@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font variables are set by next/font in layout.tsx:
+   --font-display: Barlow Condensed (headings, numbers, wordmark)
+   --font-body:    Inter (everything else) */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Keep anchor targets clear of the fixed h-20 header */
+    scroll-padding-top: 5.5rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #FFFFFF;
+    color: #14161C;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  ::selection {
+    background-color: rgba(200, 35, 44, 0.18);
+    color: #14161C;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-md
+           hover:bg-primary-700 active:bg-primary-800 transition-colors duration-200
+           shadow-soft focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-navy-900 font-semibold rounded-md
+           border border-surface-300 hover:border-navy-400 hover:bg-surface-50
+           transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-navy-500 focus:ring-offset-2;
+  }
+
+  /* Ghost button for dark/video sections */
+  .btn-ghost-light {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/5 text-white font-semibold rounded-md
+           border border-white/40 hover:bg-white/15 hover:border-white/70
+           transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/60;
+  }
+
+  .btn-call {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary-600
+           text-white font-bold text-lg rounded-md transition-colors duration-200
+           shadow-medium hover:bg-primary-700
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-soft hover:shadow-medium transition-shadow duration-300
+           border border-surface-200;
+  }
+
+  .section-padding {
+    @apply py-14 sm:py-20 md:py-24;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section heading — condensed display type, reads like signage */
+  .section-heading {
+    @apply font-display text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-navy-950 leading-[1.08];
+  }
+
+  /* Small red overline label above section headings */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-display text-sm font-semibold uppercase tracking-[0.18em] text-primary-600 mb-3;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply inline-block w-8 h-[3px] bg-primary-600;
+  }
+
+  /* On dark (navy-950) sections the 600 red fails AA contrast at 14px —
+     lift the text to primary-400 (the dash bar can stay 600; non-text). */
+  .bg-navy-950 .eyebrow {
+    @apply text-primary-400;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .link-underline {
+    @apply relative inline-block;
+  }
+
+  .link-underline::after {
+    @apply content-[''] absolute bottom-0 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-300;
+  }
+
+  .link-underline:hover::after {
+    @apply w-full;
+  }
+}
+
+@layer utilities {
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-400 { animation-delay: 400ms; }
+  .animation-delay-600 { animation-delay: 600ms; }
+  .animation-delay-800 { animation-delay: 800ms; }
+
+  /* Better tap target on iOS Safari */
+  @supports (-webkit-touch-callout: none) {
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
+
+  /* Safe-area padding for iOS notched devices — used by the mobile sticky
+     bottom bar so its content doesn't sit under the home-indicator bar */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F3F6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B4BBC7;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #79828F;
+}
+
+/* Phone call pulse animation */
+@keyframes call-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(200, 35, 44, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(200, 35, 44, 0);
+  }
+}
+
+.animate-call-pulse {
+  animation: call-pulse 2s ease-in-out infinite;
+}
+
+/* Background patterns */
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(20, 22, 28, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 22, 28, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-dots-pattern {
+  background-image: radial-gradient(rgba(20, 22, 28, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Full-bleed video backdrop (hero + CTA bands) */
+.video-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Marquee strip (LiveLoadTicker) — CSS-driven so it pauses on hover and
+   is automatically stopped by the global prefers-reduced-motion rule. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 60s linear infinite;
+}
+.marquee-region:hover .marquee-track,
+.marquee-region:focus-within .marquee-track {
+  animation-play-state: paused;
+}
