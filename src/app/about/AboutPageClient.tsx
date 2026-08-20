@@ -188,7 +188,7 @@ export default function AboutPageClient() {
                 <div className="bg-navy-900 border border-white/10 rounded-lg p-8">
                   <div className="w-28 h-28 mx-auto mb-5 rounded-full bg-primary-600 flex items-center justify-center">
                     <span className="font-display text-5xl font-bold text-white">
-                      {DISPATCHER.name.charAt(0)}
+                      {DISPATCHER.initials}
                     </span>
                   </div>
                   <div className="text-center">

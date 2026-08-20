@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, Send, Check, Loader2, ShieldCheck } from 'lucide-react';
+import { X, Phone, Send, Check, Loader2, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
 
 interface QuoteModalProps {
@@ -10,10 +10,36 @@ interface QuoteModalProps {
   onClose: () => void;
 }
 
+/* Honeypot wrapper — off-screen rather than display:none, because naive bots
+   skip hidden inputs but happily fill positioned ones. Never seen by humans
+   (off-screen) or screen readers (aria-hidden on the wrapper). */
+const honeypotWrapperStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: '-9999px',
+  top: 'auto',
+  width: '1px',
+  height: '1px',
+  overflow: 'hidden',
+};
+
+const EMPTY_FORM = {
+  name: '',
+  phone: '',
+  email: '',
+  mcNumber: '',
+  equipment: '',
+  lanes: '',
+  currentStatus: '',
+  factoring: '',
+  message: '',
+  requestCallback: false,
+  company: '', // honeypot — real users never touch this
+};
+
 /**
  * QuoteModal — onboarding-grade lead capture.
  *
- * Captures the data Sam actually needs before a discovery call:
+ * Captures the data a dispatch manager actually needs before a discovery call:
  *  - MC number (lets him pull FMCSA history before he calls back)
  *  - Factoring company (avoids surprise mid-onboarding)
  *  - Current dispatch status (new authority vs. switching from someone)
@@ -22,22 +48,15 @@ interface QuoteModalProps {
  * open and restored on close, Tab is trapped inside, and Escape closes.
  */
 export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
-  const [formState, setFormState] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    mcNumber: '',
-    equipment: '',
-    lanes: '',
-    currentStatus: '',
-    factoring: '',
-    message: '',
-    requestCallback: false,
-  });
+  const [formState, setFormState] = useState(EMPTY_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
+  // Tracked so the post-success auto-close can be cancelled if the modal is
+  // dismissed first — otherwise it fires against an unmounted component.
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
 
   // Focus management: remember the trigger, move focus into the dialog on
@@ -45,6 +64,10 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
   useEffect(() => {
     if (!isOpen) return;
     previouslyFocused.current = document.activeElement as HTMLElement | null;
+    // Lock the page behind the dialog so the background cannot scroll
+    // under it (the Header does the same for the mobile menu).
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
     const panel = panelRef.current;
     const focusables = () =>
@@ -80,39 +103,60 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
     document.addEventListener('keydown', onKeyDown);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
       previouslyFocused.current?.focus();
     };
   }, [isOpen, onClose]);
 
+  // Clear any pending auto-close when the modal unmounts.
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     setIsSubmitting(true);
+    setSubmitFailed(false);
 
-    // NOTE: form submission is currently simulated. Wire to /api/lead route
-    // (or your preferred email service like Resend) when ready — and update
-    // the success copy below once submissions actually reach someone.
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-
-    // Auto-reset after success
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormState({
-        name: '',
-        phone: '',
-        email: '',
-        mcNumber: '',
-        equipment: '',
-        lanes: '',
-        currentStatus: '',
-        factoring: '',
-        message: '',
-        requestCallback: false,
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formState,
+          source: 'quote_modal',
+          pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+        }),
       });
-      onClose();
-    }, 3600);
+
+      const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+
+      if (res.ok && data?.ok === true) {
+        setIsSubmitted(true);
+
+        // Auto-reset and close after the confirmation has been on screen a beat.
+        closeTimer.current = setTimeout(() => {
+          setIsSubmitted(false);
+          setFormState(EMPTY_FORM);
+          onClose();
+        }, 4500);
+      } else {
+        // Covers 400 validation, 429, 503 not_configured, 502 delivery_failed.
+        // Never claim delivery we can't stand behind — show the phone instead
+        // and leave the filled-in form intact so nothing is retyped.
+        setSubmitFailed(true);
+      }
+    } catch {
+      // Network error / offline / request blocked.
+      setSubmitFailed(true);
+    } finally {
+      // Always resolves — the user never sits on a spinner.
+      setIsSubmitting(false);
+    }
   };
 
   const inputCls =
@@ -177,10 +221,11 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                     <Check className="w-8 h-8 text-primary-600" />
                   </div>
                   <h3 className="text-xl font-display font-bold text-navy-950 mb-2">
-                    Thanks!
+                    Request sent
                   </h3>
                   <p className="text-surface-600">
-                    The fastest way to get set up is a quick call — dial{' '}
+                    We&apos;ve got your details. The fastest way to get set up is
+                    still a quick call — dial{' '}
                     <a href={BUSINESS.phoneHref} className="text-primary-600 font-semibold">
                       {BUSINESS.phone}
                     </a>{' '}
@@ -189,6 +234,21 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Spam trap — hidden from humans and assistive tech. If it
+                      comes back filled, the API drops the lead silently. */}
+                  <div style={honeypotWrapperStyle} aria-hidden="true">
+                    <label htmlFor="quote-company">Company (leave this field empty)</label>
+                    <input
+                      id="quote-company"
+                      name="company"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formState.company}
+                      onChange={(e) => setFormState({ ...formState, company: e.target.value })}
+                    />
+                  </div>
+
                   {/* Trust strip */}
                   <div className="flex items-center gap-2 px-3 py-2 bg-surface-50 border border-surface-200 text-navy-800 rounded-md text-sm">
                     <ShieldCheck className="w-4 h-4 flex-shrink-0 text-primary-600" />
@@ -362,6 +422,40 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                       I would prefer a callback over email
                     </span>
                   </label>
+
+                  {submitFailed && (
+                    <div
+                      role="alert"
+                      className="flex gap-3 rounded-md border border-primary-200 bg-primary-50 px-3 py-3"
+                    >
+                      <AlertTriangle
+                        className="w-5 h-5 flex-shrink-0 text-primary-600 mt-0.5"
+                        aria-hidden="true"
+                      />
+                      <div className="text-sm text-navy-900">
+                        <p className="font-semibold text-primary-700 mb-1">
+                          We couldn&apos;t send that just now.
+                        </p>
+                        <p>
+                          Please call{' '}
+                          <a
+                            href={BUSINESS.phoneHref}
+                            className="font-semibold text-primary-700 underline underline-offset-2"
+                          >
+                            {BUSINESS.phone}
+                          </a>{' '}
+                          or{' '}
+                          <a
+                            href={BUSINESS.smsHref}
+                            className="font-semibold text-primary-700 underline underline-offset-2"
+                          >
+                            text us
+                          </a>{' '}
+                          and we&apos;ll get you set up.
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="pt-2 flex flex-col sm:flex-row gap-3">
                     <button

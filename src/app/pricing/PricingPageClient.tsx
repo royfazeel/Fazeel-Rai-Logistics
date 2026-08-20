@@ -232,7 +232,7 @@ export default function PricingPageClient() {
           <ScrollReveal>
             <div className="max-w-5xl">
               <div className="bg-white rounded-lg border border-surface-200 overflow-hidden">
-                <div className="overflow-x-auto">
+                <div className="relative overflow-x-auto">
                   <table className="w-full min-w-[640px]">
                     <thead>
                       <tr className="bg-navy-950 text-white">

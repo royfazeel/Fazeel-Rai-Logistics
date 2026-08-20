@@ -186,6 +186,46 @@
   background-size: 20px 20px;
 }
 
+/* Homepage hero contrast scrim.
+   Mobile/tablet: the original left-to-right wash (navy-950 at 85% → 60% →
+   30%), unchanged — the copy spans the full width there, so it needs the
+   whole frame darkened.
+   lg and up: re-balanced. The horizontal pass stays heavy under the left
+   column (≥ 0.73 everywhere text sits, which keeps white type well past
+   AA even over a blown-out video frame) and then drops away fast across
+   the right half so the truck is actually visible. The vertical pass only
+   darkens the top band, where the translucent header sits. */
+.hero-scrim {
+  background-image: linear-gradient(
+    to right,
+    rgba(20, 22, 28, 0.85) 0%,
+    rgba(20, 22, 28, 0.6) 50%,
+    rgba(20, 22, 28, 0.3) 100%
+  );
+}
+
+@media (min-width: 1024px) {
+  .hero-scrim {
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(20, 22, 28, 0.62) 0%,
+        rgba(20, 22, 28, 0.34) 20%,
+        rgba(20, 22, 28, 0.1) 38%,
+        rgba(20, 22, 28, 0) 52%
+      ),
+      linear-gradient(
+        95deg,
+        rgba(20, 22, 28, 0.95) 0%,
+        rgba(20, 22, 28, 0.93) 32%,
+        rgba(20, 22, 28, 0.82) 48%,
+        rgba(20, 22, 28, 0.55) 64%,
+        rgba(20, 22, 28, 0.24) 82%,
+        rgba(20, 22, 28, 0.16) 100%
+      );
+  }
+}
+
 /* Full-bleed video backdrop (hero + CTA bands) */
 .video-backdrop {
   position: absolute;

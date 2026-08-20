@@ -69,6 +69,26 @@ const equipmentIcons: Record<string, React.ElementType> = {
   'power-only': Package,
 };
 
+/**
+ * Squeezes BUSINESS.hours down to the micro-caps form the hero status line
+ * needs — "Monday – Saturday" + "8:00 AM – 6:00 PM CST" becomes
+ * "MON–SAT 8A–6P CST". Derived rather than hardcoded so the hero can never
+ * drift from the hours shown in the footer and on /contact.
+ */
+function condenseHours(hours: { days: string; time: string }): string {
+  const days = hours.days
+    .split(/\s*[–—-]\s*/)
+    .map((day) => day.trim().slice(0, 3))
+    .join('–');
+  const time = hours.time
+    .replace(/:00/g, '')
+    .replace(/\s*([AP])M\b/gi, '$1')
+    .replace(/\s*[–—-]\s*/g, '–');
+  return `${days} ${time}`.toUpperCase();
+}
+
+const HERO_STATUS = `Dispatch desk open · ${condenseHours(BUSINESS.hours)}`;
+
 export default function HomePage() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
@@ -87,23 +107,57 @@ export default function HomePage() {
           poster={MEDIA.heroVideo.poster}
           loading="eager"
         />
-        {/* Contrast overlay — heavier on the left where the copy sits */}
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-navy-950/85 via-navy-950/60 to-navy-950/30"
-          aria-hidden="true"
-        />
+        {/* Contrast scrim (see .hero-scrim in globals.css). Below lg it is the
+            original left-to-right wash, unchanged. From lg up it is
+            re-balanced: heavier over the left column so the copy keeps its
+            contrast, far lighter across the right half so the truck reads
+            instead of being crushed into darkness. */}
+        <div className="hero-scrim absolute inset-0" aria-hidden="true" />
         <div
           className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-950/90 to-transparent"
           aria-hidden="true"
         />
 
-        <div className="container-custom relative z-10 flex-1 flex flex-col justify-center pt-32 pb-16 w-full">
-          <div className="max-w-3xl">
+        <div className="container-custom relative z-10 flex-1 flex flex-col justify-center pt-32 lg:pt-44 pb-16 w-full">
+          {/* ------------------------------------------------------------
+              Desktop-only frame. Nothing sits inside it — it is there to
+              give the open right half an edge so the composition reads as
+              deliberate. Aligned to the content gutter (left-8/right-8 of
+              the container's padding box) and clipped to this flex-1 area,
+              so the rail stops cleanly at the stats strip. Hidden below lg
+              via responsive classes, and inert for pointers + AT.
+              ------------------------------------------------------------ */}
+          <div
+            className="pointer-events-none absolute inset-y-0 left-8 right-8 hidden lg:block"
+            aria-hidden="true"
+          >
+            {/* Status line — hours come from BUSINESS.hours */}
+            <div className="absolute right-4 top-[100px] flex items-center gap-2.5 font-display text-[0.8125rem] font-semibold uppercase tracking-[0.2em] text-white/80 [text-shadow:0_1px_6px_rgba(20,22,28,0.75)]">
+              <span className="block h-[7px] w-[7px] bg-primary-600" />
+              {HERO_STATUS}
+            </div>
+
+            {/* Hairline rule under the status line, red tick where it meets the rail */}
+            <div className="absolute inset-x-0 top-[136px] h-px bg-white/25">
+              <span className="absolute right-0 -top-px block h-[2px] w-10 bg-primary-600" />
+            </div>
+
+            {/* Right-edge keyline rail + vertical scroll cue */}
+            <div className="absolute right-0 top-[136px] bottom-0 w-px bg-white/25">
+              <span className="absolute right-0 top-0 block h-10 w-[2px] bg-primary-600" />
+              <span className="absolute right-0 bottom-0 block h-[88px] w-[2px] bg-primary-600" />
+              <span className="absolute right-[15px] bottom-[104px] font-display text-[0.9375rem] font-semibold uppercase tracking-[0.34em] text-white/85 [writing-mode:vertical-rl] [text-shadow:0_1px_6px_rgba(20,22,28,0.75)]">
+                Scroll
+              </span>
+            </div>
+          </div>
+
+          <div className="relative max-w-3xl">
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="font-display text-sm sm:text-base font-semibold uppercase tracking-[0.22em] text-white/70 mb-5 flex items-center gap-3"
+              className="font-display text-sm sm:text-base font-semibold uppercase tracking-[0.22em] text-white/70 mb-5 lg:mb-7 flex items-center gap-3"
             >
               <span className="inline-block w-10 h-[3px] bg-primary-500" aria-hidden="true" />
               Truck dispatch · All 48 states
@@ -113,7 +167,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="font-display font-bold uppercase text-white leading-[0.95] tracking-tight text-5xl sm:text-6xl lg:text-7xl mb-6"
+              className="font-display font-bold uppercase text-white leading-[0.95] tracking-tight text-5xl sm:text-6xl lg:text-7xl xl:text-[5.25rem] mb-6 lg:mb-7"
             >
               We find the <span className="text-primary-500">loads</span>.
               <br />
@@ -124,7 +178,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-lg sm:text-xl text-white/85 mb-8 max-w-xl leading-relaxed"
+              className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"
             >
               A dedicated dispatcher books your freight, fights brokers for the
               rate, and handles the paperwork — for 5–7% of gross. No forced
@@ -486,7 +540,7 @@ export default function HomePage() {
                 <div className="bg-navy-900 border border-white/10 rounded-lg p-8">
                   <div className="w-28 h-28 mx-auto mb-5 rounded-full bg-primary-600 flex items-center justify-center">
                     <span className="font-display text-5xl font-bold text-white">
-                      {DISPATCHER.name.charAt(0)}
+                      {DISPATCHER.initials}
                     </span>
                   </div>
                   <div className="text-center">

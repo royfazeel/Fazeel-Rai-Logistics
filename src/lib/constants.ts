@@ -150,7 +150,7 @@ export const TESTIMONIALS = [
     location: 'Atlanta, GA',
     equipment: 'Dry Van',
     yearsExperience: '8 yrs driving',
-    quote: 'Switched to Rai Logistics three months ago and my weekly gross went up noticeably. Their rate negotiation is top-notch and Sam picks up the phone.',
+    quote: 'Switched to Rai Logistics three months ago and my weekly gross went up noticeably. Their rate negotiation is top-notch and my dispatch manager picks up the phone.',
     rating: 5,
     verified: true,
   },
@@ -340,7 +340,7 @@ export const FAQS = [
 ] as const;
 
 // Service-capability stats — no financial claims (Google Ads-safe), no inflated counts.
-// These are operational facts Sam can verify on every call:
+// These are operational facts the dispatch desk can verify on every call:
 //   - 24-48 hr setup is a process commitment
 //   - 48 states is geographic coverage
 //   - 5 equipment types is what Rai dispatches
@@ -500,21 +500,24 @@ export const RISK_REVERSAL = {
   ],
 } as const;
 
-// The "Meet Sam" / dedicated dispatcher block. Truckers deal with faceless
-// call centers in this industry — putting a real person at the front
-// differentiates Rai immediately. Update photo URL when one is available;
-// for now we render initials in a gradient avatar.
+// The dedicated-dispatcher block. Truckers deal with faceless call centers in
+// this industry, so the promise here is a single named ROLE that owns your
+// truck — a dispatch manager — rather than a rotating queue. Deliberately a
+// role and not a personal name, so the copy stays true no matter who is on
+// desk. Add a team photo here when one is available; until then we render the
+// brand initials.
 export const DISPATCHER = {
-  name: 'Sam',
-  title: 'Founder & Lead Dispatcher',
-  // photo: '/team/sam.jpg',  // <-- add when available
+  name: 'Your Dispatch Manager',
+  title: 'Carrier Relations · Rai Logistics',
+  initials: 'RL',
+  // photo: '/team/dispatch-manager.jpg',  // <-- add when available
   intro:
-    'I started Rai Logistics because I saw too many owner-operators losing money to bad dispatchers, hidden fees, and faceless call centers. Every driver who calls speaks directly with me or someone I trained personally. I treat your truck like my own paycheck depends on it — because in a way, it does.',
+    'Rai Logistics exists because too many owner-operators lose money to bad dispatchers, hidden fees, and faceless call centers. Every carrier who signs on gets a dispatch manager — one person who books your loads, negotiates your rates, and answers when you call. Not a ticket queue, not a different voice every week.',
   commitments: [
-    'I answer my phone — even after hours',
-    'I negotiate every load like it is my own',
-    'I tell you the truth, even when it is not what you want to hear',
-    'If we are not the right fit, I will say so',
+    'We answer the phone — even after hours',
+    'We negotiate every load like it is our own',
+    'We tell you the truth, even when it is not what you want to hear',
+    'If we are not the right fit, we will say so',
   ],
 } as const;
 

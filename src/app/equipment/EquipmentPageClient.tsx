@@ -215,7 +215,7 @@ export default function EquipmentPageClient() {
           <section
             key={equipment.id}
             id={equipment.id}
-            className={`section-padding scroll-mt-36 ${isEven ? 'bg-surface-50' : 'bg-white'}`}
+            className={`section-padding scroll-mt-36 overflow-x-clip ${isEven ? 'bg-surface-50' : 'bg-white'}`}
           >
             <div className="container-custom">
               <div className="grid lg:grid-cols-2 gap-12 items-start">

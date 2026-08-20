@@ -14,6 +14,7 @@ import {
   Zap,
   Users,
   MessageCircle,
+  AlertTriangle,
 } from 'lucide-react';
 import { ScrollReveal } from '@/components';
 import { BUSINESS, MEDIA, EQUIPMENT_TYPES } from '@/lib/constants';
@@ -33,49 +34,81 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+/* Honeypot wrapper — off-screen rather than display:none, because naive bots
+   skip hidden inputs but happily fill positioned ones. Never seen by humans
+   (off-screen) or screen readers (aria-hidden on the wrapper). */
+const honeypotWrapperStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: '-9999px',
+  top: 'auto',
+  width: '1px',
+  height: '1px',
+  overflow: 'hidden',
+};
+
+const EMPTY_FORM = {
+  name: '',
+  phone: '',
+  email: '',
+  mcNumber: '',
+  equipment: '',
+  lanes: '',
+  currentStatus: '',
+  factoring: '',
+  message: '',
+  requestCallback: false,
+  company: '', // honeypot — real users never touch this
+};
+
 export default function ContactPageClient() {
   // Form state — kept aligned with QuoteModal's onboarding-grade fields so leads
   // captured here vs. the popup are interchangeable.
-  const [formState, setFormState] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    mcNumber: '',
-    equipment: '',
-    lanes: '',
-    currentStatus: '',
-    factoring: '',
-    message: '',
-    requestCallback: false,
-  });
+  const [formState, setFormState] = useState(EMPTY_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     setIsSubmitting(true);
+    setSubmitFailed(false);
 
-    // NOTE: form submission is simulated. Wire to /api/lead or Resend when ready.
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formState,
+          source: 'contact_page',
+          pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+        }),
+      });
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+      const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+
+      if (res.ok && data?.ok === true) {
+        setIsSubmitted(true);
+      } else {
+        // Covers 400 validation, 429, 503 not_configured, 502 delivery_failed.
+        // We never claim delivery we can't stand behind — the visitor gets the
+        // phone number instead.
+        setSubmitFailed(true);
+      }
+    } catch {
+      // Network error / offline / request blocked.
+      setSubmitFailed(true);
+    } finally {
+      // Always resolves — the user never sits on a spinner.
+      setIsSubmitting(false);
+    }
   };
 
   const resetForm = () => {
     setIsSubmitted(false);
-    setFormState({
-      name: '',
-      phone: '',
-      email: '',
-      mcNumber: '',
-      equipment: '',
-      lanes: '',
-      currentStatus: '',
-      factoring: '',
-      message: '',
-      requestCallback: false,
-    });
+    setSubmitFailed(false);
+    setFormState(EMPTY_FORM);
   };
 
   return (
@@ -307,12 +340,13 @@ export default function ContactPageClient() {
                         <Check className="w-8 h-8 text-primary-600" aria-hidden="true" />
                       </div>
                       <h3 className="font-display text-2xl font-bold text-navy-950 mb-3">
-                        Thanks!
+                        Message sent
                       </h3>
                       <p className="text-surface-700 mb-6">
-                        The fastest way to get set up is a quick call —
+                        We&apos;ve got your details and a dispatcher will get back
+                        to you. The fastest route is still a call —
                         <br />
-                        reach a dispatcher directly at{' '}
+                        reach one directly at{' '}
                         <a
                           href={BUSINESS.phoneHref}
                           className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
@@ -329,6 +363,25 @@ export default function ContactPageClient() {
                     </motion.div>
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
+                      {/* Spam trap — hidden from humans and assistive tech. If it
+                          comes back filled, the API drops the lead silently. */}
+                      <div style={honeypotWrapperStyle} aria-hidden="true">
+                        <label htmlFor="contact-company">
+                          Company (leave this field empty)
+                        </label>
+                        <input
+                          id="contact-company"
+                          name="company"
+                          type="text"
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={formState.company}
+                          onChange={(e) =>
+                            setFormState({ ...formState, company: e.target.value })
+                          }
+                        />
+                      </div>
+
                       <div className="grid sm:grid-cols-2 gap-6">
                         <div>
                           <label htmlFor="contact-name" className="block text-sm font-medium text-navy-800 mb-2">
@@ -514,6 +567,40 @@ export default function ContactPageClient() {
                           I would prefer a callback instead of email
                         </span>
                       </label>
+
+                      {submitFailed && (
+                        <div
+                          role="alert"
+                          className="flex gap-3 rounded-md border border-primary-200 bg-primary-50 px-4 py-3"
+                        >
+                          <AlertTriangle
+                            className="w-5 h-5 flex-shrink-0 text-primary-600 mt-0.5"
+                            aria-hidden="true"
+                          />
+                          <div className="text-sm text-navy-900">
+                            <p className="font-semibold text-primary-700 mb-1">
+                              We couldn&apos;t send that just now.
+                            </p>
+                            <p>
+                              Please call{' '}
+                              <a
+                                href={BUSINESS.phoneHref}
+                                className="font-semibold text-primary-700 underline underline-offset-2"
+                              >
+                                {BUSINESS.phone}
+                              </a>{' '}
+                              or{' '}
+                              <a
+                                href={BUSINESS.smsHref}
+                                className="font-semibold text-primary-700 underline underline-offset-2"
+                              >
+                                text us
+                              </a>{' '}
+                              and we&apos;ll get you set up.
+                            </p>
+                          </div>
+                        </div>
+                      )}
 
                       <div className="flex flex-col sm:flex-row gap-3">
                         <button

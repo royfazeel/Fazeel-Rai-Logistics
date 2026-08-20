@@ -3,12 +3,33 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Phone, Send, Truck, Loader2, Check, ShieldCheck } from 'lucide-react';
+import {
+  X,
+  Phone,
+  Send,
+  Truck,
+  Loader2,
+  Check,
+  ShieldCheck,
+  AlertTriangle,
+} from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
+
+/* Honeypot wrapper — off-screen rather than display:none, because naive bots
+   skip hidden inputs but happily fill positioned ones. Never seen by humans
+   (off-screen) or screen readers (aria-hidden on the wrapper). */
+const honeypotWrapperStyle: React.CSSProperties = {
+  position: 'absolute',
+  left: '-9999px',
+  top: 'auto',
+  width: '1px',
+  height: '1px',
+  overflow: 'hidden',
+};
 
 /**
  * LeadCapturePopup — a one-time conversion popup designed to catch visitors
- * who are about to leave without contacting Sam.
+ * who are about to leave without contacting a dispatcher.
  *
  * Trigger logic (whichever fires first):
  *   - Desktop: mouseleave at the top of viewport (classic exit-intent)
@@ -35,12 +56,16 @@ export default function LeadCapturePopup() {
     phone: '',
     equipment: '',
     mcNumber: '',
+    company: '', // honeypot — real users never touch this
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
+  // Tracked so the post-success auto-close can be cancelled on unmount.
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Legal pages are never interrupted. Derived from the live pathname so
   // client-side navigation in/out of them is handled correctly (the layout
@@ -121,6 +146,10 @@ export default function LeadCapturePopup() {
   useEffect(() => {
     if (!isOpen) return;
     previouslyFocused.current = document.activeElement as HTMLElement | null;
+    // Lock the page behind the dialog so the background cannot scroll
+    // under it (the Header does the same for the mobile menu).
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
     const panel = panelRef.current;
     const focusables = () =>
@@ -156,27 +185,58 @@ export default function LeadCapturePopup() {
     document.addEventListener('keydown', onKeyDown);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
       previouslyFocused.current?.focus();
     };
   }, [isOpen]);
+
+  // Clear any pending auto-close when the component unmounts.
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
+  }, []);
 
   const handleClose = () => setIsOpen(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     setIsSubmitting(true);
+    setSubmitFailed(false);
 
-    // NOTE: simulated submission. Wire to /api/lead or Resend when ready.
-    // Send formState along with a `source: 'exit_intent_popup'` field so leads
-    // from here can be tracked separately in the CRM.
-    await new Promise((r) => setTimeout(r, 1100));
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formState,
+          // Tags the lead so popup conversions can be tracked separately.
+          source: 'exit_intent_popup',
+          pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+        }),
+      });
 
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+      const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
 
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 3000);
+      if (res.ok && data?.ok === true) {
+        setIsSubmitted(true);
+        closeTimer.current = setTimeout(() => {
+          setIsOpen(false);
+        }, 4000);
+      } else {
+        // Covers 400 validation, 429, 503 not_configured, 502 delivery_failed.
+        // Never claim delivery we can't stand behind — show the phone instead.
+        setSubmitFailed(true);
+      }
+    } catch {
+      // Network error / offline / request blocked.
+      setSubmitFailed(true);
+    } finally {
+      // Always resolves — the user never sits on a spinner.
+      setIsSubmitting(false);
+    }
   };
 
   // NOTE: no early return here — AnimatePresence must stay mounted so the
@@ -236,7 +296,7 @@ export default function LeadCapturePopup() {
                   Need Loads for Your Truck?
                 </h2>
                 <p className="text-white/70 text-sm">
-                  Talk to Sam — no setup fees, no long contracts.
+                  Talk to a dispatch manager — no setup fees, no long contracts.
                 </p>
               </div>
             </div>
@@ -253,10 +313,11 @@ export default function LeadCapturePopup() {
                     <Check className="w-7 h-7 text-primary-600" />
                   </div>
                   <h3 className="font-display text-xl font-bold text-navy-950 mb-1.5">
-                    Thanks!
+                    Got it
                   </h3>
                   <p className="text-surface-600 text-sm">
-                    The fastest way to get set up is a quick call:{' '}
+                    Your details are with us. The fastest way to get set up is
+                    still a quick call:{' '}
                     <a href={BUSINESS.phoneHref} className="text-primary-600 font-semibold">
                       {BUSINESS.phone}
                     </a>
@@ -264,6 +325,23 @@ export default function LeadCapturePopup() {
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-3">
+                  {/* Spam trap — hidden from humans and assistive tech. If it
+                      comes back filled, the API drops the lead silently. */}
+                  <div style={honeypotWrapperStyle} aria-hidden="true">
+                    <label htmlFor="lead-company">Company (leave this field empty)</label>
+                    <input
+                      id="lead-company"
+                      name="company"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formState.company}
+                      onChange={(e) =>
+                        setFormState({ ...formState, company: e.target.value })
+                      }
+                    />
+                  </div>
+
                   <div>
                     <label htmlFor="lead-name" className="block text-sm font-semibold text-navy-800 mb-1.5">
                       Your Name
@@ -338,6 +416,40 @@ export default function LeadCapturePopup() {
                       />
                     </div>
                   </div>
+
+                  {submitFailed && (
+                    <div
+                      role="alert"
+                      className="flex gap-2.5 rounded-md border border-primary-200 bg-primary-50 px-3 py-2.5"
+                    >
+                      <AlertTriangle
+                        className="w-4 h-4 flex-shrink-0 text-primary-600 mt-0.5"
+                        aria-hidden="true"
+                      />
+                      <div className="text-sm text-navy-900">
+                        <p className="font-semibold text-primary-700 mb-0.5">
+                          We couldn&apos;t send that just now.
+                        </p>
+                        <p>
+                          Please call{' '}
+                          <a
+                            href={BUSINESS.phoneHref}
+                            className="font-semibold text-primary-700 underline underline-offset-2"
+                          >
+                            {BUSINESS.phone}
+                          </a>{' '}
+                          or{' '}
+                          <a
+                            href={BUSINESS.smsHref}
+                            className="font-semibold text-primary-700 underline underline-offset-2"
+                          >
+                            text us
+                          </a>{' '}
+                          and we&apos;ll get you set up.
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   <button
                     type="submit"
