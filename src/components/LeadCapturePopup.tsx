@@ -188,6 +188,7 @@ export default function LeadCapturePopup() {
     <AnimatePresence>
       {isOpen && (
         <div
+          key="lead-popup"
           className="fixed inset-0 z-[60] flex items-center justify-center p-4"
           role="dialog"
           aria-modal="true"
@@ -215,7 +216,10 @@ export default function LeadCapturePopup() {
             <div className="relative bg-navy-950 px-6 pt-7 pb-6 text-white">
               <button
                 onClick={handleClose}
-                className="absolute top-4 right-4 w-9 h-9 rounded-md bg-white/10 hover:bg-white/20 active:bg-white/25 flex items-center justify-center transition-colors"
+                /* z-10 is load-bearing: the sibling content div below is positioned,
+                   so without it that div paints over this button and swallows
+                   the click. */
+                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-md bg-white/10 hover:bg-white/20 active:bg-white/25 flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
