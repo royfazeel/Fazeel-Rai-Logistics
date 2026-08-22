@@ -114,7 +114,7 @@ export default function HomePage() {
             instead of being crushed into darkness. */}
         <div className="hero-scrim absolute inset-0" aria-hidden="true" />
         <div
-          className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-950/90 to-transparent"
+          className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-950/75 to-transparent"
           aria-hidden="true"
         />
 
