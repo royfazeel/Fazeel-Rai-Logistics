@@ -21,8 +21,17 @@ import Script from 'next/script';
  * redeploy before they take effect.
  */
 
+/**
+ * The live GA4 property for railogistics.us. A GA4 measurement ID is public by
+ * design — it is visible in the page source of every site that uses it — so it
+ * is safe in the repo, and hardcoding the default means analytics keep working
+ * even if the Vercel environment variable is missing. Setting
+ * NEXT_PUBLIC_GA4_ID still overrides it (useful for a staging property).
+ */
+const DEFAULT_GA4_ID = 'G-K31P16P0SB';
+
 // Read at module scope so Next's build-time inlining can see the literal keys.
-const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
+const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || DEFAULT_GA4_ID;
 const GADS_ID = process.env.NEXT_PUBLIC_GADS_ID;
 
 export default function Analytics() {

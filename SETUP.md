@@ -267,3 +267,20 @@ then show `"autoReply":false`.
 | `NEXT_PUBLIC_GADS_LEAD_LABEL` | Lead-form conversion "send to" value | Google Ads |
 
 After any change: **Save -> Redeploy -> check `/api/lead`.**
+
+---
+
+## Google Analytics — already connected
+
+Your GA4 property **G-K31P16P0SB** is built into the site, so page views and
+conversion events (call taps, text taps, WhatsApp taps, form submits) start
+flowing the moment you deploy. There is nothing to paste in Vercel for this.
+
+To confirm it is working: open the site, then in Google Analytics go to
+**Reports -> Realtime**. You should see yourself within about 30 seconds.
+
+You only need `NEXT_PUBLIC_GA4_ID` if you ever want to point the site at a
+different property — setting it overrides the built-in one.
+
+Google **Ads** conversion tracking is separate and still needs its own values
+(`NEXT_PUBLIC_GADS_ID` and the two conversion labels) — see the table above.
