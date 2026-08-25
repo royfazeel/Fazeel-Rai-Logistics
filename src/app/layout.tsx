@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Barlow_Condensed, Inter } from 'next/font/google';
-import { Header, Footer, StickyCallWidgets, LeadCapturePopup, MotionProvider } from '@/components';
+import { Header, Footer, StickyCallWidgets, MotionProvider } from '@/components';
 import { BUSINESS, FAQS, SERVICES } from '@/lib/constants';
 import './globals.css';
 
@@ -213,7 +213,11 @@ export default function RootLayout({
           <main className="pt-20">{children}</main>
           <Footer />
           <StickyCallWidgets />
-          <LeadCapturePopup />
+          {/* No auto-appearing popup: the exit-intent/timed LeadCapturePopup was
+              removed at the client's request. The component still exists at
+              src/components/LeadCapturePopup.tsx — re-add <LeadCapturePopup /> here
+              to switch it back on. The quote modal is unaffected: it only opens
+              when someone clicks a "Get a free setup" / "Get Started" button. */}
         </MotionProvider>
         {/* Spacer for mobile sticky bar (14 = bar height; +safe-area for notched iOS) */}
         <div className="h-14 mb-safe md:hidden" aria-hidden="true" />
