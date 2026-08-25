@@ -19,6 +19,14 @@ import {
 import { ScrollReveal } from '@/components';
 import { BUSINESS, MEDIA, EQUIPMENT_TYPES } from '@/lib/constants';
 import { track } from '@/lib/track';
+import {
+  formatUsPhone,
+  validateName,
+  validatePhone,
+  validateEmail,
+  validateMcNumber,
+  validateRequiredSelect,
+} from '@/lib/formValidation';
 
 /* Shared input styling — square-ish corners, neutral border, red focus ring */
 const inputClasses =
@@ -65,6 +73,42 @@ export default function ContactPageClient() {
   // Form state — kept aligned with QuoteModal's onboarding-grade fields so leads
   // captured here vs. the popup are interchangeable.
   const [formState, setFormState] = useState(EMPTY_FORM);
+  const [errors, setErrors] = useState<Record<string, string | null>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  // Mirrors the server-side rules in /api/lead so a typo surfaces while the
+  // driver is still typing rather than after a failed round trip.
+  const validators: Record<string, (v: string) => string | null> = {
+    name: validateName,
+    phone: validatePhone,
+    email: (v) => validateEmail(v, false),
+    mcNumber: validateMcNumber,
+    equipment: (v) => validateRequiredSelect(v, 'your equipment type'),
+  };
+  const inputIds: Record<string, string> = {
+    name: 'contact-name',
+    phone: 'contact-phone',
+    email: 'contact-email',
+    mcNumber: 'contact-mc',
+    equipment: 'contact-equipment',
+  };
+
+  const valueOf = (field: string) =>
+    String((formState as unknown as Record<string, unknown>)[field] ?? '');
+  const runValidation = (field: string, value: string) =>
+    validators[field] ? validators[field](value) : null;
+  const handleBlur = (field: string) => {
+    setTouched((t) => ({ ...t, [field]: true }));
+    setErrors((e) => ({ ...e, [field]: runValidation(field, valueOf(field)) }));
+  };
+  const revalidate = (field: string, value: string) => {
+    if (!touched[field]) return;
+    setErrors((e) => ({ ...e, [field]: runValidation(field, value) }));
+  };
+  const errorFor = (field: string) => (touched[field] ? errors[field] : null) || null;
+  const fieldCls = (field: string, base: string) =>
+    errorFor(field) ? `${base} border-primary-500` : base;
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitFailed, setSubmitFailed] = useState(false);
@@ -72,6 +116,23 @@ export default function ContactPageClient() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    // Check the format before spending a round trip; focus the first problem.
+    const nextErrors: Record<string, string | null> = {};
+    const nextTouched: Record<string, boolean> = {};
+    let firstBad: string | null = null;
+    Object.keys(validators).forEach((field) => {
+      const message = runValidation(field, valueOf(field));
+      nextErrors[field] = message;
+      nextTouched[field] = true;
+      if (message && !firstBad) firstBad = field;
+    });
+    if (firstBad) {
+      setErrors(nextErrors);
+      setTouched((t) => ({ ...t, ...nextTouched }));
+      document.getElementById(inputIds[firstBad])?.focus();
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitFailed(false);
@@ -377,7 +438,7 @@ export default function ContactPageClient() {
                       </button>
                     </motion.div>
                   ) : (
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form noValidate onSubmit={handleSubmit} className="space-y-6">
                       {/* Spam trap — hidden from humans and assistive tech. If it
                           comes back filled, the API drops the lead silently. */}
                       <div style={honeypotWrapperStyle} aria-hidden="true">
@@ -408,12 +469,21 @@ export default function ContactPageClient() {
                             autoComplete="name"
                             required
                             value={formState.name}
-                            onChange={(e) =>
-                              setFormState({ ...formState, name: e.target.value })
-                            }
-                            className={inputClasses}
+                            onChange={(e) => {
+                              setFormState({ ...formState, name: e.target.value });
+                              revalidate('name', e.target.value);
+                            }}
+                            onBlur={() => handleBlur('name')}
+                            aria-invalid={errorFor('name') ? true : undefined}
+                            aria-describedby={errorFor('name') ? 'contact-name-error' : undefined}
+                            className={fieldCls('name', inputClasses)}
                             placeholder="John Smith"
                           />
+                          {errorFor('name') && (
+                            <p id="contact-name-error" role="alert" className="mt-1.5 text-xs font-medium text-primary-700">
+                              {errorFor('name')}
+                            </p>
+                          )}
                         </div>
                         <div>
                           <label htmlFor="contact-phone" className="block text-sm font-medium text-navy-800 mb-2">
@@ -422,15 +492,27 @@ export default function ContactPageClient() {
                           <input
                             id="contact-phone"
                             type="tel"
+                            inputMode="tel"
                             autoComplete="tel"
                             required
+                            maxLength={14}
                             value={formState.phone}
-                            onChange={(e) =>
-                              setFormState({ ...formState, phone: e.target.value })
-                            }
-                            className={inputClasses}
+                            onChange={(e) => {
+                              const formatted = formatUsPhone(e.target.value);
+                              setFormState({ ...formState, phone: formatted });
+                              revalidate('phone', formatted);
+                            }}
+                            onBlur={() => handleBlur('phone')}
+                            aria-invalid={errorFor('phone') ? true : undefined}
+                            aria-describedby={errorFor('phone') ? 'contact-phone-error' : undefined}
+                            className={fieldCls('phone', inputClasses)}
                             placeholder="(555) 555-5555"
                           />
+                          {errorFor('phone') && (
+                            <p id="contact-phone-error" role="alert" className="mt-1.5 text-xs font-medium text-primary-700">
+                              {errorFor('phone')}
+                            </p>
+                          )}
                         </div>
                       </div>
 
@@ -441,14 +523,24 @@ export default function ContactPageClient() {
                         <input
                           id="contact-email"
                           type="email"
+                          inputMode="email"
                           autoComplete="email"
                           value={formState.email}
-                          onChange={(e) =>
-                            setFormState({ ...formState, email: e.target.value })
-                          }
-                          className={inputClasses}
+                          onChange={(e) => {
+                            setFormState({ ...formState, email: e.target.value });
+                            revalidate('email', e.target.value);
+                          }}
+                          onBlur={() => handleBlur('email')}
+                          aria-invalid={errorFor('email') ? true : undefined}
+                          aria-describedby={errorFor('email') ? 'contact-email-error' : undefined}
+                          className={fieldCls('email', inputClasses)}
                           placeholder="john@example.com"
                         />
+                        {errorFor('email') && (
+                          <p id="contact-email-error" role="alert" className="mt-1.5 text-xs font-medium text-primary-700">
+                            {errorFor('email')}
+                          </p>
+                        )}
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-6">
@@ -459,13 +551,24 @@ export default function ContactPageClient() {
                           <input
                             id="contact-mc"
                             type="text"
+                            inputMode="numeric"
+                            maxLength={12}
                             value={formState.mcNumber}
-                            onChange={(e) =>
-                              setFormState({ ...formState, mcNumber: e.target.value })
-                            }
-                            className={inputClasses}
+                            onChange={(e) => {
+                              setFormState({ ...formState, mcNumber: e.target.value });
+                              revalidate('mcNumber', e.target.value);
+                            }}
+                            onBlur={() => handleBlur('mcNumber')}
+                            aria-invalid={errorFor('mcNumber') ? true : undefined}
+                            aria-describedby={errorFor('mcNumber') ? 'contact-mc-error' : undefined}
+                            className={fieldCls('mcNumber', inputClasses)}
                             placeholder="MC-123456"
                           />
+                          {errorFor('mcNumber') && (
+                            <p id="contact-mc-error" role="alert" className="mt-1.5 text-xs font-medium text-primary-700">
+                              {errorFor('mcNumber')}
+                            </p>
+                          )}
                         </div>
                         <div>
                           <label htmlFor="contact-equipment" className="block text-sm font-medium text-navy-800 mb-2">
@@ -475,10 +578,14 @@ export default function ContactPageClient() {
                             id="contact-equipment"
                             required
                             value={formState.equipment}
-                            onChange={(e) =>
-                              setFormState({ ...formState, equipment: e.target.value })
-                            }
-                            className={`${inputClasses} appearance-none`}
+                            onChange={(e) => {
+                              setFormState({ ...formState, equipment: e.target.value });
+                              revalidate('equipment', e.target.value);
+                            }}
+                            onBlur={() => handleBlur('equipment')}
+                            aria-invalid={errorFor('equipment') ? true : undefined}
+                            aria-describedby={errorFor('equipment') ? 'contact-equipment-error' : undefined}
+                            className={fieldCls('equipment', `${inputClasses} appearance-none`)}
                           >
                             <option value="">Select equipment</option>
                             {EQUIPMENT_TYPES.map((eq) => (
@@ -487,6 +594,11 @@ export default function ContactPageClient() {
                               </option>
                             ))}
                           </select>
+                          {errorFor('equipment') && (
+                            <p id="contact-equipment-error" role="alert" className="mt-1.5 text-xs font-medium text-primary-700">
+                              {errorFor('equipment')}
+                            </p>
+                          )}
                         </div>
                       </div>
 

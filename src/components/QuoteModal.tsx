@@ -5,6 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, Send, Check, Loader2, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
 import { track } from '@/lib/track';
+import {
+  formatUsPhone,
+  validateName,
+  validatePhone,
+  validateEmail,
+  validateMcNumber,
+  validateRequiredSelect,
+} from '@/lib/formValidation';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -50,6 +58,47 @@ const EMPTY_FORM = {
  */
 export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
   const [formState, setFormState] = useState(EMPTY_FORM);
+  const [errors, setErrors] = useState<Record<string, string | null>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  // Field -> validator. The API re-checks all of this server-side; these run
+  // as the driver types so a typo surfaces before they tap Send.
+  const validators: Record<string, (v: string) => string | null> = {
+    name: validateName,
+    phone: validatePhone,
+    email: (v) => validateEmail(v, false),
+    mcNumber: validateMcNumber,
+    equipment: (v) => validateRequiredSelect(v, 'your equipment type'),
+  };
+  const inputIds: Record<string, string> = {
+    name: 'quote-name',
+    phone: 'quote-phone',
+    email: 'quote-email',
+    mcNumber: 'quote-mc',
+    equipment: 'quote-equipment',
+  };
+
+  const valueOf = (field: string) =>
+    String((formState as unknown as Record<string, unknown>)[field] ?? '');
+
+  const runValidation = (field: string, value: string) =>
+    validators[field] ? validators[field](value) : null;
+
+  const handleBlur = (field: string) => {
+    setTouched((t) => ({ ...t, [field]: true }));
+    setErrors((e) => ({ ...e, [field]: runValidation(field, valueOf(field)) }));
+  };
+
+  /** Re-validate while typing, but only once the field has been blurred once. */
+  const revalidate = (field: string, value: string) => {
+    if (!touched[field]) return;
+    setErrors((e) => ({ ...e, [field]: runValidation(field, value) }));
+  };
+
+  const errorFor = (field: string) => (touched[field] ? errors[field] : null) || null;
+  const fieldCls = (field: string, base: string) =>
+    errorFor(field) ? `${base} border-primary-500` : base;
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitFailed, setSubmitFailed] = useState(false);
@@ -119,6 +168,24 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    // Validate everything before spending a round trip, and send focus to the
+    // first problem so the driver is not hunting for it on a phone.
+    const nextErrors: Record<string, string | null> = {};
+    const nextTouched: Record<string, boolean> = {};
+    let firstBad: string | null = null;
+    Object.keys(validators).forEach((field) => {
+      const message = runValidation(field, valueOf(field));
+      nextErrors[field] = message;
+      nextTouched[field] = true;
+      if (message && !firstBad) firstBad = field;
+    });
+    if (firstBad) {
+      setErrors(nextErrors);
+      setTouched((t) => ({ ...t, ...nextTouched }));
+      document.getElementById(inputIds[firstBad])?.focus();
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitFailed(false);
@@ -242,7 +309,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form noValidate onSubmit={handleSubmit} className="space-y-4">
                   {/* Spam trap — hidden from humans and assistive tech. If it
                       comes back filled, the API drops the lead silently. */}
                   <div style={honeypotWrapperStyle} aria-hidden="true">
@@ -275,10 +342,21 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                         required
                         autoComplete="name"
                         value={formState.name}
-                        onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                        className={inputCls}
+                        onChange={(e) => {
+                          setFormState({ ...formState, name: e.target.value });
+                          revalidate('name', e.target.value);
+                        }}
+                        onBlur={() => handleBlur('name')}
+                        aria-invalid={errorFor('name') ? true : undefined}
+                        aria-describedby={errorFor('name') ? 'quote-name-error' : undefined}
+                        className={fieldCls('name', inputCls)}
                         placeholder="John Smith"
                       />
+                      {errorFor('name') && (
+                        <p id="quote-name-error" role="alert" className="mt-1 text-xs font-medium text-primary-700">
+                          {errorFor('name')}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="quote-phone" className={labelCls}>
@@ -287,13 +365,27 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                       <input
                         id="quote-phone"
                         type="tel"
+                        inputMode="tel"
                         required
                         autoComplete="tel"
+                        maxLength={14}
                         value={formState.phone}
-                        onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
-                        className={inputCls}
+                        onChange={(e) => {
+                          const formatted = formatUsPhone(e.target.value);
+                          setFormState({ ...formState, phone: formatted });
+                          revalidate('phone', formatted);
+                        }}
+                        onBlur={() => handleBlur('phone')}
+                        aria-invalid={errorFor('phone') ? true : undefined}
+                        aria-describedby={errorFor('phone') ? 'quote-phone-error' : undefined}
+                        className={fieldCls('phone', inputCls)}
                         placeholder="(555) 555-5555"
                       />
+                      {errorFor('phone') && (
+                        <p id="quote-phone-error" role="alert" className="mt-1 text-xs font-medium text-primary-700">
+                          {errorFor('phone')}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -305,12 +397,24 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                       <input
                         id="quote-email"
                         type="email"
+                        inputMode="email"
                         autoComplete="email"
                         value={formState.email}
-                        onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                        className={inputCls}
+                        onChange={(e) => {
+                          setFormState({ ...formState, email: e.target.value });
+                          revalidate('email', e.target.value);
+                        }}
+                        onBlur={() => handleBlur('email')}
+                        aria-invalid={errorFor('email') ? true : undefined}
+                        aria-describedby={errorFor('email') ? 'quote-email-error' : undefined}
+                        className={fieldCls('email', inputCls)}
                         placeholder="john@example.com"
                       />
+                      {errorFor('email') && (
+                        <p id="quote-email-error" role="alert" className="mt-1 text-xs font-medium text-primary-700">
+                          {errorFor('email')}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="quote-mc" className={labelCls}>
@@ -319,13 +423,24 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                       <input
                         id="quote-mc"
                         type="text"
+                        inputMode="numeric"
+                        maxLength={12}
                         value={formState.mcNumber}
-                        onChange={(e) =>
-                          setFormState({ ...formState, mcNumber: e.target.value })
-                        }
-                        className={inputCls}
+                        onChange={(e) => {
+                          setFormState({ ...formState, mcNumber: e.target.value });
+                          revalidate('mcNumber', e.target.value);
+                        }}
+                        onBlur={() => handleBlur('mcNumber')}
+                        aria-invalid={errorFor('mcNumber') ? true : undefined}
+                        aria-describedby={errorFor('mcNumber') ? 'quote-mc-error' : undefined}
+                        className={fieldCls('mcNumber', inputCls)}
                         placeholder="MC-123456"
                       />
+                      {errorFor('mcNumber') && (
+                        <p id="quote-mc-error" role="alert" className="mt-1 text-xs font-medium text-primary-700">
+                          {errorFor('mcNumber')}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -337,8 +452,14 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                       id="quote-equipment"
                       required
                       value={formState.equipment}
-                      onChange={(e) => setFormState({ ...formState, equipment: e.target.value })}
-                      className={inputCls + ' appearance-none'}
+                      onChange={(e) => {
+                        setFormState({ ...formState, equipment: e.target.value });
+                        revalidate('equipment', e.target.value);
+                      }}
+                      onBlur={() => handleBlur('equipment')}
+                      aria-invalid={errorFor('equipment') ? true : undefined}
+                      aria-describedby={errorFor('equipment') ? 'quote-equipment-error' : undefined}
+                      className={fieldCls('equipment', inputCls + ' appearance-none')}
                     >
                       <option value="">Select equipment type</option>
                       {EQUIPMENT_TYPES.map((eq) => (
@@ -347,6 +468,11 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                         </option>
                       ))}
                     </select>
+                    {errorFor('equipment') && (
+                      <p id="quote-equipment-error" role="alert" className="mt-1 text-xs font-medium text-primary-700">
+                        {errorFor('equipment')}
+                      </p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
