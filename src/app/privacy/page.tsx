@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import {
+  BarChart3,
   MessageSquare,
   Lock,
   Mail,
@@ -10,9 +11,16 @@ import {
 } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 
+/**
+ * The one place the policy date lives. Bump it whenever the wording below
+ * changes — a materially edited policy carrying an old date is exactly the
+ * kind of inconsistency an SMS carrier audit or an ads review flags.
+ */
+const POLICY_UPDATED = 'August 2026';
+
 export const metadata: Metadata = {
   title: 'Privacy Policy & SMS Terms',
-  description: `Privacy Policy and SMS Terms for ${BUSINESS.parentCompany}. Learn how we collect, use, and protect your information, plus our 10DLC SMS messaging terms.`,
+  description: `Privacy Policy, cookie and advertising disclosures, and SMS Terms for ${BUSINESS.parentCompany}. How we collect, use, and protect your information, which Google measurement cookies this site sets, how to opt out, and our 10DLC SMS messaging terms.`,
 };
 
 /**
@@ -27,6 +35,14 @@ export const metadata: Metadata = {
  *   - STOP / HELP instructions
  *   - Message & data rates disclosure
  *   - Carrier liability disclaimer
+ *
+ * Section 5 covers cookies, website analytics, and advertising. It exists
+ * because this site runs Google Ads and loads Google's measurement tags —
+ * an ads landing page that sets advertising cookies without disclosing them
+ * is a disapproval risk. It names ONLY what is actually installed (GA4 +
+ * Google Ads conversion tracking). Adding any other analytics, remarketing,
+ * session-recording, or chat vendor means updating Section 5 BEFORE that
+ * vendor's script ships.
  *
  * Do not edit boilerplate without first confirming with the business — this
  * page is referenced by SMS carriers during 10DLC registration audits.
@@ -44,7 +60,7 @@ export default function PrivacyPage() {
             </h1>
             <p className="text-white/70 text-lg">{BUSINESS.parentCompany}</p>
             <p className="text-white/50 text-sm mt-3">
-              Effective Date: January 2025
+              Effective Date: {POLICY_UPDATED}
             </p>
           </div>
         </div>
@@ -115,6 +131,24 @@ export default function PrivacyPage() {
               <li>Dispatching details (loads, schedules, appointments)</li>
               <li>Communication preferences</li>
             </ul>
+            <p>
+              Separately, our website collects a limited amount of technical
+              information automatically from every visitor, whether or not you
+              ever contact us:
+            </p>
+            <ul>
+              <li>IP address and the approximate city or region it maps to</li>
+              <li>Device type, operating system, and browser</li>
+              <li>Pages viewed, time on page, and the links you click</li>
+              <li>
+                The page or advertisement that referred you, including the click
+                identifier Google attaches to an ad click
+              </li>
+            </ul>
+            <p>
+              Section 5 explains exactly which tools do this and how to turn
+              them off.
+            </p>
           </Section>
 
           {/* 3. How We Use Your Information */}
@@ -131,8 +165,11 @@ export default function PrivacyPage() {
               <li>Business administration</li>
             </ul>
             <p>
-              We do not use your information for marketing unless you provide
-              explicit authorization.
+              We do not use the contact details you give us&mdash;your name,
+              phone number, or email address&mdash;to run marketing campaigns
+              unless you explicitly authorize it. Anonymous website measurement
+              and advertising performance reporting are a separate matter and
+              are described in Section 5.
             </p>
           </Section>
 
@@ -164,10 +201,157 @@ export default function PrivacyPage() {
                 services.
               </li>
             </ul>
+            <p>
+              <strong>How this fits with website analytics.</strong> The
+              statement above covers the personal information you give us&mdash;
+              your name, phone number, email address, SMS consent, and dispatch
+              records. None of it is ever sold, shared, or passed to an
+              advertising platform. Our website separately uses Google
+              measurement tools that see anonymous browsing activity, and never
+              your phone number or SMS consent. Section 5 sets that out in full.
+            </p>
           </Section>
 
-          {/* 5. How We Protect */}
-          <Section number="5" title="How We Protect Your Information">
+          {/* 5. Cookies, analytics & advertising — required before the
+              Google advertising tag goes live on this site. Describes ONLY
+              what is actually installed (GA4 + Google Ads conversion
+              tracking). If another vendor is ever added, it must be listed
+              here BEFORE its script ships. */}
+          <Section
+            number="5"
+            title="Cookies, Website Analytics &amp; Advertising"
+            badge={{ icon: BarChart3, text: 'Website visitors' }}
+          >
+            <p>
+              We advertise this business on Google, and we measure whether those
+              advertisements actually produce phone calls and enquiries. That
+              measurement requires cookies. This section tells you precisely
+              which ones, what they see, and how to switch them off.
+            </p>
+            <p>
+              We use two Google tools and{' '}
+              <strong>no other advertising, tracking, analytics, session
+              recording, or data-broker service</strong>:
+            </p>
+
+            <SubSection letter="A" title="Google Analytics 4">
+              <p>
+                Counts how many people visit, which pages they read, how long
+                they stay, and how they found us. It sets first-party cookies
+                (named <code>_ga</code> and <code>_ga_&hellip;</code>) that can
+                last up to two years and identify a browser, not a person. It
+                tells us that &ldquo;a visitor read the pricing page,&rdquo; not
+                who that visitor is.
+              </p>
+            </SubSection>
+
+            <SubSection letter="B" title="Google Ads Conversion Tracking">
+              <p>
+                Records when someone who arrived from one of our advertisements
+                then taps our phone number or sends us the enquiry form, so we
+                can tell which advertisements are worth paying for. It sets a
+                cookie (named <code>_gcl_au</code>) and reads the click
+                identifier Google appends to the web address of an ad click.
+                These typically expire within 90 days.
+              </p>
+            </SubSection>
+
+            <SubSection letter="C" title="Google's Role">
+              <p>
+                Google acts as our service provider for both tools and processes
+                this data under the{' '}
+                <a
+                  href="https://business.safety.google/privacy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-700 font-medium hover:text-primary-800 underline"
+                >
+                  Google Business Data Responsibility terms
+                </a>
+                . We do not control what Google does with data it collects
+                independently through your Google account.
+              </p>
+            </SubSection>
+
+            <SubSection letter="D" title="What Is Never Sent to Google">
+              <div className="not-prose flex items-start gap-3 p-4 bg-surface-50 border border-surface-200 border-l-4 border-l-primary-600 rounded-lg my-3">
+                <Lock className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <p className="text-navy-800 text-sm leading-relaxed">
+                  Your name, phone number, email address, MC authority number,
+                  SMS consent, and dispatch records are{' '}
+                  <strong className="text-navy-900 font-semibold">never</strong>{' '}
+                  passed to Google, to any advertising platform, or to any other
+                  third party. A form submission is reported to Google only as an
+                  anonymous count &mdash; that one happened, never what was in it.
+                </p>
+              </div>
+              <p>
+                We do not sell or share personal information for cross-context
+                behavioural advertising, and we do not build or upload customer
+                lists for ad targeting.
+              </p>
+            </SubSection>
+
+            <SubSection letter="E" title="How to Opt Out">
+              <p>
+                Nothing on this website requires a cookie in order to work. You
+                can decline all of the above and still read every page, call us,
+                and submit the form. To opt out:
+              </p>
+              <ul>
+                <li>
+                  <strong>Block or delete cookies</strong> in your browser
+                  settings, or browse in a private/incognito window.
+                </li>
+                <li>
+                  <strong>Turn off Google Analytics entirely</strong> by
+                  installing Google&rsquo;s{' '}
+                  <a
+                    href="https://tools.google.com/dlpage/gaoptout"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary-700 font-medium hover:text-primary-800 underline"
+                  >
+                    Analytics Opt-out Browser Add-on
+                  </a>
+                  .
+                </li>
+                <li>
+                  <strong>Turn off personalised advertising</strong> at{' '}
+                  <a
+                    href="https://myadcenter.google.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary-700 font-medium hover:text-primary-800 underline"
+                  >
+                    Google My Ad Center
+                  </a>
+                  .
+                </li>
+                <li>
+                  <strong>On a phone,</strong> reset or limit your advertising
+                  identifier in iOS Privacy &amp; Security settings or Android
+                  Ads settings.
+                </li>
+              </ul>
+              <p>
+                Opting out stops the measurement. It does not stop you seeing
+                advertisements, and it does not affect any dispatch service you
+                receive from us.
+              </p>
+            </SubSection>
+
+            <SubSection letter="F" title="Changes to This Section">
+              <p>
+                If we ever add another analytics or advertising provider, this
+                section will be updated to name it before that provider&rsquo;s
+                code goes live on the site.
+              </p>
+            </SubSection>
+          </Section>
+
+          {/* 6. How We Protect */}
+          <Section number="6" title="How We Protect Your Information">
             <p>
               We implement administrative, technical, and physical safeguards to
               protect your personal data. Access is limited to authorized personnel
@@ -175,9 +359,9 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          {/* 6. SMS Terms & Conditions — the 10DLC compliance section */}
+          {/* 7. SMS Terms & Conditions — the 10DLC compliance section */}
           <Section
-            number="6"
+            number="7"
             title="SMS Terms & Conditions"
             badge={{ icon: MessageSquare, text: '10DLC Required Section' }}
           >
@@ -266,8 +450,8 @@ export default function PrivacyPage() {
             </SubSection>
           </Section>
 
-          {/* 7. Data Retention */}
-          <Section number="7" title="Data Retention">
+          {/* 8. Data Retention */}
+          <Section number="8" title="Data Retention">
             <p>We retain personal information only as long as necessary to:</p>
             <ul>
               <li>Provide dispatching services</li>
@@ -276,8 +460,8 @@ export default function PrivacyPage() {
             </ul>
           </Section>
 
-          {/* 8. Your Rights */}
-          <Section number="8" title="Your Rights">
+          {/* 9. Your Rights */}
+          <Section number="9" title="Your Rights">
             <p>You may request:</p>
             <ul>
               <li>Access to the information we hold</li>
@@ -287,8 +471,8 @@ export default function PrivacyPage() {
             <p>Requests may be submitted to the contact information below.</p>
           </Section>
 
-          {/* 9. Changes */}
-          <Section number="9" title="Changes to This Policy">
+          {/* 10. Changes */}
+          <Section number="10" title="Changes to This Policy">
             <p>
               We may update this Privacy Policy &amp; SMS Terms from time to time.
               The &ldquo;Effective Date&rdquo; will be updated accordingly whenever
@@ -296,8 +480,8 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          {/* 10. Contact — final emphasized block */}
-          <Section number="10" title="Contact Information">
+          {/* 11. Contact — final emphasized block */}
+          <Section number="11" title="Contact Information">
             <p>For questions or concerns, please contact:</p>
             <div className="not-prose bg-surface-50 border border-surface-200 rounded-lg p-6 my-4">
               <p className="font-display font-bold text-navy-950 text-lg mb-4">
@@ -329,14 +513,22 @@ export default function PrivacyPage() {
           {/* Footer back-link */}
           <div className="mt-12 pt-8 border-t border-surface-200 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <p className="text-sm text-surface-600">
-              Last updated: January 2025
+              Last updated: {POLICY_UPDATED}
             </p>
-            <Link
-              href="/"
-              className="text-sm font-semibold text-primary-700 hover:text-primary-800"
-            >
-              ← Back to home
-            </Link>
+            <div className="flex items-center gap-6">
+              <Link
+                href="/terms"
+                className="text-sm font-semibold text-primary-700 hover:text-primary-800"
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/"
+                className="text-sm font-semibold text-primary-700 hover:text-primary-800"
+              >
+                ← Back to home
+              </Link>
+            </div>
           </div>
         </article>
       </div>

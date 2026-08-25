@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { ScrollReveal } from '@/components';
 import { BUSINESS, MEDIA, SERVICES } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 const iconComponents: Record<string, React.ElementType> = {
   DollarSign,
@@ -62,7 +63,7 @@ const serviceDetails = [
     ],
     stats: [
       { value: 'DAT+', label: 'Multiple Load Boards' },
-      { value: '48', label: 'States Covered' },
+      { value: '48', label: 'Contiguous States' },
     ],
   },
   {
@@ -170,6 +171,7 @@ export default function ServicesPageClient() {
             </p>
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'services_hero' })}
               className="btn-primary"
               aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
             >
@@ -277,7 +279,7 @@ export default function ServicesPageClient() {
                       ))}
                     </ul>
 
-                    <a href={BUSINESS.phoneHref} className="btn-primary">
+                    <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'services_detail_get_started' })} className="btn-primary">
                       <Phone className="w-5 h-5" aria-hidden="true" />
                       Get started
                     </a>
@@ -310,6 +312,7 @@ export default function ServicesPageClient() {
                       </p>
                       <a
                         href={BUSINESS.phoneHref}
+                        onClick={() => track('call_click', { location: 'services_detail_call' })}
                         className="inline-flex items-center gap-2 font-semibold text-white hover:text-primary-400 transition-colors"
                         aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
                       >
@@ -403,6 +406,7 @@ export default function ServicesPageClient() {
             </p>
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'services_final_cta' })}
               className="inline-flex items-center justify-center gap-3 h-16 px-8 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg sm:text-xl rounded-md transition-colors"
               aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
             >

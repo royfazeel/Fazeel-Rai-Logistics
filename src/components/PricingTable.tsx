@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Check, ArrowRight, FileText, Calendar, Percent, ChevronDown } from 'lucide-react';
 import { BUSINESS, PRICING_PLANS } from '@/lib/constants';
 import QuoteModal from './QuoteModal';
+import { track } from '@/lib/track';
 
 type PlanType = 'weekly' | 'contract' | 'percentage';
 
@@ -74,16 +75,16 @@ export default function PricingTable({
         >
           {activePlan === 'weekly' && (
             <WeeklyPlanCard
-              onGetStarted={() => setIsQuoteModalOpen(true)}
+              onGetStarted={() => { track('quote_modal_open', { location: 'pricing_card_weekly' }); setIsQuoteModalOpen(true); }}
               expandedFeatures={expandedFeatures}
               setExpandedFeatures={setExpandedFeatures}
             />
           )}
           {activePlan === 'contract' && (
-            <ContractPlanCard onGetStarted={() => setIsQuoteModalOpen(true)} />
+            <ContractPlanCard onGetStarted={() => { track('quote_modal_open', { location: 'pricing_card_contract' }); setIsQuoteModalOpen(true); }} />
           )}
           {activePlan === 'percentage' && (
-            <PercentagePlanCard onGetStarted={() => setIsQuoteModalOpen(true)} />
+            <PercentagePlanCard onGetStarted={() => { track('quote_modal_open', { location: 'pricing_card_percentage' }); setIsQuoteModalOpen(true); }} />
           )}
         </motion.div>
       </AnimatePresence>
@@ -149,7 +150,7 @@ function WeeklyPlanCard({
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <a href={BUSINESS.phoneHref} className="btn-primary flex-1">
+              <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_card_weekly' })} className="btn-primary flex-1">
                 <Phone className="w-5 h-5" aria-hidden="true" />
                 {PRICING_PLANS.weekly.cta}
               </a>
@@ -224,7 +225,7 @@ function ContractPlanCard({ onGetStarted }: { onGetStarted: () => void }) {
         </ul>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <a href={BUSINESS.phoneHref} className="btn-primary flex-1">
+          <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_card_contract' })} className="btn-primary flex-1">
             <Phone className="w-5 h-5" aria-hidden="true" />
             {PRICING_PLANS.contract.cta}
           </a>
@@ -281,7 +282,7 @@ function PercentagePlanCard({ onGetStarted }: { onGetStarted: () => void }) {
         </ul>
 
         <div className="flex flex-col sm:flex-row gap-3">
-          <a href={BUSINESS.phoneHref} className="btn-primary flex-1">
+          <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_card_percentage' })} className="btn-primary flex-1">
             <Phone className="w-5 h-5" aria-hidden="true" />
             {PRICING_PLANS.percentage.cta}
           </a>
@@ -340,11 +341,11 @@ export function PricingPreview() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            <a href={BUSINESS.phoneHref} className="btn-primary flex-1">
+            <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_preview_weekly' })} className="btn-primary flex-1">
               <Phone className="w-5 h-5" aria-hidden="true" />
               Call Now
             </a>
-            <button onClick={() => setIsQuoteModalOpen(true)} className="btn-secondary flex-1">
+            <button onClick={() => { track('quote_modal_open', { location: 'pricing_preview_weekly' }); setIsQuoteModalOpen(true); }} className="btn-secondary flex-1">
               Get Started
               <ArrowRight className="w-5 h-5" aria-hidden="true" />
             </button>
@@ -368,7 +369,7 @@ export function PricingPreview() {
           <p className="text-surface-700 text-sm mb-5">
             1-month dispatch contract with all services included. Renewable monthly or yearly.
           </p>
-          <a href={BUSINESS.phoneHref} className="btn-secondary w-full">
+          <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_preview_contract' })} className="btn-secondary w-full">
             <Phone className="w-4 h-4" aria-hidden="true" />
             Call for Pricing
           </a>
@@ -388,7 +389,7 @@ export function PricingPreview() {
           <p className="text-surface-700 text-sm mb-5">
             Pay only when you earn. Rates vary by equipment: 5% Dry Van/Reefer/Flatbed, 6% Power Only, 7% Box Truck.
           </p>
-          <a href={BUSINESS.phoneHref} className="btn-secondary w-full">
+          <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_preview_percentage' })} className="btn-secondary w-full">
             <Phone className="w-4 h-4" aria-hidden="true" />
             Start Today
           </a>

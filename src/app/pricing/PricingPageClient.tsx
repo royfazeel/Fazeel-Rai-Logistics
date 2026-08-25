@@ -15,6 +15,7 @@ import {
 import { ScrollReveal, PricingTable, FAQAccordion } from '@/components';
 import { BUSINESS, MEDIA, WEEKLY_PLAN_FAQS } from '@/lib/constants';
 import Link from 'next/link';
+import { track } from '@/lib/track';
 
 const pricingFaqs = [
   {
@@ -116,6 +117,7 @@ export default function PricingPageClient() {
               </p>
               <a
                 href={BUSINESS.phoneHref}
+                onClick={() => track('call_click', { location: 'pricing_hero' })}
                 className="btn-call"
                 aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
               >
@@ -378,6 +380,7 @@ export default function PricingPageClient() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
                 href={BUSINESS.phoneHref}
+                onClick={() => track('call_click', { location: 'pricing_final_cta' })}
                 className="btn-call"
                 aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
               >

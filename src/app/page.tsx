@@ -51,6 +51,7 @@ import {
   COMPARISON_ROWS,
   REVENUE_POTENTIAL,
 } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 const iconComponents: Record<string, React.ElementType> = {
   DollarSign,
@@ -192,7 +193,7 @@ export default function HomePage() {
               className="flex flex-col sm:flex-row gap-3 mb-10"
             >
               <button
-                onClick={() => setIsQuoteModalOpen(true)}
+                onClick={() => { track('quote_modal_open', { location: 'home_hero' }); setIsQuoteModalOpen(true); }}
                 className="btn-primary h-14 px-8 text-base sm:text-lg"
               >
                 Get a free setup
@@ -200,6 +201,7 @@ export default function HomePage() {
               </button>
               <a
                 href={BUSINESS.phoneHref}
+                onClick={() => track('call_click', { location: 'home_hero' })}
                 className="btn-ghost-light h-14 px-8 text-base sm:text-lg whitespace-nowrap"
                 aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
               >
@@ -332,7 +334,7 @@ export default function HomePage() {
 
           <ScrollReveal className="mt-10">
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
-              <a href={BUSINESS.phoneHref} className="btn-primary">
+              <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'home_services_cta' })} className="btn-primary">
                 <Phone className="w-5 h-5" aria-hidden="true" />
                 Call to get started
               </a>
@@ -416,6 +418,7 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <a
                     href={BUSINESS.phoneHref}
+                    onClick={() => track('call_click', { location: 'home_ratecheck_card' })}
                     className="flex items-center justify-center gap-2 h-12 px-4 bg-white text-primary-700 font-bold rounded-md hover:bg-primary-50 transition-colors"
                     aria-label={`Call ${BUSINESS.phone}`}
                   >
@@ -424,6 +427,7 @@ export default function HomePage() {
                   </a>
                   <a
                     href={BUSINESS.smsHref}
+                    onClick={() => track('sms_click', { location: 'home_ratecheck_card' })}
                     className="flex items-center justify-center gap-2 h-12 px-4 bg-primary-700 text-white font-semibold rounded-md border border-white/25 hover:bg-primary-800 transition-colors"
                   >
                     <MessageCircle className="w-4 h-4" aria-hidden="true" />
@@ -521,7 +525,7 @@ export default function HomePage() {
           </div>
 
           <ScrollReveal className="mt-12">
-            <a href={BUSINESS.phoneHref} className="btn-call">
+            <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'home_how_it_works' })} className="btn-call">
               <Phone className="w-5 h-5" aria-hidden="true" />
               Call to start: {BUSINESS.phone}
             </a>
@@ -553,6 +557,7 @@ export default function HomePage() {
                     <div className="grid grid-cols-2 gap-2">
                       <a
                         href={BUSINESS.phoneHref}
+                        onClick={() => track('call_click', { location: 'home_dispatcher_card' })}
                         className="inline-flex items-center justify-center gap-1.5 h-11 px-4 bg-primary-600 text-white text-sm font-semibold rounded-md hover:bg-primary-700 transition-colors"
                       >
                         <Phone className="w-4 h-4" aria-hidden="true" />
@@ -560,6 +565,7 @@ export default function HomePage() {
                       </a>
                       <a
                         href={BUSINESS.smsHref}
+                        onClick={() => track('sms_click', { location: 'home_dispatcher_card' })}
                         className="inline-flex items-center justify-center gap-1.5 h-11 px-4 bg-white/10 text-white text-sm font-semibold rounded-md border border-white/20 hover:bg-white/20 transition-colors"
                       >
                         <MessageCircle className="w-4 h-4" aria-hidden="true" />
@@ -747,7 +753,7 @@ export default function HomePage() {
           </ScrollReveal>
 
           <ScrollReveal className="mt-10">
-            <a href={BUSINESS.phoneHref} className="btn-primary">
+            <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'home_switch_cta' })} className="btn-primary">
               <Phone className="w-5 h-5" aria-hidden="true" />
               Call to switch: {BUSINESS.phone}
             </a>
@@ -951,6 +957,7 @@ export default function HomePage() {
             <div className="flex flex-col gap-3 max-w-md mx-auto mb-8">
               <a
                 href={BUSINESS.phoneHref}
+                onClick={() => track('call_click', { location: 'home_final_cta' })}
                 className="inline-flex items-center justify-center gap-3 h-16 px-6 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg sm:text-xl rounded-md transition-colors whitespace-nowrap"
               >
                 <Phone className="w-6 h-6" strokeWidth={2.25} aria-hidden="true" />
@@ -958,12 +965,12 @@ export default function HomePage() {
               </a>
 
               <div className="grid grid-cols-2 gap-3">
-                <a href={BUSINESS.smsHref} className="btn-ghost-light h-14">
+                <a href={BUSINESS.smsHref} onClick={() => track('sms_click', { location: 'home_final_cta' })} className="btn-ghost-light h-14">
                   <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
                   Text us
                 </a>
                 <button
-                  onClick={() => setIsQuoteModalOpen(true)}
+                  onClick={() => { track('quote_modal_open', { location: 'home_final_cta' }); setIsQuoteModalOpen(true); }}
                   className="btn-ghost-light h-14"
                 >
                   Get a quote

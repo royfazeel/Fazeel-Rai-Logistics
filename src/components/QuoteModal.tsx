@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, Send, Check, Loader2, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -136,6 +137,10 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
       const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
 
       if (res.ok && data?.ok === true) {
+        // Google Ads counts this as the lead conversion. Fired ONLY after the
+        // API confirmed the lead was actually delivered — never on a failure,
+        // or the campaign optimises towards submissions nobody received.
+        track('lead_submit', { source: 'quote_modal' });
         setIsSubmitted(true);
 
         // Auto-reset and close after the confirmation has been on screen a beat.
@@ -226,7 +231,11 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                   <p className="text-surface-600">
                     We&apos;ve got your details. The fastest way to get set up is
                     still a quick call — dial{' '}
-                    <a href={BUSINESS.phoneHref} className="text-primary-600 font-semibold">
+                    <a
+                      href={BUSINESS.phoneHref}
+                      onClick={() => track('call_click', { location: 'quote_modal_success' })}
+                      className="text-primary-600 font-semibold"
+                    >
                       {BUSINESS.phone}
                     </a>{' '}
                     or text us and we&apos;ll take it from there.
@@ -291,12 +300,11 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label htmlFor="quote-email" className={labelCls}>
-                        Email *
+                        Email (optional)
                       </label>
                       <input
                         id="quote-email"
                         type="email"
-                        required
                         autoComplete="email"
                         value={formState.email}
                         onChange={(e) => setFormState({ ...formState, email: e.target.value })}
@@ -440,6 +448,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                           Please call{' '}
                           <a
                             href={BUSINESS.phoneHref}
+                            onClick={() => track('call_click', { location: 'quote_modal_error' })}
                             className="font-semibold text-primary-700 underline underline-offset-2"
                           >
                             {BUSINESS.phone}
@@ -472,6 +481,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                     </button>
                     <a
                       href={BUSINESS.phoneHref}
+                      onClick={() => track('call_click', { location: 'quote_modal_call_instead' })}
                       className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-navy-900 font-semibold rounded-md border border-surface-300 hover:border-navy-400 hover:bg-surface-50 transition-colors"
                     >
                       <Phone className="w-5 h-5" />

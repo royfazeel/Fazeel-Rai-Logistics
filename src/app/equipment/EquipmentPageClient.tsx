@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { ScrollReveal } from '@/components';
 import { BUSINESS, MEDIA, REVENUE_POTENTIAL } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 const equipmentData = [
   {
@@ -174,6 +175,7 @@ export default function EquipmentPageClient() {
               </p>
               <a
                 href={BUSINESS.phoneHref}
+                onClick={() => track('call_click', { location: 'equipment_hero' })}
                 className="btn-primary h-14 px-8 text-base sm:text-lg"
                 aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
               >
@@ -270,7 +272,7 @@ export default function EquipmentPageClient() {
                       ))}
                     </ul>
 
-                    <a href={BUSINESS.phoneHref} className="btn-primary">
+                    <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'equipment_detail_get_started' })} className="btn-primary">
                       <Phone className="w-5 h-5" aria-hidden="true" />
                       Get started with {equipment.name}
                     </a>
@@ -312,6 +314,11 @@ export default function EquipmentPageClient() {
                             <dd className="font-display text-xl font-bold text-white">
                               {equipment.avgGross}
                             </dd>
+                            {/* Google Ads reviewers expect the qualifier beside the number,
+                                not only in the disclaimer far below. */}
+                            <p className="text-[11px] leading-snug text-white/50 mt-1 max-w-[22rem]">
+                              Industry-average range, not an income guarantee.
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -348,6 +355,7 @@ export default function EquipmentPageClient() {
                       </p>
                       <a
                         href={BUSINESS.phoneHref}
+                        onClick={() => track('call_click', { location: 'equipment_detail_card' })}
                         className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-white text-primary-700 font-bold rounded-md hover:bg-primary-50 transition-colors"
                         aria-label={`Call ${BUSINESS.phone}`}
                       >
@@ -422,6 +430,7 @@ export default function EquipmentPageClient() {
                         <td className="px-6 py-4 text-center">
                           <a
                             href={BUSINESS.phoneHref}
+                            onClick={() => track('call_click', { location: 'equipment_compare_table' })}
                             className="inline-flex items-center gap-1.5 text-primary-600 font-semibold hover:text-primary-700 transition-colors"
                           >
                             <Phone className="w-4 h-4" aria-hidden="true" />
@@ -465,6 +474,7 @@ export default function EquipmentPageClient() {
             </p>
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'equipment_final_cta' })}
               className="inline-flex items-center justify-center gap-3 h-16 px-8 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg rounded-md transition-colors"
               aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
             >

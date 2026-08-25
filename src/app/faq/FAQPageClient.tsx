@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Phone, Search } from 'lucide-react';
 import { ScrollReveal, FAQAccordion } from '@/components';
 import { BUSINESS, FAQS, MEDIA } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 export default function FAQPageClient() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -69,6 +70,7 @@ export default function FAQPageClient() {
             </p>
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'faq_top_bar' })}
               className="btn-primary"
               aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
             >
@@ -123,6 +125,7 @@ export default function FAQPageClient() {
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                 <a
                   href={BUSINESS.phoneHref}
+                  onClick={() => track('call_click', { location: 'faq_help_section' })}
                   className="btn-call"
                   aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
                 >
@@ -131,6 +134,7 @@ export default function FAQPageClient() {
                 </a>
                 <a
                   href={BUSINESS.emailHref}
+                  onClick={() => track('email_click', { location: 'faq_help_section' })}
                   className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
                 >
                   Or email us at {BUSINESS.email}
@@ -155,6 +159,7 @@ export default function FAQPageClient() {
             </p>
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'faq_final_cta' })}
               className="inline-flex items-center justify-center gap-3 h-16 px-8 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg sm:text-xl rounded-md transition-colors"
               aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
             >

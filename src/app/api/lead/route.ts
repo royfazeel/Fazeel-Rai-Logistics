@@ -2,18 +2,27 @@ import { NextResponse } from 'next/server';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
 
 /**
- * POST /api/lead — the single intake endpoint for every lead form on the site.
+ * /api/lead — the single intake endpoint for every lead form on the site.
  *
- * Consumed by:
+ * POST — submit a lead. Consumed by:
  *   - src/app/contact/ContactPageClient.tsx   (source: 'contact_page')
  *   - src/components/QuoteModal.tsx           (source: 'quote_modal')
- *   - src/components/LeadCapturePopup.tsx     (source: 'exit_intent_popup')
+ *   - src/components/LeadCapturePopup.tsx     (source: 'exit_intent_popup' —
+ *     the component is still in the repo but is not mounted in layout.tsx)
+ *
+ * GET — a non-sensitive configuration self-check the owner can open in a
+ * browser (/api/lead) to see whether lead delivery is actually live. It
+ * reports booleans only, never key values.
  *
  * Delivery is env-driven and additive — whatever is configured runs:
- *   RESEND_API_KEY + LEAD_TO_EMAIL + LEAD_FROM_EMAIL -> email via Resend HTTP API
- *   LEAD_WEBHOOK_URL                                 -> raw JSON POST (Zapier/Make/Sheets)
+ *   RESEND_API_KEY + LEAD_FROM_EMAIL (+ LEAD_TO_EMAIL) -> email via Resend HTTP API
+ *   LEAD_WEBHOOK_URL                                   -> raw JSON POST (Zapier/Make/Sheets)
  * If NOTHING is configured we return 503 not_configured. We never tell a
  * visitor their lead was delivered when it wasn't.
+ *
+ * When email is configured and the carrier gave an address, a short courtesy
+ * auto-reply goes to them AFTER the owner's notification. It can never fail
+ * the request — see sendAutoReply().
  */
 
 // Node runtime (not edge): we want plain fetch + a module-scoped Map, and
@@ -35,7 +44,7 @@ const MAX_USER_AGENT_CHARS = 400;
 const VALID_SOURCES = ['contact_page', 'quote_modal', 'exit_intent_popup'] as const;
 type LeadSource = (typeof VALID_SOURCES)[number];
 
-/** Short text fields accepted from the forms, in the order they appear in the email. */
+/** Short text fields accepted from the forms. */
 const TEXT_FIELDS = [
   'name',
   'phone',
@@ -48,6 +57,22 @@ const TEXT_FIELDS = [
 ] as const;
 type TextField = (typeof TEXT_FIELDS)[number];
 
+/**
+ * The order the notification email is written in — a CALLBACK order, not the
+ * form order. A dispatcher reading this on a phone should be able to dial and
+ * know who he is calling before he has to scroll.
+ */
+const CALLBACK_ORDER: TextField[] = [
+  'name',
+  'phone',
+  'equipment',
+  'mcNumber',
+  'lanes',
+  'currentStatus',
+  'factoring',
+  'email',
+];
+
 const FIELD_LABELS: Record<TextField | 'message' | 'requestCallback', string> = {
   name: 'Name',
   phone: 'Phone',
@@ -58,13 +83,33 @@ const FIELD_LABELS: Record<TextField | 'message' | 'requestCallback', string> = 
   factoring: 'Factoring',
   lanes: 'Preferred Lanes',
   message: 'Message',
-  requestCallback: 'Prefers a callback',
+  requestCallback: 'Callback requested',
 };
 
 const SOURCE_LABELS: Record<LeadSource, string> = {
   contact_page: 'Contact page form',
   quote_modal: 'Quote modal',
   exit_intent_popup: 'Exit-intent popup',
+};
+
+/**
+ * The <select> values the forms post are machine ids. Nobody wants to read
+ * "new-authority" at 6am, so they are decoded before they reach the inbox.
+ * These must stay in step with the selects in ContactPageClient.tsx and
+ * QuoteModal.tsx; an unrecognised id falls through to the raw value rather
+ * than being dropped.
+ */
+const STATUS_LABELS: Record<string, string> = {
+  'new-authority': 'New authority',
+  switching: 'Switching dispatchers',
+  'self-dispatch': 'Self-dispatching now',
+  exploring: 'Just exploring',
+};
+
+const FACTORING_LABELS: Record<string, string> = {
+  'have-factoring': 'Has a factoring company',
+  'no-factoring': 'No factoring',
+  'need-help': 'Needs help choosing',
 };
 
 /* ------------------------------------------------------------------ *
@@ -164,8 +209,16 @@ function equipmentLabel(id: string): string {
   return match ? match.name : id;
 }
 
+/** Turn a stored field value into the human wording that goes in the email. */
+function displayValue(field: TextField, value: string): string {
+  if (field === 'equipment') return equipmentLabel(value);
+  if (field === 'currentStatus') return STATUS_LABELS[value] ?? value;
+  if (field === 'factoring') return FACTORING_LABELS[value] ?? value;
+  return value;
+}
+
 /**
- * Normalise a submitted phone number into a dependable tel: href.
+ * Normalise a submitted phone number into a dependable E.164 tel: href.
  * A bare 10-digit US number works when dialled from a US handset but not from
  * every mail client or VoIP app, so we promote to E.164 where we safely can.
  */
@@ -176,6 +229,11 @@ function telHref(phone: string): string {
   if (digits.length === 10) return `tel:+1${digits}`;
   if (digits.length === 11 && digits.startsWith('1')) return `tel:+${digits}`;
   return `tel:${digits}`;
+}
+
+/** Same normalisation, as an sms: href — a dispatcher often texts first. */
+function smsHref(phone: string): string {
+  return telHref(phone).replace(/^tel:/, 'sms:');
 }
 
 function escapeHtml(value: string): string {
@@ -189,6 +247,45 @@ function escapeHtml(value: string): string {
 
 function fail(status: number, code: string, message: string) {
   return NextResponse.json({ ok: false, code, message }, { status });
+}
+
+/* ------------------------------------------------------------------ *
+ * Configuration — one place that decides what is switched on, shared by the
+ * POST handler and the GET self-check so the two can never disagree.
+ * ------------------------------------------------------------------ */
+
+/** Email notifications need a key AND a verified from-address. */
+function resendConfigured(): boolean {
+  return Boolean(process.env.RESEND_API_KEY && process.env.LEAD_FROM_EMAIL);
+}
+
+function webhookConfigured(): boolean {
+  return Boolean(process.env.LEAD_WEBHOOK_URL);
+}
+
+/**
+ * The courtesy auto-reply rides on the same Resend setup as the owner
+ * notification. LEAD_AUTO_REPLY=off turns it off without disturbing anything
+ * else.
+ */
+function autoReplyConfigured(): boolean {
+  const flag = (process.env.LEAD_AUTO_REPLY || '').trim().toLowerCase();
+  if (flag === 'off' || flag === 'false' || flag === '0' || flag === 'no') return false;
+  return resendConfigured();
+}
+
+/**
+ * Resend's endpoint. Overridable ONLY so the delivery path can be pointed at
+ * a local sink while testing — deliberately left out of the owner-facing
+ * setup guide, and it must stay unset in production.
+ */
+function resendEndpoint(): string {
+  return process.env.RESEND_API_URL || 'https://api.resend.com/emails';
+}
+
+/** Where the owner's lead notifications land. */
+function ownerInbox(): string {
+  return process.env.LEAD_TO_EMAIL || BUSINESS.email;
 }
 
 /* ------------------------------------------------------------------ *
@@ -207,15 +304,25 @@ interface Lead {
   raw: Record<string, string | boolean>;
 }
 
+/**
+ * Subject line. It gets read on a phone lock screen, so the two things that
+ * decide whether the call happens now come first: who it is, and what he
+ * drives.
+ */
 function buildEmailSubject(lead: Lead): string {
-  const name = lead.raw.name as string;
-  const equipment = lead.raw.equipment ? ` · ${equipmentLabel(lead.raw.equipment as string)}` : '';
-  return `New lead: ${name}${equipment} (${lead.sourceLabel})`;
+  const name = (lead.raw.name as string) || 'Carrier';
+  const equipmentId = (lead.raw.equipment as string) || '';
+  const parts = [name, equipmentId ? equipmentLabel(equipmentId) : 'Equipment not given'];
+  if (lead.raw.requestCallback === true) parts.push('wants a callback');
+  return `New lead: ${parts.join(' · ')}`;
 }
 
 function buildEmailText(lead: Lead): string {
+  const phone = (lead.raw.phone as string) || '';
   const lines = [
     `New ${lead.sourceLabel.toLowerCase()} submission — ${BUSINESS.name}`,
+    '',
+    `CALL BACK: ${phone}   ${telHref(phone)}`,
     '',
     ...lead.fields.map((f) => `${f.label}: ${f.value}`),
     '',
@@ -231,18 +338,29 @@ function buildEmailText(lead: Lead): string {
 }
 
 function buildEmailHtml(lead: Lead): string {
+  const phone = (lead.raw.phone as string) || '';
+
   const rows = lead.fields
-    .map(
-      (f) =>
+    .map((f) => {
+      // The phone row is a link as well as a button — some clients strip
+      // button styling, and the number has to stay tappable regardless.
+      const value =
+        f.key === 'phone'
+          ? `<a href="${escapeHtml(
+              telHref(f.value)
+            )}" style="color:#C8232C;font-weight:700;text-decoration:none;">${escapeHtml(
+              f.value
+            )}</a>`
+          : escapeHtml(f.value).replace(/\n/g, '<br>');
+      return (
         `<tr>` +
         `<td style="padding:6px 14px 6px 0;color:#5b6270;font:600 13px/1.5 Arial,sans-serif;white-space:nowrap;vertical-align:top;">${escapeHtml(
           f.label
         )}</td>` +
-        `<td style="padding:6px 0;color:#14161C;font:400 15px/1.5 Arial,sans-serif;">${escapeHtml(
-          f.value
-        ).replace(/\n/g, '<br>')}</td>` +
+        `<td style="padding:6px 0;color:#14161C;font:400 15px/1.5 Arial,sans-serif;">${value}</td>` +
         `</tr>`
-    )
+      );
+    })
     .join('');
 
   const meta = [
@@ -265,8 +383,11 @@ function buildEmailHtml(lead: Lead): string {
     )
     .join('');
 
-  const phone = lead.raw.phone as string;
-  const callHref = telHref(phone);
+  const equipmentId = (lead.raw.equipment as string) || '';
+  const strapline = [
+    equipmentId ? equipmentLabel(equipmentId) : 'Equipment not given',
+    lead.sourceLabel,
+  ].join(' · ');
 
   return [
     `<div style="background:#f4f5f7;padding:24px;">`,
@@ -274,18 +395,23 @@ function buildEmailHtml(lead: Lead): string {
     `<div style="background:#14161C;padding:18px 24px;">`,
     `<div style="color:#C8232C;font:700 12px/1.4 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;">New lead</div>`,
     `<div style="color:#ffffff;font:700 22px/1.3 Arial,sans-serif;margin-top:4px;">${escapeHtml(
-      lead.raw.name as string
+      (lead.raw.name as string) || 'Carrier'
     )}</div>`,
     `<div style="color:rgba(255,255,255,.7);font:400 13px/1.5 Arial,sans-serif;margin-top:2px;">${escapeHtml(
-      lead.sourceLabel
+      strapline
     )}</div>`,
     `</div>`,
     `<div style="padding:20px 24px;">`,
+    `<div style="margin-bottom:18px;">`,
     `<a href="${escapeHtml(
-      callHref
-    )}" style="display:inline-block;background:#C8232C;color:#ffffff;font:700 14px/1 Arial,sans-serif;padding:12px 20px;border-radius:6px;text-decoration:none;margin-bottom:18px;">Call ${escapeHtml(
+      telHref(phone)
+    )}" style="display:inline-block;background:#C8232C;color:#ffffff;font:700 14px/1 Arial,sans-serif;padding:12px 20px;border-radius:6px;text-decoration:none;margin-right:8px;">Call ${escapeHtml(
       phone
     )}</a>`,
+    `<a href="${escapeHtml(
+      smsHref(phone)
+    )}" style="display:inline-block;background:#ffffff;color:#14161C;font:700 14px/1 Arial,sans-serif;padding:11px 18px;border:1px solid #c8ccd4;border-radius:6px;text-decoration:none;">Text</a>`,
+    `</div>`,
     `<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">${rows}</table>`,
     `<hr style="border:none;border-top:1px solid #e3e5ea;margin:18px 0;">`,
     `<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">${meta}</table>`,
@@ -294,30 +420,110 @@ function buildEmailHtml(lead: Lead): string {
 }
 
 /* ------------------------------------------------------------------ *
+ * The carrier's courtesy auto-reply.
+ *
+ * It deliberately makes no promise the business has not already made on the
+ * site: it confirms what arrived and points at the phone, which is both the
+ * fastest route for the carrier and the conversion that matters.
+ * ------------------------------------------------------------------ */
+
+function firstName(fullName: string): string {
+  return fullName.trim().split(/\s+/)[0] || '';
+}
+
+/** The handful of details worth reading back, in the carrier's own words. */
+function autoReplySummary(lead: Lead): Array<[string, string]> {
+  return lead.fields
+    .filter((f) => ['name', 'phone', 'equipment', 'mcNumber', 'lanes'].includes(f.key))
+    .map((f) => [f.label, f.value] as [string, string]);
+}
+
+function buildAutoReplyText(lead: Lead): string {
+  const greeting = firstName(lead.raw.name as string);
+  const summary = autoReplySummary(lead)
+    .map(([label, value]) => `  ${label}: ${value}`)
+    .join('\n');
+
+  return [
+    greeting ? `Hi ${greeting},` : 'Hi,',
+    '',
+    `Thanks for contacting ${BUSINESS.name}. This is an automatic confirmation that your request reached us.`,
+    '',
+    'Here is what we received:',
+    summary,
+    '',
+    `The fastest way to speak to a dispatcher is to call ${BUSINESS.phone}. You can text or WhatsApp the same number.`,
+    `Dispatch desk: ${BUSINESS.hours.days}, ${BUSINESS.hours.time}.`,
+    '',
+    'If anything above is wrong, just reply to this email and we will correct it.',
+    '',
+    `— ${BUSINESS.name}`,
+    BUSINESS.address.full,
+    `${BUSINESS.phone} · ${ownerInbox()}`,
+    '',
+    'You are receiving this because this address was entered on our website. No further email will be sent unless you reply.',
+  ].join('\n');
+}
+
+function buildAutoReplyHtml(lead: Lead): string {
+  const greeting = firstName(lead.raw.name as string);
+  const summaryRows = autoReplySummary(lead)
+    .map(
+      ([label, value]) =>
+        `<tr>` +
+        `<td style="padding:5px 14px 5px 0;color:#5b6270;font:600 13px/1.5 Arial,sans-serif;white-space:nowrap;vertical-align:top;">${escapeHtml(
+          label
+        )}</td>` +
+        `<td style="padding:5px 0;color:#14161C;font:400 14px/1.5 Arial,sans-serif;">${escapeHtml(
+          value
+        )}</td>` +
+        `</tr>`
+    )
+    .join('');
+
+  return [
+    `<div style="background:#f4f5f7;padding:24px;">`,
+    `<div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e3e5ea;border-radius:6px;overflow:hidden;">`,
+    `<div style="background:#14161C;padding:16px 24px;color:#ffffff;font:700 18px/1.3 Arial,sans-serif;">${escapeHtml(
+      BUSINESS.name
+    )}</div>`,
+    `<div style="padding:22px 24px;color:#14161C;font:400 15px/1.6 Arial,sans-serif;">`,
+    `<p style="margin:0 0 14px;">${escapeHtml(greeting ? `Hi ${greeting},` : 'Hi,')}</p>`,
+    `<p style="margin:0 0 14px;">Thanks for contacting ${escapeHtml(
+      BUSINESS.name
+    )}. This is an automatic confirmation that your request reached us.</p>`,
+    `<p style="margin:0 0 8px;font-weight:700;">Here is what we received:</p>`,
+    `<table cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin-bottom:16px;">${summaryRows}</table>`,
+    `<p style="margin:0 0 14px;">The fastest way to speak to a dispatcher is to call <a href="${escapeHtml(
+      BUSINESS.phoneHref
+    )}" style="color:#C8232C;font-weight:700;text-decoration:none;">${escapeHtml(
+      BUSINESS.phone
+    )}</a>. You can text or WhatsApp the same number.</p>`,
+    `<p style="margin:0 0 14px;">Dispatch desk: ${escapeHtml(BUSINESS.hours.days)}, ${escapeHtml(
+      BUSINESS.hours.time
+    )}.</p>`,
+    `<p style="margin:0 0 18px;">If anything above is wrong, just reply to this email and we will correct it.</p>`,
+    `<hr style="border:none;border-top:1px solid #e3e5ea;margin:0 0 14px;">`,
+    `<p style="margin:0;color:#5b6270;font:400 12px/1.6 Arial,sans-serif;">${escapeHtml(
+      BUSINESS.name
+    )} · ${escapeHtml(BUSINESS.address.full)}<br>${escapeHtml(BUSINESS.phone)} · ${escapeHtml(
+      ownerInbox()
+    )}<br>` +
+      `You are receiving this because this address was entered on our website. No further email will be sent unless you reply.</p>`,
+    `</div></div></div>`,
+  ].join('');
+}
+
+/* ------------------------------------------------------------------ *
  * Delivery channels.
  * ------------------------------------------------------------------ */
 
-async function deliverViaResend(lead: Lead): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY as string;
-  const to = process.env.LEAD_TO_EMAIL || BUSINESS.email;
-  const from = process.env.LEAD_FROM_EMAIL as string;
-
-  const payload: Record<string, unknown> = {
-    from,
-    to: [to],
-    subject: buildEmailSubject(lead),
-    text: buildEmailText(lead),
-    html: buildEmailHtml(lead),
-  };
-
-  // Replying to the notification should reach the carrier directly.
-  const replyTo = lead.raw.email as string | undefined;
-  if (replyTo) payload.reply_to = replyTo;
-
-  const res = await fetch('https://api.resend.com/emails', {
+/** The one place that talks to Resend, so both emails share timeout + errors. */
+async function sendViaResend(payload: Record<string, unknown>): Promise<void> {
+  const res = await fetch(resendEndpoint(), {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${process.env.RESEND_API_KEY as string}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
@@ -327,6 +533,56 @@ async function deliverViaResend(lead: Lead): Promise<void> {
   if (!res.ok) {
     const detail = await res.text().catch(() => '');
     throw new Error(`Resend responded ${res.status}: ${detail.slice(0, 500)}`);
+  }
+}
+
+async function deliverViaResend(lead: Lead): Promise<void> {
+  const payload: Record<string, unknown> = {
+    from: process.env.LEAD_FROM_EMAIL as string,
+    to: [ownerInbox()],
+    subject: buildEmailSubject(lead),
+    text: buildEmailText(lead),
+    html: buildEmailHtml(lead),
+  };
+
+  // Replying to the notification should reach the carrier directly.
+  const replyTo = lead.raw.email as string | undefined;
+  if (replyTo) payload.reply_to = replyTo;
+
+  await sendViaResend(payload);
+}
+
+/**
+ * Courtesy acknowledgement to the carrier. NEVER throws: the owner's lead is
+ * the thing that matters, and a bounced pleasantry must not turn a delivered
+ * lead into an error on the visitor's screen.
+ */
+async function sendAutoReply(lead: Lead): Promise<boolean> {
+  const to = (lead.raw.email as string) || '';
+  if (!to || !autoReplyConfigured()) return false;
+
+  try {
+    await sendViaResend({
+      from: process.env.LEAD_FROM_EMAIL as string,
+      to: [to],
+      reply_to: ownerInbox(),
+      subject: `We received your request — ${BUSINESS.name}`,
+      text: buildAutoReplyText(lead),
+      html: buildAutoReplyHtml(lead),
+      headers: {
+        // Standard hints that stop other autoresponders answering this one
+        // and starting a loop.
+        'Auto-Submitted': 'auto-replied',
+        'X-Auto-Response-Suppress': 'All',
+      },
+    });
+    return true;
+  } catch (err) {
+    console.error(
+      '[api/lead] auto-reply to the carrier failed (the lead itself was delivered):',
+      err instanceof Error ? err.message : String(err)
+    );
+    return false;
   }
 }
 
@@ -344,6 +600,12 @@ async function deliverViaWebhook(lead: Lead): Promise<void> {
       pageUrl: lead.pageUrl,
       userAgent: lead.userAgent,
       ip: lead.ip,
+      // Ready-made strings so a no-code Zap can send a useful SMS or Slack
+      // message from a single merge field instead of stitching one together.
+      subject: buildEmailSubject(lead),
+      summary: buildEmailText(lead),
+      telHref: telHref((lead.raw.phone as string) || ''),
+      equipmentLabel: lead.raw.equipment ? equipmentLabel(lead.raw.equipment as string) : '',
       ...lead.raw,
     }),
     signal: AbortSignal.timeout(10_000),
@@ -434,49 +696,53 @@ export async function POST(req: Request) {
   }
 
   // 6. Is anything actually wired up? Check BEFORE claiming success.
-  const resendConfigured = Boolean(process.env.RESEND_API_KEY && process.env.LEAD_FROM_EMAIL);
-  const webhookConfigured = Boolean(process.env.LEAD_WEBHOOK_URL);
-  if (!resendConfigured && !webhookConfigured) {
+  const emailReady = resendConfigured();
+  const webhookReady = webhookConfigured();
+  if (!emailReady && !webhookReady) {
     console.error(
       '[api/lead] Dropping a real lead: no delivery channel configured. ' +
-        'Set RESEND_API_KEY + LEAD_FROM_EMAIL + LEAD_TO_EMAIL, or LEAD_WEBHOOK_URL. ' +
-        'See README "Lead form setup".'
+        'Set RESEND_API_KEY + LEAD_FROM_EMAIL + LEAD_TO_EMAIL, or LEAD_WEBHOOK_URL, then ' +
+        'redeploy. Open GET /api/lead to see what is missing; SETUP.md has the steps.'
     );
-    return fail(
-      503,
-      'not_configured',
-      'Lead delivery is not configured on this site yet.'
-    );
+    return fail(503, 'not_configured', 'Lead delivery is not configured on this site yet.');
   }
 
   // 7. Build the lead record.
   const now = new Date();
   let submittedAtLocal: string;
   try {
-    submittedAtLocal = new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/Chicago',
-      dateStyle: 'full',
-      timeStyle: 'short',
-    }).format(now) + ' CST/CDT';
+    submittedAtLocal =
+      new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Chicago',
+        dateStyle: 'full',
+        timeStyle: 'short',
+      }).format(now) + ' CST/CDT';
   } catch {
     submittedAtLocal = now.toUTCString();
   }
 
+  // Callback order, not form order — see CALLBACK_ORDER.
   const fields: Lead['fields'] = [];
-  for (const field of TEXT_FIELDS) {
+  for (const field of CALLBACK_ORDER) {
     const value = values[field];
-    if (!value) continue;
-    fields.push({
-      key: field,
-      label: FIELD_LABELS[field],
-      value: field === 'equipment' ? equipmentLabel(value) : value,
-    });
+    if (value) {
+      fields.push({
+        key: field,
+        label: FIELD_LABELS[field],
+        value: displayValue(field, value),
+      });
+    }
+    // Sits directly under the number it applies to.
+    if (field === 'phone' && requestCallback) {
+      fields.push({
+        key: 'requestCallback',
+        label: FIELD_LABELS.requestCallback,
+        value: 'Yes — prefers a call over email',
+      });
+    }
   }
   if (message) {
     fields.push({ key: 'message', label: FIELD_LABELS.message, value: message });
-  }
-  if (requestCallback) {
-    fields.push({ key: 'requestCallback', label: FIELD_LABELS.requestCallback, value: 'Yes' });
   }
 
   const lead: Lead = {
@@ -501,11 +767,11 @@ export async function POST(req: Request) {
   //    least one of them actually accepted the lead.
   const attempts: Array<Promise<void>> = [];
   const channelNames: string[] = [];
-  if (resendConfigured) {
+  if (emailReady) {
     channelNames.push('resend');
     attempts.push(deliverViaResend(lead));
   }
-  if (webhookConfigured) {
+  if (webhookReady) {
     channelNames.push('webhook');
     attempts.push(deliverViaWebhook(lead));
   }
@@ -525,17 +791,60 @@ export async function POST(req: Request) {
   });
 
   if (!delivered) {
-    return fail(
-      502,
-      'delivery_failed',
-      'We could not send that message just now.'
-    );
+    return fail(502, 'delivery_failed', 'We could not send that message just now.');
   }
+
+  // 9. Only once the lead is safely delivered, send the carrier a courtesy
+  //    acknowledgement. Awaited (a serverless function can be frozen the
+  //    instant the response is returned) but it can never fail the request.
+  await sendAutoReply(lead);
 
   return NextResponse.json({ ok: true });
 }
 
-/** Anything that isn't a POST gets a clear, boring answer. */
+/**
+ * GET /api/lead — configuration self-check.
+ *
+ * Open this in a browser after setting environment variables and redeploying:
+ * it says, in plain words, whether leads will actually reach you. Booleans
+ * only — it never echoes a key, an address, or a URL.
+ */
 export async function GET() {
-  return fail(405, 'method_not_allowed', 'Use POST to submit a lead.');
+  const configured = {
+    resend: resendConfigured(),
+    webhook: webhookConfigured(),
+    autoReply: autoReplyConfigured(),
+  };
+  const ok = configured.resend || configured.webhook;
+
+  const parts: string[] = [];
+  if (ok) {
+    parts.push('Lead delivery is configured.');
+    parts.push(`Email notifications: ${configured.resend ? 'ON' : 'OFF'}.`);
+    parts.push(`Webhook delivery: ${configured.webhook ? 'ON' : 'OFF'}.`);
+    parts.push(
+      configured.autoReply
+        ? 'Auto-reply to the carrier: ON.'
+        : 'Auto-reply to the carrier: OFF (it needs RESEND_API_KEY and LEAD_FROM_EMAIL, and LEAD_AUTO_REPLY must not be set to "off").'
+    );
+    parts.push('Now send yourself a test through the contact form to confirm it end to end.');
+  } else {
+    parts.push(
+      'Lead delivery is NOT configured — the forms currently show visitors your phone number instead of accepting a message.'
+    );
+    parts.push(
+      'Set RESEND_API_KEY + LEAD_FROM_EMAIL + LEAD_TO_EMAIL (email), or LEAD_WEBHOOK_URL (Zapier/Make), then REDEPLOY the site.'
+    );
+    parts.push('Step-by-step instructions are in SETUP.md.');
+  }
+
+  return NextResponse.json(
+    {
+      ok,
+      configured,
+      message: parts.join(' '),
+      checkedAt: new Date().toISOString(),
+    },
+    { headers: { 'Cache-Control': 'no-store' } }
+  );
 }

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, MessageCircle } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 /**
  * Floating call/text/WhatsApp widgets — appear after 300px of scroll.
@@ -77,6 +78,7 @@ export default function StickyCallWidgets() {
                 <>
                   <motion.a
                     href={BUSINESS.whatsappHref}
+                    onClick={() => track('whatsapp_click', { location: 'sticky_desktop_expanded' })}
                     target="_blank"
                     rel="noopener noreferrer"
                     initial={{ opacity: 0, y: 12 }}
@@ -91,6 +93,7 @@ export default function StickyCallWidgets() {
                   </motion.a>
                   <motion.a
                     href={BUSINESS.smsHref}
+                    onClick={() => track('sms_click', { location: 'sticky_desktop_expanded' })}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 12 }}
@@ -108,6 +111,7 @@ export default function StickyCallWidgets() {
             {/* Call Button — always visible, primary CTA */}
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'sticky_desktop_call' })}
               className={`group flex items-center gap-3 h-14 pl-3 pr-5 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-md shadow-strong transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/40 ${
                 isPulsing ? 'animate-call-pulse' : ''
               }`}
@@ -133,6 +137,7 @@ export default function StickyCallWidgets() {
           <div className="grid grid-cols-3 h-14 divide-x divide-surface-200">
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'mobile_bottom_bar' })}
               className="flex flex-col items-center justify-center gap-0.5 bg-primary-600 text-white font-semibold active:bg-primary-700 transition-colors"
               aria-label={`Call ${BUSINESS.phone}`}
             >
@@ -141,6 +146,7 @@ export default function StickyCallWidgets() {
             </a>
             <a
               href={BUSINESS.smsHref}
+              onClick={() => track('sms_click', { location: 'mobile_bottom_bar' })}
               className="flex flex-col items-center justify-center gap-0.5 bg-white text-navy-800 font-semibold active:bg-surface-50 transition-colors"
               aria-label="Text us"
             >
@@ -149,6 +155,7 @@ export default function StickyCallWidgets() {
             </a>
             <a
               href={BUSINESS.whatsappHref}
+              onClick={() => track('whatsapp_click', { location: 'mobile_bottom_bar' })}
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center justify-center gap-0.5 bg-white text-navy-800 font-semibold active:bg-surface-50 transition-colors"

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { ScrollReveal } from '@/components';
 import { BUSINESS, MEDIA, DISPATCHER, STATS } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 const values = [
   {
@@ -82,6 +83,7 @@ export default function AboutPageClient() {
               </p>
               <a
                 href={BUSINESS.phoneHref}
+                onClick={() => track('call_click', { location: 'about_hero' })}
                 className="btn-primary"
                 aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
               >
@@ -201,6 +203,7 @@ export default function AboutPageClient() {
                     <div className="grid grid-cols-2 gap-2">
                       <a
                         href={BUSINESS.phoneHref}
+                        onClick={() => track('call_click', { location: 'about_dispatcher_card' })}
                         className="inline-flex items-center justify-center gap-1.5 h-11 px-4 bg-primary-600 text-white text-sm font-semibold rounded-md hover:bg-primary-700 transition-colors"
                         aria-label={`Call ${DISPATCHER.name} at ${BUSINESS.phone}`}
                       >
@@ -209,6 +212,7 @@ export default function AboutPageClient() {
                       </a>
                       <a
                         href={BUSINESS.smsHref}
+                        onClick={() => track('sms_click', { location: 'about_dispatcher_card' })}
                         className="inline-flex items-center justify-center gap-1.5 h-11 px-4 bg-white/10 text-white text-sm font-semibold rounded-md border border-white/20 hover:bg-white/20 transition-colors"
                       >
                         <MessageCircle className="w-4 h-4" aria-hidden="true" />
@@ -377,6 +381,7 @@ export default function AboutPageClient() {
             </p>
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'about_final_cta' })}
               className="inline-flex items-center justify-center gap-3 h-16 px-8 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg sm:text-xl rounded-md transition-colors"
               aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
             >

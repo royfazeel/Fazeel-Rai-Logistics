@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Truck, ArrowRight, MessageCircle, Clock } from 'lucide-react';
 import { BUSINESS, NAVIGATION } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 const footerLinks = {
   services: [
@@ -49,6 +50,7 @@ export default function Footer() {
             </div>
             <motion.a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'footer_cta_banner' })}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-3 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xl rounded-md transition-colors"
@@ -87,6 +89,7 @@ export default function Footer() {
             <div className="space-y-3">
               <a
                 href={BUSINESS.phoneHref}
+                onClick={() => track('call_click', { location: 'footer_contact_list' })}
                 className="flex items-center gap-3 text-surface-300 hover:text-white transition-colors"
               >
                 <Phone className="w-5 h-5 text-primary-400" />
@@ -94,6 +97,7 @@ export default function Footer() {
               </a>
               <a
                 href={BUSINESS.smsHref}
+                onClick={() => track('sms_click', { location: 'footer_contact_list' })}
                 className="flex items-center gap-3 text-surface-300 hover:text-white transition-colors"
               >
                 <MessageCircle className="w-5 h-5 text-primary-400" />
@@ -101,6 +105,7 @@ export default function Footer() {
               </a>
               <a
                 href={BUSINESS.whatsappHref}
+                onClick={() => track('whatsapp_click', { location: 'footer_contact_list' })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-surface-300 hover:text-white transition-colors"
@@ -118,6 +123,7 @@ export default function Footer() {
               </a>
               <a
                 href={BUSINESS.emailHref}
+                onClick={() => track('email_click', { location: 'footer_contact_list' })}
                 className="flex items-center gap-3 text-surface-300 hover:text-white transition-colors"
               >
                 <Mail className="w-5 h-5 text-primary-400" />

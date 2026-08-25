@@ -2,6 +2,13 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { BUSINESS } from '@/lib/constants';
 
+/**
+ * Single source of truth for the date shown at the top and bottom of this
+ * page. Keep it in step with POLICY_UPDATED in src/app/privacy/page.tsx —
+ * two legal pages carrying dates a year apart reads as neglect.
+ */
+const TERMS_UPDATED = 'August 2026';
+
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description: `Terms of Service for ${BUSINESS.name}. Read our service agreement and conditions.`,
@@ -22,7 +29,7 @@ export default function TermsPage() {
               The service agreement and conditions for {BUSINESS.name} dispatch
               services.
             </p>
-            <p className="text-white/50 text-sm mt-3">Last updated: January 2024</p>
+            <p className="text-white/50 text-sm mt-3">Last updated: {TERMS_UPDATED}</p>
           </div>
         </div>
       </section>
@@ -66,8 +73,10 @@ export default function TermsPage() {
             <div className="bg-surface-50 border border-surface-200 border-l-4 border-l-primary-600 rounded-lg p-6 mb-4">
               <p className="text-navy-900 font-medium leading-relaxed">
                 {BUSINESS.name} provides dispatch services only. We are NOT a motor carrier,
-                freight broker, or freight forwarder. Carriers using our services remain
-                solely responsible for:
+                NOT a freight broker, NOT a freight forwarder, and NOT a factoring company.
+                We do not buy, resell, or take title to freight, and we operate under YOUR
+                motor carrier authority &mdash; never our own. Carriers using our services
+                remain solely responsible for:
               </p>
               <ul className="list-disc pl-6 text-navy-800 leading-relaxed space-y-2 mt-4">
                 <li>Maintaining valid operating authority (MC/DOT)</li>
@@ -82,7 +91,39 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              4. Carrier Requirements
+              4. No Earnings, Revenue, or Load Volume Guarantee
+            </h2>
+            <div className="bg-surface-50 border border-surface-200 border-l-4 border-l-primary-600 rounded-lg p-6 mb-4">
+              <p className="text-navy-900 font-medium leading-relaxed">
+                Any weekly gross figures, rate-per-mile ranges, or sample lane rates shown
+                on this website are industry reference ranges gathered from public load
+                board and market rate data. They are illustrations of the market, not
+                offers, projections, or promises about what you will earn.
+              </p>
+            </div>
+            <p className="text-navy-800 leading-relaxed mb-4">
+              {BUSINESS.name} does not guarantee any specific income, gross revenue, profit,
+              rate per mile, number of loads, or continuity of freight. Your results depend
+              on factors outside our control, including:
+            </p>
+            <ul className="list-disc pl-6 text-navy-800 leading-relaxed space-y-2">
+              <li>Freight market conditions and seasonal rate movement</li>
+              <li>The lanes and load types you are willing to run</li>
+              <li>Your equipment, insurance, safety rating, and operating authority</li>
+              <li>Your availability, hours of service, and downtime</li>
+              <li>Fuel, maintenance, insurance, and other costs you carry</li>
+              <li>Broker and shipper rate decisions, which are theirs to make, not ours</li>
+            </ul>
+            <p className="text-navy-800 leading-relaxed mt-4">
+              We are paid a dispatch fee for the work of finding freight and negotiating on
+              your behalf. That fee is owed for the service performed regardless of the
+              revenue any individual load produces.
+            </p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
+              5. Carrier Requirements
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               To use our dispatch services, you must:
@@ -99,7 +140,7 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              5. Fees and Payment
+              6. Fees and Payment
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               Our dispatch services are provided under one of the following arrangements:
@@ -125,7 +166,7 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              6. Cancellation and Termination
+              7. Cancellation and Termination
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               Either party may terminate the dispatch relationship with proper written notice
@@ -140,7 +181,7 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              7. Limitation of Liability
+              8. Limitation of Liability
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               To the maximum extent permitted by law, {BUSINESS.name} shall not be liable for:
@@ -160,7 +201,7 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              8. Indemnification
+              9. Indemnification
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               You agree to indemnify and hold harmless {BUSINESS.name}, {BUSINESS.parentCompany},
@@ -172,7 +213,7 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              9. Confidentiality
+              10. Confidentiality
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               Both parties agree to maintain the confidentiality of proprietary information
@@ -183,7 +224,7 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              10. Modifications
+              11. Modifications
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               We reserve the right to modify these Terms of Service at any time. Changes will
@@ -194,7 +235,7 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              11. Governing Law
+              12. Governing Law
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               These Terms of Service shall be governed by and construed in accordance with the
@@ -204,7 +245,32 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              12. Contact Information
+              13. Website, Cookies, Advertising &amp; Privacy
+            </h2>
+            <p className="text-navy-800 leading-relaxed mb-4">
+              This website advertises on Google and loads Google Analytics and Google Ads
+              conversion tracking so we can tell which advertisements produce real enquiries.
+              Those tools set cookies in your browser. No other analytics, advertising,
+              session-recording, or data-broker service runs on this site.
+            </p>
+            <p className="text-navy-800 leading-relaxed mb-4">
+              Full detail &mdash; which cookies, what they can and cannot see, and step-by-step
+              instructions for opting out &mdash; is in Section 5 of our{' '}
+              <Link href="/privacy" className="text-primary-700 font-medium hover:text-primary-800 underline">
+                Privacy Policy &amp; SMS Terms
+              </Link>
+              , which also carries the SMS consent, STOP, and HELP terms required for text
+              messaging. The Privacy Policy is incorporated into these Terms by reference.
+            </p>
+            <p className="text-navy-800 leading-relaxed">
+              Nothing on this site requires a cookie in order to work. You can decline them
+              and still read every page, call us, and submit the enquiry form.
+            </p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
+              14. Contact Information
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               For questions about these Terms of Service, please contact us:
@@ -213,7 +279,9 @@ export default function TermsPage() {
               <p className="text-navy-800 leading-relaxed">
                 <strong className="text-navy-900 font-semibold">{BUSINESS.name}</strong>
                 <br />
-                A dispatch services company operating under {BUSINESS.parentCompany}
+                A truck dispatch service operating under {BUSINESS.parentCompany}
+                <br />
+                Not a motor carrier, freight broker, or factoring company
                 <br />
                 <br />
                 {BUSINESS.address.full}
@@ -227,13 +295,21 @@ export default function TermsPage() {
 
           {/* Footer back-link */}
           <div className="pt-8 border-t border-surface-200 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <p className="text-sm text-surface-600">Last updated: January 2024</p>
-            <Link
-              href="/"
-              className="text-sm font-semibold text-primary-700 hover:text-primary-800"
-            >
-              ← Back to home
-            </Link>
+            <p className="text-sm text-surface-600">Last updated: {TERMS_UPDATED}</p>
+            <div className="flex items-center gap-6">
+              <Link
+                href="/privacy"
+                className="text-sm font-semibold text-primary-700 hover:text-primary-800"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/"
+                className="text-sm font-semibold text-primary-700 hover:text-primary-800"
+              >
+                ← Back to home
+              </Link>
+            </div>
           </div>
         </div>
       </div>

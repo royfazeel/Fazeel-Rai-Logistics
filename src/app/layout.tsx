@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Barlow_Condensed, Inter } from 'next/font/google';
-import { Header, Footer, StickyCallWidgets, MotionProvider } from '@/components';
+import { Header, Footer, StickyCallWidgets, MotionProvider, Analytics } from '@/components';
 import { BUSINESS, FAQS, SERVICES } from '@/lib/constants';
 import './globals.css';
 
@@ -208,6 +208,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-white font-body antialiased">
+        {/* Google tag (GA4 / Google Ads). Renders nothing at all until
+            NEXT_PUBLIC_GA4_ID or NEXT_PUBLIC_GADS_ID is set. next/script with
+            strategy="afterInteractive" is the App Router recommendation: the
+            tag loads after hydration so it never delays the hero. */}
+        <Analytics />
         <MotionProvider>
           <Header />
           <main className="pt-20">{children}</main>

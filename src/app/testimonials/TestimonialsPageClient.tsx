@@ -3,6 +3,7 @@
 import { Phone, Star, Quote, Truck, MapPin } from 'lucide-react';
 import { ScrollReveal } from '@/components';
 import { BUSINESS, MEDIA, STATS, TESTIMONIALS } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 export default function TestimonialsPageClient() {
   const featured = TESTIMONIALS[0];
@@ -35,6 +36,7 @@ export default function TestimonialsPageClient() {
 
               <a
                 href={BUSINESS.phoneHref}
+                onClick={() => track('call_click', { location: 'testimonials_hero' })}
                 className="btn-primary"
                 aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
               >
@@ -80,7 +82,7 @@ export default function TestimonialsPageClient() {
               <p className="eyebrow">In their own words</p>
               <h2 className="section-heading mb-4">All reviews</h2>
               <p className="text-surface-700 text-lg">
-                Real reviews from real drivers across the United States.
+                Feedback from owner-operators and small fleets we dispatch for.
               </p>
             </div>
           </ScrollReveal>
@@ -193,6 +195,7 @@ export default function TestimonialsPageClient() {
             </p>
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'testimonials_final_cta' })}
               className="inline-flex items-center justify-center gap-3 h-16 px-8 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
               aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
             >

@@ -2,6 +2,10 @@
 
 A premium, enterprise-grade website for Rai Logistics truck dispatch services. Built with Next.js 14, Tailwind CSS, and Framer Motion.
 
+> **Site owner?** Everything you need to do yourself — getting leads into your
+> inbox and switching on Google Ads tracking — is written out click by click in
+> **[SETUP.md](SETUP.md)**. You do not need anything else in this file.
+
 ## Features
 
 - 🚛 **Complete Multi-Page Website**: Home, Services, Equipment, Pricing, Testimonials, About, FAQ, Contact, Privacy Policy, and Terms of Service
@@ -97,6 +101,7 @@ rai-logistics/
 │   │   ├── services/           # Services page
 │   │   ├── terms/              # Terms of Service page
 │   │   ├── testimonials/       # Testimonials page
+│   │   ├── api/lead/route.ts   # Lead intake + delivery + config self-check
 │   │   ├── globals.css         # Global styles
 │   │   ├── layout.tsx          # Root layout
 │   │   └── page.tsx            # Homepage
@@ -114,8 +119,11 @@ rai-logistics/
 │   │   ├── TestimonialCarousel.tsx
 │   │   └── index.ts
 │   └── lib/
-│       └── constants.ts        # Business info, content data
+│       ├── constants.ts        # Business info, content data
+│       └── track.ts            # Conversion tracking helper (GA4 / Google Ads)
 ├── public/                     # Static assets
+├── SETUP.md                    # Owner-facing setup guide (start here)
+├── .env.example                # Every environment variable, annotated
 ├── tailwind.config.ts          # Tailwind configuration
 ├── tsconfig.json               # TypeScript configuration
 ├── next.config.js              # Next.js configuration
@@ -157,109 +165,89 @@ All business details (phone, email, address, etc.) are centralized in `src/lib/c
 
 ## Lead form setup
 
-There are three places a visitor can leave their details: the **Contact page
-form**, the **Get a Free Quote** popup, and the **exit-intent popup** that
-appears when someone is about to leave. All three send to the same place:
-`/api/lead`.
+**If you are the site owner and not a developer, read [SETUP.md](SETUP.md)
+instead of this section.** It is the same thing written as click-by-click
+steps, and it also covers the Google Ads tracking variables.
 
-**You have to tell the site where to send those leads.** Until you do, the
-forms will not pretend a message went through — they show the visitor an error
-and your phone number instead. Nothing is ever silently thrown away.
+Short version for developers:
 
-There are two ways to receive leads. Pick one, or do both.
+- Two forms post to `POST /api/lead`: the contact page
+  (`source: 'contact_page'`) and the quote modal (`source: 'quote_modal'`).
+  `LeadCapturePopup` still exists and would post `exit_intent_popup`, but it
+  is not mounted in `layout.tsx`.
+- Delivery is environment-driven and additive. Whatever is configured runs:
 
-### Option 1 — Get leads by email (Resend)
+  | Variable | Effect |
+  | --- | --- |
+  | `RESEND_API_KEY` + `LEAD_FROM_EMAIL` | Emails the lead via the Resend HTTP API |
+  | `LEAD_TO_EMAIL` | Where that email goes (defaults to `BUSINESS.email`) |
+  | `LEAD_AUTO_REPLY=off` | Suppresses the carrier acknowledgement |
+  | `LEAD_WEBHOOK_URL` | POSTs the lead as JSON (Zapier / Make / Sheets) |
+  | `NEXT_PUBLIC_GA4_ID` / `NEXT_PUBLIC_GADS_ID` | Loads the Google tag |
+  | `NEXT_PUBLIC_GADS_CALL_LABEL` / `NEXT_PUBLIC_GADS_LEAD_LABEL` | Google Ads conversion labels |
 
-[Resend](https://resend.com) is an email service with a free tier that is more
-than enough for a dispatch business. Emails from a real service land in the
-inbox; emails sent straight from a website usually land in spam.
+- With **no** delivery channel configured the endpoint returns
+  `503 not_configured` and both forms show the visitor an error with the phone
+  number. We never claim a delivery we cannot stand behind.
+- `NEXT_PUBLIC_*` values are inlined at build time and the server-side ones are
+  read per request, but Vercel only picks up either after a **redeploy**.
 
-1. Sign up at [resend.com](https://resend.com).
-2. Add and verify your domain (`railogistics.us`). Resend gives you a few DNS
-   records to paste into wherever the domain is managed. This is the step that
-   keeps lead emails out of spam.
-3. Go to **API Keys** and create one. Copy it — it starts with `re_` and is
-   only shown once.
-4. You now have three values to add in Vercel (next section):
-   - `RESEND_API_KEY` — the key you just copied
-   - `LEAD_TO_EMAIL` — where you want leads to land, e.g. `sam@railogistics.us`
-   - `LEAD_FROM_EMAIL` — who the email is from, e.g. `leads@railogistics.us`
-     (this must be on the domain you verified in step 2)
+### Checking the configuration
 
-Each lead arrives as a clean email with the carrier's name, phone, MC number,
-equipment, and message, plus which form it came from and when. Hitting Reply
-replies straight to the carrier.
+`GET /api/lead` returns a non-sensitive self-check — booleans only, no key
+values, no addresses:
 
-### Option 2 — Get leads anywhere else, no code (webhook)
+```json
+{
+  "ok": true,
+  "configured": { "resend": true, "webhook": false, "autoReply": true },
+  "message": "Lead delivery is configured. ...",
+  "checkedAt": "2026-08-25T16:54:12.700Z"
+}
+```
 
-If you would rather have leads drop into a Google Sheet, a CRM, a text
-message, or Slack, use a webhook. Zapier and Make both do this without any
-programming.
+`ok` is true when at least one delivery channel is live. Point the owner at
+this URL rather than asking him to read logs.
 
-1. In [Zapier](https://zapier.com) create a new Zap, or in
-   [Make](https://make.com) a new scenario.
-2. For the trigger, choose **Webhooks -> Catch Hook**. It will give you a URL.
-3. Copy that URL. That is your `LEAD_WEBHOOK_URL`.
-4. For the action, pick whatever you want to happen — "Add row to Google
-   Sheets", "Send SMS", "Create HubSpot contact", and so on.
-5. Turn the Zap on.
+### What the owner receives
 
-Every lead gets sent to that URL as JSON, with all the same fields.
+- **Subject**: `New lead: <name> · <equipment>` (plus `· wants a callback`
+  when the box was ticked) — readable on a phone lock screen.
+- **Body**, in callback order: a tappable `tel:` call button and an `sms:`
+  button, then name, phone (also a `tel:` link), callback preference,
+  equipment, MC number, lanes, current status, factoring, email, message, and
+  finally the context block (time, source, page, browser, IP).
+- Select values are decoded before sending — the email says
+  "Switching dispatchers", not `switching`.
+- `reply_to` is the carrier's address, so Reply reaches them directly.
 
-**Setting both is fine and recommended** — you get the email *and* the
-spreadsheet row, so a lead is never lost to a single service having a bad day.
+### The carrier's auto-reply
 
-### Where to paste the values (Vercel)
-
-1. Go to [vercel.com](https://vercel.com) and open the Rai Logistics project.
-2. Click **Settings**, then **Environment Variables** in the left sidebar.
-3. For each value you have, click **Add New**, then:
-   - **Key**: the name exactly as spelled below — capitals and underscores matter
-   - **Value**: paste the value
-   - **Environments**: tick **Production**, **Preview**, and **Development**
-   - Click **Save**
-
-| Key | What it is | Needed for |
-| --- | --- | --- |
-| `RESEND_API_KEY` | Your Resend API key (`re_...`) | Email |
-| `LEAD_TO_EMAIL` | The inbox leads should land in | Email |
-| `LEAD_FROM_EMAIL` | The verified "from" address | Email |
-| `LEAD_WEBHOOK_URL` | Your Zapier/Make catch-hook URL | Webhook |
-
-4. **Redeploy — this is the step people miss.** Environment variables are baked
-   in when the site is built, so adding them changes nothing until you deploy
-   again. Go to the **Deployments** tab, find the most recent deployment, click
-   the **…** menu on the right, and choose **Redeploy**.
-5. Test it. Open the live site, fill in the contact form with your own name and
-   phone, and submit. You should see "Message sent" and get the email (or the
-   Zapier row) within a minute or so.
-
-For local development, copy `.env.example` to `.env.local` and fill in the same
-values there. `.env.local` is gitignored and never leaves your machine.
-
-### If something goes wrong
-
-- **"We couldn't send that just now" on the live site** — either the variables
-  are not set, or you have not redeployed since setting them. Check both. The
-  server logs (Vercel -> your project -> **Logs**) say which one it is.
-- **Emails not arriving** — check the spam folder first, then confirm the
-  domain shows as verified in Resend and that `LEAD_FROM_EMAIL` uses that exact
-  domain.
-- **Nothing at all happens** — the visitor always sees either a confirmation or
-  an error with the phone number, so a lead is never lost without a trace. If
-  a customer says a form did not work, they were shown the number to call.
+When email delivery is configured and the carrier gave an address, a short
+acknowledgement is sent from `LEAD_FROM_EMAIL` **after** the owner
+notification, with `reply_to` pointing back at the owner's inbox. It confirms
+what was received, gives the phone number as the fastest route, and makes no
+promise about response time. `sendAutoReply()` swallows every error: a failed
+courtesy email can never turn a delivered lead into an error on the visitor's
+screen.
 
 ### Notes for whoever maintains the code
 
-- The endpoint is `src/app/api/lead/route.ts` (POST only).
+- The endpoint is `src/app/api/lead/route.ts`.
 - Every field is validated and length-capped server-side; name and phone are
-  required, and phone/email are sanity-checked.
+  required, and phone/email are sanity-checked. Control characters (including
+  CR/LF header-injection attempts) are stripped from short fields.
 - A hidden `company` field acts as a spam trap. Bots fill it, humans never see
   it; those submissions get a 200 and go straight in the bin.
 - Rate limiting is 5 submissions per IP per 10 minutes, held in memory. On
   Vercel that is **per serverless instance and best-effort only** — it stops
   casual spam loops, not a determined attacker. For real abuse, move it to a
   shared store (Upstash/Redis) or put the route behind Vercel's WAF.
+- `track('lead_submit', { source })` is fired in the browser only on a
+  confirmed `{ ok: true }` response, never on failure, so Google Ads never
+  optimises towards submissions nobody received.
+- `RESEND_API_URL` exists only to point the email path at a local sink during
+  testing. Leave it unset everywhere else.
 
 ## License
 
@@ -269,4 +257,4 @@ Private - All rights reserved.
 
 For questions or support, contact:
 - Email: sam@railogistics.us
-- Phone: (307) 303-9797
+- Phone: (213) 371-6155

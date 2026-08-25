@@ -150,7 +150,7 @@ export const TESTIMONIALS = [
     location: 'Atlanta, GA',
     equipment: 'Dry Van',
     yearsExperience: '8 yrs driving',
-    quote: 'Switched to Rai Logistics three months ago and my weekly gross went up noticeably. Their rate negotiation is top-notch and my dispatch manager picks up the phone.',
+    quote: 'Switched to Rai Logistics three months ago. Their rate negotiation is top-notch and my dispatch manager actually picks up the phone.',
     rating: 5,
     verified: true,
   },

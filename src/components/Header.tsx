@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Menu, X, Truck, MessageCircle } from 'lucide-react';
 import { BUSINESS, NAVIGATION } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 /**
  * Site header.
@@ -43,6 +44,16 @@ export default function Header() {
     return () => {
       document.body.style.overflow = '';
     };
+  }, [isMobileMenuOpen]);
+
+  // Escape closes the mobile menu, matching the dialogs elsewhere on the site.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMobileMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
   }, [isMobileMenuOpen]);
 
   // Close mobile menu on route change
@@ -130,6 +141,7 @@ export default function Header() {
             {/* Desktop: full "Call (xxx) xxx-xxxx" button */}
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'header_desktop' })}
               className="hidden md:inline-flex items-center gap-2 h-11 px-4 lg:px-5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-md transition-colors whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
               aria-label={`Call ${BUSINESS.phone}`}
             >
@@ -142,6 +154,7 @@ export default function Header() {
             {/* Mobile: icon-only Phone shortcut (44×44 tap target — Apple HIG) */}
             <a
               href={BUSINESS.phoneHref}
+              onClick={() => track('call_click', { location: 'header_mobile_icon' })}
               className="md:hidden inline-flex items-center justify-center w-11 h-11 bg-primary-600 text-white rounded-md active:scale-95 transition-transform"
               aria-label={`Call ${BUSINESS.phone}`}
             >
@@ -236,7 +249,7 @@ export default function Header() {
               >
                 <a
                   href={BUSINESS.phoneHref}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => { track('call_click', { location: 'header_mobile_menu' }); setIsMobileMenuOpen(false); }}
                   className="inline-flex items-center justify-center gap-2 h-12 px-4 bg-primary-600 text-white font-semibold rounded-md active:scale-[0.98] transition-transform"
                   aria-label={`Call ${BUSINESS.phone}`}
                 >
@@ -245,7 +258,7 @@ export default function Header() {
                 </a>
                 <a
                   href={BUSINESS.smsHref}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => { track('sms_click', { location: 'header_mobile_menu' }); setIsMobileMenuOpen(false); }}
                   className="inline-flex items-center justify-center gap-2 h-12 px-4 bg-white text-navy-800 font-semibold rounded-md border border-surface-300 active:scale-[0.98] transition-transform"
                   aria-label="Text us"
                 >

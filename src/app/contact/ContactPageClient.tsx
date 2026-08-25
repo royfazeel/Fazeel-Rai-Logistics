@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { ScrollReveal } from '@/components';
 import { BUSINESS, MEDIA, EQUIPMENT_TYPES } from '@/lib/constants';
+import { track } from '@/lib/track';
 
 /* Shared input styling — square-ish corners, neutral border, red focus ring */
 const inputClasses =
@@ -89,6 +90,10 @@ export default function ContactPageClient() {
       const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
 
       if (res.ok && data?.ok === true) {
+        // Google Ads counts this as the lead conversion. Fired ONLY after the
+        // API confirmed the lead was actually delivered — never on a failure,
+        // or the campaign optimises towards submissions nobody received.
+        track('lead_submit', { source: 'contact_page' });
         setIsSubmitted(true);
       } else {
         // Covers 400 validation, 429, 503 not_configured, 502 delivery_failed.
@@ -139,13 +144,16 @@ export default function ContactPageClient() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
                   href={BUSINESS.phoneHref}
+                  onClick={() => track('call_click', { location: 'contact_hero' })}
                   className="btn-primary"
                   aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
                 >
                   <Phone className="w-5 h-5" aria-hidden="true" />
                   {BUSINESS.phone}
                 </a>
-                <a href={BUSINESS.smsHref} className="btn-ghost-light">
+                <a href={BUSINESS.smsHref} className="btn-ghost-light"
+                onClick={() => track('sms_click', { location: 'contact_hero' })}
+                >
                   <MessageCircle className="w-5 h-5" aria-hidden="true" />
                   Text us instead
                 </a>
@@ -198,6 +206,7 @@ export default function ContactPageClient() {
                         </h3>
                         <a
                           href={BUSINESS.phoneHref}
+                          onClick={() => track('call_click', { location: 'contact_method_card' })}
                           className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
                           aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
                         >
@@ -221,6 +230,7 @@ export default function ContactPageClient() {
                         </h3>
                         <a
                           href={BUSINESS.smsHref}
+                          onClick={() => track('sms_click', { location: 'contact_method_card' })}
                           className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
                         >
                           {BUSINESS.phone}
@@ -243,6 +253,7 @@ export default function ContactPageClient() {
                         </h3>
                         <a
                           href={BUSINESS.whatsappHref}
+                          onClick={() => track('whatsapp_click', { location: 'contact_method_card' })}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
@@ -267,6 +278,7 @@ export default function ContactPageClient() {
                         </h3>
                         <a
                           href={BUSINESS.emailHref}
+                          onClick={() => track('email_click', { location: 'contact_method_card' })}
                           className="text-primary-600 font-semibold hover:text-primary-700 transition-colors break-all"
                         >
                           {BUSINESS.email}
@@ -324,7 +336,9 @@ export default function ContactPageClient() {
                   </h2>
                   <p className="text-surface-700 mb-8">
                     Tell us about your operation — or skip the form and call{' '}
-                    <a href={BUSINESS.phoneHref} className="text-primary-600 font-semibold">
+                    <a href={BUSINESS.phoneHref} className="text-primary-600 font-semibold"
+                    onClick={() => track('call_click', { location: 'contact_form_intro' })}
+                    >
                       {BUSINESS.phone}
                     </a>{' '}
                     to talk to a dispatcher right away.
@@ -349,6 +363,7 @@ export default function ContactPageClient() {
                         reach one directly at{' '}
                         <a
                           href={BUSINESS.phoneHref}
+                          onClick={() => track('call_click', { location: 'contact_form_error' })}
                           className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
                         >
                           {BUSINESS.phone}
@@ -421,13 +436,12 @@ export default function ContactPageClient() {
 
                       <div>
                         <label htmlFor="contact-email" className="block text-sm font-medium text-navy-800 mb-2">
-                          Email Address *
+                          Email Address (optional)
                         </label>
                         <input
                           id="contact-email"
                           type="email"
                           autoComplete="email"
-                          required
                           value={formState.email}
                           onChange={(e) =>
                             setFormState({ ...formState, email: e.target.value })
@@ -585,6 +599,7 @@ export default function ContactPageClient() {
                               Please call{' '}
                               <a
                                 href={BUSINESS.phoneHref}
+                                onClick={() => track('call_click', { location: 'contact_faq_cta' })}
                                 className="font-semibold text-primary-700 underline underline-offset-2"
                               >
                                 {BUSINESS.phone}
@@ -592,6 +607,7 @@ export default function ContactPageClient() {
                               or{' '}
                               <a
                                 href={BUSINESS.smsHref}
+                                onClick={() => track('sms_click', { location: 'contact_faq_cta' })}
                                 className="font-semibold text-primary-700 underline underline-offset-2"
                               >
                                 text us
@@ -617,13 +633,16 @@ export default function ContactPageClient() {
                         </button>
                         <a
                           href={BUSINESS.phoneHref}
+                          onClick={() => track('call_click', { location: 'contact_final_cta' })}
                           className="btn-secondary py-4"
                           aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
                         >
                           <Phone className="w-5 h-5" aria-hidden="true" />
                           Call
                         </a>
-                        <a href={BUSINESS.smsHref} className="btn-secondary py-4">
+                        <a href={BUSINESS.smsHref} className="btn-secondary py-4"
+                        onClick={() => track('sms_click', { location: 'contact_final_cta' })}
+                        >
                           <MessageCircle className="w-5 h-5" aria-hidden="true" />
                           Text
                         </a>
