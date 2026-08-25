@@ -288,6 +288,25 @@ function ownerInbox(): string {
   return process.env.LEAD_TO_EMAIL || BUSINESS.email;
 }
 
+/**
+ * The Resend "from" header, with a friendly display name.
+ *
+ * LEAD_FROM_EMAIL stays a PLAIN address (e.g. leads@railogistics.us) because
+ * that is what Resend verifies against the sending domain. The display name is
+ * added here instead, so inboxes show "Rai Logistics" rather than a bare
+ * address. If someone ever sets LEAD_FROM_EMAIL to a full "Name <addr>" string
+ * we pass it through untouched rather than nesting the angle brackets.
+ */
+function senderAddress(): string {
+  const address = (process.env.LEAD_FROM_EMAIL || '').trim();
+  if (!address || address.includes('<')) return address;
+  // Quote the display name if it contains RFC 5322 specials.
+  const name = /[",;:<>@\[\]\\]/.test(BUSINESS.name)
+    ? `"${BUSINESS.name.replace(/(["\\])/g, '\\$1')}"`
+    : BUSINESS.name;
+  return `${name} <${address}>`;
+}
+
 /* ------------------------------------------------------------------ *
  * The lead shape we build once and hand to every delivery channel.
  * ------------------------------------------------------------------ */
@@ -538,7 +557,7 @@ async function sendViaResend(payload: Record<string, unknown>): Promise<void> {
 
 async function deliverViaResend(lead: Lead): Promise<void> {
   const payload: Record<string, unknown> = {
-    from: process.env.LEAD_FROM_EMAIL as string,
+    from: senderAddress(),
     to: [ownerInbox()],
     subject: buildEmailSubject(lead),
     text: buildEmailText(lead),
@@ -563,7 +582,7 @@ async function sendAutoReply(lead: Lead): Promise<boolean> {
 
   try {
     await sendViaResend({
-      from: process.env.LEAD_FROM_EMAIL as string,
+      from: senderAddress(),
       to: [to],
       reply_to: ownerInbox(),
       subject: `We received your request — ${BUSINESS.name}`,
