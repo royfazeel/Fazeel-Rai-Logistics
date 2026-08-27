@@ -30,17 +30,20 @@ export const BUSINESS = {
 // required). Hotlinked from the Pexels CDN; to self-host later, download the
 // files into /public/video and swap these URLs.
 export const MEDIA = {
+  // Self-hosted and re-encoded from the original Pexels masters. The site used
+  // to stream a 101-second, 19 MB clip straight from Pexels, which buffered
+  // slower than it played and stalled on load. These are the SAME shots, cut to
+  // a short loop, stripped of their (inaudible, muted) audio track and written
+  // with +faststart so playback can begin before the file finishes arriving.
   heroVideo: {
-    // Aerial: semi trucks rolling down an Oregon highway at golden hour
-    src: 'https://videos.pexels.com/video-files/18749847/18749847-sd_960_540_30fps.mp4',
-    poster:
-      'https://images.pexels.com/videos/18749847/4k-birds-eye-view-climbing-dji-18749847.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    // Aerial: convoy of tractor-trailers on an Oregon highway at golden hour
+    src: '/video/hero-highway.mp4',   // 6.6 MB, full 101 s, 1280x720 @ 546 kb/s
+    poster: '/video/hero-highway.jpg',
   },
   ctaVideo: {
-    // Ground level: semi truck rolling past on a US highway
-    src: 'https://videos.pexels.com/video-files/32536402/13875213_960_540_24fps.mp4',
-    poster:
-      'https://images.pexels.com/videos/32536402/pexels-photo-32536402.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    // Ground level: rigs rolling past on a US highway
+    src: '/video/cta-highway.mp4',    // 0.8 MB, 12 s, 1280x720
+    poster: '/video/cta-highway.jpg',
   },
   // Red Kenworth T680 on an open highway — wide divider image
   highwayPhoto:

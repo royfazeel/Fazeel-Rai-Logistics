@@ -37,18 +37,22 @@ function prefersReducedMotion(): boolean {
  */
 function shouldSkipVideo(): boolean {
   const conn = (
-    navigator as Navigator & {
-      connection?: { saveData?: boolean; effectiveType?: string; downlink?: number };
-    }
+    navigator as Navigator & { connection?: { saveData?: boolean } }
   ).connection;
-  if (!conn) return false;
-  if (conn.saveData) return true;
-  // A phone on a weak tower still self-reports "4g" while actually delivering
-  // ~1.7 Mbps, so the effectiveType check alone lets a ~19 MB clip through and
-  // monopolises the connection the visitor needs for the call and the form.
-  if (typeof conn.downlink === 'number' && conn.downlink < 5) return true;
-  return ['slow-2g', '2g', '3g'].includes(conn.effectiveType ?? '');
+  // Data Saver is the one signal here that is an explicit choice by the
+  // visitor rather than a guess, so it is the only one we act on.
+  //
+  // We deliberately do NOT gate on connection.effectiveType any more. It is a
+  // rolling browser estimate and it is wildly unstable — while testing this
+  // very change the same machine reported "10 Mbps", then "3g", then "slow-2g"
+  // within a few minutes. Gating on it meant the hero silently never loaded and
+  // sat on a still poster, which is what "the video is stuck" turned out to be.
+  // The clip is ~1.3 MB (about two photographs) and is written with +faststart
+  // so it streams progressively, which is a fair cost on any real connection.
+  return Boolean(conn?.saveData);
 }
+
+
 
 
 /** Run `cb` when the browser is idle, with a hard ceiling so it always runs. */
@@ -124,8 +128,14 @@ export default function VideoBackdrop({
   /* ---- 1. Decide when the poster, then the video, may load ---------------- */
   useEffect(() => {
     if (loading === 'eager') {
-      // Poster is already rendering. Queue the mp4 for after load + idle.
-      return afterPageLoad(attachVideo);
+      // The hero clip is ~1.3 MB with +faststart, so waiting for the load event
+      // AND an idle callback just left the poster sitting there looking frozen.
+      // Attach on the next macrotask instead: it still yields to the current
+      // render, but unlike requestAnimationFrame it also fires in a background
+      // tab, so a page opened in one is already playing when it is brought
+      // forward rather than stuck on its poster.
+      const t = window.setTimeout(attachVideo, 0);
+      return () => window.clearTimeout(t);
     }
 
     const el = videoRef.current;
@@ -194,10 +204,10 @@ export default function VideoBackdrop({
         muted
         loop
         playsInline
-        // Always 'none': the effects above decide when a byte of mp4 is worth
-        // fetching. 'auto' here would hand the browser permission to start
-        // buffering during the LCP window.
-        preload="none"
+        // The effects above still decide WHEN the src is attached; once it is,
+        // let the browser buffer freely so playback starts and stays smooth.
+        // Lazy bands keep 'none' until they are near the viewport.
+        preload={loading === 'eager' ? 'auto' : 'none'}
         controls={false}
         disablePictureInPicture
         disableRemotePlayback
