@@ -105,6 +105,7 @@ export default function HomePage() {
       <section className="relative -mt-20 flex flex-col overflow-hidden bg-navy-950 min-h-[100svh]">
         <VideoBackdrop
           src={MEDIA.heroVideo.src}
+          srcSmall={MEDIA.heroVideo.srcSmall}
           poster={MEDIA.heroVideo.poster}
           loading="eager"
         />

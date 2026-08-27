@@ -30,19 +30,26 @@ export const BUSINESS = {
 // required). Hotlinked from the Pexels CDN; to self-host later, download the
 // files into /public/video and swap these URLs.
 export const MEDIA = {
-  // Self-hosted and re-encoded from the original Pexels masters. The site used
-  // to stream a 101-second, 19 MB clip straight from Pexels, which buffered
-  // slower than it played and stalled on load. These are the SAME shots, cut to
-  // a short loop, stripped of their (inaudible, muted) audio track and written
-  // with +faststart so playback can begin before the file finishes arriving.
+  // Self-hosted, encoded from Pexels' 1920x1080 masters (NOT from their 960x540
+  // rendition — encoding from that and scaling up is what made the hero look
+  // soft). Audio stripped, 30 fps, +faststart so playback starts before the
+  // file finishes arriving.
   heroVideo: {
-    // Aerial: convoy of tractor-trailers on an Oregon highway at golden hour
-    src: '/video/hero-highway.mp4',   // 6.6 MB, full 101 s, 1280x720 @ 546 kb/s
+    // Aerial: convoy of tractor-trailers, Oregon highway at golden hour.
+    // Full 101 s, encoded from Pexels' 1920x1080 master (never from their
+    // 960x540 rendition — encoding from that and scaling up is what made an
+    // earlier version look soft).
+    //
+    // Sizes are held under 25 MB on purpose: that is GitHub's per-file limit
+    // for browser uploads, which is how this project is deployed.
+    src: '/video/hero-highway.mp4',         // 1920x1080, 21.2 MB, 1760 kb/s
+    srcSmall: '/video/hero-highway-sm.mp4', // 1280x720,  17.5 MB — phones cannot
+                                            // resolve 1080p and should not pay for it
     poster: '/video/hero-highway.jpg',
   },
   ctaVideo: {
     // Ground level: rigs rolling past on a US highway
-    src: '/video/cta-highway.mp4',    // 0.8 MB, 12 s, 1280x720
+    src: '/video/cta-highway.mp4',          // 1600x900, 1.8 MB
     poster: '/video/cta-highway.jpg',
   },
   // Red Kenworth T680 on an open highway — wide divider image

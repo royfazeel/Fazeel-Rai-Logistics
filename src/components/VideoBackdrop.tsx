@@ -3,8 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface VideoBackdropProps {
-  /** Direct mp4 URL */
+  /** Direct mp4 URL (the full-quality rendition) */
   src: string;
+  /** Optional smaller rendition for phones — they cannot resolve the big one
+      and should not pay for it. Falls back to `src` when omitted. */
+  srcSmall?: string;
   /** Poster image shown before the video is ready (and forever, if the
       visitor prefers reduced motion, is on a metered/slow connection, or the
       video fails to load) */
@@ -107,6 +110,7 @@ function afterPageLoad(cb: () => void): () => void {
  */
 export default function VideoBackdrop({
   src,
+  srcSmall,
   poster,
   loading = 'lazy',
   className = '',
@@ -122,8 +126,19 @@ export default function VideoBackdrop({
   /** Attach the mp4 unless this visitor should not be paying for it. */
   const attachVideo = useCallback(() => {
     if (prefersReducedMotion() || shouldSkipVideo()) return;
-    setVideoSrc(src);
-  }, [src]);
+    // Phones get the lighter rendition: a 960-wide clip is already more pixels
+    // than they can show, and it is less than half the bytes.
+    //
+    // Keyed off the physical SCREEN rather than the window: this runs the
+    // moment the component mounts, and a desktop window that is still laying
+    // out (or simply narrow) would otherwise be misread as a phone and left on
+    // the low-resolution file for the whole session. Screen size does not move.
+    const deviceWidth =
+      (typeof window !== 'undefined' && window.screen && window.screen.width) ||
+      (typeof window !== 'undefined' ? window.innerWidth : 0);
+    const wantsSmall = deviceWidth > 0 && deviceWidth <= 1023;
+    setVideoSrc(wantsSmall && srcSmall ? srcSmall : src);
+  }, [src, srcSmall]);
 
   /* ---- 1. Decide when the poster, then the video, may load ---------------- */
   useEffect(() => {
