@@ -43,8 +43,9 @@ export const MEDIA = {
     // Sizes are held under 25 MB on purpose: that is GitHub's per-file limit
     // for browser uploads, which is how this project is deployed.
     src: '/video/hero-highway.mp4',         // 1920x1080, 21.2 MB, 1760 kb/s
-    srcSmall: '/video/hero-highway-sm.mp4', // 1280x720,  17.5 MB — phones cannot
-                                            // resolve 1080p and should not pay for it
+    srcSmall: '/video/hero-highway-sm.mp4', // 960x540, 7.9 MB @ 655 kb/s — phones cannot
+                                            // resolve 1080p, and phone networks cannot
+                                            // sustain the desktop bitrate without stalling
     poster: '/video/hero-highway.jpg',
   },
   ctaVideo: {

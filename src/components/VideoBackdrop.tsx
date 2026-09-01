@@ -127,16 +127,15 @@ export default function VideoBackdrop({
   const attachVideo = useCallback(() => {
     if (prefersReducedMotion() || shouldSkipVideo()) return;
     // Phones get the lighter rendition: a 960-wide clip is already more pixels
-    // than they can show, and it is less than half the bytes.
+    // than they can show, and phone networks cannot sustain the desktop file's
+    // bitrate — that mismatch is exactly what made the hero freeze on phones.
     //
-    // Keyed off the physical SCREEN rather than the window: this runs the
-    // moment the component mounts, and a desktop window that is still laying
-    // out (or simply narrow) would otherwise be misread as a phone and left on
-    // the low-resolution file for the whole session. Screen size does not move.
-    const deviceWidth =
-      (typeof window !== 'undefined' && window.screen && window.screen.width) ||
-      (typeof window !== 'undefined' ? window.innerWidth : 0);
-    const wantsSmall = deviceWidth > 0 && deviceWidth <= 1023;
+    // Decide with a media query, not raw width reads. matchMedia follows the
+    // real viewport on devices and the EMULATED viewport under devtools /
+    // automation (where window.innerWidth and screen.width both lie), and when
+    // the viewport is unmeasurable it matches max-width — i.e. the failure
+    // mode is "serve the lighter file", never "send a phone the 21 MB one".
+    const wantsSmall = window.matchMedia('(max-width: 1023px)').matches;
     setVideoSrc(wantsSmall && srcSmall ? srcSmall : src);
   }, [src, srcSmall]);
 
@@ -173,24 +172,55 @@ export default function VideoBackdrop({
     };
   }, [loading, attachVideo]);
 
-  /* ---- 2. Play only while on screen -------------------------------------- */
+  /* ---- 2. Play only while on screen, and RECOVER when autoplay is refused.
+          iPhones in Low Power Mode (and some webviews) reject the programmatic
+          play() call. Without a retry the hero just freezes on its first frame
+          — which is what "the video is stuck on mobile" looked like. The
+          browser lifts that restriction after any user gesture and whenever
+          the tab becomes visible, so retry at exactly those moments. -------- */
   useEffect(() => {
     const el = videoRef.current;
     if (!el || !videoSrc) return;
 
+    let onScreen = false;
+    const tryPlay = () => {
+      if (!onScreen || !el.paused) return;
+      void el.play().catch(() => {});
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting) {
-          // Autoplay can still be refused (low power mode); the poster stays.
-          void el.play().catch(() => {});
-        } else {
-          el.pause();
-        }
+        onScreen = Boolean(entries[0]?.isIntersecting);
+        if (onScreen) tryPlay();
+        else el.pause();
       },
       { threshold: 0 }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+
+    // Enough data arrived after a slow start — try again.
+    el.addEventListener('canplay', tryPlay);
+    // Tab brought back to the foreground — autoplay is allowed again.
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') tryPlay();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    // First real user gesture unlocks playback on iOS Low Power Mode.
+    const gestures: Array<keyof DocumentEventMap> = ['touchend', 'pointerdown', 'keydown'];
+    const onGesture = () => {
+      tryPlay();
+      gestures.forEach((g) => document.removeEventListener(g, onGesture));
+    };
+    gestures.forEach((g) =>
+      document.addEventListener(g, onGesture, { passive: true })
+    );
+
+    return () => {
+      observer.disconnect();
+      el.removeEventListener('canplay', tryPlay);
+      document.removeEventListener('visibilitychange', onVisible);
+      gestures.forEach((g) => document.removeEventListener(g, onGesture));
+    };
   }, [videoSrc]);
 
   return (
