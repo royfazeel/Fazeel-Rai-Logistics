@@ -9,7 +9,11 @@ export default function HeroPhoto({ desktop = false }: { desktop?: boolean }) {
   return (
     <picture className={desktop ? 'hero-photo-desktop' : 'hero-photo-mobile'} aria-hidden="true">
       <source media={desktop ? '(max-width: 1023px)' : '(min-width: 1024px)'} srcSet={EMPTY_IMAGE} />
-      {!desktop && <source media={HERO_IMAGES.tablet.media} srcSet={HERO_IMAGES.tablet.srcSet} sizes="100vw" />}
+      {!desktop && <>
+        <source media={HERO_IMAGES.tablet.media} type="image/avif" srcSet={HERO_IMAGES.tablet.avifSrcSet} sizes="100vw" />
+        <source media={HERO_IMAGES.tablet.media} type="image/webp" srcSet={HERO_IMAGES.tablet.srcSet} sizes="100vw" />
+      </>}
+      <source media={image.media} type="image/avif" srcSet={image.avifSrcSet} sizes="100vw" />
       {/* Pre-encoded responsive assets keep quality consistent and avoid a
           first-visit image transformation. The matching preload is in page.tsx. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}

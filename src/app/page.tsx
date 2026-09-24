@@ -33,8 +33,8 @@ export default function HomePage() {
   };
   return <>
     {Object.values(HERO_IMAGES).map(image => (
-      <link key={image.media} rel="preload" as="image" type="image/webp" href={image.src}
-        imageSrcSet={image.srcSet} imageSizes="100vw" media={image.media} fetchPriority="high" />
+      <link key={image.media} rel="preload" as="image" type="image/avif" href={image.avifSrc}
+        imageSrcSet={image.avifSrcSet} imageSizes="100vw" media={image.media} fetchPriority="high" />
     ))}
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
     <HomePageClient />

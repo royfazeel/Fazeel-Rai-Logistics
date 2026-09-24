@@ -16,7 +16,8 @@ const sharp = require('sharp');
 const source = fileURLToPath(new URL('../public/images/rai-dispatch-hero-realistic.png', import.meta.url));
 const outputDirectory = fileURLToPath(new URL('../public/images/hero/', import.meta.url));
 const VERSION = 'v1';
-const QUALITY = 85;
+const WEBP_QUALITY = 85;
+const AVIF_QUALITY = 65;
 
 // Exact source rectangles reproduce the existing right-aligned CSS crops.
 // No output is larger than its source rectangle.
@@ -35,13 +36,17 @@ await mkdir(outputDirectory, { recursive: true });
 const results = [];
 for (const variant of variants) {
   for (const width of variant.widths) {
-    const filename = `truck-${variant.name}-${width}-${VERSION}.webp`;
-    const info = await sharp(source)
+    const filename = `truck-${variant.name}-${width}-${VERSION}`;
+    const resized = sharp(source)
       .extract(variant.crop)
-      .resize({ width, withoutEnlargement: true })
-      .webp({ quality: QUALITY, effort: 6 })
-      .toFile(`${outputDirectory}/${filename}`);
-    results.push({ filename, width: info.width, height: info.height, bytes: info.size });
+      .resize({ width, withoutEnlargement: true });
+    for (const format of ['webp', 'avif']) {
+      const encoded = format === 'webp'
+        ? resized.clone().webp({ quality: WEBP_QUALITY, effort: 6 })
+        : resized.clone().avif({ quality: AVIF_QUALITY, effort: 6, chromaSubsampling: '4:4:4' });
+      const info = await encoded.toFile(`${outputDirectory}/${filename}.${format}`);
+      results.push({ filename: `${filename}.${format}`, width: info.width, height: info.height, bytes: info.size });
+    }
   }
 }
-console.log(JSON.stringify({ version: VERSION, quality: QUALITY, variants: results }, null, 2));
+console.log(JSON.stringify({ version: VERSION, quality: { webp: WEBP_QUALITY, avif: AVIF_QUALITY }, variants: results }, null, 2));
