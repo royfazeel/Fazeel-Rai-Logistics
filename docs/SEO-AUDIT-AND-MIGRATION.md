@@ -26,6 +26,14 @@ The photo homepage release **232561f** was confirmed Ready on Vercel and live on
 
 The branding follow-up passed an optimized production build and the same local 40-page crawl. Browser review covered 320px and 375px phones, 1024px tablet navigation, 1280px desktop navigation, and the normal desktop viewport. The compact navigation breakpoint prevents the new wordmark from crowding links at tablet widths. The full truck, mobile slogan/image order, dark/light logo colors, icon dimensions and 1200×630 sharing image were checked. Final production branding verification is recorded separately under `output/launch-verification` after publishing.
 
+## Mobile image loading revision
+
+The owner's PageSpeed report from **24 September 2026, 22:49:45 PKT** measured the photo release at **74 mobile performance**, **100 accessibility**, **100 best practices**, and **100 SEO**. Its lab metrics were FCP **1.2s**, LCP **7.2s**, TBT **100ms**, CLS **0**, and Speed Index **4.0s**. These are results from that specific run, not field measurements or guarantees.
+
+The implementation was preloading both desktop and mobile hero photographs, even when CSS hid one layout. The mobile photo also lacked explicit high fetch priority and included pixels discarded by the visible crop. The follow-up uses media-exclusive image preloads, matching `<picture>` source selection, and pre-encoded versioned WebP assets. Phone, tablet and desktop derivatives preserve their existing visible framing and quality was visually compared before choosing quality 85. `scripts/optimize-hero-images.mjs` reproduces all nine derivatives without upscaling. Long-lived cache headers apply to these versioned files; the original master remains available for image search and future exports.
+
+A local Chrome network check at 375px/DPR2 confirmed **one** hero request, `truck-phone-768-v1.webp`, at **High** priority (**66,210 bytes**). The hidden desktop companion selected an inline transparent image and caused no network download. Desktop and mobile compositions were visually checked, the production build passed, and the local 40-page/212-target SEO crawl reported no failures or warnings. A new live PageSpeed run must be recorded after deployment before claiming an improved score. The original report is [available here](https://pagespeed.web.dev/analysis/https-raidispatch-com/26inpeb2t5?form_factor=mobile).
+
 ## Observed baseline
 
 The audit fetched the public website HTML, `robots.txt`, `sitemap.xml`, and the read-only lead configuration endpoint. No lead was submitted and no email was sent during this audit.

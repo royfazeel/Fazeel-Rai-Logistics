@@ -3,7 +3,7 @@
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import HeroPhoto from '@/components/HeroPhoto';
 import {
   Phone,
   ArrowRight,
@@ -98,17 +98,7 @@ export default function HomePage() {
           centered; a stats strip anchors the bottom edge.
           ============================================================ */}
       <section className="photo-hero relative -mt-20 flex flex-col overflow-hidden bg-navy-950 min-h-[100svh]">
-        <div className="hero-photo-desktop" aria-hidden="true">
-          <Image
-            src="/images/rai-dispatch-hero-realistic.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            quality={90}
-            className="hero-photo-image"
-          />
-        </div>
+        <HeroPhoto desktop />
         <div className="photo-hero-scrim" aria-hidden="true" />
 
         <div className="photo-hero-content container-custom relative z-10 flex-1 flex flex-col justify-center pt-32 lg:pt-44 pb-16 w-full">
@@ -161,17 +151,7 @@ export default function HomePage() {
               <span className="text-primary-500">We manage the loads.</span>
             </h1>
 
-        <div className="hero-photo-mobile" aria-hidden="true">
-          <Image
-            src="/images/rai-dispatch-hero-realistic.png"
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 639px) 165vw, (max-width: 1023px) 130vw, 1px"
-            quality={90}
-            className="hero-photo-image"
-          />
-        </div>
+            <HeroPhoto />
 
             <p
               className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"

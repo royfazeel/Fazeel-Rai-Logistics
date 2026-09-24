@@ -2,6 +2,7 @@ import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import HomePageClient from './HomePageClient';
 import { HOME_HERO_IMAGE, pageMetadata, SITE_URL } from '@/lib/seo';
 import { BUSINESS, SERVICES } from '@/lib/constants';
+import { HERO_IMAGES } from '@/lib/hero-images';
 
 export const metadata = pageMetadata(`Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees`, `Dedicated truck dispatch for owner-operators and fleets across 48 states. Load booking, rate negotiation and paperwork. ${DISPATCH_RATE_RANGE} fees by equipment.`, '/');
 
@@ -30,5 +31,12 @@ export default function HomePage() {
       service,
     ],
   };
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} /><HomePageClient /></>;
+  return <>
+    {Object.values(HERO_IMAGES).map(image => (
+      <link key={image.media} rel="preload" as="image" type="image/webp" href={image.src}
+        imageSrcSet={image.srcSet} imageSizes="100vw" media={image.media} fetchPriority="high" />
+    ))}
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+    <HomePageClient />
+  </>;
 }
