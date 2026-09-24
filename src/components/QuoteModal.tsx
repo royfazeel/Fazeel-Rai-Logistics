@@ -468,6 +468,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                           {eq.name}
                         </option>
                       ))}
+                      <option value="other">Other truck type</option>
                     </select>
                     {errorFor('equipment') && (
                       <p id="quote-equipment-error" role="alert" className="mt-1 text-xs font-medium text-primary-700">

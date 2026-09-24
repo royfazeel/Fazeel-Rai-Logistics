@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { EQUIPMENT_CONTENT, SERVICE_CONTENT, GUIDES } from '@/lib/dispatch-content';
 import { CARRIER_CONTENT } from '@/lib/carrier-content';
-import { SITE_URL } from '@/lib/seo';
+import { HOME_HERO_IMAGE, SITE_URL } from '@/lib/seo';
 
 // Dates reflect the actual content revision; do not change merely on a rebuild.
 const CONTENT_UPDATED = '2026-09-24';
@@ -14,5 +14,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...GUIDES.map(({ slug }) => `/resources/${slug}`),
     ...CARRIER_CONTENT.map(({ slug }) => `/carriers/${slug}`),
   ];
-  return paths.map((path) => ({ url: `${SITE_URL}${path}`, lastModified: CONTENT_UPDATED }));
+  return paths.map((path) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: CONTENT_UPDATED,
+    ...(path === '' ? { images: [`${SITE_URL}${HOME_HERO_IMAGE}`] } : {}),
+  }));
 }

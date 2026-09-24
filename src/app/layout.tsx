@@ -22,8 +22,8 @@ const bodyFont = Inter({
 });
 
 export const metadata: Metadata = {
-  ...pageMetadata(`USA Truck Dispatch | ${DISPATCH_RATE_RANGE} by Equipment`, `A dedicated dispatcher for your truck. Load booking, rate negotiation and paperwork across the lower 48, with equipment-based fees of ${DISPATCH_RATE_RANGE}.`, '/'),
-  title: { default: `USA Truck Dispatch | ${DISPATCH_RATE_RANGE} by Equipment | Rai Dispatch`, template: '%s | Rai Dispatch' },
+  ...pageMetadata(`Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees`, `A dedicated dispatcher for your truck. Load booking, rate negotiation and paperwork across the lower 48, with equipment-based fees of ${DISPATCH_RATE_RANGE}.`, '/'),
+  title: { default: `Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees | Rai Dispatch`, template: '%s | Rai Dispatch' },
   metadataBase: new URL(SITE_URL),
   applicationName: 'Rai Dispatch',
   authors: [{ name: BUSINESS.name }],

@@ -205,6 +205,7 @@ function isPlausibleUsPhone(value: string): boolean {
 }
 
 function equipmentLabel(id: string): string {
+  if (id === 'other') return 'Other truck type';
   const match = EQUIPMENT_TYPES.find((eq) => eq.id === id);
   return match ? match.name : id;
 }

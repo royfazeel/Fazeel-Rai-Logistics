@@ -1,21 +1,34 @@
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import HomePageClient from './HomePageClient';
-import { pageMetadata, SITE_URL } from '@/lib/seo';
+import { HOME_HERO_IMAGE, pageMetadata, SITE_URL } from '@/lib/seo';
 import { BUSINESS, SERVICES } from '@/lib/constants';
 
-export const metadata = pageMetadata(`USA Truck Dispatch | ${DISPATCH_RATE_RANGE} by Equipment`, `A dedicated dispatcher for your truck. Load booking, rate negotiation and paperwork across the lower 48, with equipment-based fees of ${DISPATCH_RATE_RANGE}.`, '/');
+export const metadata = pageMetadata(`Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees`, `Dedicated truck dispatch for owner-operators and fleets across 48 states. Load booking, rate negotiation and paperwork. ${DISPATCH_RATE_RANGE} fees by equipment.`, '/');
 
 export default function HomePage() {
   const service = {
-    '@context': 'https://schema.org', '@type': 'Service',
+    '@type': 'Service',
     '@id': `${SITE_URL}/#dispatch-service`, name: 'Truck dispatch services',
     serviceType: 'Truck Dispatch', url: SITE_URL, description: BUSINESS.description,
     provider: { '@id': `${SITE_URL}/#organization` },
-    areaServed: { '@type': 'Country', name: 'United States' },
+    areaServed: { '@type': 'Place', name: '48 contiguous United States' },
     hasOfferCatalog: {
       '@type': 'OfferCatalog', name: 'Truck dispatch support',
       itemListElement: SERVICES.map(item => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: item.title, url: `${SITE_URL}/services/${item.id}` } })),
     },
   };
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(service).replace(/</g, '\\u003c') }} /><HomePageClient /></>;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage', '@id': `${SITE_URL}/#webpage`, url: SITE_URL,
+        name: 'Rai Dispatch — Truck Dispatch Services USA', inLanguage: 'en-US',
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        mainEntity: { '@id': `${SITE_URL}/#dispatch-service` },
+        primaryImageOfPage: `${SITE_URL}${HOME_HERO_IMAGE}`,
+      },
+      service,
+    ],
+  };
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} /><HomePageClient /></>;
 }

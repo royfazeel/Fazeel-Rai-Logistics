@@ -598,6 +598,7 @@ export default function ContactPageClient() {
                                 {eq.name}
                               </option>
                             ))}
+                            <option value="other">Other truck type</option>
                           </select>
                           {errorFor('equipment') && (
                             <p id="contact-equipment-error" role="alert" className="mt-1.5 text-xs font-medium text-primary-700">

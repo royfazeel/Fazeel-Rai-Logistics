@@ -20,6 +20,7 @@ const nextConfig = {
     ] }];
   },
   images: {
+    qualities: [75, 90],
     // `domains` is deprecated in Next 14; remotePatterns is the supported form.
     // Scoped to the one host this site actually loads imagery from, so it can
     // never act as an open image proxy. Declared now so the Pexels stills can

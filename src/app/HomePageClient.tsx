@@ -3,6 +3,7 @@
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Phone,
   ArrowRight,
@@ -90,30 +91,27 @@ export default function HomePage() {
   return (
     <>
       {/* ============================================================
-          HERO — real truck footage, edge to edge.
+          HERO — branded truck image, edge to edge.
           The -mt-20 pulls the section up behind the fixed header
-          (which starts transparent on this page), so the video runs
+          (which starts transparent on this page), so the image runs
           from the very top of the viewport. Content is vertically
           centered; a stats strip anchors the bottom edge.
           ============================================================ */}
-      <section className="relative -mt-20 flex flex-col overflow-hidden bg-navy-950 min-h-[100svh]">
-        <VideoBackdrop
-          src={MEDIA.heroVideo.src}
-          poster={MEDIA.heroVideo.poster}
-          loading="eager"
-        />
-        {/* Contrast scrim (see .hero-scrim in globals.css). Below lg it is the
-            original left-to-right wash, unchanged. From lg up it is
-            re-balanced: heavier over the left column so the copy keeps its
-            contrast, far lighter across the right half so the truck reads
-            instead of being crushed into darkness. */}
-        <div className="hero-scrim absolute inset-0" aria-hidden="true" />
-        <div
-          className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-950/75 to-transparent"
-          aria-hidden="true"
-        />
+      <section className="photo-hero relative -mt-20 flex flex-col overflow-hidden bg-navy-950 min-h-[100svh]">
+        <div className="hero-photo-desktop" aria-hidden="true">
+          <Image
+            src="/images/rai-dispatch-hero-realistic.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            quality={90}
+            className="hero-photo-image"
+          />
+        </div>
+        <div className="photo-hero-scrim" aria-hidden="true" />
 
-        <div className="container-custom relative z-10 flex-1 flex flex-col justify-center pt-32 lg:pt-44 pb-16 w-full">
+        <div className="photo-hero-content container-custom relative z-10 flex-1 flex flex-col justify-center pt-32 lg:pt-44 pb-16 w-full">
           {/* ------------------------------------------------------------
               Desktop-only frame. Nothing sits inside it — it is there to
               give the open right half an edge so the composition reads as
@@ -123,7 +121,7 @@ export default function HomePage() {
               via responsive classes, and inert for pointers + AT.
               ------------------------------------------------------------ */}
           <div
-            className="pointer-events-none absolute inset-y-0 left-8 right-8 hidden lg:block"
+            className="photo-hero-frame pointer-events-none absolute inset-y-0 left-8 right-8 hidden lg:block"
             aria-hidden="true"
           >
             {/* Status line — hours come from BUSINESS.hours */}
@@ -147,32 +145,45 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative max-w-3xl">
+          <div className="photo-hero-copy relative max-w-3xl">
             <p
               className="font-display text-sm sm:text-base font-semibold uppercase tracking-[0.22em] text-white/70 mb-5 lg:mb-7 flex items-center gap-3"
             >
               <span className="inline-block w-10 h-[3px] bg-primary-500" aria-hidden="true" />
-              Owner-operators &amp; fleets · 48 contiguous states
+              Truck dispatch services · 48 contiguous states
             </p>
 
             <h1
-              className="font-display font-bold uppercase text-white leading-[0.95] tracking-tight text-5xl sm:text-6xl lg:text-7xl xl:text-[5.25rem] mb-6 lg:mb-7"
+              className="photo-hero-title font-display font-bold uppercase text-white leading-[0.95] tracking-tight mb-6 lg:mb-7"
             >
-              Truck dispatch
+              You drive the miles.
               <br />
-              <span className="text-primary-500">built around you.</span>
+              <span className="text-primary-500">We manage the loads.</span>
             </h1>
+
+        <div className="hero-photo-mobile" aria-hidden="true">
+          <Image
+            src="/images/rai-dispatch-hero-realistic.png"
+            alt=""
+            fill
+            priority
+            sizes="(max-width: 639px) 165vw, (max-width: 1023px) 130vw, 1px"
+            quality={90}
+            className="hero-photo-image"
+          />
+        </div>
 
             <p
               className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"
             >
-              Your dedicated dispatcher finds freight, negotiates rates, and
+              <span className="hidden sm:inline">Your dedicated dispatcher finds freight, negotiates rates, and
               handles load paperwork. Nationwide support for owner-operators
-              and fleets, with {DISPATCH_RATE_RANGE} fees based on your equipment.
+              and fleets, with {DISPATCH_RATE_RANGE} fees based on your equipment.</span>
+              <span className="sm:hidden">Your dedicated dispatcher finds loads, negotiates rates, and handles paperwork. Nationwide support, with {DISPATCH_RATE_RANGE} fees by equipment.</span>
             </p>
 
             <div
-              className="flex flex-col sm:flex-row gap-3 mb-10"
+              className="photo-hero-actions flex flex-col sm:flex-row gap-3 mb-10"
             >
               <button
                 onClick={() => { track('quote_modal_open', { location: 'home_hero' }); setIsQuoteModalOpen(true); }}
@@ -205,9 +216,10 @@ export default function HomePage() {
           </div>
         </div>
 
+
         {/* Stats strip along the bottom edge of the hero — solid-ish backing
-            keeps the small labels readable over bright video frames */}
-        <div className="relative z-10 border-t border-white/15 bg-navy-950/70">
+            keeps the small labels readable over the photograph */}
+        <div className="photo-hero-stats relative z-10 border-t border-white/15 bg-navy-950/70">
           <div className="container-custom">
             <dl className="grid grid-cols-2 md:grid-cols-4">
               {STATS.map((stat, idx) => (

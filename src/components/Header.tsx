@@ -73,7 +73,7 @@ export default function Header() {
           : 'bg-white shadow-soft border-b border-surface-200'
       }`}
     >
-      <nav className="container-custom" aria-label="Main navigation">
+      <nav className={`container-custom ${pathname === '/' ? 'photo-home-header' : ''}`} aria-label="Main navigation">
         <div className="flex items-center justify-between h-20 gap-4">
           {/* Logo */}
           <Link
