@@ -3,9 +3,10 @@
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Truck, ArrowRight, MessageCircle, Clock } from 'lucide-react';
+import { Phone, Mail, MapPin, ArrowRight, MessageCircle, Clock } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 import { track } from '@/lib/track';
+import BrandLogo from './BrandLogo';
 
 const footerLinks = {
   services: [
@@ -77,19 +78,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-6">
-              <div className="w-10 h-10 bg-primary-600 rounded-md flex items-center justify-center">
-                <Truck className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="font-display font-bold text-2xl tracking-wide uppercase">
-                  <span className="text-primary-500">Rai</span>{' '}
-                  <span className="text-white/90">Dispatch</span>
-                </span>
-                <span className="font-display text-[11px] font-semibold uppercase tracking-[0.13em] text-white/50 mt-0.5">
-                  Truck Dispatch Service
-                </span>
-              </div>
+            <Link href="/" className="inline-flex max-w-full mb-6 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500" aria-label="Rai Dispatch — Home">
+              <BrandLogo onDark className="w-[320px] max-w-full" />
             </Link>
             <p className="text-surface-400 mb-6 max-w-sm">
               Professional truck dispatch services for owner-operators and small fleets. 

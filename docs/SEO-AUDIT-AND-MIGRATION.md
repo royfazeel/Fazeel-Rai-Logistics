@@ -18,6 +18,14 @@ Current Google guidance was rechecked for this release: use [clear page titles, 
 
 Search Console verification, the initial sitemap submission and the successful old **www** host move are recorded below and do not need to be recreated. The historical sitemap result listed 30 discovered pages; the current public sitemap contains 40 URLs. After deployment, check its latest processing result and inspect important equipment/service pages. The separate old apex-host Change of Address previously failed Google's fetch check and remains a follow-up until a successful result is observed. Keep old-domain permanent redirects for [at least one year](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes). Index coverage, search queries, earned references and field Core Web Vitals require ongoing observation; a successful website build cannot complete those external processes.
 
+## Approved Forward RD branding release
+
+The owner selected concept 02, **Forward RD**, on 24 September 2026. Its outlined SVG wordmarks and RD monogram are stored in `public/brand`; the existing favicon, Apple touch icon, and app-icon URLs now serve this identity. The header uses red/white on the dark homepage and red/charcoal on white interior pages and open navigation. The footer and social-sharing image use the dark-surface version. Icons are versioned in metadata and the manifest to refresh cached branding. The Organization logo remains a crawlable 512px image. The approved slogan, content, fee schedule, and support email are unchanged.
+
+The photo homepage release **232561f** was confirmed Ready on Vercel and live on `raidispatch.com`. Its production crawl passed **40/40 pages**, **212 internal targets**, **0 failures**, and **0 advisory warnings**. All old/new HTTP/HTTPS and www origin combinations preserved `/equipment/cargo-van?utm_source=launch-check&ref=domain-migration` through permanent redirects to the canonical domain. Search Console's sitemap table reported **Success, 40 discovered pages**, last read 24 September 2026. This establishes successful sitemap processing, not indexing or rankings.
+
+The branding follow-up passed an optimized production build and the same local 40-page crawl. Browser review covered 320px and 375px phones, 1024px tablet navigation, 1280px desktop navigation, and the normal desktop viewport. The compact navigation breakpoint prevents the new wordmark from crowding links at tablet widths. The full truck, mobile slogan/image order, dark/light logo colors, icon dimensions and 1200×630 sharing image were checked. Final production branding verification is recorded separately under `output/launch-verification` after publishing.
+
 ## Observed baseline
 
 The audit fetched the public website HTML, `robots.txt`, `sitemap.xml`, and the read-only lead configuration endpoint. No lead was submitted and no email was sent during this audit.

@@ -4,20 +4,21 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, Menu, X, Truck, MessageCircle } from 'lucide-react';
+import { Phone, Menu, X, MessageCircle } from 'lucide-react';
 import { BUSINESS, NAVIGATION } from '@/lib/constants';
 import { track } from '@/lib/track';
+import BrandLogo from './BrandLogo';
 
 /**
  * Site header.
  *
- * On the homepage the header starts transparent so the hero video runs
+ * On the homepage the header starts transparent so the hero photo runs
  * edge-to-edge behind it, then switches to solid white once the visitor
  * scrolls. Every other page gets the solid white header from the start.
  *
  * Layout responsibilities:
- *   - Fixed at top; mobile (< lg) gets a hamburger + icon-only call button,
- *     desktop (≥ lg) gets full nav links + a "Call (xxx) xxx-xxxx" button.
+ *   - Fixed at top; mobile/tablet (< xl) gets a hamburger + icon-only call button,
+ *     desktop (≥ xl) gets full nav links + a "Call (xxx) xxx-xxxx" button.
  *   - All tap targets are ≥ 44px (Apple HIG).
  */
 export default function Header() {
@@ -61,14 +62,14 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  // Transparent-over-video treatment only applies at the top of the homepage
+  // Transparent-over-photo treatment only applies at the top of the homepage
   // (and never while the mobile menu is open, which needs a solid backdrop).
-  const overVideo = pathname === '/' && !isScrolled && !isMobileMenuOpen;
+  const overHero = pathname === '/' && !isScrolled && !isMobileMenuOpen;
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        overVideo
+        overHero
           ? 'bg-navy-950/40 backdrop-blur-sm border-b border-white/10'
           : 'bg-white shadow-soft border-b border-surface-200'
       }`}
@@ -81,26 +82,15 @@ export default function Header() {
             className="flex items-center gap-2.5 group flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-md"
             aria-label="Rai Dispatch — Home"
           >
-            <div className="w-10 h-10 bg-primary-600 rounded-md flex items-center justify-center">
-              <Truck className="w-6 h-6 text-white" strokeWidth={2.25} aria-hidden="true" />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span className="font-display font-bold text-2xl tracking-wide uppercase">
-                <span className={overVideo ? 'text-white' : 'text-primary-600'}>Rai</span>{' '}
-                <span className={overVideo ? 'text-white/90' : 'text-accent-700'}>Dispatch</span>
-              </span>
-              <span
-                className={`font-display text-[11px] font-semibold uppercase tracking-[0.13em] mt-0.5 hidden sm:block ${
-                  overVideo ? 'text-white/60' : 'text-surface-600'
-                }`}
-              >
-                Truck Dispatch Service
-              </span>
-            </div>
+            <BrandLogo
+              onDark={overHero}
+              className="w-[166px] min-[375px]:w-[190px] sm:w-[260px] xl:w-[260px] 2xl:w-[280px]"
+              priority
+            />
           </Link>
 
-          {/* Desktop Navigation — only at lg+ */}
-          <div className="hidden lg:flex items-center gap-0.5">
+          {/* Desktop Navigation — only at xl+ */}
+          <div className="hidden xl:flex items-center gap-0.5">
             {NAVIGATION.map((item) => {
               const isActive =
                 item.href === '/'
@@ -111,7 +101,7 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   className={`relative px-3 py-2 text-sm font-medium rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
-                    overVideo
+                    overHero
                       ? isActive
                         ? 'text-white'
                         : 'text-white/80 hover:text-white hover:bg-white/10'
@@ -126,7 +116,7 @@ export default function Header() {
                     <motion.span
                       layoutId="nav-active-pill"
                       className={`absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full ${
-                        overVideo ? 'bg-white' : 'bg-primary-600'
+                        overHero ? 'bg-white' : 'bg-primary-600'
                       }`}
                       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
@@ -146,9 +136,9 @@ export default function Header() {
               aria-label={`Call ${BUSINESS.phone}`}
             >
               <Phone className="w-4 h-4 flex-shrink-0" strokeWidth={2.5} aria-hidden="true" />
-              <span className="hidden lg:inline">Call</span>
+              <span className="hidden xl:inline">Call</span>
               <span className="hidden xl:inline">{BUSINESS.phone}</span>
-              <span className="lg:hidden">Call Now</span>
+              <span className="xl:hidden">Call Now</span>
             </a>
 
             {/* Mobile: icon-only Phone shortcut (44×44 tap target — Apple HIG) */}
@@ -164,8 +154,8 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen((v) => !v)}
-              className={`lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
-                overVideo
+              className={`xl:hidden inline-flex items-center justify-center w-11 h-11 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+                overHero
                   ? 'text-white hover:bg-white/10 active:bg-white/20'
                   : 'text-navy-800 hover:bg-surface-100 active:bg-surface-200'
               }`}
@@ -210,7 +200,7 @@ export default function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="lg:hidden bg-white border-t border-surface-200 max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain"
+            className="xl:hidden bg-white border-t border-surface-200 max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain"
           >
             <div className="container-custom py-4 space-y-1">
               {NAVIGATION.map((item, index) => {
