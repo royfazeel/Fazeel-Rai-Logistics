@@ -4,6 +4,8 @@ Audit date: 24 September 2026. Target website: `https://raidispatch.com`.
 
 This document records the original audit, implemented changes, production verification, and remaining measurement work for the Rai Dispatch migration on 24 September 2026. Observed results are distinguished from ranking predictions and tests that still require a real recipient or accumulated field data.
 
+**Current pricing revision:** the owner subsequently replaced the initial “up to 5%” offer with equipment-specific fees: cargo/Sprinter van 8%, box truck 7%, hotshot 6%, dry van/flatbed/reefer 5%, and all other truck types 7%. Earlier launch entries below are historical; use `src/lib/dispatch-pricing.ts` and the current pricing page for the active schedule. The support email remains `sam@railogistics.us`.
+
 ## Observed baseline
 
 The audit fetched the public website HTML, `robots.txt`, `sitemap.xml`, and the read-only lead configuration endpoint. No lead was submitted and no email was sent during this audit.

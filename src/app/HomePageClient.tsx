@@ -1,5 +1,6 @@
 'use client';
 
+import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -98,7 +99,6 @@ export default function HomePage() {
       <section className="relative -mt-20 flex flex-col overflow-hidden bg-navy-950 min-h-[100svh]">
         <VideoBackdrop
           src={MEDIA.heroVideo.src}
-          srcSmall={MEDIA.heroVideo.srcSmall}
           poster={MEDIA.heroVideo.poster}
           loading="eager"
         />
@@ -166,9 +166,9 @@ export default function HomePage() {
             <p
               className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"
             >
-              Find freight, negotiate rates, and keep your paperwork moving with
-              a dedicated truck dispatch service. Nationwide support for
-              owner-operators and fleets — for up to 5% of dispatched load revenue.
+              Your dedicated dispatcher finds freight, negotiates rates, and
+              handles load paperwork. Nationwide support for owner-operators
+              and fleets, with {DISPATCH_RATE_RANGE} fees based on your equipment.
             </p>
 
             <div
@@ -195,7 +195,7 @@ export default function HomePage() {
             <ul
               className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/75"
             >
-              {['Up to 5% dispatch fee', 'No setup fees', 'You approve every load'].map((item) => (
+              {['Dedicated dispatcher', `${DISPATCH_RATE_RANGE} by equipment`, 'You approve every load'].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-primary-400" aria-hidden="true" />
                   {item}
@@ -343,7 +343,8 @@ export default function HomePage() {
               <p className="text-white/70 text-lg">
                 Dry van, reefer, flatbed, box truck, power only, step deck, hotshot,
                 and cargo van dispatch. We review your equipment and lane needs
-                before you start, with percentage dispatch fees capped at 5%.
+                before you start, with a dedicated dispatcher and equipment-based
+                dispatch fees of {DISPATCH_RATE_RANGE}.
               </p>
             </div>
           </ScrollReveal>
@@ -616,7 +617,7 @@ export default function HomePage() {
             <div className="max-w-2xl mb-12 sm:mb-16">
               <p className="eyebrow">Transparent pricing</p>
               <h2 className="section-heading mb-4">
-                Full-service dispatch. Fees up to 5%.
+                Your dedicated dispatcher. {DISPATCH_RATE_RANGE} by equipment.
               </h2>
               <p className="text-surface-700 text-lg">
                 Keep your dispatch costs clear from the first conversation.
@@ -662,7 +663,7 @@ export default function HomePage() {
                 icon: DollarSign,
                 title: 'Affordable rates',
                 description:
-                  'Dispatch fees up to 5% of gross revenue on loads we dispatch, with the rate agreed before you start.',
+                  `Equipment-based dispatch fees of ${DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch, confirmed before you start.`,
               },
               {
                 icon: Users,
@@ -785,7 +786,8 @@ export default function HomePage() {
             </h2>
             <p className="text-white/80 text-lg sm:text-xl mb-9 max-w-2xl mx-auto">
               Tell us about your truck, lanes, and schedule. We will walk through
-              your dispatch options, documents, and an agreed fee up to 5%.
+              your dedicated dispatcher, documents, and the {DISPATCH_RATE_RANGE} fee
+              for your equipment.
             </p>
 
             <div className="flex flex-col gap-3 max-w-md mx-auto mb-8">

@@ -21,6 +21,24 @@ const pages = [];
 const cache = new Map();
 const checkedLinks = new Set();
 
+// Independent acceptance criteria from the owner's equipment-specific pricing
+// instruction. Do not import the site's pricing helper: this crawl must catch a
+// wrong value that has propagated consistently through the rendered website.
+const approvedFees = [
+  { slug: 'cargo-van', label: /cargo\s*(?:&|and|\/)\s*sprinter\s*vans?|cargo\s*vans?|sprinter\s*vans?/i, rate: 8 },
+  { slug: 'box-truck', label: /box\s*trucks?/i, rate: 7 },
+  { slug: 'hotshot', label: /hot\s*shot(?:\s*trucks?)?/i, rate: 6 },
+  { slug: 'dry-van', label: /dry\s*vans?/i, rate: 5 },
+  { slug: 'flatbed', label: /flatbeds?/i, rate: 5 },
+  { slug: 'reefer', label: /reefers?/i, rate: 5 },
+  { slug: 'power-only', label: /power[\s-]*only/i, rate: 7 },
+  { slug: 'step-deck', label: /step[\s-]*decks?/i, rate: 7 },
+];
+const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 7 };
+const percentages = text => [...text.matchAll(/\b(\d+(?:\.\d+)?)\s*%/g)].map(match => Number(match[1]));
+const hasType = (node, type) => [node?.['@type']].flat().includes(type);
+const obsoletePricing = /\bup\s+to\s+5\s*%|\b(?:maximum|max)\s+(?:(?:percentage|dispatch|service)\s+)*(?:fee|rate|percentage)?\s*(?:is|of|:)?\s*5\s*%|\b5\s*%\s*(?:maximum|max|cap|ceiling)\b|\bsame\s+(?:maximum\s+)?percentage\s+(?:across|for)\s+(?:all|our)/i;
+
 const issue = (path, check, detail) => failures.push({ path, check, detail });
 const decode = value => value.replace(/&(?:amp|quot|apos|lt|gt|nbsp|#(\d+)|#x([0-9a-f]+));/gi, (match, decimal, hex) => {
   if (decimal || hex) return String.fromCodePoint(Number.parseInt(decimal || hex, decimal ? 10 : 16));
@@ -50,6 +68,66 @@ function schemaNodes(value) {
   if (Array.isArray(value)) return value.flatMap(schemaNodes);
   if (!value || typeof value !== 'object') return [];
   return [value, ...Object.values(value).flatMap(schemaNodes)];
+}
+
+function checkOfferFee(path, offer, rate, label) {
+  const rates = percentages(String(offer.description || ''));
+  if (rates.length !== 1 || rates[0] !== rate) issue(path, 'offer-pricing', `${label} offer must describe exactly ${rate}%; received ${JSON.stringify(offer.description || '')}.`);
+  // These offers describe a percentage service fee, not a fixed-dollar price.
+  if (schemaNodes(offer).some(node => node.price !== undefined || node.lowPrice !== undefined || node.highPrice !== undefined)) issue(path, 'percentage-as-price', `${label} percentage offer must not be represented as a monetary price.`);
+}
+
+function checkRenderedPricing(path, markup, visibleText, title, description, nodes) {
+  const equipment = approvedFees.find(item => path === `/equipment/${item.slug}`);
+  if (equipment) {
+    const article = markup.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1] || markup;
+    const hero = article.match(/<header\b[^>]*>([\s\S]*?)<\/header>/i)?.[1];
+    const headlineRates = percentages(hero ? plain(hero) : `${title} ${description}`);
+    if (!headlineRates.includes(equipment.rate) || headlineRates.some(rate => rate !== equipment.rate)) issue(path, 'equipment-pricing', `Primary equipment offer must advertise ${equipment.rate}%; found ${JSON.stringify(headlineRates)}.`);
+    if (!percentages(visibleText).includes(equipment.rate)) issue(path, 'visible-equipment-fee', `No visible ${equipment.rate}% fee found.`);
+    const metadataRates = percentages(`${title} ${description}`);
+    if (metadataRates.some(rate => rate !== equipment.rate)) issue(path, 'equipment-metadata-pricing', `Equipment title/description must not advertise a different rate from ${equipment.rate}%; found ${JSON.stringify(metadataRates)}.`);
+    const matchingServices = nodes.filter(node => hasType(node, 'Service') && (node.url === canonicalFor(path) || node['@id'] === `${canonicalFor(path)}#service`));
+    if (!matchingServices.length) issue(path, 'equipment-service-schema', 'No page-specific Service schema found.');
+    for (const service of matchingServices) {
+      if (percentages(String(service.description || '')).some(rate => rate !== equipment.rate)) issue(path, 'equipment-schema-pricing', `${equipment.slug} Service description advertises a rate other than ${equipment.rate}%.`);
+      // A Service without an Offer is valid; if pricing is published in schema,
+      // it must agree with the specific equipment's visible offer.
+      for (const offer of [service.offers].flat().filter(Boolean)) {
+        if (typeof offer !== 'object') { issue(path, 'offer-pricing', 'Expected a structured percentage Offer.'); continue; }
+        checkOfferFee(path, offer, equipment.rate, equipment.slug);
+      }
+    }
+  }
+  if (path !== '/pricing') return;
+  const tableRows = [...markup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].map(match => plain(match[1]));
+  for (const item of [...approvedFees, otherEquipmentFee]) {
+    const matchingRows = tableRows.filter(row => item.label.test(row));
+    if (matchingRows.length) {
+      for (const row of matchingRows) {
+        const rates = percentages(row);
+        if (rates.length !== 1 || rates[0] !== item.rate) issue(path, 'pricing-table-rate', `Expected ${item.slug || 'other equipment'} row at ${item.rate}%; received ${JSON.stringify(row)}.`);
+      }
+    } else {
+      // Supports a semantic equipment/rate card if the page is not a table.
+      // Check the first percentage following the equipment label, rather than
+      // accepting an unrelated percentage elsewhere on the page.
+      const association = new RegExp(`(?:${item.label.source})[^%]{0,65}?\\b(\\d+(?:\\.\\d+)?)\\s*%`, 'gi');
+      const matches = [...visibleText.matchAll(association)];
+      if (!matches.some(match => Number(match[1]) === item.rate)) issue(path, 'pricing-equipment-label', `Missing visible ${item.slug || 'other equipment'} → ${item.rate}% association.`);
+    }
+  }
+  const catalogs = nodes.filter(node => hasType(node, 'OfferCatalog'));
+  if (!catalogs.length) return;
+  const catalogOffers = catalogs.flatMap(schemaNodes).filter(node => hasType(node, 'Offer'));
+  for (const item of approvedFees) {
+    const offers = catalogOffers.filter(offer => [offer.itemOffered].flat().some(service => service?.url === canonicalFor(`/equipment/${item.slug}`)));
+    if (!offers.length) issue(path, 'catalog-equipment', `OfferCatalog is missing ${item.slug}.`);
+    for (const offer of offers) checkOfferFee(path, offer, item.rate, item.slug);
+  }
+  const otherOffers = catalogOffers.filter(offer => otherEquipmentFee.label.test(`${offer.name || ''} ${offer.itemOffered?.name || ''}`));
+  if (!otherOffers.length) issue(path, 'catalog-other-equipment', 'OfferCatalog is missing the 7% other-equipment category.');
+  for (const offer of otherOffers) checkOfferFee(path, offer, otherEquipmentFee.rate, 'other equipment');
 }
 
 console.log(`Auditing server-rendered pages at ${base.origin}; canonical target ${canonicalOrigin}`);
@@ -105,20 +183,27 @@ await batch(uniquePaths, async path => {
   if (description) { const other = descriptions.get(description); if (other) issue(path, 'duplicate-description', `Same description as ${other}.`); else descriptions.set(description, path); }
   if (title.length > 70) warnings.push({ path, check: 'title-length', detail: `${title.length} characters; review search result truncation.` });
   if (description.length > 170) warnings.push({ path, check: 'description-length', detail: `${description.length} characters; review search result truncation.` });
-  const staleRate = visibleText.match(/\b(?:6|7)\s*%/);
-  if (staleRate) issue(path, 'stale-pricing', `Old percentage found: ${staleRate[0]}.`);
+  const searchText = [visibleText, title, ...metas.map(meta => meta.content || '')].join(' ');
+  const staleRate = searchText.match(obsoletePricing);
+  if (staleRate) issue(path, 'obsolete-universal-pricing', `Superseded universal pricing claim found: ${staleRate[0]}.`);
   if (/Marcus Johnson|David Chen|Robert Williams|James Anderson|Michael Thompson|Anthony Davis|Christopher Brown|Daniel Garcia|William Martinez|Joseph Taylor|Kevin Robinson|Brian Wilson|verified (?:driver|owner.operator)|sample loads|live load ticker|average dispatcher|\$5k\s*[–-]\s*\$9k/i.test(visibleText)) issue(path, 'unsupported-remnants', 'A removed testimonial, sample ticker, comparison, or revenue claim remains.');
   const schemaBlocks = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(match => attributes(match[1]).type?.toLowerCase() === 'application/ld+json');
   if (!schemaBlocks.length) issue(path, 'json-ld', 'No JSON-LD block found.');
+  const pageSchemaNodes = [];
   for (let index = 0; index < schemaBlocks.length; index++) {
     try {
       const value = JSON.parse(schemaBlocks[index][2]);
       const nodes = schemaNodes(value);
+      pageSchemaNodes.push(...nodes);
+      for (const node of nodes) {
+        if (Object.values(node).some(value => typeof value === 'string' && obsoletePricing.test(value))) issue(path, 'obsolete-schema-pricing', `Superseded universal pricing claim in JSON-LD block ${index + 1}.`);
+      }
       if (!nodes.some(node => /^https?:\/\/schema\.org\/?$/.test(node['@context'] || ''))) issue(path, 'json-ld-context', `Block ${index + 1} has no schema.org context.`);
       if (!nodes.some(node => node['@type'])) issue(path, 'json-ld-type', `Block ${index + 1} has no typed node.`);
       if (nodes.some(node => [node['@type']].flat().some(type => ['Review', 'AggregateRating'].includes(type)))) issue(path, 'review-schema', 'Unverified review or rating schema remains.');
     } catch (error) { issue(path, 'json-ld-syntax', `Block ${index + 1}: ${error.message}`); }
   }
+  checkRenderedPricing(path, markup, visibleText, title, description, pageSchemaNodes);
   for (const anchor of elements(markup, 'a')) {
     if (!anchor.href || /^(mailto:|tel:|sms:|whatsapp:|data:)/i.test(anchor.href)) continue;
     try {

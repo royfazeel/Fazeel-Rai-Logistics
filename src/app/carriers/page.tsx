@@ -1,3 +1,4 @@
+import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Link from 'next/link';
 import { ArrowRight, Check, ClipboardCheck, Truck, Users } from 'lucide-react';
 import { ContentBreadcrumbs, ContentCTA, ContentJsonLd } from '@/components/content/ContentDetail';
@@ -6,7 +7,7 @@ import { pageMetadata, SITE_URL } from '@/lib/seo';
 
 export const metadata = pageMetadata(
   'Dispatch for Owner-Operators, Fleets & New Authorities',
-  'Explore truck dispatch support for owner-operators, small fleets and new authorities. Review service fit, load approval and fees up to 5% across the lower 48.',
+  `Dedicated dispatchers for owner-operators, small fleets and new authorities. Review service fit and equipment-based fees of ${DISPATCH_RATE_RANGE} across the lower 48.`,
   '/carriers',
 );
 
@@ -38,7 +39,7 @@ export default function CarriersPage() {
           <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch for owner-operators, fleets and new authorities.</h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">A single truck, a growing fleet and a newly active authority face different dispatch decisions. Start with your operation, then review the equipment, lanes, communication and paperwork support that fit.</p>
           <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white">
-            {['Fees up to 5%', 'You approve the loads', '48 contiguous states'].map(item => <li key={item} className="flex items-center gap-2"><Check size={17} className="shrink-0 text-primary-400" aria-hidden="true" />{item}</li>)}
+            {['Dedicated dispatcher', `${DISPATCH_RATE_RANGE} fees by equipment`, 'You approve the loads'].map(item => <li key={item} className="flex items-center gap-2"><Check size={17} className="shrink-0 text-primary-400" aria-hidden="true" />{item}</li>)}
           </ul>
         </div>
       </section>
@@ -75,7 +76,7 @@ export default function CarriersPage() {
           </div>
           <div className="space-y-6 rounded-lg border border-surface-300 bg-surface-50 p-7 sm:p-9">
             <div><h3 className="text-2xl">Match the equipment</h3><p className="mt-3 leading-7 text-navy-700">Review the load requirements that apply to dry vans, reefers, flatbeds, box trucks, power only, step decks, hotshot trucks and cargo vans.</p><Link href="/equipment" className="mt-4 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">Compare equipment dispatch <ArrowRight size={17} aria-hidden="true" /></Link></div>
-            <div className="border-t border-surface-300 pt-6"><h3 className="text-2xl">Agree on the service and fee</h3><p className="mt-3 leading-7 text-navy-700">Percentage dispatch fees are up to 5% of gross revenue on loads we dispatch. Confirm your exact fee, included support, communication plan and billing terms in writing.</p><Link href="/pricing" className="mt-4 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">Understand dispatch pricing <ArrowRight size={17} aria-hidden="true" /></Link></div>
+            <div className="border-t border-surface-300 pt-6"><h3 className="text-2xl">Agree on the service and fee</h3><p className="mt-3 leading-7 text-navy-700">Your dedicated dispatcher supports your operation at equipment-based fees of {DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch. Confirm your exact fee, included support, communication plan and billing terms in writing.</p><Link href="/pricing" className="mt-4 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">Understand dispatch pricing <ArrowRight size={17} aria-hidden="true" /></Link></div>
           </div>
         </div>
       </section>

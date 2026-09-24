@@ -1,5 +1,6 @@
 'use client';
 
+import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Box, CheckCircle, Container, Package, Phone, Snowflake, Truck } from 'lucide-react';
@@ -20,7 +21,7 @@ export default function EquipmentPageClient() {
       <div className="container-custom relative z-10">
         <p className="eyebrow">Equipment we dispatch</p>
         <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5 max-w-3xl">Truck dispatch services for your equipment</h1>
-        <p className="text-white/80 text-lg max-w-2xl mb-8">Dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo van dispatch across the 48 contiguous states. Percentage dispatch fees are up to 5%.</p>
+        <p className="text-white/80 text-lg max-w-2xl mb-8">Dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo van dispatch across the 48 contiguous states. Work with a dedicated dispatcher at {DISPATCH_RATE_RANGE} fees based on equipment.</p>
         <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'equipment_hero' })} className="btn-primary"><Phone className="w-5 h-5" aria-hidden="true" />Talk about your truck</a>
       </div>
     </section>
@@ -39,6 +40,7 @@ export default function EquipmentPageClient() {
             </article>;
           })}
         </div>
+        <p className="mt-8 text-surface-700 leading-relaxed">Other truck types have a {DEFAULT_DISPATCH_RATE}% dispatch fee. Share your equipment details so we can confirm service fit and assign your dedicated dispatcher.</p>
       </div>
     </section>
     <section className="section-padding bg-surface-50">

@@ -1,5 +1,6 @@
 'use client';
 
+import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Truck, ArrowRight, MessageCircle, Clock } from 'lucide-react';
@@ -53,7 +54,7 @@ export default function Footer() {
                 Ready to run better freight?
               </h2>
               <p className="text-surface-400 text-lg">
-                Nationwide dispatch support. Percentage fees up to 5%.
+                Dedicated dispatchers nationwide. {DISPATCH_RATE_RANGE} fees by equipment.
               </p>
             </div>
             <motion.a
@@ -92,7 +93,7 @@ export default function Footer() {
             </Link>
             <p className="text-surface-400 mb-6 max-w-sm">
               Professional truck dispatch services for owner-operators and small fleets. 
-              Nationwide coverage with dedicated dispatchers who fight for your best rates.
+              A dedicated dispatcher for your truck, with load search, rate negotiation and paperwork support across the lower 48.
             </p>
             <div className="space-y-3">
               <a

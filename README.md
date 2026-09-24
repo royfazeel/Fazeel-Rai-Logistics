@@ -1,6 +1,6 @@
 # Rai Dispatch
 
-Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. The published percentage dispatch fee is **up to 5%** of gross revenue on loads Rai Dispatch dispatches, subject to the written agreement.
+Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. Published dispatch fees depend on equipment: **8% cargo/Sprinter vans, 7% box trucks, 6% hotshot, 5% dry van/flatbed/reefer, and 7% all other equipment**. The billing base, service availability, and terms must be confirmed in the written agreement. The website's supported-equipment scope still applies; a fee category does not establish that every specialized operation is available.
 
 The source is configured for **https://raidispatch.com**. The existing GitHub repository is [royfazeel/Fazeel-Rai-Logistics](https://github.com/royfazeel/Fazeel-Rai-Logistics), connected to the existing Vercel project **fazeel-rai-logistics**. Repository and project names can retain the old brand without affecting the public website.
 
@@ -14,6 +14,8 @@ For lead delivery and tracking, read [SETUP.md](SETUP.md). For migration evidenc
 - Page-specific titles, descriptions, canonical URLs, Open Graph metadata, JSON-LD, sitemap, and robots rules.
 - Phone, SMS, WhatsApp, contact form, and quote modal. Percentage pricing is explained with a clearly labeled fee example.
 - Server-rendered FAQ answers and content that remains visible without scroll-triggered JavaScript. Mobile visitors receive a still hero image; eligible desktop background video is deferred and can be paused.
+
+The desktop hero uses `/video/hero-highway-hd.mp4`: a 20.07-second, 1920×1080 H.264 excerpt (4,602,916 bytes), copied from the original footage without re-encoding and optimized for progressive playback. The old 960×540 source is no longer selected. The still image remains visible while the HD video prepares and if playback reports a media error. Mobile, reduced-motion, data-saver and slow-connection visitors keep the still image.
 
 The retained `/testimonials` route now explains the carrier experience. It does not publish unverified testimonials or ratings. The unused testimonial carousel, sample load ticker, and lead popup components are not mounted in the active site.
 
@@ -44,7 +46,7 @@ After a production build, with the site running on port 3000:
 node scripts/verify-seo.mjs http://localhost:3000
 ```
 
-The read-only crawler follows the sitemap and checks HTTP status, one H1 per page, unique titles/descriptions, Rai Dispatch branding, self-canonicals, Open Graph URLs, JSON-LD syntax, indexability, internal links/fragments, robots directives, and removed pricing/review remnants. To retain a JSON report, add `--json /tmp/rai-seo-report.json`.
+The read-only crawler follows the sitemap and checks HTTP status, one H1 per page, unique titles/descriptions, Rai Dispatch branding, self-canonicals, Open Graph URLs, JSON-LD syntax, indexability, internal links/fragments, robots directives, and removed review remnants. It also rejects the obsolete universal 5% ceiling, checks each equipment page's advertised fee and applicable structured data, and checks the pricing table's equipment/rate associations. The expected rates are independent acceptance criteria from the owner's pricing instruction, so an incorrect shared data value cannot make the audit pass by reproducing the same mistake. To retain a JSON report, add `--json /tmp/rai-seo-report.json`.
 
 Run the same read-only audit after deployment:
 
@@ -60,7 +62,7 @@ node scripts/verify-lead-api.mjs
 
 This harness requires a completed production build. It starts its own loopback Next server and fake Resend sink, uses reserved `.example` addresses, clears webhook delivery, and blocks non-loopback fetches in the test server. It accepts no remote URL. Checks include owner notification, carrier acknowledgement, validation, escaping, spam controls, rate limits, provider failures, and unconfigured delivery. Temporary processes and files are cleaned up afterward.
 
-The expanded release produces **46 build outputs**, including 40 indexable pages. Local verification on 24 September 2026 passed **40/40 sitemap pages** and **211 internal link/fragment targets**. The unchanged lead API previously passed **17/17 isolated checks**. The crawler reports one advisory about a 71-character guide title. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
+The current release produces **46 build outputs**, including 40 indexable pages. Local verification on 24 September 2026 passed **40/40 sitemap pages** and **212 internal link/fragment targets**, with **zero failures or advisory warnings**. The unchanged lead API previously passed **17/17 isolated checks**. The crawler also checks equipment-specific pricing in page content, metadata and percentage Offer descriptions. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
 
 ## Deploy to the existing Vercel project
 
@@ -78,7 +80,8 @@ Environment changes require a new deployment. Public `NEXT_PUBLIC_*` values are 
 
 | Location | Purpose |
 | --- | --- |
-| `src/lib/constants.ts` | Business identity/contact details, hours, equipment labels and fees, core services, FAQs, onboarding, and service commitments |
+| `src/lib/constants.ts` | Business identity/contact details, hours, equipment labels, core services, FAQs, onboarding, and service commitments |
+| `src/lib/dispatch-pricing.ts` | Shared equipment-specific dispatch percentages and pricing descriptions |
 | `src/lib/dispatch-content.ts` | Distinct equipment/service detail content and carrier guides; slugs feed the corresponding dynamic routes |
 | `src/lib/expanded-content.ts`, `carrier-content.ts` | Operating-pattern services, additional educational guides, and carrier audience content |
 | `src/lib/seo.ts` | Canonical origin, site name, share image, and the shared page-metadata helper |
@@ -93,7 +96,7 @@ Environment changes require a new deployment. Public `NEXT_PUBLIC_*` values are 
 | `scripts/` | Read-only SEO crawl and isolated lead API verification |
 | `public/video/` | Locally hosted hero/CTA posters and video files |
 
-When changing a fee or a service claim, review both shared data files and the visible pricing, FAQ, and agreement copy. Add a page only when it provides distinct, useful information. New content needs a stable slug, page-specific metadata, contextual links, and sitemap coverage. Do not add invented reviews, unsupported income promises, or duplicate city pages.
+When changing a fee, update the shared pricing helper and review visible equipment, pricing, FAQ, agreement, metadata, and schema copy. Update the crawler's independent acceptance rates only when the owner authorizes a price change. Add a page only when it provides distinct, useful information. New content needs a stable slug, page-specific metadata, contextual links, and sitemap coverage. Do not add invented reviews, unsupported income promises, or duplicate city pages.
 
 ## Lead delivery and email
 
@@ -115,7 +118,7 @@ With no channel configured, POST returns `503 not_configured`. A failed delivery
 
 The local test sink proves the application workflow in isolation. Confirm live delivery separately with an explicitly authorized test submission and check the recipient inbox/provider logs. Rate limiting is in-memory and best-effort per serverless instance.
 
-**Web and email domains are separate.** Keep the existing `sam@railogistics.us` inbox and verified old-domain sender until replacement mailboxes and delivery are verified. Moving the website to `raidispatch.com` does not create new email accounts or authenticate a new sender. `RESEND_API_URL` is a local-test override only and must remain unset in production.
+**Web and email domains are separate.** The owner has confirmed that `sam@railogistics.us` remains the contact email. Preserve that inbox, its DNS, and the verified old-domain sender. Moving the website to `raidispatch.com` does not create new email accounts or authenticate a new sender. `RESEND_API_URL` is a local-test override only and must remain unset in production.
 
 ## Contact and license
 

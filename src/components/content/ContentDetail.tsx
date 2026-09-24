@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Check, ChevronRight, Phone } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
+import { DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
 import type { CarrierGuide, ContentLink, DispatchContent } from '@/lib/dispatch-content';
 
 export function ContentJsonLd({ data }: { data: Record<string, unknown> }) {
@@ -52,6 +53,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
   const categoryLabel = { equipment: 'Equipment', services: 'Services', resources: 'Carrier resources', carriers: 'Carriers' }[category];
   const path = `/${category}/${content.slug}`;
   const url = `${SITE_URL}${path}`;
+  const feeLabel = category === 'equipment' ? getDispatchRateLabel(content.slug) : DISPATCH_RATE_RANGE;
   return (
     <>
       <ContentJsonLd data={guide ? {
@@ -67,6 +69,10 @@ export default function ContentDetail({ content, category, guide }: { content: D
         name: content.title, serviceType: content.title, description: content.availability ? `${content.description} ${content.availability}` : content.description,
         url, provider: { '@id': `${SITE_URL}/#organization` },
         areaServed: { '@type': 'Place', name: 'Contiguous United States' },
+        offers: {
+          '@type': 'Offer', url: `${SITE_URL}/pricing`,
+          description: `${feeLabel} of gross revenue on loads we dispatch.${category === 'equipment' ? '' : ' Rate depends on truck type.'} Dedicated truck dispatcher included; billing terms confirmed before service.`,
+        },
       }} />
 
       <article>
@@ -85,8 +91,8 @@ export default function ContentDetail({ content, category, guide }: { content: D
               </div>
               {!guide && <div className="border-t border-white/20 pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
                 <p className="text-sm uppercase tracking-[0.15em] text-navy-200">Percentage dispatch plan</p>
-                <p className="mt-2 font-display text-6xl font-bold">Up to <span className="text-primary-400">5%</span></p>
-                <p className="mt-3 text-sm leading-relaxed text-navy-200">Confirm your exact fee, billing base and service scope before starting.</p>
+                <p className="mt-2 font-display text-6xl font-bold text-primary-400">{feeLabel}</p>
+                <p className="mt-3 text-sm leading-relaxed text-navy-200">{category === 'equipment' ? 'For this equipment type.' : 'Rate depends on your truck type.'} Dedicated truck dispatcher included. Confirm the billing base and service scope before starting.</p>
                 <Link href="/contact" className="btn-primary mt-6 w-full">Discuss your truck <ArrowRight size={18} aria-hidden="true" /></Link>
                 <Link href="/pricing" className="mt-4 inline-block text-sm text-navy-200 underline underline-offset-4 hover:text-white">View pricing details</Link>
               </div>}

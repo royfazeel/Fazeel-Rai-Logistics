@@ -1,3 +1,4 @@
+import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Link from 'next/link';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { ContentBreadcrumbs, ContentCTA, ContentJsonLd } from '@/components/content/ContentDetail';
@@ -23,7 +24,7 @@ export default function ServiceAreasPage() {
           <ContentBreadcrumbs dark items={[{ label: 'US service areas', href: '/service-areas' }]} />
           <p className="eyebrow">Nationwide dispatch. Your lane preferences.</p>
           <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch across<br />the lower 48 states.</h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Rai Dispatch supports owner-operators and small fleets running regional and over-the-road freight across the contiguous United States. We plan around your truck, your schedule and the lanes you choose.</p>
+          <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Rai Dispatch supports owner-operators and small fleets running regional and over-the-road freight across the contiguous United States. Your dedicated dispatcher plans around your truck, your schedule and the lanes you choose.</p>
           <div className="mt-8 flex flex-wrap gap-4"><Link className="btn-primary" href="/contact">Discuss your lanes <ArrowRight size={18} aria-hidden="true" /></Link><Link className="btn-ghost-light" href="/equipment">Find your equipment type</Link></div>
         </div>
       </section>
@@ -32,7 +33,7 @@ export default function ServiceAreasPage() {
         <div className="container-custom">
           <div className="grid gap-8 md:grid-cols-[1fr_320px]">
             <div><p className="eyebrow">Coverage that starts with a conversation</p><h2 id="coverage-heading" className="section-heading">A national service area is not a promise of a load in every ZIP code.</h2><p className="mt-5 max-w-3xl leading-8 text-navy-700">Location, equipment, broker requirements and freight availability determine which opportunities fit. Share your empty location, maximum pickup radius, preferred destinations and home-time goal so we can assess a workable search. Local-only or dedicated routes need a specific availability review.</p></div>
-            <aside className="rounded-lg bg-surface-100 p-7"><p className="font-display text-5xl font-bold text-primary-600">Up to 5%</p><p className="mt-3 leading-7 text-navy-700">Percentage dispatch fee, with the billing base and service scope confirmed before you start.</p><Link href="/pricing" className="mt-5 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">View pricing <ArrowRight size={17} aria-hidden="true" /></Link></aside>
+            <aside className="rounded-lg bg-surface-100 p-7"><p className="font-display text-5xl font-bold text-primary-600">{DISPATCH_RATE_RANGE}</p><p className="mt-3 leading-7 text-navy-700">Equipment-based dispatch fees with a dedicated dispatcher. Confirm the billing base and service scope before you start.</p><Link href="/pricing" className="mt-5 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">View pricing <ArrowRight size={17} aria-hidden="true" /></Link></aside>
           </div>
           <nav aria-label="Jump to region" className="mt-10 flex flex-wrap gap-3">{regions.map((region, index) => <a key={region.name} href={`#region-${index}`} className="rounded-full border border-surface-300 px-4 py-2 text-sm text-navy-700 hover:border-primary-600 hover:text-primary-700">{region.name}</a>)}</nav>
           <div className="mt-10 grid gap-6 lg:grid-cols-2">

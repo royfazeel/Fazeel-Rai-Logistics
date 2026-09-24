@@ -1,8 +1,9 @@
+import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import HomePageClient from './HomePageClient';
 import { pageMetadata, SITE_URL } from '@/lib/seo';
 import { BUSINESS, SERVICES } from '@/lib/constants';
 
-export const metadata = pageMetadata('Truck Dispatch Services in the USA | Up to 5%', 'Dedicated truck dispatch services for owner-operators and fleets. Load booking, rate negotiation and paperwork across the lower 48, with fees up to 5%.', '/');
+export const metadata = pageMetadata(`USA Truck Dispatch | ${DISPATCH_RATE_RANGE} by Equipment`, `A dedicated dispatcher for your truck. Load booking, rate negotiation and paperwork across the lower 48, with equipment-based fees of ${DISPATCH_RATE_RANGE}.`, '/');
 
 export default function HomePage() {
   const service = {

@@ -1,3 +1,4 @@
+import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import type { Metadata, Viewport } from 'next';
 import { Barlow_Condensed, Inter } from 'next/font/google';
 import { Header, Footer, StickyCallWidgets, MotionProvider, Analytics } from '@/components';
@@ -21,8 +22,8 @@ const bodyFont = Inter({
 });
 
 export const metadata: Metadata = {
-  ...pageMetadata('Truck Dispatch Services in the USA | Up to 5%', 'Truck dispatch services for owner-operators and fleets across the USA. Load booking, rate negotiation and paperwork support with dispatch fees up to 5%.', '/'),
-  title: { default: 'Truck Dispatch Services in the USA | Up to 5% | Rai Dispatch', template: '%s | Rai Dispatch' },
+  ...pageMetadata(`USA Truck Dispatch | ${DISPATCH_RATE_RANGE} by Equipment`, `A dedicated dispatcher for your truck. Load booking, rate negotiation and paperwork across the lower 48, with equipment-based fees of ${DISPATCH_RATE_RANGE}.`, '/'),
+  title: { default: `USA Truck Dispatch | ${DISPATCH_RATE_RANGE} by Equipment | Rai Dispatch`, template: '%s | Rai Dispatch' },
   metadataBase: new URL(SITE_URL),
   applicationName: 'Rai Dispatch',
   authors: [{ name: BUSINESS.name }],

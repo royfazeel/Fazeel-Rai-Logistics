@@ -1,13 +1,14 @@
+import { DISPATCH_RATE_RANGE } from './dispatch-pricing';
 import type { DispatchContent } from './dispatch-content';
 
 export const CARRIER_CONTENT: DispatchContent[] = [
   {
     slug: 'owner-operators',
     title: 'Truck dispatch services for owner-operators',
-    metaTitle: 'Owner-Operator Truck Dispatch Services | Up to 5%',
-    description: 'Owner-operator dispatch across the lower 48. Get load search, rate negotiation and paperwork support while you approve each load. Dispatch fees up to 5%.',
+    metaTitle: `Owner-Operator Truck Dispatch | ${DISPATCH_RATE_RANGE} Fees`,
+    description: `Owner-operator dispatch across the lower 48 with a dedicated dispatcher. Get load search, rate negotiation and paperwork support. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
     eyebrow: 'Your truck. Your business. A dispatch contact.',
-    intro: 'Running your own truck means balancing the road with broker calls, load searches and paperwork. Rai Dispatch gives independent owner-operators a dispatch contact for those tasks, with nationwide support across the 48 contiguous United States. You choose the freight and keep control of your operation.',
+    intro: 'Running your own truck means balancing the road with broker calls, load searches and paperwork. Rai Dispatch gives independent owner-operators a dedicated dispatcher for those tasks, with nationwide support across the 48 contiguous United States. You choose the freight and keep control of your operation.',
     highlights: ['Support for one-truck operations', 'Loads approved by you', 'Regional and OTR preferences'],
     sections: [
       {
@@ -47,7 +48,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
         id: 'pricing',
         title: 'Understand the fee before the first load',
         paragraphs: [
-          'Our percentage dispatch fee is up to 5% on loads we dispatch. Your exact rate, billing base, service scope and invoice schedule are confirmed in writing before service starts. Clarify how fuel surcharge, accessorials, cancelled loads and freight you book yourself are treated.',
+          `Our percentage dispatch fee is ${DISPATCH_RATE_RANGE} by equipment on loads we dispatch. Your exact rate, billing base, service scope and invoice schedule are confirmed in writing before service starts. Clarify how fuel surcharge, accessorials, cancelled loads and freight you book yourself are treated.`,
           'There is no setup fee. Review the agreement’s notice and outstanding-payment requirements, then compare the dispatch service with the time and support your business needs. The amount left after a dispatch fee is still before your other operating expenses.',
         ],
       },
@@ -70,8 +71,8 @@ export const CARRIER_CONTENT: DispatchContent[] = [
   {
     slug: 'small-fleets',
     title: 'Truck dispatch services for small fleets',
-    metaTitle: 'Small Fleet Truck Dispatch Services | Fees Up to 5%',
-    description: 'Small fleet dispatch across the USA. Coordinate truck availability, load approvals, broker updates and paperwork across the lower 48 with fees up to 5%.',
+    metaTitle: `Small Fleet Truck Dispatch Services | ${DISPATCH_RATE_RANGE} Fees`,
+    description: `Small fleet dispatch across the lower 48 with a dedicated dispatcher. Coordinate truck availability, load approvals and paperwork. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
     eyebrow: 'Several trucks. One clear operating plan.',
     intro: 'As a fleet grows, each truck adds its own location, schedule and paperwork. Rai Dispatch helps small trucking companies coordinate the dispatch work around those differences. Our nationwide service supports carriers across the lower 48, with the fleet retaining control of equipment, drivers and load approval.',
     highlights: ['Truck-by-truck availability', 'Clear carrier approval contacts', 'Coordinated load documents'],
@@ -123,7 +124,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
         title: 'Review service and costs at truck level',
         paragraphs: [
           'Compare completed loads, total miles, time waiting and home-time fit for each truck. A strong fleet gross can hide one truck spending too much time empty or unavailable. Share that feedback when reviewing the next week’s search preferences.',
-          'Percentage dispatch fees are up to 5% on loads we dispatch. Confirm the exact rate, billing base, included trucks and service scope in writing. Agree how invoices identify each truck and how accessorials, cancellations or changes in active fleet size are handled. Any fixed-fee arrangement requires a separate written quote.',
+          `Percentage dispatch fees are ${DISPATCH_RATE_RANGE} by equipment on loads we dispatch. Confirm the exact rate, billing base, included trucks and service scope in writing. Agree how invoices identify each truck and how accessorials, cancellations or changes in active fleet size are handled. Any fixed-fee arrangement requires a separate written quote.`,
         ],
       },
     ],
@@ -146,7 +147,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
     slug: 'new-authorities',
     title: 'Truck dispatch support for new authorities',
     metaTitle: 'New Authority Truck Dispatch | Carrier Setup Review',
-    description: 'New authority dispatch support across the lower 48. Review documents, equipment and broker requirements, with fees up to 5% and carrier-approved bookings.',
+    description: `New authority dispatch across the lower 48 with a dedicated dispatcher. Review documents, equipment and broker requirements. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
     eyebrow: 'New carrier. Prepare for a realistic start.',
     intro: 'Starting a carrier operation brings a new set of documents, broker requirements and load decisions. Rai Dispatch helps new authorities assess dispatch readiness and suitable freight across the contiguous United States. The first step is a review of your actual equipment, operating status and lanes.',
     highlights: ['Carrier readiness review', 'Broker requirements checked', 'Clear expectations before booking'],
@@ -189,7 +190,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
         id: 'fees-and-timing',
         title: 'Agree fees and expectations before starting',
         paragraphs: [
-          'Rai Dispatch advertises percentage dispatch fees up to 5% on loads we dispatch, with no setup fee. Your exact percentage, billing base, service scope and invoice timing are agreed in writing. Ask how cancelled loads, accessorials and freight you book yourself affect the fee.',
+          `Rai Dispatch charges equipment-specific dispatch fees of ${DISPATCH_RATE_RANGE} on loads we dispatch, with no setup fee. Your equipment rate, billing base, service scope and invoice timing are confirmed in writing. Ask how cancelled loads, accessorials and freight you book yourself affect the fee.`,
           'A start-date estimate follows the review of your documents, equipment and lanes. Keep onboarding completion separate from a confirmed booking when planning your first week. Available freight, broker approval and operating costs make fixed income or immediate-load promises unreliable planning assumptions.',
         ],
       },

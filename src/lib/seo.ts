@@ -1,3 +1,4 @@
+import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import type { Metadata } from 'next';
 
 export const SITE_URL = 'https://raidispatch.com';
@@ -13,7 +14,7 @@ export function pageMetadata(title: string, description: string, path: string): 
     openGraph: {
       type: 'website', locale: 'en_US', siteName: SITE_NAME,
       title: `${title} | ${SITE_NAME}`, description, url,
-      images: [{ url: SHARE_IMAGE, width: 1200, height: 630, alt: 'Rai Dispatch — truck dispatch services with fees up to 5%' }],
+      images: [{ url: SHARE_IMAGE, width: 1200, height: 630, alt: `Rai Dispatch — dedicated truck dispatchers with equipment-based fees of ${DISPATCH_RATE_RANGE}` }],
     },
     twitter: { card: 'summary_large_image', title: `${title} | ${SITE_NAME}`, description, images: [SHARE_IMAGE] },
   };

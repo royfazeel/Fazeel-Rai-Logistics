@@ -1,3 +1,5 @@
+import { DISPATCH_PRICING_SUMMARY, DISPATCH_RATE_RANGE, getDispatchRateLabel } from './dispatch-pricing';
+
 export const BUSINESS = {
   name: 'Rai Dispatch',
   parentCompany: 'Rai Technologies LLC',
@@ -23,15 +25,14 @@ export const BUSINESS = {
   },
   serviceArea: 'All 48 contiguous United States',
   tagline: 'Professional Truck Dispatching Services',
-  description: 'Truck dispatch services for owner-operators and fleets across the 48 contiguous states. Dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo van support with dispatch fees up to 5%.',
+  description: `Dedicated truck dispatchers for owner-operators and fleets across the 48 contiguous states. Dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo van support with equipment-based fees of ${DISPATCH_RATE_RANGE}.`,
 } as const;
 
 // Locally hosted media. The hero uses a still image on mobile and for reduced
-// motion; eligible desktop playback uses the smaller, deferred rendition.
+// motion; eligible desktop playback uses a deferred, full-HD excerpt.
 export const MEDIA = {
   heroVideo: {
-    src: '/video/hero-highway.mp4',
-    srcSmall: '/video/hero-highway-sm.mp4',
+    src: '/video/hero-highway-hd.mp4',
     poster: '/video/hero-highway.jpg',
   },
   ctaVideo: {
@@ -54,63 +55,61 @@ export const NAVIGATION = [
 
 // Equipment we dispatch + dispatch fee (percentage of gross).
 //
-// Pricing source of truth — these percentages drive the EquipmentSection cards,
-// the pricing table, the PricingPreview component, and the JSON-LD Service
-// schema. Update HERE only; everything else reads from this list.
+// Numeric pricing lives in dispatch-pricing.ts; this list supplies equipment copy.
 export const EQUIPMENT_TYPES = [
   {
     id: 'box-truck',
     name: 'Box Trucks',
-    percentage: 'Up to 5%',
+    percentage: getDispatchRateLabel('box-truck'),
     description: 'Specialized dispatch for box truck operations, from local deliveries to long-haul routes.',
     benefits: ['Local & regional loads', 'Capacity-based load matching', 'Flexible scheduling'],
   },
   {
     id: 'dry-van',
     name: 'Dry Vans',
-    percentage: 'Up to 5%',
+    percentage: getDispatchRateLabel('dry-van'),
     description: 'Dry van dispatch for regional and over-the-road carriers hauling general freight.',
     benefits: ['Coast-to-coast lanes', 'Consistent freight', 'Rate negotiation expertise'],
   },
   {
     id: 'reefer',
     name: 'Reefers',
-    percentage: 'Up to 5%',
+    percentage: getDispatchRateLabel('reefer'),
     description: 'Temperature-controlled freight dispatch with time-sensitive load expertise.',
     benefits: ['Temperature-controlled loads', 'Top produce lanes', 'Time-critical shipments'],
   },
   {
     id: 'flatbed',
     name: 'Flatbeds',
-    percentage: 'Up to 5%',
+    percentage: getDispatchRateLabel('flatbed'),
     description: 'Dedicated dispatching for flatbed operators with specialized load matching.',
     benefits: ['Specialized cargo support', 'Tarping and securement review', 'Equipment-specific matching'],
   },
   {
     id: 'power-only',
     name: 'Power Only',
-    percentage: 'Up to 5%',
+    percentage: getDispatchRateLabel('power-only'),
     description: 'Power only dispatch for tractors hauling broker- or shipper-provided trailers, subject to carrier eligibility.',
     benefits: ['Drop-and-hook freight', 'Trailer requirements review', 'Pickup appointment coordination'],
   },
   {
     id: 'step-deck',
     name: 'Step Decks',
-    percentage: 'Up to 5%',
+    percentage: getDispatchRateLabel('step-deck'),
     description: 'Step deck dispatch for taller freight, machinery, and equipment within your trailer and authority limits.',
     benefits: ['Deck-height load matching', 'Dimensions reviewed before booking', 'Open-deck lane planning'],
   },
   {
     id: 'hotshot',
     name: 'Hotshot Trucks',
-    percentage: 'Up to 5%',
+    percentage: getDispatchRateLabel('hotshot'),
     description: 'Hotshot dispatch based on your truck, trailer, payload, operating authority, and preferred radius.',
     benefits: ['Partial-load opportunities', 'Payload and length matching', 'Regional and expedited lanes'],
   },
   {
     id: 'cargo-van',
     name: 'Cargo & Sprinter Vans',
-    percentage: 'Up to 5%',
+    percentage: getDispatchRateLabel('cargo-van'),
     description: 'Cargo van and Sprinter van dispatch for suitable expedited freight, subject to lane and broker availability.',
     benefits: ['Interior dimensions reviewed', 'Expedited freight search', 'Availability confirmed by lane'],
   },
@@ -156,7 +155,7 @@ export const SERVICES = [
 ] as const;
 
 export const FAQS = [
-  { id: 1, question: 'How much does a truck dispatch service cost?', answer: 'Rai Dispatch offers percentage dispatch fees up to 5% of the gross revenue on loads we dispatch. Your exact rate, billing schedule, and fee basis are agreed in writing before dispatch starts. Ask about weekly or monthly plans if you prefer a fixed fee.' },
+  { id: 1, question: 'How much does a truck dispatch service cost?', answer: `${DISPATCH_PRICING_SUMMARY} These fees apply to gross revenue on loads we dispatch. Confirm the billing base, schedule and service scope in writing before starting.` },
   { id: 2, question: 'What documents do I need to get started?', answer: 'Prepare your operating authority details where applicable, Certificate of Insurance, W-9, equipment specifications, and a signed dispatch agreement. A factoring notice of assignment may also be needed. Broker requirements vary by load and carrier.' },
   { id: 3, question: 'Where do you provide truck dispatch services?', answer: 'We support carriers across the 48 contiguous United States. Tell us whether you prefer local, regional, dedicated, or over-the-road work. Load availability depends on your equipment, authority, location, and the market.' },
   { id: 4, question: 'Which truck and trailer types can you dispatch?', answer: 'We support dry vans, reefers, flatbeds, box trucks, power only tractors, step decks, hotshot trucks, and cargo or Sprinter vans. Specialized equipment and freight requirements are reviewed before accepting or booking a load.' },
@@ -164,7 +163,7 @@ export const FAQS = [
   { id: 6, question: 'Do you work with new authorities and owner-operators?', answer: 'Owner-operators, small fleets, and carriers with new authority can discuss their setup with us. Each broker sets its own authority-age, insurance, safety, and equipment requirements, so not every load will be available to every carrier.' },
   { id: 7, question: 'How do you find loads for my truck?', answer: 'We search load boards and available broker freight, review lane fit and carrier requirements, negotiate terms, and present suitable options for your approval. We consider loaded and empty miles as well as pickup and delivery schedules.' },
   { id: 8, question: 'Are freight rates or weekly earnings guaranteed?', answer: 'No. Freight availability, load rates, operating costs, and weekly revenue change with equipment, markets, hours available, and the loads you accept. Dispatch support helps you evaluate opportunities; it does not guarantee a particular income.' },
-  { id: 9, question: 'Will I have a dedicated dispatcher?', answer: 'Your dispatcher learns your truck specifications, preferred lanes, scheduling needs, and load criteria. Confirm your contact person, working hours, and escalation process during onboarding.' },
+  { id: 9, question: 'Will I have a dedicated dispatcher?', answer: 'Yes. Rai Dispatch provides clients with a dedicated truck dispatcher who learns their equipment, preferred lanes, scheduling needs and load criteria. Confirm your contact person, working hours and escalation process during onboarding.' },
   { id: 10, question: 'Do you help with detention and layover requests?', answer: 'We help document arrival and departure times and request eligible detention or layover pay under the agreed load terms. Payment depends on the broker or shipper agreement and supporting documentation.' },
   { id: 11, question: 'What are your business hours?', answer: 'Our published dispatch desk hours are Monday through Saturday, 8:00 AM to 6:00 PM Central Time. Discuss any after-hours needs during your setup call.' },
   { id: 12, question: 'Do you handle rate confirmations and factoring paperwork?', answer: 'We assist with carrier packets, rate confirmations, bills of lading, proof of delivery, and communication with your chosen factoring provider. The carrier remains responsible for accurate records and compliance.' },
@@ -173,7 +172,7 @@ export const FAQS = [
 ] as const;
 
 export const STATS = [
-  { label: 'Maximum dispatch fee', value: '5', prefix: '', suffix: '%' },
+  { label: 'Fees by truck type', value: DISPATCH_RATE_RANGE.replace('%', ''), prefix: '', suffix: '%' },
   { label: 'Contiguous states', value: '48', prefix: '', suffix: '' },
   { label: 'Equipment types', value: '8', prefix: '', suffix: '' },
   { label: 'Days of desk support', value: '6', prefix: '', suffix: '/week' },

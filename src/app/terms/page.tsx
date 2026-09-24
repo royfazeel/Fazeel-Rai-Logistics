@@ -1,6 +1,7 @@
 import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { BUSINESS } from '@/lib/constants';
+import { DISPATCH_PRICING_SUMMARY } from '@/lib/dispatch-pricing';
 
 /**
  * Single source of truth for the date shown at the top and bottom of this
@@ -139,8 +140,8 @@ export default function TermsPage() {
               6. Fees and Payment
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
-              Our percentage-based dispatch fee is up to 5% of gross load revenue on
-              loads we dispatch. The exact percentage, fee basis, treatment of fuel
+              {DISPATCH_PRICING_SUMMARY} These percentage-based dispatch fees apply to gross load revenue on
+              loads we dispatch. The equipment rate, fee basis, treatment of fuel
               surcharge and accessorials, and payment schedule are confirmed in your
               individual dispatch agreement before service begins.
             </p>
