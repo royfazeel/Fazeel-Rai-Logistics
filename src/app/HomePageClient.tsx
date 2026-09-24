@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import {
   Phone,
   ArrowRight,
@@ -149,42 +148,30 @@ export default function HomePage() {
           </div>
 
           <div className="relative max-w-3xl">
-            <motion.p
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+            <p
               className="font-display text-sm sm:text-base font-semibold uppercase tracking-[0.22em] text-white/70 mb-5 lg:mb-7 flex items-center gap-3"
             >
               <span className="inline-block w-10 h-[3px] bg-primary-500" aria-hidden="true" />
               Owner-operators &amp; fleets · 48 contiguous states
-            </motion.p>
+            </p>
 
-            <motion.h1
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+            <h1
               className="font-display font-bold uppercase text-white leading-[0.95] tracking-tight text-5xl sm:text-6xl lg:text-7xl xl:text-[5.25rem] mb-6 lg:mb-7"
             >
               Truck dispatch
               <br />
               <span className="text-primary-500">built around you.</span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+            <p
               className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"
             >
               Find freight, negotiate rates, and keep your paperwork moving with
               a dedicated truck dispatch service. Nationwide support for
               owner-operators and fleets — for up to 5% of dispatched load revenue.
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+            <div
               className="flex flex-col sm:flex-row gap-3 mb-10"
             >
               <button
@@ -203,12 +190,9 @@ export default function HomePage() {
                 <Phone className="w-5 h-5" aria-hidden="true" />
                 {BUSINESS.phone}
               </a>
-            </motion.div>
+            </div>
 
-            <motion.ul
-              initial={false}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.55 }}
+            <ul
               className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/75"
             >
               {['Up to 5% dispatch fee', 'No setup fees', 'You approve every load'].map((item) => (
@@ -217,7 +201,7 @@ export default function HomePage() {
                   {item}
                 </li>
               ))}
-            </motion.ul>
+            </ul>
           </div>
         </div>
 
@@ -405,7 +389,7 @@ export default function HomePage() {
                   <h3 className="font-display text-2xl font-bold mb-2">
                     Not sure where your truck fits?
                   </h3>
-                  <p className="text-white/85 text-sm leading-relaxed mb-6">
+                  <p className="text-white text-sm leading-relaxed mb-6">
                     Tell us your equipment and where you like to run. We&apos;ll
                     review your capacity, lanes, and broker requirements together.
                   </p>
@@ -476,7 +460,7 @@ export default function HomePage() {
                     className="absolute -top-[3px] left-0 w-12 h-[3px] bg-primary-600"
                     aria-hidden="true"
                   />
-                  <span className="font-display text-5xl font-bold text-surface-300 leading-none">
+                  <span className="font-display text-5xl font-bold text-surface-700 leading-none">
                     {String(step.step).padStart(2, '0')}
                   </span>
                   <h3 className="font-display text-2xl font-bold text-navy-950 mt-3 mb-2">

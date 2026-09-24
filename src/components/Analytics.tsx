@@ -3,30 +3,12 @@
 import Script from 'next/script';
 
 /**
- * Google tag loader (GA4 and/or Google Ads).
- *
- * Reads its IDs from the environment so the site ships completely clean until
- * the owner is ready to advertise:
- *
- *   NEXT_PUBLIC_GA4_ID   e.g. G-XXXXXXXXXX   (Google Analytics 4)
- *   NEXT_PUBLIC_GADS_ID  e.g. AW-123456789   (Google Ads)
- *
- * If NEITHER is set this component renders nothing at all — no script tags, no
- * network requests, no console noise. If BOTH are set, gtag.js is loaded once
- * and `config` is called once per ID, which is exactly how Google documents
- * running Analytics and Ads off a single tag.
- *
- * NOTE for Next.js: `process.env.NEXT_PUBLIC_*` is inlined at BUILD time in
- * client bundles. Adding these variables in Vercel therefore requires a
- * redeploy before they take effect.
- */
-
-/**
- * The live GA4 property for railogistics.us. A GA4 measurement ID is public by
- * design — it is visible in the page source of every site that uses it — so it
- * is safe in the repo, and hardcoding the default means analytics keep working
- * even if the Vercel environment variable is missing. Setting
- * NEXT_PUBLIC_GA4_ID still overrides it (useful for a staging property).
+ * Retain the existing GA4 property through the domain migration. Public
+ * NEXT_PUBLIC_GA4_ID / NEXT_PUBLIC_GADS_ID values can override or extend it.
+ * The inline bootstrap creates the standard gtag command queue after
+ * hydration; the larger Google library waits until page load and idle time.
+ * Calls to track() in between stay queued until the library consumes them.
+ * Public environment values are inlined by Next.js and require a rebuild.
  */
 const DEFAULT_GA4_ID = 'G-K31P16P0SB';
 
@@ -40,7 +22,7 @@ export default function Analytics() {
     new Set([GA4_ID, GADS_ID].map((id) => id?.trim()).filter(Boolean) as string[])
   );
 
-  // Nothing configured — render nothing. This is the default state of the site.
+  // If all configured IDs are empty after normalization, omit the tag.
   if (ids.length === 0) return null;
 
   // gtag.js only needs one ID in the URL; every other property is attached
@@ -56,14 +38,14 @@ export default function Analytics() {
 
   return (
     <>
-      <Script
-        id="google-tag"
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(loaderId)}`}
-      />
       <Script id="google-tag-init" strategy="afterInteractive">
         {bootstrap}
       </Script>
+      <Script
+        id="google-tag"
+        strategy="lazyOnload"
+        src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(loaderId)}`}
+      />
     </>
   );
 }

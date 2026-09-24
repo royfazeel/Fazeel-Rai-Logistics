@@ -69,17 +69,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth ${displayFont.variable} ${bodyFont.variable}`}>
       <head>
-        <link rel="preconnect" href="https://images.pexels.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="min-h-screen bg-white font-body antialiased">
-        {/* Google tag (GA4 / Google Ads). Renders nothing at all until
-            NEXT_PUBLIC_GA4_ID or NEXT_PUBLIC_GADS_ID is set. next/script with
-            strategy="afterInteractive" is the App Router recommendation: the
-            tag loads after hydration so it never delays the hero. */}
+        {/* Preserve the existing analytics property. Queue events after
+            hydration, then load the external tag after page load and idle. */}
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:p-4 focus:text-navy-950">Skip to main content</a>
         <Analytics />
         <MotionProvider>
