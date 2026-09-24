@@ -68,10 +68,10 @@ Google recommends useful, original content that answers the audience's needs and
 
 Google recommends permanent server-side redirects, accurate URL mapping, updated canonicals and internal links, and a new sitemap. Keep old-domain redirects for at least a year. Use Search Console's Change of Address for the applicable verified old-domain variants. Temporary search visibility fluctuations are possible: [site-move guidance](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes).
 
-- [ ] Confirm the intended Vercel project/repository and keep the existing deployment available for rollback.
-- [ ] Add `raidispatch.com` and `www.raidispatch.com` to the project; apply the exact DNS records Vercel requests.
-- [ ] Preserve unrelated DNS, especially MX and email authentication records. Confirm TLS issuance before relying on the new host.
-- [ ] Choose `https://raidispatch.com` as canonical. Redirect the alternate new-domain hostname to it.
+- [x] Confirm the intended Vercel project/repository and keep the existing deployment available for rollback.
+- [x] Add `raidispatch.com` and `www.raidispatch.com` to the project; apply the exact DNS records Vercel requests.
+- [x] Preserve unrelated DNS, especially MX and email authentication records. Confirm TLS issuance before relying on the new host.
+- [x] Choose `https://raidispatch.com` as canonical. Redirect the alternate new-domain hostname to it.
 - [ ] Redirect both `railogistics.us` and `www.railogistics.us` to equivalent new URLs with 301 or 308 responses, preserving paths and queries where appropriate. Check representative deep links and avoid loops.
 - [ ] Verify the new home, all existing routes, and every new route return the correct content and status; nonexistent paths must return 404.
 - [ ] Verify rendered titles, descriptions, canonicals, Open Graph/Twitter URLs and images, and structured-data IDs reference the correct page and new host.
@@ -131,3 +131,19 @@ Do not automate public status claims from a configuration check. Use existing an
 Technical SEO makes content accessible and understandable; it does not purchase or guarantee rankings. Domain migrations require recrawling and can take weeks or longer. Broad keyword coverage comes from useful content and an established business reputation, not repeating every possible phrase. Search engines decide indexing and placement.
 
 Further growth depends on accurate first-hand content, genuine customer feedback, verifiable business information, relevant earned references, reliable service, and ongoing measurement. Add lane-specific case studies only when the underlying records and customer permissions exist. Revisit pricing, equipment availability, onboarding requirements, and published guidance when operations change.
+
+## Implementation and validation record
+
+As of 24 September 2026, implementation is committed locally as `a5ae580` on `main`; publication remains pending because the Mac locked before the authenticated GitHub Desktop push. The new domain currently serves the previous production deployment. Do not treat the redesigned site, old-domain redirects, sitemap submission, or Change of Address as live until their production checks are recorded.
+
+- Repository: `royfazeel/Fazeel-Rai-Logistics`; existing Vercel project: `fazeel-arshads-projects/fazeel-rai-logistics`. Previous production source: `1c3cc489697288c94ba5783b5c7f7acab3005a84`.
+- New web DNS: apex A `216.198.79.1`; `www` CNAME `4fceb2910ff04c7c.vercel-dns-017.com`. Existing mail records preserved. Vercel reports valid configuration for both hosts.
+- Public HTTPS checks: new apex HTTP 200; new `www` HTTP 308 to the apex, preserving a sample path and query. Old-domain edge redirects await publication.
+- Production build succeeds on Next.js 15.5.26, with 30 indexable content pages. TypeScript and diff whitespace checks pass. Dependency audit reports zero known vulnerabilities at check time.
+- Local rendered-HTML crawl: 30/30 sitemap URLs and 141 internal links/fragments pass; unique titles/descriptions, canonical and Open Graph URLs, one H1, crawlability, and JSON-LD syntax checked. One advisory is a 71-character guide title; this is not a rendering or indexability failure.
+- Contact route harness: 17/17 checks pass, including validation, spam controls, notification/acknowledgement flow, escaping, provider failures, and unconfigured-service response. All test messages went to a local fake service; no real email was sent.
+- Mobile menu and quote-modal validation checked in a 390px viewport; no horizontal overflow on sampled home/equipment pages. Decorative video sources remain absent on mobile. Desktop guide and home layouts inspected. Temporary viewport override reset.
+- Branded Open Graph image renders as a 1200×630 PNG. Unknown equipment slug returns 404. Application-level old-host redirect preserves the sample deep path and query with HTTP 308.
+- Google Analytics property and stream now use Rai Dispatch; stream URL is `https://raidispatch.com`. Measurement ID `G-K31P16P0SB` is preserved. Both Search Console domain properties are verified; final migration submission awaits the live checks.
+
+Resume by publishing the tested `main` branch through the authenticated GitHub Desktop session, waiting for the Vercel production build, running `node scripts/verify-seo.mjs https://raidispatch.com`, checking the public lead configuration, setting both old-domain variants to direct permanent redirects, and completing Search Console sitemap/Change of Address. Update this record after those actions succeed. A production inbox-delivery test and field Core Web Vitals remain distinct from the checks above.
