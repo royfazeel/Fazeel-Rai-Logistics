@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { BUSINESS } from '@/lib/constants';
 
@@ -7,12 +7,9 @@ import { BUSINESS } from '@/lib/constants';
  * page. Keep it in step with POLICY_UPDATED in src/app/privacy/page.tsx —
  * two legal pages carrying dates a year apart reads as neglect.
  */
-const TERMS_UPDATED = 'August 2026';
+const TERMS_UPDATED = 'September 2026';
 
-export const metadata: Metadata = {
-  title: 'Terms of Service',
-  description: `Terms of Service for ${BUSINESS.name}. Read our service agreement and conditions.`,
-};
+export const metadata = pageMetadata('Terms of Service', 'Rai Dispatch service terms, carrier responsibilities, dispatch fees, load approvals, payment arrangements and cancellation conditions.', "/terms");
 
 export default function TermsPage() {
   return (
@@ -95,10 +92,9 @@ export default function TermsPage() {
             </h2>
             <div className="bg-surface-50 border border-surface-200 border-l-4 border-l-primary-600 rounded-lg p-6 mb-4">
               <p className="text-navy-900 font-medium leading-relaxed">
-                Any weekly gross figures, rate-per-mile ranges, or sample lane rates shown
-                on this website are industry reference ranges gathered from public load
-                board and market rate data. They are illustrations of the market, not
-                offers, projections, or promises about what you will earn.
+                Any sample rates or fee calculations on this website are illustrations
+                only. They are not live load offers, market forecasts, or promises
+                about earnings.
               </p>
             </div>
             <p className="text-navy-800 leading-relaxed mb-4">
@@ -143,21 +139,15 @@ export default function TermsPage() {
               6. Fees and Payment
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
-              Our dispatch services are provided under one of the following arrangements:
+              Our percentage-based dispatch fee is up to 5% of gross load revenue on
+              loads we dispatch. The exact percentage, fee basis, treatment of fuel
+              surcharge and accessorials, and payment schedule are confirmed in your
+              individual dispatch agreement before service begins.
             </p>
-            <ul className="list-disc pl-6 text-navy-800 leading-relaxed space-y-2">
-              <li>
-                <strong className="text-navy-900 font-semibold">Weekly Flat Rate:</strong> A fixed weekly fee per truck ($250&ndash;$350
-                depending on equipment type), billed weekly.
-              </li>
-              <li>
-                <strong className="text-navy-900 font-semibold">Contract Plan:</strong> A fixed monthly fee as agreed upon during signup.
-              </li>
-              <li>
-                <strong className="text-navy-900 font-semibold">Percentage Plan:</strong> A percentage of gross load revenue (5-7%
-                depending on equipment type).
-              </li>
-            </ul>
+            <p className="text-navy-800 leading-relaxed">
+              A fixed weekly or monthly arrangement applies only if separately agreed
+              in writing. Its fee and billing terms are confirmed before starting.
+            </p>
             <p className="text-navy-800 leading-relaxed mt-4">
               Payment terms, billing frequency, and specific rates will be outlined in your
               individual dispatch agreement.

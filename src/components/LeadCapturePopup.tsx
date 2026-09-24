@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -33,7 +34,7 @@ const honeypotWrapperStyle: React.CSSProperties = {
  *
  * Trigger logic (whichever fires first):
  *   - Desktop: mouseleave at the top of viewport (classic exit-intent)
- *   - Mobile (no mouse): show after 18 seconds of engaged time
+ *   - Touch/mobile visitors: suppressed; the persistent call actions stay available
  *   - Suppressed entirely if:
  *       a) sessionStorage flag set (already dismissed/seen this session)
  *       b) user is on /privacy or /terms (legal pages — never interrupt)
@@ -76,7 +77,9 @@ export default function LeadCapturePopup() {
   // Suppress if already dismissed this session
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (sessionStorage.getItem('rai_lead_popup_seen') === '1') {
+    try {
+      if (sessionStorage.getItem('rai_lead_popup_seen') === '1') setHasShown(true);
+    } catch {
       setHasShown(true);
     }
   }, []);
@@ -98,6 +101,7 @@ export default function LeadCapturePopup() {
     if (typeof window === 'undefined') return;
 
     const touch = isTouchDevice();
+    if (touch) return;
 
     // Track scroll activity — suppress popup if user is actively scrolling
     let lastScrollAt = Date.now();
@@ -129,15 +133,12 @@ export default function LeadCapturePopup() {
       document.addEventListener('mouseleave', mouseHandler);
     }
 
-    // Time-based fallback — fires on both desktop and mobile.
-    // Mobile is the primary path (no mouse), desktop gets it as a backup if
-    // user never moves to the top.
-    const timer = setTimeout(trigger, touch ? 18000 : 28000);
+
 
     return () => {
       window.removeEventListener('scroll', onScroll);
       if (mouseHandler) document.removeEventListener('mouseleave', mouseHandler);
-      clearTimeout(timer);
+
     };
   }, [hasShown, onLegalPage]);
 
@@ -485,7 +486,7 @@ export default function LeadCapturePopup() {
                   {/* Privacy reassurance — increases form completion */}
                   <p className="flex items-center justify-center gap-1.5 text-[11px] text-surface-500 mt-2">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    Your info stays private. We never sell or share it.
+                    <span>We do not sell your contact details. See our <Link href="/privacy" className="underline underline-offset-2 hover:text-primary-700">Privacy Policy</Link>.</span>
                   </p>
                 </form>
               )}

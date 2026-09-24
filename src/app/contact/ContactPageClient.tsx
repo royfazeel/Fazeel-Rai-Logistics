@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
@@ -183,8 +185,11 @@ export default function ContactPageClient() {
           PAGE HERO — compact dark band over the highway photo.
           ============================================================ */}
       <section className="relative bg-navy-950 text-white py-16 sm:py-20 overflow-hidden">
-        <img
-          src={MEDIA.highwayPhoto}
+        <Image
+          fill
+          priority
+          sizes="100vw"
+          src={MEDIA.heroVideo.poster}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
@@ -207,7 +212,7 @@ export default function ContactPageClient() {
                   href={BUSINESS.phoneHref}
                   onClick={() => track('call_click', { location: 'contact_hero' })}
                   className="btn-primary"
-                  aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
+                  aria-label={`Call Rai Dispatch at ${BUSINESS.phone}`}
                 >
                   <Phone className="w-5 h-5" aria-hidden="true" />
                   {BUSINESS.phone}
@@ -269,7 +274,7 @@ export default function ContactPageClient() {
                           href={BUSINESS.phoneHref}
                           onClick={() => track('call_click', { location: 'contact_method_card' })}
                           className="text-primary-600 font-semibold hover:text-primary-700 transition-colors"
-                          aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
+                          aria-label={`Call Rai Dispatch at ${BUSINESS.phone}`}
                         >
                           {BUSINESS.phone}
                         </a>
@@ -747,7 +752,7 @@ export default function ContactPageClient() {
                           href={BUSINESS.phoneHref}
                           onClick={() => track('call_click', { location: 'contact_final_cta' })}
                           className="btn-secondary py-4"
-                          aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
+                          aria-label={`Call Rai Dispatch at ${BUSINESS.phone}`}
                         >
                           <Phone className="w-5 h-5" aria-hidden="true" />
                           Call
@@ -784,7 +789,7 @@ export default function ContactPageClient() {
             {[
               {
                 q: 'How quickly can I get started?',
-                a: 'Most carriers are set up and dispatched within 24-48 hours.',
+                a: 'Timing depends on complete documents, broker eligibility, and available freight. Call us to discuss your start date.',
               },
               {
                 q: 'Do you work nationwide?',

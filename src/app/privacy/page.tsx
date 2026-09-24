@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import {
   BarChart3,
@@ -16,12 +16,9 @@ import { BUSINESS } from '@/lib/constants';
  * changes — a materially edited policy carrying an old date is exactly the
  * kind of inconsistency an SMS carrier audit or an ads review flags.
  */
-const POLICY_UPDATED = 'August 2026';
+const POLICY_UPDATED = 'September 2026';
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy & SMS Terms',
-  description: `Privacy Policy, cookie and advertising disclosures, and SMS Terms for ${BUSINESS.parentCompany}. How we collect, use, and protect your information, which Google measurement cookies this site sets, how to opt out, and our 10DLC SMS messaging terms.`,
-};
+export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Read how Rai Technologies LLC handles contact details, website analytics, cookies and SMS communications for Rai Dispatch.', "/privacy");
 
 /**
  * Privacy Policy & SMS Terms page.

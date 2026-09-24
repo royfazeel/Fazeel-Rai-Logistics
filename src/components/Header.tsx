@@ -79,7 +79,7 @@ export default function Header() {
           <Link
             href="/"
             className="flex items-center gap-2.5 group flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-md"
-            aria-label="Rai Logistics — Home"
+            aria-label="Rai Dispatch — Home"
           >
             <div className="w-10 h-10 bg-primary-600 rounded-md flex items-center justify-center">
               <Truck className="w-6 h-6 text-white" strokeWidth={2.25} aria-hidden="true" />
@@ -87,7 +87,7 @@ export default function Header() {
             <div className="flex flex-col leading-none">
               <span className="font-display font-bold text-2xl tracking-wide uppercase">
                 <span className={overVideo ? 'text-white' : 'text-primary-600'}>Rai</span>{' '}
-                <span className={overVideo ? 'text-white/90' : 'text-accent-700'}>Logistics</span>
+                <span className={overVideo ? 'text-white/90' : 'text-accent-700'}>Dispatch</span>
               </span>
               <span
                 className={`font-display text-[11px] font-semibold uppercase tracking-[0.13em] mt-0.5 hidden sm:block ${

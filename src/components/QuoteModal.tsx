@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, Send, Check, Loader2, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
@@ -328,7 +329,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                   {/* Trust strip */}
                   <div className="flex items-center gap-2 px-3 py-2 bg-surface-50 border border-surface-200 text-navy-800 rounded-md text-sm">
                     <ShieldCheck className="w-4 h-4 flex-shrink-0 text-primary-600" />
-                    <span>Your info stays private. We never sell or share it.</span>
+                    <span>We do not sell your contact details. See our <Link href="/privacy" onClick={onClose} className="underline underline-offset-2 hover:text-primary-700">Privacy Policy</Link>.</span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">

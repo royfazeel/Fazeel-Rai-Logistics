@@ -1,12 +1,12 @@
 export const BUSINESS = {
-  name: 'Rai Logistics',
+  name: 'Rai Dispatch',
   parentCompany: 'Rai Technologies LLC',
   phone: '(213) 371-6155',
   phoneHref: 'tel:+12133716155',
   // SMS uses sms: protocol with body= for prefilled message (works on iOS & Android)
-  smsHref: 'sms:+12133716155?body=Hi%20Rai%20Logistics%2C%20I%27m%20interested%20in%20dispatch%20services.',
+  smsHref: 'sms:+12133716155?body=Hi%20Rai%20Dispatch%2C%20I%27m%20interested%20in%20dispatch%20services.',
   // WhatsApp deep link (wa.me) — falls back to web if no app installed
-  whatsappHref: 'https://wa.me/12133716155?text=Hi%20Rai%20Logistics%2C%20I%27m%20interested%20in%20dispatch%20services.',
+  whatsappHref: 'https://wa.me/12133716155?text=Hi%20Rai%20Dispatch%2C%20I%27m%20interested%20in%20dispatch%20services.',
   email: 'sam@railogistics.us',
   emailHref: 'mailto:sam@railogistics.us',
   address: {
@@ -18,44 +18,27 @@ export const BUSINESS = {
   },
   hours: {
     days: 'Monday – Saturday',
-    time: '8:00 AM – 6:00 PM CST',
-    note: 'We answer fast, even after hours.',
+    time: '8:00 AM – 6:00 PM CT',
+    note: 'Contact the dispatch desk to confirm availability for your schedule.',
   },
-  serviceArea: 'All over the United States',
+  serviceArea: 'All 48 contiguous United States',
   tagline: 'Professional Truck Dispatching Services',
-  description: 'Professional truck dispatch services for Box Trucks, Dry Vans, Reefers, Flatbeds, and Power Only carriers. Nationwide coverage with dedicated dispatchers.',
+  description: 'Truck dispatch services for owner-operators and fleets across the 48 contiguous states. Dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo van support with dispatch fees up to 5%.',
 } as const;
 
-// Background footage (Pexels free license — commercial use, no attribution
-// required). Hotlinked from the Pexels CDN; to self-host later, download the
-// files into /public/video and swap these URLs.
+// Locally hosted media. The hero uses a still image on mobile and for reduced
+// motion; eligible desktop playback uses the smaller, deferred rendition.
 export const MEDIA = {
-  // Self-hosted, encoded from Pexels' 1920x1080 masters (NOT from their 960x540
-  // rendition — encoding from that and scaling up is what made the hero look
-  // soft). Audio stripped, 30 fps, +faststart so playback starts before the
-  // file finishes arriving.
   heroVideo: {
-    // Aerial: convoy of tractor-trailers, Oregon highway at golden hour.
-    // Full 101 s, encoded from Pexels' 1920x1080 master (never from their
-    // 960x540 rendition — encoding from that and scaling up is what made an
-    // earlier version look soft).
-    //
-    // Sizes are held under 25 MB on purpose: that is GitHub's per-file limit
-    // for browser uploads, which is how this project is deployed.
-    src: '/video/hero-highway.mp4',         // 1920x1080, 21.2 MB, 1760 kb/s
-    srcSmall: '/video/hero-highway-sm.mp4', // 960x540, 7.9 MB @ 655 kb/s — phones cannot
-                                            // resolve 1080p, and phone networks cannot
-                                            // sustain the desktop bitrate without stalling
+    src: '/video/hero-highway.mp4',
+    srcSmall: '/video/hero-highway-sm.mp4',
     poster: '/video/hero-highway.jpg',
   },
   ctaVideo: {
-    // Ground level: rigs rolling past on a US highway
-    src: '/video/cta-highway.mp4',          // 1600x900, 1.8 MB
+    src: '/video/cta-highway.mp4',
     poster: '/video/cta-highway.jpg',
   },
-  // Red Kenworth T680 on an open highway — wide divider image
-  highwayPhoto:
-    'https://images.pexels.com/photos/27099095/pexels-photo-27099095.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  highwayPhoto: '/video/hero-highway.jpg',
 } as const;
 
 export const NAVIGATION = [
@@ -63,7 +46,7 @@ export const NAVIGATION = [
   { name: 'Services', href: '/services' },
   { name: 'Equipment', href: '/equipment' },
   { name: 'Pricing', href: '/pricing' },
-  { name: 'Testimonials', href: '/testimonials' },
+  { name: 'Resources', href: '/resources' },
   { name: 'About', href: '/about' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },
@@ -78,37 +61,58 @@ export const EQUIPMENT_TYPES = [
   {
     id: 'box-truck',
     name: 'Box Trucks',
-    percentage: '7%',
+    percentage: 'Up to 5%',
     description: 'Specialized dispatch for box truck operations, from local deliveries to long-haul routes.',
-    benefits: ['Local & regional loads', 'High-volume opportunities', 'Flexible scheduling'],
+    benefits: ['Local & regional loads', 'Capacity-based load matching', 'Flexible scheduling'],
   },
   {
     id: 'dry-van',
     name: 'Dry Vans',
-    percentage: '5%',
-    description: 'Expert dispatch services for dry van carriers with access to high-paying freight.',
+    percentage: 'Up to 5%',
+    description: 'Dry van dispatch for regional and over-the-road carriers hauling general freight.',
     benefits: ['Coast-to-coast lanes', 'Consistent freight', 'Rate negotiation expertise'],
   },
   {
     id: 'reefer',
     name: 'Reefers',
-    percentage: '5%',
+    percentage: 'Up to 5%',
     description: 'Temperature-controlled freight dispatch with time-sensitive load expertise.',
     benefits: ['Temperature-controlled loads', 'Top produce lanes', 'Time-critical shipments'],
   },
   {
     id: 'flatbed',
     name: 'Flatbeds',
-    percentage: '5%',
+    percentage: 'Up to 5%',
     description: 'Dedicated dispatching for flatbed operators with specialized load matching.',
-    benefits: ['Specialized cargo support', 'High-paying rates', 'Equipment-specific matching'],
+    benefits: ['Specialized cargo support', 'Tarping and securement review', 'Equipment-specific matching'],
   },
   {
     id: 'power-only',
     name: 'Power Only',
-    percentage: '6%',
-    description: 'Drop-and-hook power only dispatch with access to dedicated trailer pools.',
-    benefits: ['Drop-and-hook freight', 'Dedicated trailer pools', 'Reduced detention time'],
+    percentage: 'Up to 5%',
+    description: 'Power only dispatch for tractors hauling broker- or shipper-provided trailers, subject to carrier eligibility.',
+    benefits: ['Drop-and-hook freight', 'Trailer requirements review', 'Pickup appointment coordination'],
+  },
+  {
+    id: 'step-deck',
+    name: 'Step Decks',
+    percentage: 'Up to 5%',
+    description: 'Step deck dispatch for taller freight, machinery, and equipment within your trailer and authority limits.',
+    benefits: ['Deck-height load matching', 'Dimensions reviewed before booking', 'Open-deck lane planning'],
+  },
+  {
+    id: 'hotshot',
+    name: 'Hotshot Trucks',
+    percentage: 'Up to 5%',
+    description: 'Hotshot dispatch based on your truck, trailer, payload, operating authority, and preferred radius.',
+    benefits: ['Partial-load opportunities', 'Payload and length matching', 'Regional and expedited lanes'],
+  },
+  {
+    id: 'cargo-van',
+    name: 'Cargo & Sprinter Vans',
+    percentage: 'Up to 5%',
+    description: 'Cargo van and Sprinter van dispatch for suitable expedited freight, subject to lane and broker availability.',
+    benefits: ['Interior dimensions reviewed', 'Expedited freight search', 'Availability confirmed by lane'],
   },
 ] as const;
 
@@ -116,13 +120,13 @@ export const SERVICES = [
   {
     id: 'rate-negotiation',
     title: 'Rate Negotiation',
-    description: 'We fight for the best rates on every load, ensuring you get paid what your work is worth.',
+    description: 'We discuss load rates, deadhead, fuel costs, and accessorial terms with brokers before you approve a load.',
     icon: 'DollarSign',
   },
   {
     id: 'load-booking',
     title: 'Load Booking',
-    description: 'From load boards to direct broker relationships, we find and secure the best freight for your equipment.',
+    description: 'We search available freight, review broker requirements, and book loads that fit your equipment and preferences.',
     icon: 'Package',
   },
   {
@@ -134,7 +138,7 @@ export const SERVICES = [
   {
     id: 'route-strategy',
     title: 'Route & Lane Strategy',
-    description: 'Strategic lane planning to maximize miles, minimize deadhead, and boost your weekly gross.',
+    description: 'Plan regional and OTR lanes around empty miles, reload options, operating costs, and time at home.',
     icon: 'Route',
   },
   {
@@ -151,223 +155,35 @@ export const SERVICES = [
   },
 ] as const;
 
-// Testimonials with experience markers (years driving, weekly miles) — these
-// concrete details make quotes feel real vs the generic praise that screams "fake."
-// `verified: true` enables a checkmark badge in the UI.
-export const TESTIMONIALS = [
-  {
-    id: 1,
-    name: 'Marcus Johnson',
-    location: 'Atlanta, GA',
-    equipment: 'Dry Van',
-    yearsExperience: '8 yrs driving',
-    quote: 'Switched to Rai Logistics three months ago. Their rate negotiation is top-notch and my dispatch manager actually picks up the phone.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 2,
-    name: 'David Chen',
-    location: 'Los Angeles, CA',
-    equipment: 'Flatbed',
-    yearsExperience: '12 yrs driving',
-    quote: 'Finally found a dispatch service that understands flatbed operations. They consistently find loads that match my equipment perfectly.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 3,
-    name: 'Robert Williams',
-    location: 'Houston, TX',
-    equipment: 'Reefer',
-    yearsExperience: '6 yrs driving',
-    quote: 'The team at Rai keeps me moving with quality reefer loads. No more sitting at truck stops waiting for loads.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 4,
-    name: 'James Anderson',
-    location: 'Chicago, IL',
-    equipment: 'Box Truck',
-    yearsExperience: '4 yrs driving',
-    quote: 'Best decision I made for my box truck business. Professional service and they always answer when I call.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 5,
-    name: 'Michael Thompson',
-    location: 'Phoenix, AZ',
-    equipment: 'Dry Van',
-    yearsExperience: '10 yrs driving',
-    quote: 'Their lane strategy helped me reduce my deadhead miles significantly. I am making more while driving less empty.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 6,
-    name: 'Anthony Davis',
-    location: 'Dallas, TX',
-    equipment: 'Flatbed',
-    yearsExperience: '15 yrs driving',
-    quote: 'Transparent pricing and no hidden fees. What you see is what you get. Great communication too.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 7,
-    name: 'Christopher Brown',
-    location: 'Denver, CO',
-    equipment: 'Reefer',
-    yearsExperience: '7 yrs driving',
-    quote: 'The setup was quick and easy. Within 48 hours I had my first load booked at a rate better than I expected.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 8,
-    name: 'Daniel Garcia',
-    location: 'Miami, FL',
-    equipment: 'Box Truck',
-    yearsExperience: '2 yrs driving',
-    quote: 'As a new owner-operator, having Rai in my corner gave me the confidence to grow my business the right way.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 9,
-    name: 'William Martinez',
-    location: 'Seattle, WA',
-    equipment: 'Dry Van',
-    yearsExperience: '9 yrs driving',
-    quote: 'Consistent loads, fair rates, and a dispatcher who actually cares about my success. Cannot ask for more.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 10,
-    name: 'Joseph Taylor',
-    location: 'Nashville, TN',
-    equipment: 'Flatbed',
-    yearsExperience: '11 yrs driving',
-    quote: 'They handle all the paperwork and broker calls so I can focus on driving. Worth every penny.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 11,
-    name: 'Kevin Robinson',
-    location: 'Detroit, MI',
-    equipment: 'Reefer',
-    yearsExperience: '5 yrs driving',
-    quote: 'Professional team that treats drivers with respect. They fight for better rates and it shows in my paycheck.',
-    rating: 5,
-    verified: true,
-  },
-  {
-    id: 12,
-    name: 'Brian Wilson',
-    location: 'Minneapolis, MN',
-    equipment: 'Box Truck',
-    yearsExperience: '3 yrs driving',
-    quote: 'I have tried three other dispatch services before. Rai is hands down the most reliable and professional.',
-    rating: 5,
-    verified: true,
-  },
-] as const;
-
 export const FAQS = [
-  {
-    id: 1,
-    question: 'How quickly can I get started with Rai Logistics?',
-    answer: 'Most carriers are fully set up and dispatched within 24-48 hours. We just need your MC authority info, insurance details, and preferred lanes. Give us a call and we can often have you on a load the same week.',
-  },
-  {
-    id: 2,
-    question: 'What documents do I need to get started?',
-    answer: 'You will need your MC Authority number, Certificate of Insurance (COI), W-9 form, and a signed dispatch agreement. Our team will guide you through the entire process during your setup call.',
-  },
-  {
-    id: 3,
-    question: 'Do you work with owner-operators nationwide?',
-    answer: 'Yes! We dispatch trucks all over the United States. Whether you run dedicated lanes or want flexibility to go where the best freight is, we have got you covered coast to coast.',
-  },
-  {
-    id: 4,
-    question: 'What is the difference between contract and percentage plans?',
-    answer: 'Our contract plan is a fixed monthly fee with dedicated support and all services included. The percentage plan charges a small percentage of your gross (5-7% depending on equipment type). Many drivers prefer percentage because you only pay when you are making money.',
-  },
-  {
-    id: 5,
-    question: 'Can I cancel my service at any time?',
-    answer: 'Yes. We believe in earning your business, not trapping you in contracts. Our monthly agreements can be cancelled with proper notice. We are confident our results will speak for themselves.',
-  },
-  {
-    id: 6,
-    question: 'Do you provide factoring support?',
-    answer: 'While we are not a factoring company, we work seamlessly with most factoring companies. We ensure all paperwork is completed correctly and submitted promptly so your payments process smoothly.',
-  },
-  {
-    id: 7,
-    question: 'How do you find loads for my truck?',
-    answer: 'We use a combination of load boards (DAT, Truckstop, etc.), direct broker relationships, and our network of shippers. Our dispatchers are skilled at finding the best paying loads for your specific equipment and preferred lanes.',
-  },
-  {
-    id: 8,
-    question: 'What equipment types do you dispatch?',
-    answer: 'We specialize in Box Trucks, Dry Vans, Reefers, Flatbeds, and Power Only carriers. Each equipment type has dedicated dispatchers who understand the unique needs and best freight opportunities for that trailer type.',
-  },
-  {
-    id: 9,
-    question: 'Will I have a dedicated dispatcher?',
-    answer: 'Absolutely. You will be assigned a dedicated dispatcher who learns your preferences, equipment, and goals. You will have direct phone access to your dispatcher during business hours.',
-  },
-  {
-    id: 10,
-    question: 'How do detention requests work?',
-    answer: 'We track all appointments and will file detention requests on your behalf when loads take longer than the contracted free time. We negotiate for every dollar you are owed.',
-  },
-  {
-    id: 11,
-    question: 'What are your business hours?',
-    answer: 'Our dispatch team is available Monday through Saturday. We understand trucking does not stop, so we make sure you have support when you need it most.',
-  },
-  {
-    id: 12,
-    question: 'Do you handle the rate confirmation paperwork?',
-    answer: 'Yes. We handle rate confirmations, carrier packets, and coordinate all broker communications. You focus on driving safely while we handle the back-office work.',
-  },
-  {
-    id: 13,
-    question: 'What makes Rai Logistics different from other dispatch services?',
-    answer: 'We combine affordable pricing with professional service. Our dispatchers are experienced professionals, not call center agents. We treat every driver like a partner, not a number.',
-  },
-  {
-    id: 14,
-    question: 'How are your percentages so competitive?',
-    answer: 'We have built an efficient operation that keeps overhead low. Those savings go directly to our drivers. We believe in providing value, not charging the highest prices in the market.',
-  },
+  { id: 1, question: 'How much does a truck dispatch service cost?', answer: 'Rai Dispatch offers percentage dispatch fees up to 5% of the gross revenue on loads we dispatch. Your exact rate, billing schedule, and fee basis are agreed in writing before dispatch starts. Ask about weekly or monthly plans if you prefer a fixed fee.' },
+  { id: 2, question: 'What documents do I need to get started?', answer: 'Prepare your operating authority details where applicable, Certificate of Insurance, W-9, equipment specifications, and a signed dispatch agreement. A factoring notice of assignment may also be needed. Broker requirements vary by load and carrier.' },
+  { id: 3, question: 'Where do you provide truck dispatch services?', answer: 'We support carriers across the 48 contiguous United States. Tell us whether you prefer local, regional, dedicated, or over-the-road work. Load availability depends on your equipment, authority, location, and the market.' },
+  { id: 4, question: 'Which truck and trailer types can you dispatch?', answer: 'We support dry vans, reefers, flatbeds, box trucks, power only tractors, step decks, hotshot trucks, and cargo or Sprinter vans. Specialized equipment and freight requirements are reviewed before accepting or booking a load.' },
+  { id: 5, question: 'Do I have to accept every load?', answer: 'No. You choose which loads to accept. We present the rate, pickup and delivery details, equipment requirements, and route considerations so you can decide before booking.' },
+  { id: 6, question: 'Do you work with new authorities and owner-operators?', answer: 'Owner-operators, small fleets, and carriers with new authority can discuss their setup with us. Each broker sets its own authority-age, insurance, safety, and equipment requirements, so not every load will be available to every carrier.' },
+  { id: 7, question: 'How do you find loads for my truck?', answer: 'We search load boards and available broker freight, review lane fit and carrier requirements, negotiate terms, and present suitable options for your approval. We consider loaded and empty miles as well as pickup and delivery schedules.' },
+  { id: 8, question: 'Are freight rates or weekly earnings guaranteed?', answer: 'No. Freight availability, load rates, operating costs, and weekly revenue change with equipment, markets, hours available, and the loads you accept. Dispatch support helps you evaluate opportunities; it does not guarantee a particular income.' },
+  { id: 9, question: 'Will I have a dedicated dispatcher?', answer: 'Your dispatcher learns your truck specifications, preferred lanes, scheduling needs, and load criteria. Confirm your contact person, working hours, and escalation process during onboarding.' },
+  { id: 10, question: 'Do you help with detention and layover requests?', answer: 'We help document arrival and departure times and request eligible detention or layover pay under the agreed load terms. Payment depends on the broker or shipper agreement and supporting documentation.' },
+  { id: 11, question: 'What are your business hours?', answer: 'Our published dispatch desk hours are Monday through Saturday, 8:00 AM to 6:00 PM Central Time. Discuss any after-hours needs during your setup call.' },
+  { id: 12, question: 'Do you handle rate confirmations and factoring paperwork?', answer: 'We assist with carrier packets, rate confirmations, bills of lading, proof of delivery, and communication with your chosen factoring provider. The carrier remains responsible for accurate records and compliance.' },
+  { id: 13, question: 'How quickly can dispatch begin?', answer: 'We review your documents, equipment, lanes, and broker eligibility during onboarding. Timing depends on complete paperwork and suitable freight availability. Call the dispatch desk for a realistic start date.' },
+  { id: 14, question: 'Can I cancel dispatch services?', answer: 'Services are offered without a long-term commitment. Follow the notice and outstanding-payment requirements in your signed dispatch agreement. Review those terms before starting.' },
 ] as const;
 
-// Service-capability stats — no financial claims (Google Ads-safe), no inflated counts.
-// These are operational facts the dispatch desk can verify on every call:
-//   - 24-48 hr setup is a process commitment
-//   - 48 states is geographic coverage
-//   - 5 equipment types is what Rai dispatches
-//   - 6 days/week is actual support availability
 export const STATS = [
-  { label: 'Setup Time', value: '48', prefix: '', suffix: ' hrs' },
-  { label: 'States Covered', value: '48', prefix: '', suffix: '' },
-  { label: 'Equipment Types', value: '5', prefix: '', suffix: '' },
-  { label: 'Days of Support', value: '6', prefix: '', suffix: '/week' },
+  { label: 'Maximum dispatch fee', value: '5', prefix: '', suffix: '%' },
+  { label: 'Contiguous states', value: '48', prefix: '', suffix: '' },
+  { label: 'Equipment types', value: '8', prefix: '', suffix: '' },
+  { label: 'Days of desk support', value: '6', prefix: '', suffix: '/week' },
 ] as const;
 
 export const HOW_IT_WORKS = [
   {
     step: 1,
     title: 'Quick Setup Call',
-    description: 'Call us and we will gather your MC info, insurance, and preferences. Setup typically takes 24-48 hours.',
+    description: 'Call us and we will gather your MC info, insurance, and preferences. We confirm document requirements and a realistic start date.',
   },
   {
     step: 2,
@@ -382,106 +198,11 @@ export const HOW_IT_WORKS = [
   {
     step: 4,
     title: 'Weekly Optimization',
-    description: 'We continuously analyze your routes and rates to find opportunities to increase your earnings.',
+    description: 'Review booked loads, empty miles, time at home, and next-week lane preferences together.',
   },
 ] as const;
 
-export const PRICING_PLANS = {
-  weekly: {
-    name: 'Weekly Flat Rate',
-    subtitle: 'Simple Weekly Billing',
-    description: 'Predictable weekly dispatch fee per truck. No percentage cuts from your loads.',
-    rates: [
-      { equipment: 'Box Truck', rate: '$250', period: '/week' },
-      { equipment: 'Dry Van', rate: '$300', period: '/week' },
-      { equipment: 'Reefer', rate: '$350', period: '/week' },
-      { equipment: 'Flatbed', rate: '$300', period: '/week' },
-      { equipment: 'Power Only', rate: '$300', period: '/week' },
-    ],
-    features: [
-      'Load sourcing & booking',
-      'Rate negotiation',
-      'Broker communication',
-      'Dispatch coordination',
-      'Paperwork support (rate confirmations, email follow-ups)',
-      'Lane strategy suggestions',
-      'Dedicated dispatcher support',
-    ],
-    note: 'Weekly rate is billed per truck. Cancel anytime with notice (details in Terms).',
-    cta: 'Call Now',
-    ctaSecondary: 'Get Started',
-  },
-  contract: {
-    name: 'Contract Plan',
-    subtitle: '1-Month Dispatch Contract',
-    description: 'Fixed monthly fee with full-service dispatch support. Renewable monthly or yearly.',
-    features: [
-      'Dedicated dispatcher assignment',
-      'Lane planning & strategy',
-      'Rate negotiation on every load',
-      'Broker & shipper communication',
-      'Rate confirmation handling',
-      'Paperwork & compliance support',
-      'Appointment scheduling',
-      'Detention request assistance',
-      'Weekly performance reviews',
-    ],
-    cta: 'Call for Pricing',
-  },
-  percentage: {
-    name: 'Percentage Plan',
-    subtitle: 'Pay Per Gross',
-    description: 'Percentage of your gross load pay. You only pay when you are making money.',
-    rates: [
-      { equipment: 'Box Truck', rate: '7%' },
-      { equipment: 'Dry Van', rate: '5%' },
-      { equipment: 'Reefer', rate: '5%' },
-      { equipment: 'Flatbed', rate: '5%' },
-      { equipment: 'Power Only', rate: '6%' },
-    ],
-    features: [
-      'All services included',
-      'No upfront costs',
-      'Pay only when you earn',
-      'Same dedicated support',
-      'Transparent billing',
-    ],
-    note: 'Percentage depends on equipment type.',
-    cta: 'Start Today',
-  },
-} as const;
-
-export const WEEKLY_PLAN_FAQS = [
-  {
-    id: 101,
-    question: 'When do you bill for the weekly plan?',
-    answer: 'We bill weekly, typically at the beginning of each dispatch week. You can choose your preferred billing day during setup. Payment is due before dispatch services begin for that week.',
-  },
-  {
-    id: 102,
-    question: 'Is the weekly rate per truck?',
-    answer: 'Yes, the weekly flat rate is billed per truck. If you have multiple trucks, each truck is billed separately at the rate for its equipment type.',
-  },
-  {
-    id: 103,
-    question: 'Can I switch plans later?',
-    answer: 'Absolutely! You can switch between our Weekly Flat Rate, Contract, or Percentage plans at any time. Just give us notice and we will adjust your billing accordingly starting the next billing period.',
-  },
-  {
-    id: 104,
-    question: 'Do you handle all states?',
-    answer: 'Yes, we provide dispatch services across all 48 contiguous states. Whether you run regional routes or coast-to-coast lanes, we have got you covered nationwide.',
-  },
-  {
-    id: 105,
-    question: 'How quickly can you start dispatching my truck?',
-    answer: 'Most carriers are fully set up and dispatched within 24-48 hours. We just need your MC authority info, insurance details, and preferred lanes. Call us and we can often have you on a load the same week.',
-  },
-] as const;
-
-// What Rai Logistics IS and ISN'T — addresses the questions every owner-operator
-// asks within the first 30 seconds of a discovery call. Front-loading this on the
-// site removes friction and builds trust with skeptical truckers.
+// Plain-language scope of the dispatch relationship.
 export const SCOPE_CLARITY = {
   weAre: [
     'A dispatch services company working under YOUR MC authority',
@@ -497,11 +218,9 @@ export const SCOPE_CLARITY = {
   ],
 } as const;
 
-// Risk-reversal offer — standard in the dispatch industry, but most websites bury it.
-// Putting it above the fold and as a standalone section removes the biggest
-// objection ("what if it does not work out").
+// Published onboarding and billing commitments.
 export const RISK_REVERSAL = {
-  headline: 'Try Us Risk-Free — No Setup Fees',
+  headline: 'Start with a conversation. No setup fees.',
   subheadline: 'We earn your business one load at a time.',
   bullets: [
     'No setup fees — we onboard you free of charge',
@@ -511,87 +230,18 @@ export const RISK_REVERSAL = {
   ],
 } as const;
 
-// The dedicated-dispatcher block. Truckers deal with faceless call centers in
-// this industry, so the promise here is a single named ROLE that owns your
-// truck — a dispatch manager — rather than a rotating queue. Deliberately a
-// role and not a personal name, so the copy stays true no matter who is on
-// desk. Add a team photo here when one is available; until then we render the
-// brand initials.
+// Role-based contact card; no stock portrait presented as a team member.
 export const DISPATCHER = {
   name: 'Your Dispatch Manager',
-  title: 'Carrier Relations · Rai Logistics',
-  initials: 'RL',
+  title: 'Carrier Relations · Rai Dispatch',
+  initials: 'RD',
   // photo: '/team/dispatch-manager.jpg',  // <-- add when available
   intro:
-    'Rai Logistics exists because too many owner-operators lose money to bad dispatchers, hidden fees, and faceless call centers. Every carrier who signs on gets a dispatch manager — one person who books your loads, negotiates your rates, and answers when you call. Not a ticket queue, not a different voice every week.',
+    'Work with a dispatch contact who understands your equipment, preferred lanes, and schedule. We help search freight, discuss rates, organize load details, and keep broker communication moving. You approve loads and stay in control of your operation.',
   commitments: [
-    'We answer the phone — even after hours',
+    'Clear contact details and published desk hours',
     'We negotiate every load like it is our own',
     'We tell you the truth, even when it is not what you want to hear',
     'If we are not the right fit, we will say so',
-  ],
-} as const;
-
-// Comparison table — Rai vs the average dispatch service.
-// Useful because owner-operators routinely shop 3-5 dispatchers before signing.
-// This pre-empts the comparison they will do anyway and frames it on Rai's terms.
-export const COMPARISON_ROWS = [
-  { feature: 'Setup fees', us: 'None', them: '$200–500' },
-  { feature: 'Long-term contracts', us: 'Month-to-month', them: '6–12 months' },
-  { feature: 'Dedicated dispatcher', us: 'Yes, the same person', them: 'Rotating call center' },
-  { feature: 'After-hours support', us: 'Yes', them: 'Voicemail only' },
-  { feature: 'Detention claims handled', us: 'Always', them: 'On request' },
-  { feature: 'Box truck dispatch', us: 'Yes — 7%', them: 'Rarely' },
-  { feature: 'Direct line to owner', us: 'Yes', them: 'Never' },
-] as const;
-
-// Revenue Potential ranges by equipment type.
-//
-// IMPORTANT — these are INDUSTRY GROSS RANGES, not guarantees. Phrasing is
-// deliberately conservative ("Potential weekly gross") and every card carries
-// the disclaimer below. Google Ads will disapprove any unverifiable income
-// claim, so we frame these as market ranges, not Rai-specific outcomes.
-//
-// Sources: aggregate of public DAT load board reports, owner-operator forums,
-// and average rate-per-mile data for each equipment class. Update annually.
-export const REVENUE_POTENTIAL = {
-  disclaimer:
-    'Estimated weekly gross ranges based on industry averages. Actual earnings vary by market conditions, lane selection, driver availability, fuel costs, and broker rates. These figures are not income guarantees.',
-  cards: [
-    {
-      equipment: 'Box Truck',
-      range: '$5k – $9k',
-      rpm: '$2.20 – $3.10 / mile',
-      notes: 'Last-mile, dedicated lanes',
-      icon: 'Box' as const,
-    },
-    {
-      equipment: 'Dry Van',
-      range: '$6k – $10k',
-      rpm: '$2.40 – $3.00 / mile',
-      notes: 'Highest load volume nationwide',
-      icon: 'Container' as const,
-    },
-    {
-      equipment: 'Reefer',
-      range: '$7k – $11k',
-      rpm: '$2.80 – $3.40 / mile',
-      notes: 'Year-round produce + frozen freight',
-      icon: 'Snowflake' as const,
-    },
-    {
-      equipment: 'Flatbed',
-      range: '$6k – $10k',
-      rpm: '$2.60 – $3.20 / mile',
-      notes: 'Steel, building materials, heavy haul',
-      icon: 'Package' as const,
-    },
-    {
-      equipment: 'Power Only',
-      range: '$7k – $12k',
-      rpm: '$2.50 – $3.30 / mile',
-      notes: 'Drop-and-hook, dedicated trailers',
-      icon: 'Truck' as const,
-    },
   ],
 } as const;

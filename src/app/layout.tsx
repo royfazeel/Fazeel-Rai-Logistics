@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { Barlow_Condensed, Inter } from 'next/font/google';
 import { Header, Footer, StickyCallWidgets, MotionProvider, Analytics } from '@/components';
-import { BUSINESS, FAQS, SERVICES } from '@/lib/constants';
+import { BUSINESS } from '@/lib/constants';
+import { SITE_URL, pageMetadata } from '@/lib/seo';
 import './globals.css';
 
 /* Barlow Condensed for display type (headings, big numbers, wordmark) —
@@ -20,60 +21,16 @@ const bodyFont = Inter({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: `${BUSINESS.name} | Professional Truck Dispatch Services`,
-    template: `%s | ${BUSINESS.name}`,
-  },
-  description: BUSINESS.description,
-  keywords: [
-    'truck dispatch',
-    'dispatch services',
-    'trucking dispatch',
-    'freight dispatch',
-    'owner operator dispatch',
-    'dry van dispatch',
-    'flatbed dispatch',
-    'reefer dispatch',
-    'box truck dispatch',
-    'trucking company',
-  ],
+  ...pageMetadata('Truck Dispatch Services in the USA | Up to 5%', 'Truck dispatch services for owner-operators and fleets across the USA. Load booking, rate negotiation and paperwork support with dispatch fees up to 5%.', '/'),
+  title: { default: 'Truck Dispatch Services in the USA | Up to 5% | Rai Dispatch', template: '%s | Rai Dispatch' },
+  metadataBase: new URL(SITE_URL),
+  applicationName: 'Rai Dispatch',
   authors: [{ name: BUSINESS.name }],
   creator: BUSINESS.parentCompany,
   publisher: BUSINESS.name,
-  metadataBase: new URL('https://railogistics.us'),
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      // SVG first for browsers that support it — stays crisp on any display
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    other: [
-      { rel: 'icon', url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { rel: 'icon', url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-    ],
-  },
+  icons: { icon: [{ url: '/favicon.ico', sizes: 'any' }, { url: '/favicon.svg', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png' },
   manifest: '/manifest.json',
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    siteName: BUSINESS.name,
-    title: `${BUSINESS.name} | Professional Truck Dispatch Services`,
-    description: BUSINESS.description,
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: `${BUSINESS.name} | Professional Truck Dispatch Services`,
-    description: BUSINESS.description,
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 } },
 };
 
 /* Tints the browser chrome on mobile (Android Chrome, iOS Safari) with
@@ -82,111 +39,24 @@ export const viewport: Viewport = {
   themeColor: '#C8232C',
 };
 
-/* ---------------------------------------------------------------------------
-   Structured data (JSON-LD).
-   We ship FOUR schemas to maximize SERP eligibility:
-     1. LocalBusiness — primary business identity, NAP, hours, area served
-     2. Organization — parent company + sameAs links
-     3. Service       — explicit list of dispatch services we offer
-     4. FAQPage       — pulls FAQS so Google can render rich FAQ snippets
-   All published as one @graph object — recommended by Google for sites that
-   want multiple schema types on the same page.
---------------------------------------------------------------------------- */
+// Business identity is shared across pages; page-specific services and breadcrumbs
+// are described on the pages where visitors can read that content.
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'LocalBusiness',
-      '@id': 'https://railogistics.us/#business',
-      name: BUSINESS.name,
-      description: BUSINESS.description,
-      telephone: BUSINESS.phone,
-      email: BUSINESS.email,
-      url: 'https://railogistics.us',
-      image: 'https://railogistics.us/icon-512.png',
-      logo: 'https://railogistics.us/icon-512.png',
-      priceRange: '$$',
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: BUSINESS.address.street,
-        addressLocality: BUSINESS.address.city,
-        addressRegion: BUSINESS.address.state,
-        postalCode: BUSINESS.address.zip,
-        addressCountry: 'US',
-      },
-      areaServed: {
-        '@type': 'Country',
-        name: 'United States',
-      },
-      openingHoursSpecification: [
-        {
-          '@type': 'OpeningHoursSpecification',
-          dayOfWeek: [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-          ],
-          opens: '08:00',
-          closes: '18:00',
-        },
-      ],
-      parentOrganization: {
-        '@type': 'Organization',
-        name: BUSINESS.parentCompany,
-      },
+      '@type': 'Organization', '@id': `${SITE_URL}/#organization`,
+      name: BUSINESS.name, alternateName: 'Rai Logistics', legalName: BUSINESS.parentCompany,
+      url: SITE_URL, logo: `${SITE_URL}/icon-512.png`,
+      description: BUSINESS.description, telephone: BUSINESS.phone, email: BUSINESS.email,
+      address: { '@type': 'PostalAddress', streetAddress: BUSINESS.address.street, addressLocality: BUSINESS.address.city, addressRegion: BUSINESS.address.state, postalCode: BUSINESS.address.zip, addressCountry: 'US' },
+      areaServed: { '@type': 'Country', name: 'United States' },
+      contactPoint: { '@type': 'ContactPoint', telephone: BUSINESS.phone, contactType: 'customer service', areaServed: 'US', availableLanguage: 'English' },
     },
     {
-      '@type': 'Organization',
-      '@id': 'https://railogistics.us/#org',
-      name: BUSINESS.name,
-      legalName: BUSINESS.parentCompany,
-      url: 'https://railogistics.us',
-      logo: 'https://railogistics.us/icon-512.png',
-      contactPoint: {
-        '@type': 'ContactPoint',
-        telephone: BUSINESS.phone,
-        email: BUSINESS.email,
-        contactType: 'customer service',
-        areaServed: 'US',
-        availableLanguage: 'en',
-      },
-    },
-    {
-      '@type': 'Service',
-      '@id': 'https://railogistics.us/#service',
-      serviceType: 'Truck Dispatch Services',
-      provider: { '@id': 'https://railogistics.us/#business' },
-      areaServed: {
-        '@type': 'Country',
-        name: 'United States',
-      },
-      description: BUSINESS.description,
-      hasOfferCatalog: {
-        '@type': 'OfferCatalog',
-        name: 'Dispatch Services',
-        itemListElement: SERVICES.map((s) => ({
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: s.title,
-            description: s.description,
-          },
-        })),
-      },
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: FAQS.slice(0, 8).map((faq) => ({
-        '@type': 'Question',
-        name: faq.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: faq.answer,
-        },
-      })),
+      '@type': 'WebSite', '@id': `${SITE_URL}/#website`, url: SITE_URL,
+      name: BUSINESS.name, alternateName: 'Rai Logistics', inLanguage: 'en-US',
+      publisher: { '@id': `${SITE_URL}/#organization` },
     },
   ],
 };
@@ -199,8 +69,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth ${displayFont.variable} ${bodyFont.variable}`}>
       <head>
-        {/* Hero video + imagery are served from the Pexels CDN */}
-        <link rel="preconnect" href="https://videos.pexels.com" />
         <link rel="preconnect" href="https://images.pexels.com" />
         <script
           type="application/ld+json"
@@ -212,10 +80,11 @@ export default function RootLayout({
             NEXT_PUBLIC_GA4_ID or NEXT_PUBLIC_GADS_ID is set. next/script with
             strategy="afterInteractive" is the App Router recommendation: the
             tag loads after hydration so it never delays the hero. */}
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:p-4 focus:text-navy-950">Skip to main content</a>
         <Analytics />
         <MotionProvider>
           <Header />
-          <main className="pt-20">{children}</main>
+          <main id="main-content" className="pt-20">{children}</main>
           <Footer />
           <StickyCallWidgets />
           {/* No auto-appearing popup: the exit-intent/timed LeadCapturePopup was

@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import EquipmentPageClient from './EquipmentPageClient';
 
-export const metadata: Metadata = {
-  title: 'Equipment We Dispatch',
-  description:
-    'Specialized dispatch services for Box Trucks, Dry Vans, Flatbeds, Reefers, and Power Only. Equipment-specific expertise with competitive commission rates starting at 5%.',
-};
+export const metadata = pageMetadata('Truck Dispatch by Equipment Type', 'Explore dry van, reefer, flatbed, box truck, power only, step deck, hotshot and cargo van dispatch. Equipment and lane fit reviewed before setup.', "/equipment");
 
 export default function EquipmentPage() {
   return <EquipmentPageClient />;

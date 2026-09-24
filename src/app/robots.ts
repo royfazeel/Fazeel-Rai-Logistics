@@ -35,7 +35,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: '/api/',
       },
     ],
-    sitemap: 'https://railogistics.us/sitemap.xml',
-    host: 'https://railogistics.us',
+    sitemap: 'https://raidispatch.com/sitemap.xml',
+    host: 'https://raidispatch.com',
   };
 }

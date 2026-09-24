@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import PricingPageClient from './PricingPageClient';
 
-export const metadata: Metadata = {
-  title: 'Pricing',
-  description:
-    'Transparent and affordable truck dispatch pricing. Weekly flat rates from $250, monthly contracts, or 5-7% of gross. No hidden fees.',
-};
+export const metadata = pageMetadata('Truck Dispatch Pricing | Fees Up to 5%', 'Truck dispatch fees up to 5% of gross load revenue. See what is included, how the fee is calculated, and options for owner-operators and fleets.', "/pricing");
 
 export default function PricingPage() {
   return <PricingPageClient />;

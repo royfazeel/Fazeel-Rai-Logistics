@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import {
   Phone,
   Target,
@@ -46,11 +48,10 @@ const values = [
 ];
 
 const milestones = [
-  { year: '2020', event: 'Rai Logistics founded under Rai Technologies LLC' },
-  { year: '2021', event: 'Expanded to full 48-state coverage' },
-  { year: '2022', event: 'Added dedicated reefer and flatbed dispatchers' },
-  { year: '2023', event: 'Launched specialized equipment divisions' },
-  { year: '2024', event: 'Extended support to six days a week' },
+  { year: '01', event: 'Tell us about your truck, authority, lanes, and schedule.' },
+  { year: '02', event: 'Review service scope, your dispatch fee, and the written agreement.' },
+  { year: '03', event: 'Confirm your dispatcher contact and load approval process.' },
+  { year: '04', event: 'Review available freight and approve the loads that fit.' },
 ];
 
 export default function AboutPageClient() {
@@ -60,8 +61,11 @@ export default function AboutPageClient() {
           PAGE HERO — compact dark band over the highway photo.
           ============================================================ */}
       <section className="relative bg-navy-950 text-white overflow-hidden">
-        <img
-          src={MEDIA.highwayPhoto}
+        <Image
+          fill
+          priority
+          sizes="100vw"
+          src={MEDIA.heroVideo.poster}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
@@ -73,10 +77,10 @@ export default function AboutPageClient() {
             <div className="max-w-3xl">
               <p className="eyebrow">About us</p>
               <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">
-                Your success is our business
+                About Rai Dispatch
               </h1>
               <p className="text-white/70 text-lg leading-relaxed max-w-2xl mb-8">
-                Rai Logistics is a professional truck dispatch company operating
+                Rai Dispatch is a professional truck dispatch company operating
                 under Rai Technologies LLC. We are dedicated to helping
                 owner-operators and small fleets maximize their earnings through
                 expert dispatch services.
@@ -85,7 +89,7 @@ export default function AboutPageClient() {
                 href={BUSINESS.phoneHref}
                 onClick={() => track('call_click', { location: 'about_hero' })}
                 className="btn-primary"
-                aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
+                aria-label={`Call Rai Dispatch at ${BUSINESS.phone}`}
               >
                 <Phone className="w-5 h-5" aria-hidden="true" />
                 Call us: {BUSINESS.phone}
@@ -196,7 +200,7 @@ export default function AboutPageClient() {
                   <div className="text-center">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 border border-white/15 text-white/90 rounded-md text-xs font-semibold mb-3">
                       <BadgeCheck className="w-3.5 h-3.5 text-primary-400" aria-hidden="true" />
-                      Talk to me directly
+                      Talk to our dispatch team
                     </div>
                     <h3 className="font-display text-3xl font-bold mb-1">{DISPATCHER.name}</h3>
                     <p className="text-white/60 text-sm mb-6">{DISPATCHER.title}</p>
@@ -228,7 +232,7 @@ export default function AboutPageClient() {
               <p className="eyebrow">Meet your dispatcher</p>
               <h2 className="font-display text-3xl sm:text-4xl md:text-[2.75rem] font-bold leading-[1.08] mb-5">
                 The dispatcher behind{' '}
-                <span className="text-primary-500">Rai Logistics</span>
+                <span className="text-primary-500">Rai Dispatch</span>
               </h2>
               <p className="text-white/80 text-lg mb-8 leading-relaxed">{DISPATCHER.intro}</p>
 
@@ -258,7 +262,7 @@ export default function AboutPageClient() {
               <p className="eyebrow">What we stand for</p>
               <h2 className="section-heading mb-4">Our core values</h2>
               <p className="text-surface-700 text-lg">
-                The principles that guide everything we do at Rai Logistics.
+                The principles that guide everything we do at Rai Dispatch.
               </p>
             </div>
           </ScrollReveal>
@@ -333,9 +337,9 @@ export default function AboutPageClient() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.1}>
-              <p className="eyebrow">Milestones</p>
+              <p className="eyebrow">Getting started</p>
               <h2 className="font-display text-3xl font-bold text-navy-950 mb-8">
-                Our journey
+                A clear working relationship
               </h2>
               <div className="space-y-6">
                 {milestones.map((milestone) => (
@@ -383,7 +387,7 @@ export default function AboutPageClient() {
               href={BUSINESS.phoneHref}
               onClick={() => track('call_click', { location: 'about_final_cta' })}
               className="inline-flex items-center justify-center gap-3 h-16 px-8 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg sm:text-xl rounded-md transition-colors"
-              aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
+              aria-label={`Call Rai Dispatch at ${BUSINESS.phone}`}
             >
               <Phone className="w-6 h-6" strokeWidth={2.25} aria-hidden="true" />
               {BUSINESS.phone}

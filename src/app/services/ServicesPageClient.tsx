@@ -1,5 +1,9 @@
 'use client';
 
+import Image from 'next/image';
+
+import Link from 'next/link';
+
 import {
   Phone,
   DollarSign,
@@ -32,19 +36,19 @@ const serviceDetails = [
     id: 'rate-negotiation',
     icon: 'DollarSign',
     title: 'Rate Negotiation',
-    subtitle: 'Maximize Your Earnings on Every Load',
+    subtitle: 'Review the Full Trip Before Accepting a Rate',
     description:
-      'Our experienced dispatchers know the market and fight for the best rates. We leverage broker relationships, market data, and negotiation skills to ensure you get paid what your work is worth.',
+      'We discuss the rate, loaded and empty miles, schedule, and extra work with the broker. You approve the load and its terms.',
     benefits: [
-      'Market-rate analysis before every negotiation',
-      'Direct broker relationships for better rates',
-      'Fuel surcharge negotiation included',
+      'Loaded and empty miles reviewed',
+      'Broker rate discussions',
+      'Fuel surcharge terms clarified',
       'Detention and layover rate requests',
-      'Accessorial charge recovery',
+      'Accessorial request support',
     ],
     stats: [
       { value: 'Every', label: 'Load Negotiated' },
-      { value: 'Daily', label: 'Market Rate Checks' },
+      { value: 'Clear', label: 'Written Terms' },
     ],
   },
   {
@@ -53,16 +57,16 @@ const serviceDetails = [
     title: 'Load Booking',
     subtitle: 'Quality Freight, Matched to Your Truck',
     description:
-      'We search multiple load boards and tap into our direct shipper network to find the best-paying freight for your specific equipment and preferred lanes.',
+      'We review available load-board and broker freight against your equipment, lane preferences, authority, and insurance requirements. You approve the load before booking.',
     benefits: [
-      'Access to DAT, Truckstop, and more',
-      'Direct shipper and broker relationships',
+      'Load-board and broker freight search',
+      'Broker eligibility checks',
       'Equipment-specific load matching',
       'Lane preference consideration',
       'Minimize deadhead miles',
     ],
     stats: [
-      { value: 'DAT+', label: 'Multiple Load Boards' },
+      { value: 'Your', label: 'Load Approval' },
       { value: '48', label: 'Contiguous States' },
     ],
   },
@@ -81,7 +85,7 @@ const serviceDetails = [
       'Professional representation',
     ],
     stats: [
-      { value: '100%', label: 'Rate Confs Handled' },
+      { value: 'Clear', label: 'Load Terms' },
       { value: '6', label: 'Days a Week Live' },
     ],
   },
@@ -107,7 +111,7 @@ const serviceDetails = [
   {
     id: 'paperwork-support',
     icon: 'FileText',
-    title: 'Paperwork & Compliance Support',
+    title: 'Paperwork Support',
     subtitle: 'Documentation Done Right',
     description:
       'We ensure all your load documentation is complete and accurate. From rate confirmations to BOLs, we keep your paperwork organized and ready for factoring.',
@@ -119,15 +123,15 @@ const serviceDetails = [
       'Document tracking system',
     ],
     stats: [
-      { value: 'Same Day', label: 'Document Processing' },
-      { value: '100%', label: 'Paperwork Handled' },
+      { value: 'BOL / POD', label: 'Paperwork Support' },
+      { value: 'Organized', label: 'Load Documents' },
     ],
   },
   {
     id: 'scheduling',
     icon: 'Calendar',
     title: 'Scheduling & Follow-ups',
-    subtitle: 'Never Miss an Appointment',
+    subtitle: 'Keep Pickup and Delivery Details Organized',
     description:
       'We coordinate all pickup and delivery appointments, monitor your schedule, and ensure proactive communication to keep loads moving smoothly.',
     benefits: [
@@ -138,7 +142,7 @@ const serviceDetails = [
       'Next-load planning',
     ],
     stats: [
-      { value: '100%', label: 'Appointment Tracking' },
+      { value: 'Load', label: 'Appointment Tracking' },
       { value: 'Proactive', label: 'Delay Management' },
     ],
   },
@@ -151,8 +155,11 @@ export default function ServicesPageClient() {
           PAGE HERO — compact dark band over the highway photo.
           ============================================================ */}
       <section className="relative bg-navy-950 text-white py-16 sm:py-20 overflow-hidden">
-        <img
-          src={MEDIA.highwayPhoto}
+        <Image
+          fill
+          priority
+          sizes="100vw"
+          src={MEDIA.heroVideo.poster}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
@@ -173,7 +180,7 @@ export default function ServicesPageClient() {
               href={BUSINESS.phoneHref}
               onClick={() => track('call_click', { location: 'services_hero' })}
               className="btn-primary"
-              aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
+              aria-label={`Call Rai Dispatch at ${BUSINESS.phone}`}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />
               Call now: {BUSINESS.phone}
@@ -206,8 +213,8 @@ export default function ServicesPageClient() {
               const Icon = iconComponents[service.icon] || Package;
               return (
                 <ScrollReveal key={service.id} delay={idx * 0.07}>
-                  <a
-                    href={`#${service.id}`}
+                  <Link
+                    href={`/services/${service.id}`}
                     className="group card flex flex-col p-6 h-full hover:border-primary-300"
                   >
                     <div className="w-12 h-12 bg-primary-50 border border-primary-100 rounded-md flex items-center justify-center mb-5 group-hover:bg-primary-600 transition-colors">
@@ -223,10 +230,10 @@ export default function ServicesPageClient() {
                       {service.description}
                     </p>
                     <span className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-primary-600">
-                      See how it works
+                      Explore this service
                       <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </span>
-                  </a>
+                  </Link>
                 </ScrollReveal>
               );
             })}
@@ -279,10 +286,10 @@ export default function ServicesPageClient() {
                       ))}
                     </ul>
 
-                    <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'services_detail_get_started' })} className="btn-primary">
-                      <Phone className="w-5 h-5" aria-hidden="true" />
-                      Get started
-                    </a>
+                    <Link href={`/services/${service.id}`} className="btn-primary">
+                      Explore {service.title.toLowerCase()}
+                      <ArrowRight className="w-5 h-5" aria-hidden="true" />
+                    </Link>
                   </div>
                 </ScrollReveal>
 
@@ -314,7 +321,7 @@ export default function ServicesPageClient() {
                         href={BUSINESS.phoneHref}
                         onClick={() => track('call_click', { location: 'services_detail_call' })}
                         className="inline-flex items-center gap-2 font-semibold text-white hover:text-primary-400 transition-colors"
-                        aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
+                        aria-label={`Call Rai Dispatch at ${BUSINESS.phone}`}
                       >
                         Call {BUSINESS.phone}
                         <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -335,7 +342,7 @@ export default function ServicesPageClient() {
         <div className="container-custom">
           <ScrollReveal>
             <div className="max-w-2xl mb-12 sm:mb-16">
-              <p className="eyebrow">Why trust Rai Logistics</p>
+              <p className="eyebrow">Why trust Rai Dispatch</p>
               <h2 className="section-heading mb-4">
                 Built on experience, transparency, and driver success
               </h2>
@@ -408,7 +415,7 @@ export default function ServicesPageClient() {
               href={BUSINESS.phoneHref}
               onClick={() => track('call_click', { location: 'services_final_cta' })}
               className="inline-flex items-center justify-center gap-3 h-16 px-8 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg sm:text-xl rounded-md transition-colors"
-              aria-label={`Call Rai Logistics at ${BUSINESS.phone}`}
+              aria-label={`Call Rai Dispatch at ${BUSINESS.phone}`}
             >
               <Phone className="w-6 h-6" strokeWidth={2.25} aria-hidden="true" />
               {BUSINESS.phone}

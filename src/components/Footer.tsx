@@ -3,27 +3,34 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Truck, ArrowRight, MessageCircle, Clock } from 'lucide-react';
-import { BUSINESS, NAVIGATION } from '@/lib/constants';
+import { BUSINESS } from '@/lib/constants';
 import { track } from '@/lib/track';
 
 const footerLinks = {
   services: [
-    { name: 'Rate Negotiation', href: '/services#rate-negotiation' },
-    { name: 'Load Booking', href: '/services#load-booking' },
-    { name: 'Broker Communication', href: '/services#broker-communication' },
-    { name: 'Route Strategy', href: '/services#route-strategy' },
+    { name: 'Rate Negotiation', href: '/services/rate-negotiation' },
+    { name: 'Load Booking', href: '/services/load-booking' },
+    { name: 'Broker Communication', href: '/services/broker-communication' },
+    { name: 'Route Strategy', href: '/services/route-strategy' },
+    { name: 'Paperwork Support', href: '/services/paperwork-support' },
+    { name: 'Load Scheduling', href: '/services/scheduling' },
   ],
   equipment: [
-    { name: 'Box Trucks', href: '/equipment#box-truck' },
-    { name: 'Dry Vans', href: '/equipment#dry-van' },
-    { name: 'Reefers', href: '/equipment#reefer' },
-    { name: 'Flatbeds', href: '/equipment#flatbed' },
-    { name: 'Power Only', href: '/equipment#power-only' },
+    { name: 'Box Trucks', href: '/equipment/box-truck' },
+    { name: 'Dry Vans', href: '/equipment/dry-van' },
+    { name: 'Reefers', href: '/equipment/reefer' },
+    { name: 'Flatbeds', href: '/equipment/flatbed' },
+    { name: 'Power Only', href: '/equipment/power-only' },
+    { name: 'Step Deck', href: '/equipment/step-deck' },
+    { name: 'Hotshot', href: '/equipment/hotshot' },
+    { name: 'Cargo & Sprinter Van', href: '/equipment/cargo-van' },
   ],
   company: [
     { name: 'About Us', href: '/about' },
     { name: 'Pricing', href: '/pricing' },
-    { name: 'Testimonials', href: '/testimonials' },
+    { name: 'Carrier Experience', href: '/testimonials' },
+    { name: 'Service Areas', href: '/service-areas' },
+    { name: 'Carrier Resources', href: '/resources' },
     { name: 'FAQ', href: '/faq' },
     { name: 'Contact', href: '/contact' },
   ],
@@ -45,7 +52,7 @@ export default function Footer() {
                 Ready to run better freight?
               </h2>
               <p className="text-surface-400 text-lg">
-                Call now — most trucks are dispatched within 24–48 hours.
+                Nationwide dispatch support. Percentage fees up to 5%.
               </p>
             </div>
             <motion.a
@@ -75,7 +82,7 @@ export default function Footer() {
               <div className="flex flex-col leading-none">
                 <span className="font-display font-bold text-2xl tracking-wide uppercase">
                   <span className="text-primary-500">Rai</span>{' '}
-                  <span className="text-white/90">Logistics</span>
+                  <span className="text-white/90">Dispatch</span>
                 </span>
                 <span className="font-display text-[11px] font-semibold uppercase tracking-[0.13em] text-white/50 mt-0.5">
                   Truck Dispatch Service

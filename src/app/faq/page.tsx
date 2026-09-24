@@ -1,11 +1,7 @@
-import { Metadata } from 'next';
+import { pageMetadata } from '@/lib/seo';
 import FAQPageClient from './FAQPageClient';
 
-export const metadata: Metadata = {
-  title: 'Frequently Asked Questions',
-  description:
-    'Get answers to common questions about Rai Logistics dispatch services. Learn about our plans, pricing, setup process, and more.',
-};
+export const metadata = pageMetadata('Truck Dispatch FAQs | Pricing, Loads & Setup', 'Answers about truck dispatch fees up to 5%, load approval, required documents, equipment, service coverage and carrier onboarding.', "/faq");
 
 export default function FAQPage() {
   return <FAQPageClient />;

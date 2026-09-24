@@ -293,7 +293,7 @@ function ownerInbox(): string {
  *
  * LEAD_FROM_EMAIL stays a PLAIN address (e.g. leads@railogistics.us) because
  * that is what Resend verifies against the sending domain. The display name is
- * added here instead, so inboxes show "Rai Logistics" rather than a bare
+ * added here instead, so inboxes show "Rai Dispatch" rather than a bare
  * address. If someone ever sets LEAD_FROM_EMAIL to a full "Name <addr>" string
  * we pass it through untouched rather than nesting the angle brackets.
  */
