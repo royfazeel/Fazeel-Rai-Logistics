@@ -180,3 +180,17 @@ Google PageSpeed Insights measured the live site on 24 September 2026 at 19:37 P
 The earlier production mobile run scored 61 performance / 96 accessibility, with LCP 6.7 s and TBT 440 ms. The final pass removed unnecessary hero motion wrappers, deferred the external Google tag until page load and idle while keeping its command queue, removed an unused preconnect, and corrected two contrast failures. The existing measurement IDs and conversion configuration remain intact. As with any deferred analytics library, a visit ending before it loads may not transmit queued events.
 
 These are single Lighthouse lab runs, including a simulated slow mobile connection, not a guarantee for every visitor or a ranking score. PageSpeed had no real-user CrUX data yet. Remaining diagnostics include unused JavaScript and desktop decorative-media transfer; video stays disabled on mobile, reduced-motion, data-saver, and slow-connection configurations. Recheck field Core Web Vitals once enough visits have accumulated.
+
+## Expanded keyword coverage — production verification
+
+On 24 September 2026, commit `a0032af2571e4d32234242cf2c864e7abed9611b` expanded the site from 30 to **40 indexable page URLs**. The existing Vercel project reported **Ready / Production** after a 32-second build: [deployment record](https://vercel.com/fazeel-arshads-projects/fazeel-rai-logistics/5M4KShQXHGNQqoyugGSxDrd7UzXB).
+
+The ten additional routes comprise the carrier hub, three audience pages (owner-operators, small fleets and new authorities), three service pages (regional, OTR and dedicated dispatcher), and three guides (self-dispatch comparison, dispatcher versus broker, and deadhead planning). Equipment coverage remains eight distinct types. The [keyword coverage record](KEYWORD-COVERAGE-PLAN.md) maps the relevant search families and editorial boundaries; it contains no invented volume or ranking forecast.
+
+- Production build: 46 outputs, TypeScript and diff checks pass.
+- Local and public production crawls: **40/40 sitemap pages, 211 internal link/fragment targets, zero failures**. The existing 71-character title advisory remains. Production canonical metadata, indexability, headings, unique descriptions and JSON-LD syntax passed.
+- Desktop carrier hub and mobile carrier/service navigation inspected. Small-fleet and regional pages fit the 390px test viewport without horizontal overflow; sampled browser flow logged no warnings or errors. Temporary viewport override reset. No production lead emails were sent for this content-only expansion.
+- Public HTTPS samples preserve the new deep paths and query values through permanent 308 redirects from the old domain and new www variant.
+- The updated `https://raidispatch.com/sitemap.xml` was resubmitted after the live 40-page crawl. Google confirmed **Sitemap submitted successfully**. Search Console still displayed **Success / 30 discovered pages** immediately afterward; the ten additions were pending reflection in that report. Sitemap acceptance is not indexing or ranking confirmation.
+
+The PageSpeed scores above belong to release `73199c9`, before this content expansion. The expansion retains the same performance implementation and 178 kB homepage first-load JavaScript build estimate; no new PageSpeed score is claimed for it. The active www-host Change of Address and additional apex validation issue remain as documented earlier.
