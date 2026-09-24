@@ -15,7 +15,7 @@ export function pageMetadata(title: string, description: string, path: string): 
     openGraph: {
       type: 'website', locale: 'en_US', siteName: SITE_NAME,
       title: `${title} | ${SITE_NAME}`, description, url,
-      images: [{ url: SHARE_IMAGE, width: 1200, height: 630, alt: `Rai Dispatch — You drive the miles. We manage the loads. Truck dispatch fees ${DISPATCH_RATE_RANGE} by equipment.` }],
+      images: [{ url: SHARE_IMAGE, width: 1200, height: 630, alt: `Rai Dispatch — We manage the loads. You drive the miles. Truck dispatch fees ${DISPATCH_RATE_RANGE} by equipment.` }],
     },
     twitter: { card: 'summary_large_image', title: `${title} | ${SITE_NAME}`, description, images: [SHARE_IMAGE] },
   };

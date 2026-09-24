@@ -146,9 +146,9 @@ export default function HomePage() {
             <h1
               className="photo-hero-title font-display font-bold uppercase text-white leading-[0.95] tracking-tight mb-6 lg:mb-7"
             >
-              You drive the miles.
+              We manage the loads.
               <br />
-              <span className="text-primary-500">We manage the loads.</span>
+              <span className="text-primary-500">You drive the miles.</span>
             </h1>
 
             <HeroPhoto />
