@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   authors: [{ name: BUSINESS.name }],
   creator: BUSINESS.parentCompany,
   publisher: BUSINESS.name,
-  icons: { icon: [{ url: '/favicon.ico?v=forward-rd', sizes: 'any' }, { url: '/favicon.svg?v=forward-rd', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png?v=forward-rd' },
-  manifest: '/manifest.json?v=forward-rd',
+  icons: { icon: [{ url: '/favicon.ico?v=forward-rd-v2', sizes: 'any' }, { url: '/favicon.svg?v=forward-rd-v2', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png?v=forward-rd-v2' },
+  manifest: '/manifest.json?v=forward-rd-v2',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 } },
 };
 
@@ -48,7 +48,7 @@ const jsonLd = {
     {
       '@type': 'Organization', '@id': `${SITE_URL}/#organization`,
       name: BUSINESS.name, alternateName: 'Rai Logistics', legalName: BUSINESS.parentCompany,
-      url: SITE_URL, logo: `${SITE_URL}/icon-512.png?v=forward-rd`,
+      url: SITE_URL, logo: `${SITE_URL}/icon-512.png?v=forward-rd-v2`,
       description: BUSINESS.description, telephone: BUSINESS.phone, email: BUSINESS.email,
       address: { '@type': 'PostalAddress', streetAddress: BUSINESS.address.street, addressLocality: BUSINESS.address.city, addressRegion: BUSINESS.address.state, postalCode: BUSINESS.address.zip, addressCountry: 'US' },
       areaServed: { '@type': 'Country', name: 'United States' },
