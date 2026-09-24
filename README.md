@@ -15,7 +15,7 @@ For lead delivery and tracking, read [SETUP.md](SETUP.md). For migration evidenc
 - Phone, SMS, WhatsApp, contact form, and quote modal. Percentage pricing is explained with a clearly labeled fee example.
 - Server-rendered FAQ answers and content that remains visible without scroll-triggered JavaScript. Mobile visitors receive a still hero image; eligible desktop background video is deferred and can be paused.
 
-The desktop hero uses `/video/hero-highway-hd.mp4`: a 20.07-second, 1920×1080 H.264 excerpt (4,602,916 bytes), copied from the original footage without re-encoding and optimized for progressive playback. The old 960×540 source is no longer selected. The still image remains visible while the HD video prepares and if playback reports a media error. Mobile, reduced-motion, data-saver and slow-connection visitors keep the still image.
+The desktop hero uses `/video/hero-highway-hd.mp4`: a 20.07-second, 1920×1080 H.264 excerpt (4,602,916 bytes), copied from the original footage without re-encoding and optimized for progressive playback. The old 960×540 source is no longer selected. The still image remains visible while the HD video prepares and if playback reports a media error. Mobile keeps the still image. Desktop autoplay respects reduced-motion, data-saver and slow-connection settings; visitors can explicitly choose the Play background video control to load the video.
 
 The retained `/testimonials` route now explains the carrier experience. It does not publish unverified testimonials or ratings. The unused testimonial carousel, sample load ticker, and lead popup components are not mounted in the active site.
 

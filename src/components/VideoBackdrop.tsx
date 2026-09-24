@@ -11,8 +11,9 @@ interface VideoBackdropProps {
   className?: string;
 }
 
-/** The still is server-rendered. Decorative video never downloads on mobile,
- * reduced-motion, data-saver, or slow connections and waits until page load.
+/** The still is server-rendered. Decorative video never downloads on mobile.
+ * Automatic playback respects reduced-motion, data-saver, and slow connections;
+ * desktop visitors can explicitly choose playback when it was skipped.
  * Eligible desktops use the full-resolution source instead of an upscaled preview. */
 export default function VideoBackdrop({ src, poster, loading = 'lazy', className = '' }: VideoBackdropProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -20,6 +21,17 @@ export default function VideoBackdrop({ src, poster, loading = 'lazy', className
   const [readySrc, setReadySrc] = useState<string>();
   const [paused, setPaused] = useState(false);
   const videoReady = Boolean(videoSrc && readySrc === videoSrc);
+  const videoLoading = Boolean(videoSrc && !videoReady);
+
+  const togglePlayback = () => {
+    if (window.matchMedia('(max-width: 1023px)').matches) return;
+    if (!videoSrc) {
+      setPaused(false);
+      setVideoSrc(src);
+      return;
+    }
+    setPaused(value => !value);
+  };
 
   useEffect(() => {
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
@@ -68,7 +80,10 @@ export default function VideoBackdrop({ src, poster, loading = 'lazy', className
 
   return <>
     <Image src={poster} alt="" aria-hidden="true" fill priority={loading === 'eager'} sizes="100vw" className={`object-cover ${className}`} />
-    <video ref={videoRef} className={`video-backdrop ${className}`} src={videoSrc} style={{ visibility: videoReady ? 'visible' : 'hidden' }} onCanPlay={() => setReadySrc(videoSrc)} onError={() => setReadySrc(undefined)} width={1920} height={1080} muted loop playsInline preload="none" controls={false} disablePictureInPicture disableRemotePlayback aria-hidden="true" tabIndex={-1} />
-    {videoReady && <button type="button" onClick={() => setPaused(value => !value)} className="absolute bottom-4 right-4 z-20 inline-flex items-center gap-2 rounded-md bg-navy-950/85 text-white border border-white/40 px-3 py-2 min-h-11 text-xs font-semibold hover:bg-navy-950 focus-visible:ring-2 focus-visible:ring-white" aria-label={paused ? 'Play background video' : 'Pause background video'}>{paused ? <Play className="w-4 h-4" aria-hidden="true" /> : <Pause className="w-4 h-4" aria-hidden="true" />}{paused ? 'Play video' : 'Pause video'}</button>}
+    <video ref={videoRef} className={`video-backdrop ${className}`} src={videoSrc} style={{ visibility: videoReady ? 'visible' : 'hidden' }} onCanPlay={() => setReadySrc(videoSrc)} onError={() => { setReadySrc(undefined); setVideoSrc(undefined); }} width={1920} height={1080} muted loop playsInline preload="none" controls={false} disablePictureInPicture disableRemotePlayback aria-hidden="true" tabIndex={-1} />
+    <button type="button" onClick={togglePlayback} disabled={videoLoading} className="absolute bottom-4 right-4 z-20 hidden lg:inline-flex items-center gap-2 rounded-md bg-navy-950/85 text-white border border-white/40 px-3 py-2 min-h-11 text-xs font-semibold hover:bg-navy-950 focus-visible:ring-2 focus-visible:ring-white disabled:cursor-wait" aria-label={videoLoading ? 'Loading background video' : videoReady && !paused ? 'Pause background video' : 'Play background video'}>
+      {videoReady && !paused ? <Pause className="w-4 h-4" aria-hidden="true" /> : <Play className="w-4 h-4" aria-hidden="true" />}
+      {videoLoading ? 'Loading video…' : videoReady && !paused ? 'Pause video' : 'Play background video'}
+    </button>
   </>;
 }

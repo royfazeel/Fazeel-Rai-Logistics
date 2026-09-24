@@ -196,3 +196,33 @@ The ten additional routes comprise the carrier hub, three audience pages (owner-
 - The updated `https://raidispatch.com/sitemap.xml` was resubmitted after the live 40-page crawl. Google confirmed **Sitemap submitted successfully**. Search Console still displayed **Success / 30 discovered pages** immediately afterward; the ten additions were pending reflection in that report. Sitemap acceptance is not indexing or ranking confirmation.
 
 The PageSpeed scores above belong to release `73199c9`, before this content expansion. The expansion retains the same performance implementation and 178 kB homepage first-load JavaScript build estimate; no new PageSpeed score is claimed for it. The active www-host Change of Address and additional apex validation issue remain as documented earlier.
+
+## Equipment pricing and HD video refresh
+
+The owner approved a revised fee schedule on 24 September 2026: cargo/Sprinter vans **8%**, box trucks **7%**, hotshot **6%**, dry vans/flatbeds/reefers **5%**, and all other truck types **7%**. Release `67c0c75182254e98af78666a597aabbf1304629e` published these rates through the homepage, equipment pages, pricing table, carrier/service content, fee guides, FAQs, terms, metadata, share image and Service/Offer descriptions. Rates are percentages of the agreed gross-revenue billing base; they are not represented as fixed dollar prices in schema. The shared source is `src/lib/dispatch-pricing.ts`. Dedicated dispatchers are emphasized, and the existing `sam@railogistics.us` support address remains unchanged. No unverified claim of being the largest US team was added.
+
+The desktop hero had selected the 960×540 rendition even where the original 1920×1080 footage was available. The active `/video/hero-highway-hd.mp4` is a 20.07-second, 30 fps, 1920×1080 excerpt, 4,602,916 bytes. It copies the original H.264 packets without re-encoding; a matching decoded frame was verified identical. The original selected file was 8.28 MB, so the new HD excerpt is also smaller. It is a continuous shot with a normal loop reset, not a claimed seamless loop. The poster remains until media is ready and returns on a media error. Mobile receives the still image; autoplay also respects reduced-motion, data-saver and slow-connection conditions.
+
+Verification for this release:
+
+- Vercel reported Ready / Production in the [deployment record](https://vercel.com/fazeel-arshads-projects/fazeel-rai-logistics/88496jCHsCJ7K2UMoHSPWLvuAVxF).
+- Local build generated 46 outputs. Local and live crawls passed **40/40 pages and 212 internal targets, zero failures and zero advisories**, including exact equipment rates in visible content, metadata and percentage Offer descriptions.
+- Desktop local playback reported 1920×1080, duration 20.066667 seconds, readyState 4 and active playback; pause worked. The public HD URL returned 200, video/mp4, byte-range support and the matching length.
+- The mobile pricing table was visually inspected at 390px; equipment and example fees matched the schedule and there was no horizontal overflow. No browser warnings or errors were reported in the sampled local flow. The live quote modal opened without sending a lead.
+- Search Console now reports sitemap **Success / 40 discovered pages**. Its indexing report is still processing, so this does not establish indexed counts or rankings.
+
+Fresh Google PageSpeed report, captured 24 September 2026 at 20:16:17 PKT after deployment: [mobile](https://pagespeed.web.dev/analysis/https-raidispatch-com/9khgb55utu?form_factor=mobile) · [desktop](https://pagespeed.web.dev/analysis/https-raidispatch-com/9khgb55utu?form_factor=desktop).
+
+| Metric | Mobile | Desktop |
+| --- | ---: | ---: |
+| Performance | 84 | 100 |
+| Accessibility | 100 | 100 |
+| Best Practices | 100 | 100 |
+| Automated SEO | 100 | 100 |
+| LCP | 2.8 s | 0.6 s |
+| TBT | 410 ms | 40 ms |
+| CLS | 0 | 0 |
+
+This is the actual new lab result, not the earlier 96 mobile score. Mobile diagnostics include unused JavaScript, six long main-thread tasks and estimated render-blocking savings. Desktop transfers about 5.33 MB including the HD video. Both reports lack real-user CrUX data. An automated SEO score of 100 is not a guarantee of indexing, search placement, traffic or complete ongoing SEO work.
+
+A small follow-up adds a desktop-only **Play background video** option for visitors whose autoplay is skipped. It loads the same HD source only after an explicit click, shows loading feedback, and returns to a retryable poster state on media errors. Automatic motion/data safeguards and the mobile still image remain. The follow-up production build passes with the same 46 outputs and 179 kB homepage first-load JavaScript estimate; the PageSpeed report above measures the preceding pricing/HD release.
