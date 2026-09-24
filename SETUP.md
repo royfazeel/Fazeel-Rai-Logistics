@@ -1,7 +1,8 @@
-# Rai Logistics — website setup
+# Rai Dispatch — website setup
 
-This is the only document you need. It assumes you have never touched code.
-Follow it top to bottom. Nothing here requires a developer.
+This guide covers lead delivery and tracking for the Rai Dispatch website.
+For the domain migration and recorded launch checks, also see
+[the SEO audit and migration record](docs/SEO-AUDIT-AND-MIGRATION.md).
 
 There are two jobs:
 
@@ -16,12 +17,12 @@ everybody gets stuck, so it has its own section.
 
 ---
 
-## 0. The 30-second health check
+## 0. Check the delivery configuration
 
 Open this address in any browser — phone or laptop:
 
 ```
-https://railogistics.us/api/lead
+https://raidispatch.com/api/lead
 ```
 
 You will see a line of text like this:
@@ -34,17 +35,19 @@ Read it like this:
 
 | What you see | What it means |
 | --- | --- |
-| `"ok":true` | Leads are reaching you. Good. |
-| `"ok":false` | **Nothing is set up.** Forms show visitors your phone number instead of taking a message. Start at section 1. |
-| `"resend":true` | Lead emails are switched on. |
-| `"webhook":true` | Leads are also being pushed to Zapier/Make/Sheets. |
-| `"autoReply":true` | Carriers who leave an email get an automatic "we got it" reply. |
+| `"ok":true` | At least one delivery channel has the required configuration values. This does **not** prove that messages are delivered. |
+| `"ok":false` | No delivery channel has all required values. Forms show an error and the phone number when they cannot send. Start at section 1. |
+| `"resend":true` | A Resend key and sender address are configured; their validity and delivery have not been checked. |
+| `"webhook":true` | A webhook URL is configured; its acceptance and downstream actions have not been checked. |
+| `"autoReply":true` | A carrier acknowledgement will be attempted after a notification channel accepts the lead. |
 
 This page never shows your passwords or keys — only true/false. It is safe to
 open anywhere, and safe to send to whoever is helping you.
 
-Use it every time you change a setting. If it does not say what you expect,
-you almost certainly have not redeployed (section 3).
+This endpoint checks configuration presence only. It does not test API-key
+validity, sender verification, provider acceptance, or inbox receipt. Use it
+after changing a setting, then complete the owner test in section 4. If the
+result is unexpected, check the environment values and deployment (section 3).
 
 ---
 
@@ -53,28 +56,40 @@ you almost certainly have not redeployed (section 3).
 Pick **Option A**, **Option B**, or both. Both is better: if one service has a
 bad day, the other still catches the lead.
 
-Until one of them is set up, the forms are honest with the visitor — they say
-we could not send the message and show your phone number. A lead is never
-quietly thrown in the bin, but it never reaches you either.
+Until a channel is configured, a form submission returns an error and shows
+the phone number. Successful submission means a configured service accepted
+the notification request; actual inbox receipt or a completed webhook action
+must be confirmed separately.
 
 ### Option A — get every lead as an email (recommended)
 
-We use a service called **Resend**. Its free tier is far more than a dispatch
-business needs. Sending through a real service is what keeps lead emails out
-of the spam folder.
+The email integration uses **Resend**. Use the existing account and verified
+sender if they are already configured. Check the account’s current plan and
+sending limits there; sender authentication helps delivery but does not
+guarantee inbox placement.
 
-1. Go to **resend.com** and create an account.
-2. Click **Domains**, then **Add Domain**, and enter `railogistics.us`.
+**Keep email separate from the web-domain change.** The website URL is
+`https://raidispatch.com`. The existing inbox `sam@railogistics.us` and the
+old-domain sender examples below are intentionally retained. Do not change
+them to `@raidispatch.com` until the replacement mailbox, sending-domain DNS,
+and actual delivery are verified. Preserve existing MX, SPF, DKIM, and DMARC
+records while changing website DNS.
+
+1. Sign in to the existing **resend.com** account. Create an account only if
+   the business does not already have one.
+2. Under **Domains**, check the existing verified sender domain. For the
+   retained examples, that domain is `railogistics.us`. Add it only if it
+   is not already present; a website migration alone does not require a new
+   sending domain.
 3. Resend shows you a few **DNS records**. Copy them into wherever your domain
-   is managed (GoDaddy, Namecheap, Cloudflare, or Vercel if the domain lives
-   there). If someone else set up your domain, send them that screen and ask
-   them to add the records — it is a five-minute job for them.
-   Wait until the domain shows **Verified** in Resend. This is the step that
-   keeps your leads out of spam. Do not skip it.
-4. Click **API Keys**, then **Create API Key**. Give it any name. Sending
-   permission is enough.
-5. **Copy the key immediately** — it starts with `re_` and Resend only shows
-   it once. Paste it somewhere safe for the next five minutes.
+   is managed, such as Porkbun. Add only the required mail records and
+   preserve the website and existing email records. Wait until the sending
+   domain shows **Verified** in Resend before using its sender address.
+4. Keep an existing working key when appropriate. If a new key is needed,
+   use **API Keys** → **Create API Key** with sending permission.
+5. If you created a key, save it directly to your password manager or the
+   intended Vercel environment variable. Never put it in GitHub, screenshots,
+   or this document.
 6. You now have three values for section 3:
 
    | Name to type in Vercel | Value to paste |
@@ -93,13 +108,15 @@ number, preferred lanes, whether he is a new authority or switching, his
 factoring situation, his email, and his message. If you hit **Reply**, your
 reply goes to the carrier, not to the website.
 
-**The carrier also gets a short reply.** Whenever someone leaves an email
-address, they get a brief, professional acknowledgement from
+**The carrier acknowledgement is attempted afterward.** When an email
+address is provided and auto-reply is enabled, the application attempts a
+brief acknowledgement from
 `LEAD_FROM_EMAIL`: it confirms what they sent, gives your phone number as the
 fastest route, and lists your dispatch hours. It promises nothing about
 timing. If you would rather it did not go out, add a variable called
 `LEAD_AUTO_REPLY` with the value `off`. If that courtesy email ever fails, it
-changes nothing about your lead — yours is sent first and is never affected.
+does not change the successful owner-notification result. Check provider
+logs separately if an acknowledgement is missing.
 
 ### Option B — send leads anywhere else, with no code (webhook)
 
@@ -151,24 +168,30 @@ You need up to four values.
 | `NEXT_PUBLIC_GADS_CALL_LABEL` | the phone-call "send to" value |
 | `NEXT_PUBLIC_GADS_LEAD_LABEL` | the lead-form "send to" value |
 
-The lead conversion fires **only when a lead was genuinely delivered**. If
-delivery ever fails, the visitor is shown your phone number and no conversion
-is counted — so the numbers in Google Ads stay honest and your bidding stays
-sane.
+The lead conversion fires only after the API reports that at least one
+notification service accepted the request. If all delivery attempts fail,
+the form displays the phone number and does not record a successful lead
+conversion. Provider acceptance is not a measurement of inbox receipt or a
+completed sale. A call-click event likewise records a tap, not a connected
+phone conversation.
 
 ---
 
 ## 3. Where to paste all of this (Vercel)
 
 1. Go to **vercel.com** and sign in.
-2. Open the **Rai Logistics** project.
+2. Open the existing **fazeel-rai-logistics** project connected to
+   **royfazeel/Fazeel-Rai-Logistics**. The dashboard name may retain the old
+   brand. Do not create a duplicate project for this change.
 3. Click **Settings** in the top row.
 4. Click **Environment Variables** in the left-hand list.
 5. For each value you collected above, click **Add New** and fill in:
    - **Key** — the name exactly as written in this document. Capitals and
      underscores matter. `Lead_To_Email` is not the same as `LEAD_TO_EMAIL`.
    - **Value** — paste the value. No quote marks, no spaces before or after.
-   - **Environments** — tick **Production**, **Preview** and **Development**.
+   - **Environments** — select **Production** for live delivery. Configure
+     Preview and Development separately; use test destinations there if
+     needed rather than unintentionally sending local tests to a live inbox.
 6. Click **Save**. Repeat for the next one.
 
 ### Then redeploy — this is the step everybody misses
@@ -179,9 +202,10 @@ Settings do nothing until the site is rebuilt.
 2. Find the deployment at the top of the list.
 3. Click the **…** button on the right of that row.
 4. Choose **Redeploy**, then confirm.
-5. Wait for the status to go green (about a minute).
+5. Wait for the deployment to report success and confirm the intended
+   production commit is serving the site.
 
-Now open `https://railogistics.us/api/lead` again (section 0) and check it says
+Now open `https://raidispatch.com/api/lead` again (section 0) and check it says
 what you expect.
 
 ---
@@ -190,19 +214,20 @@ what you expect.
 
 Do this once, on your phone, before the ads go live.
 
-1. Open `https://railogistics.us/api/lead`. Confirm `"ok":true`.
-2. Go to `https://railogistics.us/contact`. Fill the form in with **your own
+1. Open `https://raidispatch.com/api/lead`. Confirm `"ok":true`; this checks
+   configuration only. The next steps verify actual delivery.
+2. Go to `https://raidispatch.com/contact`. Fill the form in with **your own
    name, your own phone number and your own email**, pick any equipment, and
    send it.
 3. You should see **"Message sent"** on the page.
-4. Within a minute the lead email should be in the `LEAD_TO_EMAIL` inbox
-   (check spam the first time). Tap the red **Call** button — your own phone
-   should start dialling the number you typed in.
-5. Check the email address you used: you should also have the short "We
-   received your request" acknowledgement.
+4. Check the `LEAD_TO_EMAIL` inbox and spam folder for the lead notification.
+   If it does not arrive, inspect the Resend delivery logs before treating
+   the test as passed. The **Call** button should contain the number you typed.
+5. If auto-reply is enabled, check the email address you entered for the
+   "We received your request" acknowledgement. Check its delivery separately.
 6. If you set up a webhook, check the Google Sheet / Slack / SMS as well.
-7. Do the same again with the **Get a Free Quote** button on the home page, so
-   both forms are proven.
+7. Repeat using a quote button on the home page, such as **Get a free setup**,
+   so both the contact form and quote modal are verified.
 8. Delete the test lead from wherever it landed, so you are not calling
    yourself back next week.
 
@@ -213,9 +238,9 @@ Do this once, on your phone, before the ads go live.
 **The form says "We couldn't send that just now."**
 Open `/api/lead`. If it says `"ok":false`, the variables are missing or you
 have not redeployed. If it says `"ok":true`, the settings are there but the
-sending service rejected the message — most often the Resend domain is not
-verified yet, or `LEAD_FROM_EMAIL` is on a different domain from the one you
-verified.
+sending attempt may have failed. Check Vercel and provider logs for the
+actual reason, including invalid credentials, sender verification, rate
+limits, network failures, or a failing webhook.
 
 **`/api/lead` still says false after I added everything.**
 You have not redeployed. Section 3, second half. If you did redeploy, check
@@ -228,14 +253,16 @@ the spelling of the variable names and that you ticked **Production**.
 4. Confirm `LEAD_TO_EMAIL` is spelled correctly.
 
 **Emails land in spam.**
-The domain is almost certainly not fully verified in Resend. Go back to
-section 1, step 3, and make sure every DNS record is in place. Also mark the
-first one as "not spam" in your own inbox.
+Check sender authentication and provider delivery logs, then review the
+recipient mail system’s spam handling. Correct DNS does not by itself
+guarantee inbox placement. Mark a legitimate test message as "not spam" if
+your mail provider supports that action.
 
 **A carrier says he filled the form and heard nothing.**
-He was shown either a confirmation or your phone number — the site never fails
-silently. Ask which he saw. If he saw the phone number, delivery was down at
-that moment; check `/api/lead` and Resend's logs.
+Ask what the carrier saw and check the notification provider’s logs for the
+submission time. A form confirmation means the service accepted a request;
+it does not establish that it reached your inbox. `/api/lead` only reports
+the current configuration and cannot diagnose a past delivery.
 
 **I am getting spam through the form.**
 There is already a hidden trap field that catches most bots, and a limit of 5
@@ -266,18 +293,21 @@ then show `"autoReply":false`.
 | `NEXT_PUBLIC_GADS_CALL_LABEL` | Phone-call conversion "send to" value | Google Ads |
 | `NEXT_PUBLIC_GADS_LEAD_LABEL` | Lead-form conversion "send to" value | Google Ads |
 
-After any change: **Save -> Redeploy -> check `/api/lead`.**
+After any change: **Save → Redeploy → check `/api/lead` → verify an authorized
+test notification at its destination.**
 
 ---
 
 ## Google Analytics — already connected
 
-Your GA4 property **G-K31P16P0SB** is built into the site, so page views and
-conversion events (call taps, text taps, WhatsApp taps, form submits) start
-flowing the moment you deploy. There is nothing to paste in Vercel for this.
+The existing GA4 measurement ID **G-K31P16P0SB** is built into the site. It is
+retained across the web-domain migration, so no replacement ID is required
+solely because the public hostname changes. Tag loading and event receipt
+still need to be verified in the browser and Analytics.
 
 To confirm it is working: open the site, then in Google Analytics go to
-**Reports -> Realtime**. You should see yourself within about 30 seconds.
+**Reports → Realtime** and confirm the visit and expected events appear.
+Browser privacy settings, blockers, and reporting delays can affect this check.
 
 You only need `NEXT_PUBLIC_GA4_ID` if you ever want to point the site at a
 different property — setting it overrides the built-in one.

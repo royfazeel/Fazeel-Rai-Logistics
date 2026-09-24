@@ -1,260 +1,123 @@
-# Rai Logistics - Premium Truck Dispatch Services Website
+# Rai Dispatch
 
-A premium, enterprise-grade website for Rai Logistics truck dispatch services. Built with Next.js 14, Tailwind CSS, and Framer Motion.
+Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. The published percentage dispatch fee is **up to 5%** of gross revenue on loads Rai Dispatch dispatches, subject to the written agreement.
 
-> **Site owner?** Everything you need to do yourself — getting leads into your
-> inbox and switching on Google Ads tracking — is written out click by click in
-> **[SETUP.md](SETUP.md)**. You do not need anything else in this file.
+The source is configured for **https://raidispatch.com**. The existing GitHub repository is [royfazeel/Fazeel-Rai-Logistics](https://github.com/royfazeel/Fazeel-Rai-Logistics), connected to the existing Vercel project **fazeel-rai-logistics**. Repository and project names can retain the old brand without affecting the public website.
 
-## Features
+For lead delivery and tracking, read [SETUP.md](SETUP.md). For migration evidence, search intent, launch checks, and outstanding production work, read [the SEO audit and migration record](docs/SEO-AUDIT-AND-MIGRATION.md). A successful local build does not establish that a deployment, DNS change, redirect, or inbox delivery is working in production.
 
-- 🚛 **Complete Multi-Page Website**: Home, Services, Equipment, Pricing, Testimonials, About, FAQ, Contact, Privacy Policy, and Terms of Service
-- 📱 **Fully Responsive**: Optimized for desktop, tablet, and mobile devices
-- ✨ **Premium Animations**: Scroll reveals, hover effects, animated counters, testimonial carousel
-- 📞 **Conversion-Focused**: Sticky call widgets, prominent CTAs, quote modal
-- 🎨 **Premium Design**: Clean layout, professional typography, subtle gradients
-- 🔍 **SEO Optimized**: Meta tags, JSON-LD schema, semantic HTML
-- ⚡ **Performance Optimized**: Lazy loading, GPU-friendly animations
+## What the site includes
 
-## Tech Stack
+- **30 indexable page URLs**: 12 core/hub pages, eight equipment pages, six service pages, and four carrier guides.
+- Equipment coverage for dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo/Sprinter van operations.
+- Separate equipment and service content, a nationwide coverage page, and practical guides to dispatch fees, onboarding, choosing a dispatcher, and evaluating freight rates.
+- Page-specific titles, descriptions, canonical URLs, Open Graph metadata, JSON-LD, sitemap, and robots rules.
+- Phone, SMS, WhatsApp, contact form, and quote modal. Percentage pricing is explained with a clearly labeled fee example.
+- Server-rendered FAQ answers and content that remains visible without scroll-triggered JavaScript. Mobile visitors receive a still hero image; eligible desktop background video is deferred and can be paused.
 
-- **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
-- **Language**: TypeScript
+The retained `/testimonials` route now explains the carrier experience. It does not publish unverified testimonials or ratings. The unused testimonial carousel, sample load ticker, and lead popup components are not mounted in the active site.
 
-## Getting Started
+## Stack and local development
 
-### Prerequisites
+Next.js **15.5.26** with the App Router, React 18, TypeScript, Tailwind CSS, Lucide icons, and Framer Motion. Dependencies are locked in `package-lock.json`; use `npm ci`. Development and verification were run with Node.js 24.18.0.
 
-- Node.js 18+ 
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd rai-logistics
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Run the development server:
-```bash
+```sh
+npm ci
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000). Use a separate terminal for checks. Do not build into the same `.next` directory while a development server is writing to it.
 
-### Building for Production
+For a production build and local production server:
 
-```bash
+```sh
+npm run typecheck
 npm run build
 npm run start
 ```
 
-## Deployment to Vercel
+## Verification
 
-### Option 1: Deploy via Vercel CLI
+After a production build, with the site running on port 3000:
 
-1. Install Vercel CLI:
-```bash
-npm install -g vercel
+```sh
+node scripts/verify-seo.mjs http://localhost:3000
 ```
 
-2. Deploy:
-```bash
-vercel
+The read-only crawler follows the sitemap and checks HTTP status, one H1 per page, unique titles/descriptions, Rai Dispatch branding, self-canonicals, Open Graph URLs, JSON-LD syntax, indexability, internal links/fragments, robots directives, and removed pricing/review remnants. To retain a JSON report, add `--json /tmp/rai-seo-report.json`.
+
+Run the same read-only audit after deployment:
+
+```sh
+node scripts/verify-seo.mjs https://raidispatch.com
 ```
 
-3. For production deployment:
-```bash
-vercel --prod
+Test the lead API without sending real emails:
+
+```sh
+node scripts/verify-lead-api.mjs
 ```
 
-### Option 2: Deploy via GitHub Integration
+This harness requires a completed production build. It starts its own loopback Next server and fake Resend sink, uses reserved `.example` addresses, clears webhook delivery, and blocks non-loopback fetches in the test server. It accepts no remote URL. Checks include owner notification, carrier acknowledgement, validation, escaping, spam controls, rate limits, provider failures, and unconfigured delivery. Temporary processes and files are cleaned up afterward.
 
-1. Push your code to a GitHub repository
-2. Go to [vercel.com](https://vercel.com)
-3. Click "New Project"
-4. Import your GitHub repository
-5. Vercel will automatically detect Next.js and configure the build settings
-6. Click "Deploy"
+Implementation commit `a5ae580` produced **36 build outputs**, including 30 indexable pages. Local verification on 24 September 2026 passed **30/30 sitemap pages**, **141 internal link/fragment targets**, and **17/17 lead API checks**. The crawler reported one advisory about a 71-character guide title. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well.
 
-## Project Structure
+## Deploy to the existing Vercel project
 
-```
-rai-logistics/
-├── src/
-│   ├── app/                    # Next.js App Router pages
-│   │   ├── about/              # About page
-│   │   ├── contact/            # Contact page
-│   │   ├── equipment/          # Equipment page
-│   │   ├── faq/                # FAQ page
-│   │   ├── pricing/            # Pricing page
-│   │   ├── privacy/            # Privacy Policy page
-│   │   ├── services/           # Services page
-│   │   ├── terms/              # Terms of Service page
-│   │   ├── testimonials/       # Testimonials page
-│   │   ├── api/lead/route.ts   # Lead intake + delivery + config self-check
-│   │   ├── globals.css         # Global styles
-│   │   ├── layout.tsx          # Root layout
-│   │   └── page.tsx            # Homepage
-│   ├── components/             # Reusable components
-│   │   ├── AnimatedCounter.tsx
-│   │   ├── Button.tsx
-│   │   ├── FAQAccordion.tsx
-│   │   ├── Footer.tsx
-│   │   ├── Header.tsx
-│   │   ├── PricingTable.tsx
-│   │   ├── QuoteModal.tsx
-│   │   ├── ScrollReveal.tsx
-│   │   ├── ServiceIcon.tsx
-│   │   ├── StickyCallWidgets.tsx
-│   │   ├── TestimonialCarousel.tsx
-│   │   └── index.ts
-│   └── lib/
-│       ├── constants.ts        # Business info, content data
-│       └── track.ts            # Conversion tracking helper (GA4 / Google Ads)
-├── public/                     # Static assets
-├── SETUP.md                    # Owner-facing setup guide (start here)
-├── .env.example                # Every environment variable, annotated
-├── tailwind.config.ts          # Tailwind configuration
-├── tsconfig.json               # TypeScript configuration
-├── next.config.js              # Next.js configuration
-└── package.json
-```
+Use the existing **fazeel-rai-logistics** project and its connection to **royfazeel/Fazeel-Rai-Logistics**. Do not import this repository as another Vercel project for the domain migration.
 
-## Customization
+1. Verify the intended change locally and commit it to the repository.
+2. Push the intended release to the configured production branch, currently `main`.
+3. In the existing Vercel project, confirm the connected repository, deployment commit, and successful production build.
+4. Keep `raidispatch.com`, its `www` variant, and the old-domain redirect configuration attached to that same project. Use the exact DNS records Vercel requests and preserve email DNS records.
+5. Verify the production site, path-preserving redirects, sitemap, metadata, contact channels, and delivery before recording the launch as complete.
 
-### Business Information
+Environment changes require a new deployment. Public `NEXT_PUBLIC_*` values are embedded at build time. Do not commit keys or `.env` files. `.vercel/` is local project-link state and is ignored by Git.
 
-All business details (phone, email, address, etc.) are centralized in `src/lib/constants.ts`. Update this file to change:
+## Content and code map
 
-- Company name and parent company
-- Phone number (including click-to-call links)
-- Email address
-- Physical address
-- Service descriptions
-- Pricing information
-- Testimonials
-- FAQ content
+| Location | Purpose |
+| --- | --- |
+| `src/lib/constants.ts` | Business identity/contact details, hours, equipment labels and fees, core services, FAQs, onboarding, and service commitments |
+| `src/lib/dispatch-content.ts` | Distinct equipment/service detail content and carrier guides; slugs feed the corresponding dynamic routes |
+| `src/lib/seo.ts` | Canonical origin, site name, share image, and the shared page-metadata helper |
+| `src/app/page.tsx` / `HomePageClient.tsx` | Server homepage metadata and interactive homepage presentation |
+| `src/app/equipment/[slug]`, `services/[slug]`, `resources/[slug]` | Static detail pages generated from content data |
+| `src/app/service-areas/page.tsx` | Actual nationwide service boundaries and lane-planning considerations |
+| `src/app/layout.tsx` | Shared layout, organization/website schema, and global UI |
+| `src/app/sitemap.ts`, `robots.ts`, `opengraph-image.tsx` | Discovery directives and branded sharing image |
+| `src/components/` | Navigation, footer, pricing presentation, native FAQ disclosure, lead forms, and contact actions |
+| `src/app/api/lead/route.ts` | Lead validation, delivery, acknowledgement, and configuration self-check |
+| `src/components/Analytics.tsx` / `src/lib/track.ts` | Existing GA4 tag and conversion events |
+| `scripts/` | Read-only SEO crawl and isolated lead API verification |
+| `public/video/` | Locally hosted hero/CTA posters and video files |
 
-### Styling
+When changing a fee or a service claim, review both shared data files and the visible pricing, FAQ, and agreement copy. Add a page only when it provides distinct, useful information. New content needs a stable slug, page-specific metadata, contextual links, and sitemap coverage. Do not add invented reviews, unsupported income promises, or duplicate city pages.
 
-- **Colors**: Modify the color palette in `tailwind.config.ts`
-- **Typography**: Update font families in `tailwind.config.ts` and `globals.css`
-- **Animations**: Customize in `tailwind.config.ts` and Framer Motion components
+## Lead delivery and email
 
-### Adding New Pages
+Contact and quote forms post to the relative `POST /api/lead` endpoint. Notification delivery is configured through:
 
-1. Create a new folder in `src/app/` with the page name
-2. Add a `page.tsx` for server-side metadata
-3. Create a client component for interactive content
+| Variable | Purpose |
+| --- | --- |
+| `RESEND_API_KEY` + `LEAD_FROM_EMAIL` | Submit owner notifications through Resend using a verified sender |
+| `LEAD_TO_EMAIL` | Owner destination; defaults to `BUSINESS.email` |
+| `LEAD_AUTO_REPLY=off` | Disable the carrier acknowledgement |
+| `LEAD_WEBHOOK_URL` | Optional additional JSON delivery channel |
+| `NEXT_PUBLIC_GA4_ID` | Override the existing GA4 measurement ID |
+| `NEXT_PUBLIC_GADS_ID` | Google Ads tag ID |
+| `NEXT_PUBLIC_GADS_CALL_LABEL` / `NEXT_PUBLIC_GADS_LEAD_LABEL` | Google Ads call-click and accepted-form conversion values |
 
-## Performance Considerations
+`GET /api/lead` reports whether the required configuration values are present. **`ok: true` means configured, not delivered.** It does not validate credentials, sender-domain verification, provider acceptance, or inbox receipt. The response contains status booleans and explanatory text, without keys or addresses.
 
-- All animations respect `prefers-reduced-motion`
-- Images should be optimized before deployment
-- Consider adding real images to replace placeholder content
+With no channel configured, POST returns `503 not_configured`. A failed delivery attempt returns an error. Success means at least one configured notification channel accepted the request; it does not prove the email reached an inbox or the webhook completed downstream actions. A carrier acknowledgement is attempted afterward, and its failure does not overturn an accepted owner notification.
 
-## Lead form setup
+The local test sink proves the application workflow in isolation. Confirm live delivery separately with an explicitly authorized test submission and check the recipient inbox/provider logs. Rate limiting is in-memory and best-effort per serverless instance.
 
-**If you are the site owner and not a developer, read [SETUP.md](SETUP.md)
-instead of this section.** It is the same thing written as click-by-click
-steps, and it also covers the Google Ads tracking variables.
+**Web and email domains are separate.** Keep the existing `sam@railogistics.us` inbox and verified old-domain sender until replacement mailboxes and delivery are verified. Moving the website to `raidispatch.com` does not create new email accounts or authenticate a new sender. `RESEND_API_URL` is a local-test override only and must remain unset in production.
 
-Short version for developers:
+## Contact and license
 
-- Two forms post to `POST /api/lead`: the contact page
-  (`source: 'contact_page'`) and the quote modal (`source: 'quote_modal'`).
-  `LeadCapturePopup` still exists and would post `exit_intent_popup`, but it
-  is not mounted in `layout.tsx`.
-- Delivery is environment-driven and additive. Whatever is configured runs:
+Email: [sam@railogistics.us](mailto:sam@railogistics.us) · Phone: [(213) 371-6155](tel:+12133716155)
 
-  | Variable | Effect |
-  | --- | --- |
-  | `RESEND_API_KEY` + `LEAD_FROM_EMAIL` | Emails the lead via the Resend HTTP API |
-  | `LEAD_TO_EMAIL` | Where that email goes (defaults to `BUSINESS.email`) |
-  | `LEAD_AUTO_REPLY=off` | Suppresses the carrier acknowledgement |
-  | `LEAD_WEBHOOK_URL` | POSTs the lead as JSON (Zapier / Make / Sheets) |
-  | `NEXT_PUBLIC_GA4_ID` / `NEXT_PUBLIC_GADS_ID` | Loads the Google tag |
-  | `NEXT_PUBLIC_GADS_CALL_LABEL` / `NEXT_PUBLIC_GADS_LEAD_LABEL` | Google Ads conversion labels |
-
-- With **no** delivery channel configured the endpoint returns
-  `503 not_configured` and both forms show the visitor an error with the phone
-  number. We never claim a delivery we cannot stand behind.
-- `NEXT_PUBLIC_*` values are inlined at build time and the server-side ones are
-  read per request, but Vercel only picks up either after a **redeploy**.
-
-### Checking the configuration
-
-`GET /api/lead` returns a non-sensitive self-check — booleans only, no key
-values, no addresses:
-
-```json
-{
-  "ok": true,
-  "configured": { "resend": true, "webhook": false, "autoReply": true },
-  "message": "Lead delivery is configured. ...",
-  "checkedAt": "2026-08-25T16:54:12.700Z"
-}
-```
-
-`ok` is true when at least one delivery channel is live. Point the owner at
-this URL rather than asking him to read logs.
-
-### What the owner receives
-
-- **Subject**: `New lead: <name> · <equipment>` (plus `· wants a callback`
-  when the box was ticked) — readable on a phone lock screen.
-- **Body**, in callback order: a tappable `tel:` call button and an `sms:`
-  button, then name, phone (also a `tel:` link), callback preference,
-  equipment, MC number, lanes, current status, factoring, email, message, and
-  finally the context block (time, source, page, browser, IP).
-- Select values are decoded before sending — the email says
-  "Switching dispatchers", not `switching`.
-- `reply_to` is the carrier's address, so Reply reaches them directly.
-
-### The carrier's auto-reply
-
-When email delivery is configured and the carrier gave an address, a short
-acknowledgement is sent from `LEAD_FROM_EMAIL` **after** the owner
-notification, with `reply_to` pointing back at the owner's inbox. It confirms
-what was received, gives the phone number as the fastest route, and makes no
-promise about response time. `sendAutoReply()` swallows every error: a failed
-courtesy email can never turn a delivered lead into an error on the visitor's
-screen.
-
-### Notes for whoever maintains the code
-
-- The endpoint is `src/app/api/lead/route.ts`.
-- Every field is validated and length-capped server-side; name and phone are
-  required, and phone/email are sanity-checked. Control characters (including
-  CR/LF header-injection attempts) are stripped from short fields.
-- A hidden `company` field acts as a spam trap. Bots fill it, humans never see
-  it; those submissions get a 200 and go straight in the bin.
-- Rate limiting is 5 submissions per IP per 10 minutes, held in memory. On
-  Vercel that is **per serverless instance and best-effort only** — it stops
-  casual spam loops, not a determined attacker. For real abuse, move it to a
-  shared store (Upstash/Redis) or put the route behind Vercel's WAF.
-- `track('lead_submit', { source })` is fired in the browser only on a
-  confirmed `{ ok: true }` response, never on failure, so Google Ads never
-  optimises towards submissions nobody received.
-- `RESEND_API_URL` exists only to point the email path at a local sink during
-  testing. Leave it unset everywhere else.
-
-## License
-
-Private - All rights reserved.
-
-## Support
-
-For questions or support, contact:
-- Email: sam@railogistics.us
-- Phone: (213) 371-6155
+Private — all rights reserved.
