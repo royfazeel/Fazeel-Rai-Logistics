@@ -2,7 +2,7 @@
 
 Audit date: 24 September 2026. Target website: `https://raidispatch.com`.
 
-This document records the observed baseline and implementation plan. It is not a deployment certificate. The launch checklist stays unchecked until the corresponding production check is recorded by the operator. Repository changes and live website changes are separate states.
+This document records the original audit, implemented changes, production verification, and remaining measurement work for the Rai Dispatch migration on 24 September 2026. Observed results are distinguished from ranking predictions and tests that still require a real recipient or accumulated field data.
 
 ## Observed baseline
 
@@ -72,18 +72,22 @@ Google recommends permanent server-side redirects, accurate URL mapping, updated
 - [x] Add `raidispatch.com` and `www.raidispatch.com` to the project; apply the exact DNS records Vercel requests.
 - [x] Preserve unrelated DNS, especially MX and email authentication records. Confirm TLS issuance before relying on the new host.
 - [x] Choose `https://raidispatch.com` as canonical. Redirect the alternate new-domain hostname to it.
-- [ ] Redirect both `railogistics.us` and `www.railogistics.us` to equivalent new URLs with 301 or 308 responses, preserving paths and queries where appropriate. Check representative deep links and avoid loops.
-- [ ] Verify the new home, all existing routes, and every new route return the correct content and status; nonexistent paths must return 404.
-- [ ] Verify rendered titles, descriptions, canonicals, Open Graph/Twitter URLs and images, and structured-data IDs reference the correct page and new host.
-- [ ] Confirm robots permits public content, the sitemap uses only canonical public URLs, and production has no accidental `noindex`.
-- [ ] Verify internal links, mobile navigation, CTA links, focus visibility, and contact-form validation.
-- [ ] Run production build/type checks and inspect mobile and desktop rendering. Measure performance rather than assuming a score.
-- [ ] Check `GET /api/lead` on the new host. Separately verify actual notification delivery using an owner-approved recipient when authorized; configuration status alone is not an end-to-end test.
+- [x] Redirect both `railogistics.us` and `www.railogistics.us` to equivalent new URLs with 301 or 308 responses, preserving paths and queries where appropriate. Check representative deep links and avoid loops.
+- [x] Verify the new home, all existing routes, and every new route return the correct content and status; nonexistent paths must return 404.
+- [x] Verify rendered titles, descriptions, canonicals, Open Graph/Twitter URLs and images, and structured-data IDs reference the correct page and new host.
+- [x] Confirm robots permits public content, the sitemap uses only canonical public URLs, and production has no accidental `noindex`.
+- [x] Verify internal links, mobile navigation, CTA links, focus visibility, and contact-form validation.
+- [x] Run production build/type checks and inspect mobile and desktop rendering. Measure performance rather than assuming a score.
+- [x] Check `GET /api/lead` on the new host: HTTP 200, Resend configured, webhook off, carrier auto-reply on.
+- [ ] Verify actual notification delivery with an explicitly authorized production test and recipient inbox check; configuration and local test-sink results are not inbox-delivery proof.
 - [x] Verify both domain properties in Google Search Console (DNS verification completed on 24 September 2026).
-- [ ] After production/redirect verification, submit the new sitemap and complete the applicable Change of Address steps.
+- [x] Submit the new sitemap after production verification: Google processed it successfully and discovered 30 pages on 24 September 2026.
+- [x] Complete Change of Address for the former canonical `https://www.railogistics.us/` property to `raidispatch.com`; Google confirmed the move started on 24 September 2026.
+- [ ] Retry the additional apex-host Change of Address after Google can fetch its homepage. Public redirects work, but Google's required apex fetch check still failed after one bounded retry. The confirmed www-host migration remains active.
 - [x] Update the existing Analytics web stream name and URL while retaining its measurement ID (completed 24 September 2026; details below).
-- [ ] Update ads destinations, business profiles, and owned external links where access and authorization permit.
-- [ ] Record the deployment URL, commit, DNS/redirect checks, Search Console actions, and any outstanding tasks in the handover.
+- [x] Update the GitHub repository website link to `https://raidispatch.com` and its description to Rai Dispatch.
+- [ ] Review any existing ads destinations and external business profiles; these were not changed in this website release. Their old-domain links continue through the permanent redirects.
+- [x] Record the deployment URL, commit, DNS/redirect checks, Search Console actions, and any outstanding tasks in the handover.
 
 ## Structured data
 
@@ -102,11 +106,21 @@ Read-only findings from `src/app/api/lead/route.ts` and the form callers:
 - The public GET check only tests whether environment variables exist. It does not verify the API key, sender-domain verification, provider acceptance, or inbox receipt.
 - On 24 September 2026 at 12:06 UTC, following the old-host GET redirect reached `https://www.railogistics.us/api/lead` with HTTP 200 and reported `resend: true`, `webhook: false`, `autoReply: true`. No delivery test was performed. This records the old site's configuration, not the new deployment's readiness.
 - POST validation and failed deliveries return errors rather than claiming a lead was delivered. Auto-replies run after a successful notification channel. A production submission could send both a notification and an acknowledgement; do not use invented visitor details for live testing.
-- `SETUP.md` retains old-domain setup examples. They describe the current sender setup and should be updated carefully after the intended sending domain is confirmed, rather than blindly replacing every email address.
+- `SETUP.md` now uses the new website URL while deliberately retaining old-domain email examples. Moving the web domain does not create a new mailbox or verify a new sending domain.
 
 ## Post-launch measurement
 
-The initial public audit did not verify search rankings, analytics, indexing success, or field Core Web Vitals. During the subsequent authorized setup, both `raidispatch.com` and `railogistics.us` domain properties were created and DNS ownership verification succeeded in the owner's Google Search Console account on 24 September 2026. Their overviews report data processing. The old domain's Change of Address screen accepts `raidispatch.com` as a verified destination; validation/update has not been submitted. Sitemap submission and Change of Address remain pending production readiness.
+The initial public audit did not verify search rankings, analytics, indexing success, or field Core Web Vitals. During the subsequent authorized setup, both `raidispatch.com` and `railogistics.us` domain properties were created and DNS ownership verification succeeded in the owner's Google Search Console account on 24 September 2026. Their overview reports initially showed data processing. Production submission results are recorded below; sitemap discovery does not establish that every URL is indexed or ranking.
+
+### Verified Search Console submission results
+
+After the live production website and old-domain redirects were confirmed, `https://raidispatch.com/sitemap.xml` was submitted under the `raidispatch.com` domain property. The UI confirmed submission, then the sitemap detail screen reported **Sitemap processed successfully**, last read **24/09/2026**, **30 discovered pages**, and **0 discovered videos**. The table's transient initial fetch message cleared in the processed detail result.
+
+The original site used `https://www.railogistics.us/` as its canonical production host. That URL-prefix property was added and automatically verified using the existing DNS ownership. Google's Change of Address validation passed with the deployed permanent redirects. The **Confirm move** action succeeded, and the resulting screen states **This site is currently moving**, from **www.railogistics.us** to **raidispatch.com**, with **Date started 24 September 2026**.
+
+An additional request for the apex hostname remains unresolved. The `railogistics.us` domain-property attempt reported **Couldn’t fetch the page** at `http://railogistics.us/`. The automatically verified `https://railogistics.us/` URL-prefix attempt also failed the required homepage fetch check, including one bounded retry; ownership verification passed. No failed check was overridden and no apex move was confirmed. Independent public HTTP checks reach the destination successfully: HTTP uses Vercel's HTTPS upgrade, HTTPS redirects to `https://raidispatch.com/`, and the destination returns 200. The same 308 redirect type passed validation for the www host, so this evidence does not establish a redirect-status incompatibility. Retry the additional apex request after Google can fetch it; retain both public redirects and the already-confirmed www migration.
+
+Google's [Change of Address guidance](https://support.google.com/webmasters/answer/9370220?hl=en-EE) calls for separate source-host variants and requires critical validation checks to pass. The tool covers protocols for the selected source host. No separate HTTP request is needed for the confirmed www-host move.
 
 ### Verified Analytics configuration update
 
@@ -134,16 +148,35 @@ Further growth depends on accurate first-hand content, genuine customer feedback
 
 ## Implementation and validation record
 
-As of 24 September 2026, implementation is committed locally as `a5ae580` on `main`; publication remains pending because the Mac locked before the authenticated GitHub Desktop push. The new domain currently serves the previous production deployment. Do not treat the redesigned site, old-domain redirects, sitemap submission, or Change of Address as live until their production checks are recorded.
+The site is live at `https://raidispatch.com`. The main implementation is commit `a5ae580`; release `1999344` deployed successfully, followed by rendering/accessibility improvements in `73199c9f2436d1ea7a0b0bdec79f6d00b206ed1d`. Vercel marked the latter Production / Ready on 24 September 2026. Its immutable deployment is [fazeel-rai-logistics-a9ri8p47p-fazeel-arshads-projects.vercel.app](https://fazeel-rai-logistics-a9ri8p47p-fazeel-arshads-projects.vercel.app), with the public canonical domain serving the release.
 
 - Repository: `royfazeel/Fazeel-Rai-Logistics`; existing Vercel project: `fazeel-arshads-projects/fazeel-rai-logistics`. Previous production source: `1c3cc489697288c94ba5783b5c7f7acab3005a84`.
 - New web DNS: apex A `216.198.79.1`; `www` CNAME `4fceb2910ff04c7c.vercel-dns-017.com`. Existing mail records preserved. Vercel reports valid configuration for both hosts.
-- Public HTTPS checks: new apex HTTP 200; new `www` HTTP 308 to the apex, preserving a sample path and query. Old-domain edge redirects await publication.
+- Public HTTPS checks: new apex HTTP 200; `www.raidispatch.com`, `railogistics.us`, and `www.railogistics.us` each return a direct HTTP 308 to the equivalent canonical new URL. Home and `/equipment/dry-van?source=migration-check` samples preserve paths and queries. HTTP old-host requests first upgrade to HTTPS through Vercel, then reach the new host; no loops were observed.
 - Production build succeeds on Next.js 15.5.26, with 30 indexable content pages. TypeScript and diff whitespace checks pass. Dependency audit reports zero known vulnerabilities at check time.
-- Local rendered-HTML crawl: 30/30 sitemap URLs and 141 internal links/fragments pass; unique titles/descriptions, canonical and Open Graph URLs, one H1, crawlability, and JSON-LD syntax checked. One advisory is a 71-character guide title; this is not a rendering or indexability failure.
+- Local and production rendered-HTML crawls: 30/30 sitemap URLs and 141 internal links/fragments pass; unique titles/descriptions, canonical and Open Graph URLs, one H1, crawlability, and JSON-LD syntax checked. One advisory is a 71-character guide title; this is not a rendering or indexability failure.
 - Contact route harness: 17/17 checks pass, including validation, spam controls, notification/acknowledgement flow, escaping, provider failures, and unconfigured-service response. All test messages went to a local fake service; no real email was sent.
-- Mobile menu and quote-modal validation checked in a 390px viewport; no horizontal overflow on sampled home/equipment pages. Decorative video sources remain absent on mobile. Desktop guide and home layouts inspected. Temporary viewport override reset.
-- Branded Open Graph image renders as a 1200×630 PNG. Unknown equipment slug returns 404. Application-level old-host redirect preserves the sample deep path and query with HTTP 308.
-- Google Analytics property and stream now use Rai Dispatch; stream URL is `https://raidispatch.com`. Measurement ID `G-K31P16P0SB` is preserved. Both Search Console domain properties are verified; final migration submission awaits the live checks.
+- Mobile menu and quote-modal validation checked locally and on production in a 390px viewport; no horizontal overflow on sampled home/equipment pages. Decorative video sources remain absent on mobile. Desktop guide and home layouts inspected. Temporary viewport override reset.
+- Branded Open Graph image renders as a 1200×630 PNG, and its production endpoint returns HTTP 200 / image/png. Unknown routes return 404. All five original equipment anchor IDs and six service anchor IDs remain present in production for incoming fragment links. Production browser checks showed no console warnings or errors on the sampled home/form flow.
+- Google Analytics property and stream now use Rai Dispatch; stream URL is `https://raidispatch.com`. Measurement ID `G-K31P16P0SB` is preserved. Both Search Console domain properties are verified. The sitemap is processed with 30 discovered pages and the former canonical www-host move is confirmed; the additional apex validator issue is documented above.
 
-Resume by publishing the tested `main` branch through the authenticated GitHub Desktop session, waiting for the Vercel production build, running `node scripts/verify-seo.mjs https://raidispatch.com`, checking the public lead configuration, setting both old-domain variants to direct permanent redirects, and completing Search Console sitemap/Change of Address. Update this record after those actions succeed. A production inbox-delivery test and field Core Web Vitals remain distinct from the checks above.
+Maintain the old domain and its mail/DNS service so permanent redirects and existing email keep working. Keep the redirects for at least one year and preferably longer while external links still use the old host. Follow the Search Console indexing and migration reports as Google recrawls. A production inbox-delivery test and real-user Core Web Vitals remain distinct from the completed technical checks.
+
+## Final PageSpeed lab results
+
+Google PageSpeed Insights measured the live site on 24 September 2026 at 19:37 PKT, after production release `73199c9`. [Mobile report](https://pagespeed.web.dev/analysis/https-raidispatch-com/q1xt4ncmjr?form_factor=mobile) · [Desktop report](https://pagespeed.web.dev/analysis/https-raidispatch-com/q1xt4ncmjr?form_factor=desktop).
+
+| Metric | Mobile | Desktop |
+| --- | ---: | ---: |
+| Performance | 96 | 100 |
+| Accessibility | 100 | 100 |
+| Best Practices | 100 | 100 |
+| SEO automated checks | 100 | 100 |
+| Largest Contentful Paint | 2.6 s | 0.6 s |
+| Total Blocking Time | 120 ms | 20 ms |
+| Cumulative Layout Shift | 0 | 0 |
+| First Contentful Paint | 1.0 s | 0.3 s |
+
+The earlier production mobile run scored 61 performance / 96 accessibility, with LCP 6.7 s and TBT 440 ms. The final pass removed unnecessary hero motion wrappers, deferred the external Google tag until page load and idle while keeping its command queue, removed an unused preconnect, and corrected two contrast failures. The existing measurement IDs and conversion configuration remain intact. As with any deferred analytics library, a visit ending before it loads may not transmit queued events.
+
+These are single Lighthouse lab runs, including a simulated slow mobile connection, not a guarantee for every visitor or a ranking score. PageSpeed had no real-user CrUX data yet. Remaining diagnostics include unused JavaScript and desktop decorative-media transfer; video stays disabled on mobile, reduced-motion, data-saver, and slow-connection configurations. Recheck field Core Web Vitals once enough visits have accumulated.
