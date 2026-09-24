@@ -226,3 +226,17 @@ Fresh Google PageSpeed report, captured 24 September 2026 at 20:16:17 PKT after 
 This is the actual new lab result, not the earlier 96 mobile score. Mobile diagnostics include unused JavaScript, six long main-thread tasks and estimated render-blocking savings. Desktop transfers about 5.33 MB including the HD video. Both reports lack real-user CrUX data. An automated SEO score of 100 is not a guarantee of indexing, search placement, traffic or complete ongoing SEO work.
 
 A small follow-up adds a desktop-only **Play background video** option for visitors whose autoplay is skipped. It loads the same HD source only after an explicit click, shows loading feedback, and returns to a retryable poster state on media errors. Automatic motion/data safeguards and the mobile still image remain. The follow-up production build passes with the same 46 outputs and 179 kB homepage first-load JavaScript estimate; the PageSpeed report above measures the preceding pricing/HD release.
+
+### Mobile and desktop playback repair
+
+The user subsequently reported a stuck video on mobile and desktop. The previous implementation intentionally disabled mobile video, and a rejected desktop `play()` promise left the control showing desired rather than actual playback. The player now supports muted inline playback on all screen sizes and offers a visible mobile Play/Pause control just below the header. Explicit playback assigns the source and calls `play()` directly during the tap. Actual media events update the control. Loading can be cancelled and returns to Retry after a media failure or 15-second timeout. Reduced-motion, data-saver and slow-connection preferences still suppress automatic playback, while an explicit Play remains available. The CTA stays unloaded offscreen.
+
+Local browser checks confirmed 1920×1080 desktop playback, playback and pause/resume at 390×844, an unloaded offscreen CTA, Retry after a blocked video request, successful retry after unblocking, and no automatic download under reduced motion followed by successful explicit playback. The reduced-motion and network test overrides were reset. These are Chrome desktop/responsive checks, not a physical iPhone test. TypeScript and twelve isolated playback scenarios also passed. The existing footage remains in place while the user reviews replacement options; the preceding PageSpeed numbers do not measure this mobile-playback change.
+
+Free replacement footage researched on the official asset and license pages:
+
+- [Red semi-truck approaching camera](https://www.pexels.com/video/a-semi-truck-is-driving-down-the-road-17899033/): 10 seconds, 1920×1080, closer truck composition; recommended desktop option.
+- [White truck at sunset](https://www.pexels.com/video/white-truck-driving-at-sunset-on-highway-33870727/): 17 seconds, 2160×3840 portrait; suitable mobile composition.
+- [Truck crossing a scenic valley bridge](https://mixkit.co/free-stock-video/truck-crossing-a-long-bridge-over-a-scenic-valley-100340/): 11 seconds, Full HD and 4K options; scenic alternative, with a smaller truck in frame.
+
+The [Pexels license](https://www.pexels.com/license/) permits free website use and editing without required attribution. The linked Mixkit clip explicitly permits commercial use under its Stock Video Free License; other Mixkit clips can have a personal-use-only restricted license and must be checked individually. No replacement footage was downloaded or published in this playback repair.

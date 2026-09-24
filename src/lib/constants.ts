@@ -28,8 +28,8 @@ export const BUSINESS = {
   description: `Dedicated truck dispatchers for owner-operators and fleets across the 48 contiguous states. Dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo van support with equipment-based fees of ${DISPATCH_RATE_RANGE}.`,
 } as const;
 
-// Locally hosted media. The hero uses a still image on mobile and for reduced
-// motion; eligible desktop playback uses a deferred, full-HD excerpt.
+// Locally hosted media. Muted inline playback is deferred on every screen size;
+// motion/data preferences keep the poster until the visitor chooses Play.
 export const MEDIA = {
   heroVideo: {
     src: '/video/hero-highway-hd.mp4',
