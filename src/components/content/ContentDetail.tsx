@@ -48,8 +48,8 @@ export function ContentCTA() {
   );
 }
 
-export default function ContentDetail({ content, category, guide }: { content: DispatchContent; category: 'equipment' | 'services' | 'resources'; guide?: CarrierGuide }) {
-  const categoryLabel = category === 'equipment' ? 'Equipment' : category === 'services' ? 'Services' : 'Carrier resources';
+export default function ContentDetail({ content, category, guide }: { content: DispatchContent; category: 'equipment' | 'services' | 'resources' | 'carriers'; guide?: CarrierGuide }) {
+  const categoryLabel = { equipment: 'Equipment', services: 'Services', resources: 'Carrier resources', carriers: 'Carriers' }[category];
   const path = `/${category}/${content.slug}`;
   const url = `${SITE_URL}${path}`;
   return (

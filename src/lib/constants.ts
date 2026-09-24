@@ -45,10 +45,10 @@ export const NAVIGATION = [
   { name: 'Home', href: '/' },
   { name: 'Services', href: '/services' },
   { name: 'Equipment', href: '/equipment' },
+  { name: 'Carriers', href: '/carriers' },
   { name: 'Pricing', href: '/pricing' },
   { name: 'Resources', href: '/resources' },
   { name: 'About', href: '/about' },
-  { name: 'FAQ', href: '/faq' },
   { name: 'Contact', href: '/contact' },
 ] as const;
 

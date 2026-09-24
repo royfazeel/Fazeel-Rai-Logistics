@@ -8,9 +8,9 @@ For lead delivery and tracking, read [SETUP.md](SETUP.md). For migration evidenc
 
 ## What the site includes
 
-- **30 indexable page URLs**: 12 core/hub pages, eight equipment pages, six service pages, and four carrier guides.
+- **40 indexable page URLs**: 13 core/hub pages, eight equipment pages, nine service pages, three carrier audience pages, and seven guides.
 - Equipment coverage for dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo/Sprinter van operations.
-- Separate equipment and service content, a nationwide coverage page, and practical guides to dispatch fees, onboarding, choosing a dispatcher, and evaluating freight rates.
+- Separate content for owner-operators, small fleets, new authorities, regional and OTR operations, and dedicated dispatcher support. Practical guides cover fees, onboarding, choosing a dispatcher, freight rates, self-dispatch, broker roles and empty-mile planning.
 - Page-specific titles, descriptions, canonical URLs, Open Graph metadata, JSON-LD, sitemap, and robots rules.
 - Phone, SMS, WhatsApp, contact form, and quote modal. Percentage pricing is explained with a clearly labeled fee example.
 - Server-rendered FAQ answers and content that remains visible without scroll-triggered JavaScript. Mobile visitors receive a still hero image; eligible desktop background video is deferred and can be paused.
@@ -60,7 +60,7 @@ node scripts/verify-lead-api.mjs
 
 This harness requires a completed production build. It starts its own loopback Next server and fake Resend sink, uses reserved `.example` addresses, clears webhook delivery, and blocks non-loopback fetches in the test server. It accepts no remote URL. Checks include owner notification, carrier acknowledgement, validation, escaping, spam controls, rate limits, provider failures, and unconfigured delivery. Temporary processes and files are cleaned up afterward.
 
-Implementation commit `a5ae580` produced **36 build outputs**, including 30 indexable pages. Local verification on 24 September 2026 passed **30/30 sitemap pages**, **141 internal link/fragment targets**, and **17/17 lead API checks**. The crawler reported one advisory about a 71-character guide title. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well.
+The expanded release produces **46 build outputs**, including 40 indexable pages. Local verification on 24 September 2026 passed **40/40 sitemap pages** and **211 internal link/fragment targets**. The unchanged lead API previously passed **17/17 isolated checks**. The crawler reports one advisory about a 71-character guide title. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
 
 ## Deploy to the existing Vercel project
 
@@ -80,9 +80,10 @@ Environment changes require a new deployment. Public `NEXT_PUBLIC_*` values are 
 | --- | --- |
 | `src/lib/constants.ts` | Business identity/contact details, hours, equipment labels and fees, core services, FAQs, onboarding, and service commitments |
 | `src/lib/dispatch-content.ts` | Distinct equipment/service detail content and carrier guides; slugs feed the corresponding dynamic routes |
+| `src/lib/expanded-content.ts`, `carrier-content.ts` | Operating-pattern services, additional educational guides, and carrier audience content |
 | `src/lib/seo.ts` | Canonical origin, site name, share image, and the shared page-metadata helper |
 | `src/app/page.tsx` / `HomePageClient.tsx` | Server homepage metadata and interactive homepage presentation |
-| `src/app/equipment/[slug]`, `services/[slug]`, `resources/[slug]` | Static detail pages generated from content data |
+| `src/app/equipment/[slug]`, `services/[slug]`, `resources/[slug]`, `carriers/[slug]` | Static detail pages generated from content data |
 | `src/app/service-areas/page.tsx` | Actual nationwide service boundaries and lane-planning considerations |
 | `src/app/layout.tsx` | Shared layout, organization/website schema, and global UI |
 | `src/app/sitemap.ts`, `robots.ts`, `opengraph-image.tsx` | Discovery directives and branded sharing image |

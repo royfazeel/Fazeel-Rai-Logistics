@@ -28,6 +28,7 @@ const footerLinks = {
   company: [
     { name: 'About Us', href: '/about' },
     { name: 'Pricing', href: '/pricing' },
+    { name: 'Carrier Support', href: '/carriers' },
     { name: 'Carrier Experience', href: '/testimonials' },
     { name: 'Service Areas', href: '/service-areas' },
     { name: 'Carrier Resources', href: '/resources' },

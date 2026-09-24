@@ -241,6 +241,29 @@ export default function ServicesPageClient() {
         </div>
       </section>
 
+      <section className="section-padding bg-navy-950 text-white" aria-labelledby="dispatch-plan-heading">
+        <div className="container-custom">
+          <div className="max-w-2xl mb-10">
+            <p className="eyebrow">How you run</p>
+            <h2 id="dispatch-plan-heading" className="font-display text-3xl sm:text-4xl font-bold">Choose support around your operating plan.</h2>
+            <p className="mt-5 text-navy-200 leading-8">Your lanes, time away and communication needs shape the dispatch workflow. Explore the arrangement that fits your truck.</p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              { slug: 'regional-dispatch', title: 'Regional dispatch', description: 'Plan around your home base, preferred states, pickup radius and weekly schedule.' },
+              { slug: 'otr-dispatch', title: 'OTR and long-haul dispatch', description: 'Review outbound trips, delivery windows, reload options and time away from home.' },
+              { slug: 'dedicated-dispatcher', title: 'Dedicated dispatcher support', description: 'Agree on your dispatch contact, load approval, status updates and communication hours.' },
+            ].map(plan => (
+              <Link key={plan.slug} href={`/services/${plan.slug}`} className="rounded-lg border border-navy-600 bg-navy-900 p-7 hover:border-primary-400">
+                <h3 className="font-display text-2xl font-bold">{plan.title}</h3>
+                <p className="mt-4 leading-7 text-navy-200">{plan.description}</p>
+                <span className="mt-6 inline-flex items-center gap-2 font-semibold">Explore this plan <ArrowRight size={18} aria-hidden="true" /></span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============================================================
           DETAILED SERVICE SECTIONS — alternating bands.
           ============================================================ */}

@@ -425,7 +425,10 @@ export default function HomePage() {
             <p className="eyebrow">Nationwide freight dispatch</p>
             <h2 className="section-heading mb-5">Your lanes. Your schedule. All 48 contiguous states.</h2>
             <p className="text-surface-700 text-lg leading-relaxed mb-5">From regional runs to coast-to-coast trucking, we build a load search around your home base, equipment, and time at home. We help compare reload options, empty miles, delivery appointments, and total trip costs before you commit.</p>
-            <Link href="/service-areas" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Explore nationwide dispatch coverage<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+            <div className="flex flex-col items-start gap-2">
+              <Link href="/service-areas" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Explore nationwide dispatch coverage<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+              <Link href="/carriers" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Find dispatch support for your operation<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+            </div>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             {[

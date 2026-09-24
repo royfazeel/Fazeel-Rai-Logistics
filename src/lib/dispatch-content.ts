@@ -1,3 +1,5 @@
+import { ADDITIONAL_GUIDES, ADDITIONAL_SERVICES } from './expanded-content';
+
 export type ContentLink = { label: string; href: string };
 export type ContentSection = {
   id: string;
@@ -191,6 +193,7 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
 ];
 
 export const SERVICE_CONTENT: DispatchContent[] = [
+  ...ADDITIONAL_SERVICES,
   {
     slug: 'rate-negotiation', title: 'Freight rate negotiation for carriers', metaTitle: 'Truck Dispatch Rate Negotiation Services',
     description: 'Rate negotiation support for owner-operators and fleets. Compare total miles, schedule and accessorial terms before approving freight with Rai Dispatch.',
@@ -310,6 +313,7 @@ export const SERVICE_CONTENT: DispatchContent[] = [
 export type CarrierGuide = DispatchContent & { readTime: string; published: string; sources?: ContentLink[] };
 
 export const GUIDES: CarrierGuide[] = [
+  ...ADDITIONAL_GUIDES,
   {
     slug: 'evaluate-freight-rate-per-mile', title: 'How to evaluate a freight rate before booking', metaTitle: 'Freight Rate Per Mile: A Carrier’s Load Evaluation Guide',
     description: 'Compare loaded miles, deadhead, dispatch fees and trip time with a worked example. A practical rate-per-mile checklist for owner-operators.',
