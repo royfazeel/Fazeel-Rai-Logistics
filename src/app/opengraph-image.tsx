@@ -15,7 +15,7 @@ export default async function Image() {
         <span style={{ color: '#ff6269' }}>You drive the miles.</span>
       </div>
       <div style={{ display: 'flex', fontSize: 28, color: '#cdd2da' }}>Your dedicated dispatcher. Across the lower 48.</div>
-      <div style={{ display: 'flex', fontSize: 32, justifyContent: 'space-between' }}><span>{DISPATCH_RATE_RANGE} fees by equipment</span><span>raidispatch.com</span></div>
+      <div style={{ display: 'flex', fontSize: 32, justifyContent: 'space-between' }}><span>{DISPATCH_RATE_RANGE} fees · Free setup</span><span>raidispatch.com</span></div>
     </div>, size,
   );
 }

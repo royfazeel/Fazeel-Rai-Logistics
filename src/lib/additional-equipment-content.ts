@@ -6,7 +6,7 @@ export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
     slug: 'sprinter-van',
     title: 'Sprinter van dispatch services',
     metaTitle: `Sprinter Van Dispatch Services | ${getDispatchRateLabel('sprinter-van')} Fee`,
-    description: `Sprinter van dispatch at an ${getDispatchRateLabel('sprinter-van')} fee. Review expedited freight, usable cargo space, pickup readiness and return miles with a dedicated dispatcher across the USA.`,
+    description: `Sprinter van dispatch at a ${getDispatchRateLabel('sprinter-van')} fee. Review expedited freight, usable cargo space, pickup readiness and return miles with a dedicated dispatcher across the USA.`,
     eyebrow: 'Small freight. A precise operating plan.',
     intro: 'Sprinter van dispatch connects a small shipment with the right cargo space, available driver and delivery window. Rai Dispatch reviews owner-operator and fleet operations across the lower 48, helping you evaluate expedited and regional freight before committing the van.',
     highlights: ['Usable cargo space reviewed', 'Pickup readiness and timing checked', 'You approve each shipment'],
@@ -30,7 +30,7 @@ export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
       },
       {
         id: 'fees', title: 'Know the Sprinter dispatch fee before starting',
-        paragraphs: [`The Sprinter van dispatch fee is ${getDispatchRateLabel('sprinter-van')} of gross revenue on loads we dispatch, with a dedicated dispatcher and no setup fee. Confirm the agreed billing base, accessorial treatment and invoice timing during onboarding. Use the pricing calculator to estimate the fee for your own load revenue.`, 'Bring your specifications and preferred operating radius to the first discussion. We can then assess the service fit and explain the next steps without promising immediate bookings, platform acceptance or a fixed weekly gross.'],
+        paragraphs: [`The Sprinter van dispatch fee is ${getDispatchRateLabel('sprinter-van')} of gross revenue on loads we dispatch, with a dedicated dispatcher for each truck and no setup fee. Confirm the agreed billing base, accessorial treatment and invoice timing during onboarding. Use the pricing calculator to estimate the fee for your own load revenue.`, 'Bring your specifications and preferred operating radius to the first discussion. We can then assess the service fit and explain the next steps without promising immediate bookings, platform acceptance or a fixed weekly gross.'],
       },
     ],
     checklistTitle: 'Prepare your Sprinter operating profile',
@@ -112,7 +112,7 @@ export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
       },
       {
         id: 'fee', title: 'A defined dispatch fee for an agreed service scope',
-        paragraphs: [`RGN and lowboy dispatch is ${getDispatchRateLabel('rgn-lowboy')} of gross revenue on loads we dispatch, with a dedicated dispatcher and no setup fee. Confirm the billing base and treatment of reimbursed costs before service starts. The percentage is a dispatch fee, not a bundled heavy-haul project quote.`, 'Send trailer specifications, example commodities and preferred regions for the initial review. We confirm what support can be provided before taking on the assignment and do not guarantee a permit, a particular load or a weekly revenue level.'],
+        paragraphs: [`RGN and lowboy dispatch is ${getDispatchRateLabel('rgn-lowboy')} of gross revenue on loads we dispatch, with a dedicated dispatcher for each truck and no setup fee. Confirm the billing base and treatment of reimbursed costs before service starts. The percentage is a dispatch fee, not a bundled heavy-haul project quote.`, 'Send trailer specifications, example commodities and preferred regions for the initial review. We confirm what support can be provided before taking on the assignment and do not guarantee a permit, a particular load or a weekly revenue level.'],
       },
     ],
     checklistTitle: 'Prepare a machinery-move profile',
@@ -276,7 +276,7 @@ export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
       },
       {
         id: 'lane-fee', title: 'Build a lane plan with a clear dispatch percentage',
-        paragraphs: ['Tell us your preferred commodities, regional or OTR radius and home-time needs. The trip comparison should include pickup deadhead, loading and unloading time, delivery hours and practical options after the last stop. A specialized return shipment is not assumed simply because the trailer is empty.', `Curtain-side dispatch is ${getDispatchRateLabel('curtain-side')} of gross revenue on loads we dispatch, with a dedicated dispatcher and no setup fee. We support agreed load search, rate discussion, booking communication and documents. Confirm the billing base and service scope in writing; you retain the final load decision.`],
+        paragraphs: ['Tell us your preferred commodities, regional or OTR radius and home-time needs. The trip comparison should include pickup deadhead, loading and unloading time, delivery hours and practical options after the last stop. A specialized return shipment is not assumed simply because the trailer is empty.', `Curtain-side dispatch is ${getDispatchRateLabel('curtain-side')} of gross revenue on loads we dispatch, with a dedicated dispatcher for each truck and no setup fee. We support agreed load search, rate discussion, booking communication and documents. Confirm the billing base and service scope in writing; you retain the final load decision.`],
       },
     ],
     checklistTitle: 'Prepare your curtain-side equipment details',

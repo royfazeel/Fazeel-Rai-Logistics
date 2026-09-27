@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 import { EQUIPMENT_TYPES } from '@/lib/constants';
-import { getDispatchRate } from '@/lib/dispatch-pricing';
+import { DISPATCH_RATE_RANGE, getDispatchRate } from '@/lib/dispatch-pricing';
 
 const equipmentOptions = [
   ...EQUIPMENT_TYPES.map(({ id, name }) => ({ value: id, label: name })),
@@ -40,7 +40,7 @@ export default function FeeCalculator() {
       <div className="p-6 sm:p-8">
         <p className="eyebrow">Dispatch fee calculator</p>
         <h2 id={`${id}-heading`} className="section-heading mb-4">Estimate your dispatch fee.</h2>
-        <p className="max-w-3xl text-surface-700 leading-relaxed">Choose your equipment and enter the gross revenue for one load or a group of loads we dispatch. The estimate uses your equipment&apos;s published rate and updates as you type.</p>
+        <p className="max-w-3xl text-surface-700 leading-relaxed">Published dispatch rates are {DISPATCH_RATE_RANGE} by equipment. Choose your truck and enter the gross revenue for one load or a group of loads we dispatch. The estimate uses your equipment&apos;s rate and updates as you type.</p>
       </div>
       <div className="grid lg:grid-cols-2">
         <div className="space-y-6 px-6 pb-6 sm:px-8 sm:pb-8">

@@ -9,13 +9,13 @@ const CONTENT_UPDATED = '2026-09-24';
 const PAGE_REVISIONS: Record<string, string> = {
   '': '2026-09-28',
   '/services': '2026-09-28', '/equipment': '2026-09-28',
-  '/pricing': '2026-09-28', '/contact': '2026-09-27',
-  '/about': '2026-09-27', '/faq': '2026-09-27',
+  '/pricing': '2026-09-28', '/contact': '2026-09-28',
+  '/about': '2026-09-28', '/faq': '2026-09-28',
+  '/carriers': '2026-09-28', '/service-areas': '2026-09-28',
   '/resources': '2026-09-28',
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(({ slug }) => [`/equipment/${slug}`, '2026-09-28'])),
-  '/services/expedited-dispatch': '2026-09-28', '/services/backhaul-dispatch': '2026-09-28',
-  '/services/rate-negotiation': '2026-09-27', '/services/load-booking': '2026-09-27',
-  '/services/paperwork-support': '2026-09-27', '/services/scheduling': '2026-09-27',
+  ...Object.fromEntries(SERVICE_CONTENT.map(({ slug }) => [`/services/${slug}`, '2026-09-28'])),
+  ...Object.fromEntries(CARRIER_CONTENT.map(({ slug }) => [`/carriers/${slug}`, '2026-09-28'])),
   ...Object.fromEntries(GUIDES.map(guide => [`/resources/${guide.slug}`, guide.updated ?? guide.published])),
 };
 export default function sitemap(): MetadataRoute.Sitemap {

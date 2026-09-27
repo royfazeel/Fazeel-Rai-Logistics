@@ -30,33 +30,35 @@ const checkedLinks = new Set();
 // instruction. Do not import the site's pricing helper: this crawl must catch a
 // wrong value that has propagated consistently through the rendered website.
 const approvedFees = [
-  { slug: 'cargo-van', label: /cargo\s*vans?/i, rate: 8 },
-  { slug: 'sprinter-van', label: /sprinter\s*vans?/i, rate: 8 },
-  { slug: 'box-truck', label: /box\s*trucks?/i, rate: 7 },
-  { slug: 'hotshot', label: /hot\s*shot(?:\s*trucks?)?/i, rate: 6 },
-  { slug: 'dry-van', label: /dry\s*vans?/i, rate: 5 },
-  { slug: 'flatbed', label: /flatbeds?/i, rate: 5 },
-  { slug: 'reefer', label: /reefers?/i, rate: 5 },
-  { slug: 'power-only', label: /power[\s-]*only/i, rate: 7 },
-  { slug: 'step-deck', label: /step[\s-]*decks?/i, rate: 7 },
-  { slug: 'conestoga', label: /conestogas?/i, rate: 7 },
-  { slug: 'rgn-lowboy', label: /\brgn\b|low[\s-]*boys?/i, rate: 7 },
-  { slug: 'car-hauler', label: /car[\s-]*haulers?/i, rate: 7 },
-  { slug: 'tanker', label: /tankers?/i, rate: 7 },
-  { slug: 'dump-truck', label: /dump\s*trucks?/i, rate: 7 },
-  { slug: 'curtain-side', label: /curtain[\s-]*sides?/i, rate: 7 },
+  { slug: 'cargo-van', label: /cargo\s*vans?/i, rate: 5 },
+  { slug: 'sprinter-van', label: /sprinter\s*vans?/i, rate: 5 },
+  { slug: 'box-truck', label: /box\s*trucks?/i, rate: 5 },
+  { slug: 'hotshot', label: /hot\s*shot(?:\s*trucks?)?/i, rate: 4 },
+  { slug: 'dry-van', label: /dry\s*vans?/i, rate: 3 },
+  { slug: 'flatbed', label: /flatbeds?/i, rate: 3 },
+  { slug: 'reefer', label: /reefers?/i, rate: 3 },
+  { slug: 'power-only', label: /power[\s-]*only/i, rate: 5 },
+  { slug: 'step-deck', label: /step[\s-]*decks?/i, rate: 5 },
+  { slug: 'conestoga', label: /conestogas?/i, rate: 5 },
+  { slug: 'rgn-lowboy', label: /\brgn\b|low[\s-]*boys?/i, rate: 5 },
+  { slug: 'car-hauler', label: /car[\s-]*haulers?/i, rate: 5 },
+  { slug: 'tanker', label: /tankers?/i, rate: 5 },
+  { slug: 'dump-truck', label: /dump\s*trucks?/i, rate: 5 },
+  { slug: 'curtain-side', label: /curtain[\s-]*sides?/i, rate: 5 },
 ];
-const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 7 };
+const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 5 };
 const percentages = text => [...text.matchAll(/\b(\d+(?:\.\d+)?)\s*%/g)].map(match => Number(match[1]));
 const hasType = (node, type) => [node?.['@type']].flat().includes(type);
-const obsoletePricing = /\bup\s+to\s+5\s*%|\b(?:maximum|max)\s+(?:(?:percentage|dispatch|service)\s+)*(?:fee|rate|percentage)?\s*(?:is|of|:)?\s*5\s*%|\b5\s*%\s*(?:maximum|max|cap|ceiling)\b|\bsame\s+(?:maximum\s+)?percentage\s+(?:across|for)\s+(?:all|our)/i;
+// The September 28 schedule supersedes 5–8%; 'up to 5%' is now valid.
+const obsoletePricing = /\b5\s*%?\s*(?:[–—-]|to)\s*8\s*%|\b[678](?:\.0+)?\s*%|\bsame\s+(?:maximum\s+)?percentage\s+(?:across|for)\s+(?:all|our)/i;
+const approvedRange = /\b3\s*%?\s*(?:[–—-]|to)\s*5\s*%/i;
 
 const issue = (path, check, detail) => failures.push({ path, check, detail });
 const decode = value => value.replace(/&(?:amp|quot|apos|lt|gt|nbsp|#(\d+)|#x([0-9a-f]+));/gi, (match, decimal, hex) => {
   if (decimal || hex) return String.fromCodePoint(Number.parseInt(decimal || hex, decimal ? 10 : 16));
   return ({ '&amp;': '&', '&quot;': '"', '&apos;': "'", '&lt;': '<', '&gt;': '>', '&nbsp;': ' ' })[match.toLowerCase()] || match;
 });
-const plain = value => decode(value.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
+const plain = value => decode(value.replace(/<!--[\s\S]*?-->/g, '').replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
 const attributes = tag => Object.fromEntries([...tag.matchAll(/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)].map(match => [match[1].toLowerCase(), decode(match[2] ?? match[3] ?? match[4] ?? '')]));
 const elements = (html, tag) => [...html.matchAll(new RegExp(`<${tag}\\b[^>]*>`, 'gi'))].map(match => attributes(match[0]));
 const normalizedPath = pathname => pathname === '/' ? '/' : pathname.replace(/\/$/, '');
@@ -111,7 +113,13 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
       }
     }
   }
+  if (path === '/' || path === '/pricing') {
+    if (!approvedRange.test(visibleText)) issue(path, 'published-range', 'Expected the approved 3–5% fee range in visible text.');
+    if (!approvedRange.test(`${title} ${description}`)) issue(path, 'metadata-range', 'Expected the approved 3–5% fee range in title or description.');
+    if (!/free\s+(?:setup|onboarding)|no\s+(?:setup|onboarding)\s+fees?/i.test(visibleText)) issue(path, 'free-setup', 'Free setup or no setup fee must remain visible.');
+  }
   if (path !== '/pricing') return;
+  checkRenderedCalculator(path, markup);
   const tableRows = [...markup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].map(match => ({ text: plain(match[1]), links: elements(match[1], 'a').map(link => link.href) }));
   for (const item of [...approvedFees, otherEquipmentFee]) {
     const exactRows = item.slug ? tableRows.filter(row => row.links.some(href => href && normalizedPath(new URL(href, base).pathname) === `/equipment/${item.slug}`)) : [];
@@ -131,7 +139,7 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
     }
   }
   const catalogs = nodes.filter(node => hasType(node, 'OfferCatalog'));
-  if (!catalogs.length) return;
+  if (!catalogs.length) { issue(path, 'offer-catalog', 'Pricing page must include its equipment OfferCatalog.'); return; }
   const catalogOffers = catalogs.flatMap(schemaNodes).filter(node => hasType(node, 'Offer'));
   for (const item of approvedFees) {
     const offers = catalogOffers.filter(offer => [offer.itemOffered].flat().some(service => service?.url === canonicalFor(`/equipment/${item.slug}`)));
@@ -139,8 +147,36 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
     for (const offer of offers) checkOfferFee(path, offer, item.rate, item.slug);
   }
   const otherOffers = catalogOffers.filter(offer => otherEquipmentFee.label.test(`${offer.name || ''} ${offer.itemOffered?.name || ''}`));
-  if (!otherOffers.length) issue(path, 'catalog-other-equipment', 'OfferCatalog is missing the 7% other-equipment category.');
+  if (!otherOffers.length) issue(path, 'catalog-other-equipment', `OfferCatalog is missing the ${otherEquipmentFee.rate}% other-equipment category.`);
   for (const offer of otherOffers) checkOfferFee(path, offer, otherEquipmentFee.rate, 'other equipment');
+}
+
+// Server-rendered calculator output is audited independently of its source
+// pricing helper. Interactive state changes receive separate component checks.
+function checkRenderedCalculator(path, markup) {
+  const selects = [...markup.matchAll(/<select\b[^>]*>([\s\S]*?)<\/select>/gi)];
+  const calculator = selects.find(match => /<option\b[^>]*value=["']dry-van["']/i.test(match[1]));
+  if (!calculator) { issue(path, 'fee-calculator', 'Equipment fee calculator is missing.'); return; }
+  const options = [...calculator[1].matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)].map(match => ({ ...attributes(match[1]), text: plain(match[2]), selected: /\bselected(?:\s|=|$)/i.test(match[1]) }));
+  for (const item of [...approvedFees, { slug: 'other', rate: otherEquipmentFee.rate }]) {
+    const matches = options.filter(option => option.value === item.slug);
+    if (matches.length !== 1 || percentages(matches[0]?.text || '').join(',') !== String(item.rate)) issue(path, 'calculator-option-rate', `Expected one ${item.slug} calculator option at ${item.rate}%.`);
+  }
+  if (options.length !== approvedFees.length + 1) issue(path, 'calculator-options', `Expected 16 approved calculator equipment options; found ${options.length}.`);
+  const selected = options.find(option => option.selected) || options[0];
+  if (selected?.value !== 'dry-van') issue(path, 'calculator-default-equipment', `Expected dry-van default; received ${selected?.value}.`);
+  const revenueInput = elements(markup, 'input').find(input => /-revenue$/.test(input.id || ''));
+  if (revenueInput?.value !== '5000') issue(path, 'calculator-default-revenue', `Expected 5000 initial revenue; received ${revenueInput?.value}.`);
+  const amounts = [...markup.matchAll(/<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/gi)].map(match => ({ label: plain(match[1]), amount: plain(match[2]) }));
+  const expected = [
+    { label: /^Gross revenue entered$/i, amount: '$5,000.00' },
+    { label: /^Dispatch fee\s*\(3%\)$/i, amount: '$150.00' },
+    { label: /^Revenue after dispatch fee$/i, amount: '$4,850.00' },
+  ];
+  for (const item of expected) {
+    const result = amounts.find(pair => item.label.test(pair.label));
+    if (result?.amount !== item.amount) issue(path, 'calculator-default-math', `Expected ${item.label.source}: ${item.amount}; received ${result?.amount || 'missing'}.`);
+  }
 }
 
 // These checks use the approved URL convention, not the implementation's image
@@ -249,7 +285,7 @@ await batch(uniquePaths, async path => {
   if (description.length > 170) warnings.push({ path, check: 'description-length', detail: `${description.length} characters; review search result truncation.` });
   const searchText = [visibleText, title, ...metas.map(meta => meta.content || '')].join(' ');
   const staleRate = searchText.match(obsoletePricing);
-  if (staleRate) issue(path, 'obsolete-universal-pricing', `Superseded universal pricing claim found: ${staleRate[0]}.`);
+  if (staleRate) issue(path, 'obsolete-pricing', `Superseded pricing claim found: ${staleRate[0]}.`);
   if (/Marcus Johnson|David Chen|Robert Williams|James Anderson|Michael Thompson|Anthony Davis|Christopher Brown|Daniel Garcia|William Martinez|Joseph Taylor|Kevin Robinson|Brian Wilson|verified (?:driver|owner.operator)|sample loads|live load ticker|average dispatcher|\$5k\s*[–-]\s*\$9k/i.test(visibleText)) issue(path, 'unsupported-remnants', 'A removed testimonial, sample ticker, comparison, or revenue claim remains.');
   const schemaBlocks = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(match => attributes(match[1]).type?.toLowerCase() === 'application/ld+json');
   if (!schemaBlocks.length) issue(path, 'json-ld', 'No JSON-LD block found.');
@@ -260,7 +296,7 @@ await batch(uniquePaths, async path => {
       const nodes = schemaNodes(value);
       pageSchemaNodes.push(...nodes);
       for (const node of nodes) {
-        if (Object.values(node).some(value => typeof value === 'string' && obsoletePricing.test(value))) issue(path, 'obsolete-schema-pricing', `Superseded universal pricing claim in JSON-LD block ${index + 1}.`);
+        if (Object.values(node).some(value => typeof value === 'string' && obsoletePricing.test(value))) issue(path, 'obsolete-schema-pricing', `Superseded pricing claim in JSON-LD block ${index + 1}.`);
       }
       if (!nodes.some(node => /^https?:\/\/schema\.org\/?$/.test(node['@context'] || ''))) issue(path, 'json-ld-context', `Block ${index + 1} has no schema.org context.`);
       if (!nodes.some(node => node['@type'])) issue(path, 'json-ld-type', `Block ${index + 1} has no typed node.`);
@@ -298,7 +334,7 @@ await batch(internalLinks, async link => {
   }
 });
 
-const report = { baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
+const report = { approvedPricing: { range: '3–5%', equipment: Object.fromEntries(approvedFees.map(({ slug, rate }) => [slug, rate])), other: otherEquipmentFee.rate }, baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
 if (outputPath) { await mkdir(dirname(outputPath), { recursive: true }); await writeFile(outputPath, JSON.stringify(report, null, 2) + '\n'); }
 for (const failure of failures) console.error(`FAIL ${failure.path} [${failure.check}] ${failure.detail}`);
 for (const warning of warnings) console.warn(`WARN ${warning.path} [${warning.check}] ${warning.detail}`);

@@ -145,10 +145,10 @@ export default function HomePage() {
             <p
               className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"
             >
-              <span className="hidden sm:inline">Your dedicated dispatcher finds freight, negotiates rates, and
-              handles load paperwork. Nationwide support for owner-operators
-              and fleets, with {DISPATCH_RATE_RANGE} fees based on your equipment.</span>
-              <span className="sm:hidden">Your dedicated dispatcher finds loads, negotiates rates, and handles paperwork. Nationwide support, with {DISPATCH_RATE_RANGE} fees by equipment.</span>
+              <span className="hidden sm:inline">A dedicated dispatcher for every truck. We find freight, negotiate rates, and
+              handle load paperwork across the lower 48. Free setup and {DISPATCH_RATE_RANGE} of gross revenue
+              on loads we dispatch, based on your equipment.</span>
+              <span className="sm:hidden">A dedicated dispatcher for every truck. Load search, rate negotiation and paperwork across the lower 48. Free setup; {DISPATCH_RATE_RANGE} of gross on loads we dispatch.</span>
             </p>
 
             <div

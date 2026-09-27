@@ -1,24 +1,24 @@
 // Published percentage of gross revenue on loads we dispatch.
 // Keep website copy and written service terms aligned when changing this schedule.
 export const DISPATCH_RATES = {
-  'cargo-van': 8,
-  'sprinter-van': 8,
-  'box-truck': 7,
-  hotshot: 6,
-  'dry-van': 5,
-  flatbed: 5,
-  reefer: 5,
-  'power-only': 7,
-  'step-deck': 7,
-  conestoga: 7,
-  'rgn-lowboy': 7,
-  'car-hauler': 7,
-  tanker: 7,
-  'dump-truck': 7,
-  'curtain-side': 7,
+  'cargo-van': 5,
+  'sprinter-van': 5,
+  'box-truck': 5,
+  hotshot: 4,
+  'dry-van': 3,
+  flatbed: 3,
+  reefer: 3,
+  'power-only': 5,
+  'step-deck': 5,
+  conestoga: 5,
+  'rgn-lowboy': 5,
+  'car-hauler': 5,
+  tanker: 5,
+  'dump-truck': 5,
+  'curtain-side': 5,
 } as const;
 
-export const DEFAULT_DISPATCH_RATE = 7;
+export const DEFAULT_DISPATCH_RATE = 5;
 const publishedRates = [...Object.values(DISPATCH_RATES), DEFAULT_DISPATCH_RATE];
 export const DISPATCH_RATE_RANGE = `${Math.min(...publishedRates)}–${Math.max(...publishedRates)}%`;
 

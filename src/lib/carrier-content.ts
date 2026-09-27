@@ -8,7 +8,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
     metaTitle: `Owner-Operator Truck Dispatch | ${DISPATCH_RATE_RANGE} Fees`,
     description: `Owner-operator dispatch across the lower 48 with a dedicated dispatcher. Get load search, rate negotiation and paperwork support. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
     eyebrow: 'Your truck. Your business. A dispatch contact.',
-    intro: 'Running your own truck means balancing the road with broker calls, load searches and paperwork. Rai Dispatch gives independent owner-operators a dedicated dispatcher for those tasks, with nationwide support across the 48 contiguous United States. You choose the freight and keep control of your operation.',
+    intro: 'Running your own truck means balancing the road with broker calls, load searches and paperwork. Rai Dispatch provides a dedicated dispatcher for each truck and free setup. We support independent owner-operators with those tasks across the 48 contiguous United States. You choose the freight and keep control of your operation.',
     highlights: ['Support for one-truck operations', 'Loads approved by you', 'Regional and OTR preferences'],
     sections: [
       {
@@ -74,7 +74,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
     metaTitle: `Small Fleet Truck Dispatch Services | ${DISPATCH_RATE_RANGE} Fees`,
     description: `Small fleet dispatch across the lower 48 with a dedicated dispatcher. Coordinate truck availability, load approvals and paperwork. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
     eyebrow: 'Several trucks. One clear operating plan.',
-    intro: 'As a fleet grows, each truck adds its own location, schedule and paperwork. Rai Dispatch helps small trucking companies coordinate the dispatch work around those differences. Our nationwide service supports carriers across the lower 48, with the fleet retaining control of equipment, drivers and load approval.',
+    intro: 'As a fleet grows, each truck adds its own location, schedule and paperwork. Rai Dispatch provides a dedicated dispatcher for each truck and free setup, helping small trucking companies coordinate the dispatch work around those differences. Our nationwide service supports carriers across the lower 48, with the fleet retaining control of equipment, drivers and load approval.',
     highlights: ['Truck-by-truck availability', 'Clear carrier approval contacts', 'Coordinated load documents'],
     sections: [
       {
@@ -190,7 +190,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
         id: 'fees-and-timing',
         title: 'Agree fees and expectations before starting',
         paragraphs: [
-          `Rai Dispatch charges equipment-specific dispatch fees of ${DISPATCH_RATE_RANGE} on loads we dispatch, with no setup fee. Your equipment rate, billing base, service scope and invoice timing are confirmed in writing. Ask how cancelled loads, accessorials and freight you book yourself affect the fee.`,
+          `Rai Dispatch charges equipment-specific dispatch fees of ${DISPATCH_RATE_RANGE} on loads we dispatch, with a dedicated dispatcher for each truck and no setup fee. Your equipment rate, billing base, service scope and invoice timing are confirmed in writing. Ask how cancelled loads, accessorials and freight you book yourself affect the fee.`,
           'A start-date estimate follows the review of your documents, equipment and lanes. Keep onboarding completion separate from a confirmed booking when planning your first week. Available freight, broker approval and operating costs make fixed income or immediate-load promises unreliable planning assumptions.',
         ],
       },

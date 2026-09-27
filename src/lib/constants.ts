@@ -25,7 +25,7 @@ export const BUSINESS = {
   },
   serviceArea: 'All 48 contiguous United States',
   tagline: 'Professional Truck Dispatching Services',
-  description: `Dedicated truck dispatchers for owner-operators and fleets across the 48 contiguous states. Dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo van support with equipment-based fees of ${DISPATCH_RATE_RANGE}.`,
+  description: `Truck dispatch for owner-operators and fleets across the 48 contiguous states. A dedicated dispatcher for every truck, free setup, and ${DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch. Support for 15 truck and trailer types.`,
 } as const;
 
 // Locally hosted media. Muted inline playback is deferred on every screen size;
@@ -212,7 +212,7 @@ export const FAQS = [
   { id: 6, question: 'Do you work with new authorities and owner-operators?', answer: 'Owner-operators, small fleets, and carriers with new authority can discuss their setup with us. Each broker sets its own authority-age, insurance, safety, and equipment requirements, so not every load will be available to every carrier.' },
   { id: 7, question: 'How do you find loads for my truck?', answer: 'We search load boards and available broker freight, review lane fit and carrier requirements, negotiate terms, and present suitable options for your approval. We consider loaded and empty miles as well as pickup and delivery schedules.' },
   { id: 8, question: 'Are freight rates or weekly earnings guaranteed?', answer: 'No. Freight availability, load rates, operating costs, and weekly revenue change with equipment, markets, hours available, and the loads you accept. Dispatch support helps you evaluate opportunities; it does not guarantee a particular income.' },
-  { id: 9, question: 'Will I have a dedicated dispatcher?', answer: 'Yes. Rai Dispatch provides clients with a dedicated truck dispatcher who learns their equipment, preferred lanes, scheduling needs and load criteria. Confirm your contact person, working hours and escalation process during onboarding.' },
+  { id: 9, question: 'Will I have a dedicated dispatcher?', answer: 'Yes. Rai Dispatch assigns a dedicated dispatcher for every truck, with load planning around its equipment, preferred lanes, schedule and load criteria. Confirm your contact person, working hours and escalation process during free setup.' },
   { id: 10, question: 'Do you help with detention and layover requests?', answer: 'We help document arrival and departure times and request eligible detention or layover pay under the agreed load terms. Payment depends on the broker or shipper agreement and supporting documentation.' },
   { id: 11, question: 'What are your business hours?', answer: 'Our published dispatch desk hours are Monday through Saturday, 8:00 AM to 6:00 PM Central Time. Discuss any after-hours needs during your setup call.' },
   { id: 12, question: 'Do you handle rate confirmations and factoring paperwork?', answer: 'We assist with carrier packets, rate confirmations, bills of lading, proof of delivery, and communication with your chosen factoring provider. The carrier remains responsible for accurate records and compliance.' },

@@ -1,10 +1,10 @@
 import { pageMetadata, SITE_URL } from '@/lib/seo';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
-import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
+import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
 import { ContentJsonLd } from '@/components/content/ContentDetail';
 import PricingPageClient from './PricingPageClient';
 
-export const metadata = pageMetadata(`Truck Dispatch Pricing | ${DISPATCH_RATE_RANGE} by Equipment`, 'Compare dispatch fees: cargo vans 8%, box trucks 7%, hotshot 6%, dry van, flatbed and reefer 5%; other trucks 7%. Dedicated dispatcher included.', '/pricing');
+export const metadata = pageMetadata(`Truck Dispatch Pricing | ${DISPATCH_RATE_RANGE} & Free Setup`, `Dry van, reefer and flatbed dispatch ${getDispatchRateLabel('dry-van')}; hotshot ${getDispatchRateLabel('hotshot')}; vans, box trucks and other equipment ${DEFAULT_DISPATCH_RATE}%. Free setup and a dedicated dispatcher for each truck.`, '/pricing');
 
 export default function PricingPage() {
   return <>

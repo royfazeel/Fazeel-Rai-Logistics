@@ -56,7 +56,7 @@ export default function Footer() {
                 Ready to run better freight?
               </h2>
               <p className="text-surface-400 text-lg">
-                Dedicated dispatchers nationwide. {DISPATCH_RATE_RANGE} fees by equipment.
+                A dedicated dispatcher for every truck. {DISPATCH_RATE_RANGE} of gross on dispatched loads. Free setup.
               </p>
             </div>
             <a

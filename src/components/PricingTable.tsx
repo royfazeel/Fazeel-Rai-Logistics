@@ -60,7 +60,7 @@ export default function PricingTable() {
   return <div className="space-y-8">
     <PricingPreview />
     <div className="border border-surface-200 rounded-lg overflow-hidden">
-      <div className="bg-navy-950 text-white px-6 py-5"><h3 className="font-display text-2xl font-bold">Dispatch fees by equipment</h3><p className="text-white/80 mt-1">Your truck type determines the percentage. A dedicated dispatcher is included.</p></div>
+      <div className="bg-navy-950 text-white px-6 py-5"><h3 className="font-display text-2xl font-bold">Dispatch fees by equipment</h3><p className="text-white/80 mt-1">Published fees are {DISPATCH_RATE_RANGE}, based on your truck type. A dedicated dispatcher is included.</p></div>
       <table className="w-full text-left">
         <caption className="sr-only">Dispatch percentage of gross revenue on loads we dispatch</caption>
         <thead className="bg-surface-50"><tr><th scope="col" className="px-6 py-4 font-semibold">Truck or trailer type</th><th scope="col" className="px-6 py-4 font-semibold text-right">Dispatch fee</th></tr></thead>
