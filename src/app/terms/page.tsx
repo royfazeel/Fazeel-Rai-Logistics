@@ -8,7 +8,7 @@ import { DISPATCH_PRICING_SUMMARY } from '@/lib/dispatch-pricing';
  * page. Keep it in step with POLICY_UPDATED in src/app/privacy/page.tsx —
  * two legal pages carrying dates a year apart reads as neglect.
  */
-const TERMS_UPDATED = 'September 2026';
+const TERMS_UPDATED = 'September 28, 2026';
 
 export const metadata = pageMetadata('Terms of Service', 'Rai Dispatch service terms, carrier responsibilities, dispatch fees, load approvals, payment arrangements and cancellation conditions.', "/terms");
 
@@ -236,26 +236,24 @@ export default function TermsPage() {
 
           <section className="mb-12">
             <h2 className="font-display text-2xl font-bold text-navy-950 mb-4">
-              13. Website, Cookies, Advertising &amp; Privacy
+              13. Website Tracking &amp; Privacy
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
-              This website advertises on Google and loads Google Analytics and Google Ads
-              conversion tracking so we can tell which advertisements produce real enquiries.
-              Those tools set cookies in your browser. No other analytics, advertising,
-              session-recording, or data-broker service runs on this site.
+              This website does not load Google Ads or Google Analytics 4 (GA4)
+              measurement tags or send website measurement events to those services.
+              Hosting and security providers may still process operational request
+              and error logs to deliver and protect the website.
             </p>
             <p className="text-navy-800 leading-relaxed mb-4">
-              Full detail &mdash; which cookies, what they can and cannot see, and step-by-step
-              instructions for opting out &mdash; is in Section 5 of our{' '}
+              Our contact forms and communication channels continue to process the
+              information you provide so we can respond to your request. Details
+              of these practices are in our{' '}
               <Link href="/privacy" className="text-primary-700 font-medium hover:text-primary-800 underline">
                 Privacy Policy &amp; SMS Terms
               </Link>
-              , which also carries the SMS consent, STOP, and HELP terms required for text
-              messaging. The Privacy Policy is incorporated into these Terms by reference.
-            </p>
-            <p className="text-navy-800 leading-relaxed">
-              Nothing on this site requires a cookie in order to work. You can decline them
-              and still read every page, call us, and submit the enquiry form.
+              , including the website practices in Section 5 and the SMS consent,
+              STOP and HELP terms in Section 7. The Privacy Policy is incorporated
+              into these Terms by reference.
             </p>
           </section>
 

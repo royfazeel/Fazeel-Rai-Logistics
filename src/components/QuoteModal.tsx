@@ -209,9 +209,8 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
       const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
 
       if (res.ok && data?.ok === true) {
-        // Google Ads counts this as the lead conversion. Fired ONLY after the
-        // API confirmed the lead was actually delivered — never on a failure,
-        // or the campaign optimises towards submissions nobody received.
+        // Record the UI event only after the API accepts the lead.
+        // The measurement adapter is currently disabled.
         track('lead_submit', { source: 'quote_modal' });
         if (!mounted.current) return;
         setIsSubmitted(true);

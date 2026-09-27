@@ -4,7 +4,6 @@ import { Barlow_Condensed, Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import StickyCallWidgets from '@/components/StickyCallWidgets';
-import Analytics from '@/components/Analytics';
 import { BUSINESS } from '@/lib/constants';
 import { SITE_URL, pageMetadata } from '@/lib/seo';
 import './globals.css';
@@ -86,10 +85,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-white font-body antialiased">
-        {/* Preserve the existing analytics property. Queue events after
-            hydration, then load the external tag after page load and idle. */}
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:p-4 focus:text-navy-950">Skip to main content</a>
-        <Analytics />
           <Header />
           <main id="main-content" className="pt-20">{children}</main>
           <Footer />

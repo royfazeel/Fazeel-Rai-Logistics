@@ -1,15 +1,15 @@
 # Rai Dispatch
 
-Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. Published dispatch fees depend on equipment: **8% cargo/Sprinter vans, 7% box trucks, 6% hotshot, 5% dry van/flatbed/reefer, and 7% all other equipment**. The billing base, service availability, and terms must be confirmed in the written agreement. The website's supported-equipment scope still applies; a fee category does not establish that every specialized operation is available.
+Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. Published dispatch fees depend on equipment: **3% dry van/flatbed/reefer, 4% hotshot, and 5% all other equipment, including cargo and Sprinter vans**. The billing base, service availability, and terms must be confirmed in the written agreement. The website's supported-equipment scope still applies; a fee category does not establish that every specialized operation is available.
 
 The source is configured for **https://raidispatch.com**. The existing GitHub repository is [royfazeel/Fazeel-Rai-Logistics](https://github.com/royfazeel/Fazeel-Rai-Logistics), connected to the existing Vercel project **fazeel-rai-logistics**. Repository and project names can retain the old brand without affecting the public website.
 
-For lead delivery and tracking, read [SETUP.md](SETUP.md). For migration evidence, search intent, launch checks, and outstanding production work, read [the SEO audit and migration record](docs/SEO-AUDIT-AND-MIGRATION.md). A successful local build does not establish that a deployment, DNS change, redirect, or inbox delivery is working in production.
+For lead delivery and the current website-measurement status, read [SETUP.md](SETUP.md). For migration evidence, search intent, launch checks, and outstanding production work, read [the SEO audit and migration record](docs/SEO-AUDIT-AND-MIGRATION.md). A successful local build does not establish that a deployment, DNS change, redirect, or inbox delivery is working in production.
 
 ## What the site includes
 
-- **40 indexable page URLs**: 13 core/hub pages, eight equipment pages, nine service pages, three carrier audience pages, and seven guides.
-- Equipment coverage for dry van, reefer, flatbed, box truck, power only, step deck, hotshot, and cargo/Sprinter van operations.
+- **54 indexable page URLs**: 13 core/hub pages, 15 equipment pages, 11 service pages, three carrier audience pages, and 12 guides.
+- Equipment coverage for dry van, reefer, flatbed, box truck, power only, step deck, hotshot, cargo van, Sprinter van, Conestoga, RGN/lowboy, car hauler, tanker, dump truck and curtain-side operations.
 - Separate content for owner-operators, small fleets, new authorities, regional and OTR operations, and dedicated dispatcher support. Practical guides cover fees, onboarding, choosing a dispatcher, freight rates, self-dispatch, broker roles and empty-mile planning.
 - Page-specific titles, descriptions, canonical URLs, Open Graph metadata, JSON-LD, sitemap, and robots rules.
 - Phone, SMS, WhatsApp, contact form, and quote modal. Percentage pricing is explained with a clearly labeled fee example.
@@ -62,7 +62,7 @@ node scripts/verify-lead-api.mjs
 
 This harness requires a completed production build. It starts its own loopback Next server and fake Resend sink, uses reserved `.example` addresses, clears webhook delivery, and blocks non-loopback fetches in the test server. It accepts no remote URL. Checks include owner notification, carrier acknowledgement, validation, escaping, spam controls, rate limits, provider failures, and unconfigured delivery. Temporary processes and files are cleaned up afterward.
 
-The current release produces **46 build outputs**, including 40 indexable pages. Local verification on 24 September 2026 passed **40/40 sitemap pages** and **212 internal link/fragment targets**, with **zero failures or advisory warnings**. The unchanged lead API previously passed **17/17 isolated checks**. The crawler also checks equipment-specific pricing in page content, metadata and percentage Offer descriptions. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
+The earlier September 24 release produced **46 build outputs**, including 40 indexable pages. Local verification on that date passed **40/40 sitemap pages** and **212 internal link/fragment targets**, with **zero failures or advisory warnings**. The lead API also previously passed **17/17 isolated checks**. Those are historical results; rerun verification for the current 54-page site after changes. The crawler also checks equipment-specific pricing in page content, metadata and percentage Offer descriptions. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
 
 ## Deploy to the existing Vercel project
 
@@ -92,7 +92,7 @@ Environment changes require a new deployment. Public `NEXT_PUBLIC_*` values are 
 | `src/app/sitemap.ts`, `robots.ts`, `opengraph-image.tsx` | Discovery directives and branded sharing image |
 | `src/components/` | Navigation, footer, pricing presentation, native FAQ disclosure, lead forms, and contact actions |
 | `src/app/api/lead/route.ts` | Lead validation, delivery, acknowledgement, and configuration self-check |
-| `src/components/Analytics.tsx` / `src/lib/track.ts` | Existing GA4 tag and conversion events |
+| `src/lib/track.ts` | Typed no-op retained for existing call sites; sends no measurement events |
 | `scripts/` | Read-only SEO crawl and isolated lead API verification |
 | `public/video/` | Locally hosted hero/CTA posters and video files |
 
@@ -108,9 +108,6 @@ Contact and quote forms post to the relative `POST /api/lead` endpoint. Notifica
 | `LEAD_TO_EMAIL` | Owner destination; defaults to `BUSINESS.email` |
 | `LEAD_AUTO_REPLY=off` | Disable the carrier acknowledgement |
 | `LEAD_WEBHOOK_URL` | Optional additional JSON delivery channel |
-| `NEXT_PUBLIC_GA4_ID` | Override the existing GA4 measurement ID |
-| `NEXT_PUBLIC_GADS_ID` | Google Ads tag ID |
-| `NEXT_PUBLIC_GADS_CALL_LABEL` / `NEXT_PUBLIC_GADS_LEAD_LABEL` | Google Ads call-click and accepted-form conversion values |
 
 `GET /api/lead` reports whether the required configuration values are present. **`ok: true` means configured, not delivered.** It does not validate credentials, sender-domain verification, provider acceptance, or inbox receipt. The response contains status booleans and explanatory text, without keys or addresses.
 
@@ -119,6 +116,12 @@ With no channel configured, POST returns `503 not_configured`. A failed delivery
 The local test sink proves the application workflow in isolation. Confirm live delivery separately with an explicitly authorized test submission and check the recipient inbox/provider logs. Rate limiting is in-memory and best-effort per serverless instance.
 
 **Web and email domains are separate.** The owner has confirmed that `sam@railogistics.us` remains the contact email. Preserve that inbox, its DNS, and the verified old-domain sender. Moving the website to `raidispatch.com` does not create new email accounts or authenticate a new sender. `RESEND_API_URL` is a local-test override only and must remain unset in production.
+
+## Website measurement
+
+As of **September 28, 2026**, the shared Google tag is removed. The website does not load Google Ads or Google Analytics 4 (GA4) measurement tags or send page-view, call-click or accepted-form events to them. Both Ads website conversions and GA4 website measurement stop; this does not change the underlying Google accounts or delete their historical data.
+
+Legacy public analytics/advertising environment variables no longer enable tracking and are not part of deployment setup. Hosting and security providers may still retain operational request/error logs. Contact forms, lead delivery, optional carrier acknowledgements and direct contact links remain separate and unchanged. The current disclosures are in `/privacy` and `/terms`, dated September 28, 2026.
 
 ## Contact and license
 

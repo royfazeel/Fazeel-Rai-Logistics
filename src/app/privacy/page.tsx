@@ -1,7 +1,7 @@
 import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import {
-  BarChart3,
+  Shield,
   MessageSquare,
   Lock,
   Mail,
@@ -11,39 +11,13 @@ import {
 } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 
-/**
- * The one place the policy date lives. Bump it whenever the wording below
- * changes — a materially edited policy carrying an old date is exactly the
- * kind of inconsistency an SMS carrier audit or an ads review flags.
- */
-const POLICY_UPDATED = 'September 2026';
+// Shared effective and revision date for this policy.
+const POLICY_UPDATED = 'September 28, 2026';
 
-export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Read how Rai Technologies LLC handles contact details, website analytics, cookies and SMS communications for Rai Dispatch.', "/privacy");
+export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Read how Rai Technologies LLC handles contact details, website operational logs and SMS communications for Rai Dispatch.', "/privacy");
 
-/**
- * Privacy Policy & SMS Terms page.
- *
- * Source of truth: this is the exact policy provided by the business owner,
- * formatted as a structured legal document. The SMS Terms (Section 6) follow
- * the 10DLC required-elements format for carrier registration:
- *   - Program description
- *   - Consent statement
- *   - Message frequency
- *   - STOP / HELP instructions
- *   - Message & data rates disclosure
- *   - Carrier liability disclaimer
- *
- * Section 5 covers cookies, website analytics, and advertising. It exists
- * because this site runs Google Ads and loads Google's measurement tags —
- * an ads landing page that sets advertising cookies without disclosing them
- * is a disapproval risk. It names ONLY what is actually installed (GA4 +
- * Google Ads conversion tracking). Adding any other analytics, remarketing,
- * session-recording, or chat vendor means updating Section 5 BEFORE that
- * vendor's script ships.
- *
- * Do not edit boilerplate without first confirming with the business — this
- * page is referenced by SMS carriers during 10DLC registration audits.
- */
+// Website measurement disclosures reflect removal of Google Ads and GA4 tags.
+// The existing SMS program terms and other policy sections are retained.
 export default function PrivacyPage() {
   return (
     <div className="bg-white">
@@ -129,22 +103,20 @@ export default function PrivacyPage() {
               <li>Communication preferences</li>
             </ul>
             <p>
-              Separately, our website collects a limited amount of technical
-              information automatically from every visitor, whether or not you
-              ever contact us:
+              When your browser requests this website, our hosting and security
+              providers may process technical information needed to deliver and
+              protect it:
             </p>
             <ul>
-              <li>IP address and the approximate city or region it maps to</li>
-              <li>Device type, operating system, and browser</li>
-              <li>Pages viewed, time on page, and the links you click</li>
-              <li>
-                The page or advertisement that referred you, including the click
-                identifier Google attaches to an ad click
-              </li>
+              <li>IP address</li>
+              <li>Browser and device information included in the request</li>
+              <li>Requested URL, request time, response status and error details</li>
+              <li>Referring URL, when your browser sends one</li>
             </ul>
             <p>
-              Section 5 explains exactly which tools do this and how to turn
-              them off.
+              These operational records are separate from the information you
+              provide through our forms. Section 5 explains our current website
+              tracking and hosting practices.
             </p>
           </Section>
 
@@ -164,9 +136,9 @@ export default function PrivacyPage() {
             <p>
               We do not use the contact details you give us&mdash;your name,
               phone number, or email address&mdash;to run marketing campaigns
-              unless you explicitly authorize it. Anonymous website measurement
-              and advertising performance reporting are a separate matter and
-              are described in Section 5.
+              unless you explicitly authorize it. Technical request information
+              may also be used to operate the website, diagnose errors and
+              protect against abuse, as described in Section 5.
             </p>
           </Section>
 
@@ -195,154 +167,62 @@ export default function PrivacyPage() {
               </li>
               <li>
                 Information is only shared when necessary to provide dispatching
-                services.
+                services, respond to your requests, or operate and protect the website.
               </li>
             </ul>
             <p>
-              <strong>How this fits with website analytics.</strong> The
-              statement above covers the personal information you give us&mdash;
-              your name, phone number, email address, SMS consent, and dispatch
-              records. None of it is ever sold, shared, or passed to an
-              advertising platform. Our website separately uses Google
-              measurement tools that see anonymous browsing activity, and never
-              your phone number or SMS consent. Section 5 sets that out in full.
+              Service providers may process the information needed to host the
+              website, deliver enquiry notifications and support our communications.
+              Removing website measurement tags does not remove the contact
+              information you choose to send us or the processing needed to respond.
             </p>
           </Section>
 
-          {/* 5. Cookies, analytics & advertising — required before the
-              Google advertising tag goes live on this site. Describes ONLY
-              what is actually installed (GA4 + Google Ads conversion
-              tracking). If another vendor is ever added, it must be listed
-              here BEFORE its script ships. */}
+          {/* 5. Current website measurement and hosting practices. */}
           <Section
             number="5"
-            title="Cookies, Website Analytics &amp; Advertising"
-            badge={{ icon: BarChart3, text: 'Website visitors' }}
+            title="Website Tracking, Cookies &amp; Operational Logs"
+            badge={{ icon: Shield, text: 'Website visitors' }}
           >
-            <p>
-              We advertise this business on Google, and we measure whether those
-              advertisements actually produce phone calls and enquiries. That
-              measurement requires cookies. This section tells you precisely
-              which ones, what they see, and how to switch them off.
-            </p>
-            <p>
-              We use two Google tools and{' '}
-              <strong>no other advertising, tracking, analytics, session
-              recording, or data-broker service</strong>:
-            </p>
-
-            <SubSection letter="A" title="Google Analytics 4">
+            <SubSection letter="A" title="Google Website Measurement Removed">
               <p>
-                Counts how many people visit, which pages they read, how long
-                they stay, and how they found us. It sets first-party cookies
-                (named <code>_ga</code> and <code>_ga_&hellip;</code>) that can
-                last up to two years and identify a browser, not a person. It
-                tells us that &ldquo;a visitor read the pricing page,&rdquo; not
-                who that visitor is.
+                This website does not load Google Ads or Google Analytics 4 (GA4)
+                measurement tags. It does not send page-view, call-click or
+                form-submission events to those services, and it does not set
+                Google advertising or analytics cookies through those tags.
+              </p>
+              <p>
+                Cookies left by an earlier visit may remain in your browser until
+                they expire or are removed. The current website does not use them
+                for Google Ads or GA4 measurement.
               </p>
             </SubSection>
 
-            <SubSection letter="B" title="Google Ads Conversion Tracking">
+            <SubSection letter="B" title="Hosting and Security">
               <p>
-                Records when someone who arrived from one of our advertisements
-                then taps our phone number or sends us the enquiry form, so we
-                can tell which advertisements are worth paying for. It sets a
-                cookie (named <code>_gcl_au</code>) and reads the click
-                identifier Google appends to the web address of an ad click.
-                These typically expire within 90 days.
+                Our hosting and security providers may maintain operational
+                request and error logs, including the technical information in
+                Section 2, to serve pages, investigate problems and prevent abuse.
+                Removing advertising and analytics tags does not prevent this
+                necessary website operation or make every request anonymous.
               </p>
             </SubSection>
 
-            <SubSection letter="C" title="Google's Role">
+            <SubSection letter="C" title="Contact Forms and External Services">
               <p>
-                Google acts as our service provider for both tools and processes
-                this data under the{' '}
-                <a
-                  href="https://business.safety.google/privacy/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary-700 font-medium hover:text-primary-800 underline"
-                >
-                  Google Business Data Responsibility terms
-                </a>
-                . We do not control what Google does with data it collects
-                independently through your Google account.
+                Our enquiry forms still send the details you enter to our lead
+                delivery service so we can respond. Phone, email, SMS and WhatsApp
+                links still connect you to the service you choose. Services you
+                open outside this website apply their own privacy practices.
+                Our SMS terms remain in Section 7.
               </p>
             </SubSection>
 
-            <SubSection letter="D" title="What Is Never Sent to Google">
-              <div className="not-prose flex items-start gap-3 p-4 bg-surface-50 border border-surface-200 border-l-4 border-l-primary-600 rounded-lg my-3">
-                <Lock className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                <p className="text-navy-800 text-sm leading-relaxed">
-                  Your name, phone number, email address, MC authority number,
-                  SMS consent, and dispatch records are{' '}
-                  <strong className="text-navy-900 font-semibold">never</strong>{' '}
-                  passed to Google, to any advertising platform, or to any other
-                  third party. A form submission is reported to Google only as an
-                  anonymous count &mdash; that one happened, never what was in it.
-                </p>
-              </div>
+            <SubSection letter="D" title="Changes to Website Measurement">
               <p>
-                We do not sell or share personal information for cross-context
-                behavioural advertising, and we do not build or upload customer
-                lists for ad targeting.
-              </p>
-            </SubSection>
-
-            <SubSection letter="E" title="How to Opt Out">
-              <p>
-                Nothing on this website requires a cookie in order to work. You
-                can decline all of the above and still read every page, call us,
-                and submit the form. To opt out:
-              </p>
-              <ul>
-                <li>
-                  <strong>Block or delete cookies</strong> in your browser
-                  settings, or browse in a private/incognito window.
-                </li>
-                <li>
-                  <strong>Turn off Google Analytics entirely</strong> by
-                  installing Google&rsquo;s{' '}
-                  <a
-                    href="https://tools.google.com/dlpage/gaoptout"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary-700 font-medium hover:text-primary-800 underline"
-                  >
-                    Analytics Opt-out Browser Add-on
-                  </a>
-                  .
-                </li>
-                <li>
-                  <strong>Turn off personalised advertising</strong> at{' '}
-                  <a
-                    href="https://myadcenter.google.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary-700 font-medium hover:text-primary-800 underline"
-                  >
-                    Google My Ad Center
-                  </a>
-                  .
-                </li>
-                <li>
-                  <strong>On a phone,</strong> reset or limit your advertising
-                  identifier in iOS Privacy &amp; Security settings or Android
-                  Ads settings.
-                </li>
-              </ul>
-              <p>
-                Opting out stops the measurement. It does not stop you seeing
-                advertisements, and it does not affect any dispatch service you
-                receive from us.
-              </p>
-            </SubSection>
-
-            <SubSection letter="F" title="Changes to This Section">
-              <p>
-                If we ever add another analytics or advertising provider, this
-                section will be updated to name it before that provider&rsquo;s
-                code goes live on the site.
+                If we introduce website analytics or advertising measurement in
+                the future, we will update this section to describe it before
+                enabling the provider on the site.
               </p>
             </SubSection>
           </Section>

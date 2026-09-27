@@ -13,4 +13,3 @@ export { default as LiveLoadTicker } from './LiveLoadTicker';
 export { default as LeadCapturePopup } from './LeadCapturePopup';
 export { default as VideoBackdrop } from './VideoBackdrop';
 export { default as MotionProvider } from './MotionProvider';
-export { default as Analytics } from './Analytics';

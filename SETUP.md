@@ -1,15 +1,12 @@
 # Rai Dispatch — website setup
 
-This guide covers lead delivery and tracking for the Rai Dispatch website.
+This guide covers lead delivery and the current website-measurement status for Rai Dispatch.
 For the domain migration and recorded launch checks, also see
 [the SEO audit and migration record](docs/SEO-AUDIT-AND-MIGRATION.md).
 
-There are two jobs:
-
-1. **Lead delivery** — make sure the website can actually send you the leads
-   people fill in. **Do this before you spend a dollar on ads.**
-2. **Tracking** — tell Google Ads which clicks turned into phone calls and
-   form submissions, so your ad money goes where it works.
+Configure and verify **lead delivery** so enquiries reach the intended inbox or
+webhook. Google Ads and Google Analytics 4 (GA4) website measurement were removed
+on **September 28, 2026**; no advertising or analytics tag setup is required.
 
 Every setting below is pasted into the same place (Vercel), and every one of
 them needs the same last step: **redeploy**. That step is where almost
@@ -142,38 +139,23 @@ Slack message, use `summary` on its own and you are done.
 
 ---
 
-## 2. Google Ads and Analytics tracking
+## 2. Website measurement is disabled
 
-Skip this only if you are not running ads yet. Without it, Google Ads cannot
-tell which clicks became a phone call or a form submission, so it cannot spend
-your budget on the ones that work.
+The shared Google tag has been removed. The website does not load Google Ads or
+Google Analytics 4 (GA4) measurement tags or send page-view, call-click or form
+conversion events to those services. Both Ads website conversion measurement
+and GA4 website measurement stop. The underlying Google accounts and their
+historical reports are not deleted by this website change.
 
-You need up to four values.
+Legacy public analytics/advertising environment variables are ignored and no
+longer belong in the setup checklist. Do not add tag IDs or conversion labels
+when configuring lead delivery.
 
-1. **GA4 measurement ID** — in Google Analytics: **Admin** -> **Data Streams**
-   -> your website. It looks like `G-XXXXXXXXXX`.
-2. **Google Ads conversion ID** — in Google Ads: **Goals** -> **Conversions**
-   -> **Summary**, then open a conversion action and look at the tag setup. It
-   looks like `AW-XXXXXXXXX`.
-3. **Two conversion labels.** In Google Ads create two conversion actions of
-   type *Website*: one called something like "Phone call click" and one called
-   "Lead form submit". Each one gives you a "send to" value that looks like
-   `AW-XXXXXXXXX/AbC-D_efGhIjKlM`. Copy each one whole, including the part
-   before the slash.
-
-| Name to type in Vercel | Value to paste |
-| --- | --- |
-| `NEXT_PUBLIC_GA4_ID` | `G-XXXXXXXXXX` |
-| `NEXT_PUBLIC_GADS_ID` | `AW-XXXXXXXXX` |
-| `NEXT_PUBLIC_GADS_CALL_LABEL` | the phone-call "send to" value |
-| `NEXT_PUBLIC_GADS_LEAD_LABEL` | the lead-form "send to" value |
-
-The lead conversion fires only after the API reports that at least one
-notification service accepted the request. If all delivery attempts fail,
-the form displays the phone number and does not record a successful lead
-conversion. Provider acceptance is not a measurement of inbox receipt or a
-completed sale. A call-click event likewise records a tap, not a connected
-phone conversation.
+Hosting and security providers may still maintain operational request/error
+logs. The contact form, quote form, lead notifications, optional acknowledgement
+emails and direct contact links continue to work independently of measurement.
+See the privacy and terms pages for the current disclosures, dated
+**September 28, 2026**.
 
 ---
 
@@ -212,7 +194,7 @@ what you expect.
 
 ## 4. Prove it works, properly
 
-Do this once, on your phone, before the ads go live.
+Do this after configuring or changing lead delivery, using your own details.
 
 1. Open `https://raidispatch.com/api/lead`. Confirm `"ok":true`; this checks
    configuration only. The next steps verify actual delivery.
@@ -288,29 +270,6 @@ then show `"autoReply":false`.
 | `LEAD_TO_EMAIL` | Inbox the leads land in | Lead emails |
 | `LEAD_AUTO_REPLY` | Set to `off` to stop the carrier acknowledgement | Optional |
 | `LEAD_WEBHOOK_URL` | Zapier / Make catch-hook address | Zapier, Sheets, SMS, Slack |
-| `NEXT_PUBLIC_GA4_ID` | `G-XXXXXXXXXX` | Google Analytics |
-| `NEXT_PUBLIC_GADS_ID` | `AW-XXXXXXXXX` | Google Ads |
-| `NEXT_PUBLIC_GADS_CALL_LABEL` | Phone-call conversion "send to" value | Google Ads |
-| `NEXT_PUBLIC_GADS_LEAD_LABEL` | Lead-form conversion "send to" value | Google Ads |
 
 After any change: **Save → Redeploy → check `/api/lead` → verify an authorized
 test notification at its destination.**
-
----
-
-## Google Analytics — already connected
-
-The existing GA4 measurement ID **G-K31P16P0SB** is built into the site. It is
-retained across the web-domain migration, so no replacement ID is required
-solely because the public hostname changes. Tag loading and event receipt
-still need to be verified in the browser and Analytics.
-
-To confirm it is working: open the site, then in Google Analytics go to
-**Reports → Realtime** and confirm the visit and expected events appear.
-Browser privacy settings, blockers, and reporting delays can affect this check.
-
-You only need `NEXT_PUBLIC_GA4_ID` if you ever want to point the site at a
-different property — setting it overrides the built-in one.
-
-Google **Ads** conversion tracking is separate and still needs its own values
-(`NEXT_PUBLIC_GADS_ID` and the two conversion labels) — see the table above.
