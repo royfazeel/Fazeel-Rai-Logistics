@@ -287,10 +287,10 @@ export default function HomePage() {
                       />
                     </div>
                     <h3 className="font-display text-2xl font-bold text-navy-950 mb-2">
-                      <Link href={`/services/${service.id}`} className="hover:text-primary-600">{service.title}</Link>
+                      <Link prefetch={false} href={`/services/${service.id}`} className="hover:text-primary-600">{service.title}</Link>
                     </h3>
                     <p className="text-surface-700 leading-relaxed">{service.description}</p>
-                    <Link href={`/services/${service.id}`} className="inline-flex items-center gap-2 font-semibold text-primary-700 mt-5 py-2">Explore {service.title.toLowerCase()}<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+                    <Link prefetch={false} href={`/services/${service.id}`} className="inline-flex items-center gap-2 font-semibold text-primary-700 mt-5 py-2">Explore {service.title.toLowerCase()}<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
                   </div>
                 </ScrollReveal>
               );
@@ -304,6 +304,7 @@ export default function HomePage() {
                 Call to get started
               </a>
               <Link
+                prefetch={false}
                 href="/services"
                 className="inline-flex items-center gap-2 text-navy-900 font-semibold hover:text-primary-600 transition-colors"
               >
@@ -332,7 +333,7 @@ export default function HomePage() {
                 types. We review your truck and lane needs before you start,
                 with a dedicated dispatcher and equipment-based dispatch fees of {DISPATCH_RATE_RANGE}.
               </p>
-              <Link href="/equipment" className="mt-5 inline-flex items-center gap-2 py-2 font-semibold text-white underline underline-offset-4 hover:text-primary-300">View all {EQUIPMENT_TYPES.length} equipment types<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+              <Link prefetch={false} href="/equipment" className="mt-5 inline-flex items-center gap-2 py-2 font-semibold text-white underline underline-offset-4 hover:text-primary-300">View all {EQUIPMENT_TYPES.length} equipment types<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             </div>
           </ScrollReveal>
 
@@ -341,7 +342,7 @@ export default function HomePage() {
               return (
                 <ScrollReveal key={equipment.id} delay={idx * 0.06}>
                   <div className="group h-full overflow-hidden bg-navy-900 border border-white/10 hover:border-primary-500/60 rounded-lg transition-colors">
-                    <Link href={`/equipment/${equipment.id}`} aria-label={`Explore ${equipment.name.toLowerCase()} dispatch`} className="block bg-white">
+                    <Link prefetch={false} href={`/equipment/${equipment.id}`} aria-label={`Explore ${equipment.name.toLowerCase()} dispatch`} className="block bg-white">
                       <EquipmentPhoto slug={equipment.id} sizes="(min-width: 1280px) 390px, (min-width: 1024px) 31vw, (min-width: 640px) 46vw, calc(100vw - 40px)" className="w-full h-auto" />
                     </Link>
                     <div className="p-6">
@@ -354,7 +355,7 @@ export default function HomePage() {
                         </span>
                       </span>
                     </div>
-                    <h3 className="font-display text-2xl font-bold mb-2"><Link href={`/equipment/${equipment.id}`} className="hover:text-primary-400">{equipment.name}</Link></h3>
+                    <h3 className="font-display text-2xl font-bold mb-2"><Link prefetch={false} href={`/equipment/${equipment.id}`} className="hover:text-primary-400">{equipment.name}</Link></h3>
                     <p className="text-white/65 text-sm leading-relaxed mb-4">
                       {equipment.description}
                     </p>
@@ -366,7 +367,7 @@ export default function HomePage() {
                         </li>
                       ))}
                     </ul>
-                    <Link href={`/equipment/${equipment.id}`} className="inline-flex items-center gap-2 text-white font-semibold mt-5 py-2">Explore dispatch options<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+                    <Link prefetch={false} href={`/equipment/${equipment.id}`} className="inline-flex items-center gap-2 text-white font-semibold mt-5 py-2">Explore dispatch options<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
                     </div>
                   </div>
                 </ScrollReveal>
@@ -404,7 +405,7 @@ export default function HomePage() {
                     <MessageCircle className="w-4 h-4" aria-hidden="true" />
                     Text us instead
                   </a>
-                  <Link href="/equipment" className="flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white underline underline-offset-4">
+                  <Link prefetch={false} href="/equipment" className="flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white underline underline-offset-4">
                     Explore all {EQUIPMENT_TYPES.length} equipment types<ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
                 </div>
@@ -421,8 +422,8 @@ export default function HomePage() {
             <h2 className="section-heading mb-5">Your lanes. Your schedule. All 48 contiguous states.</h2>
             <p className="text-surface-700 text-lg leading-relaxed mb-5">From regional runs to coast-to-coast trucking, we build a load search around your home base, equipment, and time at home. We help compare reload options, empty miles, delivery appointments, and total trip costs before you commit.</p>
             <div className="flex flex-col items-start gap-2">
-              <Link href="/service-areas" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Explore nationwide dispatch coverage<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
-              <Link href="/carriers" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Find dispatch support for your operation<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+              <Link prefetch={false} href="/service-areas" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Explore nationwide dispatch coverage<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+              <Link prefetch={false} href="/carriers" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Find dispatch support for your operation<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             </div>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -627,6 +628,7 @@ export default function HomePage() {
 
           <ScrollReveal className="mt-10">
             <Link
+              prefetch={false}
               href="/pricing"
               className="inline-flex items-center gap-2 text-navy-900 font-semibold hover:text-primary-600 transition-colors"
             >
@@ -719,9 +721,9 @@ export default function HomePage() {
               { title: 'Choose a truck dispatcher', href: 'how-to-choose-a-truck-dispatcher', text: 'Ask about load approval, communication, service scope, and cancellation.' },
               { title: 'Get ready for onboarding', href: 'carrier-onboarding-checklist', text: 'Prepare authority, insurance, equipment details, and your lane preferences.' },
               { title: 'Evaluate a freight rate', href: 'evaluate-freight-rate-per-mile', text: 'Account for deadhead, time, fuel, and delivery requirements before accepting.' },
-            ].map(item => <Link key={item.href} href={`/resources/${item.href}`} className="card p-6 hover:border-primary-300"><h3 className="font-display text-2xl font-bold text-navy-950 mb-3">{item.title}</h3><p className="text-surface-700 mb-5">{item.text}</p><span className="inline-flex items-center gap-2 font-semibold text-primary-700">Read the guide<ArrowRight className="w-4 h-4" aria-hidden="true" /></span></Link>)}
+            ].map(item => <Link prefetch={false} key={item.href} href={`/resources/${item.href}`} className="card p-6 hover:border-primary-300"><h3 className="font-display text-2xl font-bold text-navy-950 mb-3">{item.title}</h3><p className="text-surface-700 mb-5">{item.text}</p><span className="inline-flex items-center gap-2 font-semibold text-primary-700">Read the guide<ArrowRight className="w-4 h-4" aria-hidden="true" /></span></Link>)}
           </div>
-          <Link href="/resources" className="inline-flex items-center gap-2 text-primary-700 font-semibold mt-8 py-2">All carrier resources<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+          <Link prefetch={false} href="/resources" className="inline-flex items-center gap-2 text-primary-700 font-semibold mt-8 py-2">All carrier resources<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
         </div>
       </section>
 
@@ -743,6 +745,7 @@ export default function HomePage() {
 
           <ScrollReveal className="mt-10">
             <Link
+              prefetch={false}
               href="/faq"
               className="inline-flex items-center gap-2 text-navy-900 font-semibold hover:text-primary-600 transition-colors"
             >

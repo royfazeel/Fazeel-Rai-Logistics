@@ -77,6 +77,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-20 gap-4">
           {/* Logo */}
           <Link
+            prefetch={false}
             href="/"
             className="flex items-center gap-2.5 group flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-md"
             aria-label="Rai Dispatch — Home"
@@ -97,6 +98,7 @@ export default function Header() {
                   : pathname.startsWith(item.href);
               return (
                 <Link
+                  prefetch={false}
                   key={item.name}
                   href={item.href}
                   className={`relative px-3 py-2 text-sm font-medium rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
@@ -185,6 +187,7 @@ export default function Header() {
               return (
                 <div key={item.name}>
                   <Link
+                    prefetch={false}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`block px-4 py-3 rounded-md font-medium transition-colors ${

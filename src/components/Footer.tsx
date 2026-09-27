@@ -1,10 +1,7 @@
-'use client';
-
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Link from 'next/link';
 import { Phone, Mail, MapPin, ArrowRight, MessageCircle, Clock } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
-import { track } from '@/lib/track';
 import BrandLogo from './BrandLogo';
 
 const footerLinks = {
@@ -61,7 +58,6 @@ export default function Footer() {
             </div>
             <a
               href={BUSINESS.phoneHref}
-              onClick={() => track('call_click', { location: 'footer_cta_banner' })}
               className="inline-flex items-center gap-3 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xl rounded-md transition-[background-color,transform] motion-safe:hover:scale-[1.02] motion-safe:active:scale-[0.98] motion-reduce:transition-none"
             >
               <Phone className="w-6 h-6" />
@@ -77,7 +73,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex max-w-full mb-6 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500" aria-label="Rai Dispatch — Home">
+            <Link prefetch={false} href="/" className="inline-flex max-w-full mb-6 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500" aria-label="Rai Dispatch — Home">
               <BrandLogo onDark className="w-[320px] max-w-full" />
             </Link>
             <p className="text-surface-400 mb-6 max-w-sm">
@@ -87,7 +83,6 @@ export default function Footer() {
             <div className="space-y-3">
               <a
                 href={BUSINESS.phoneHref}
-                onClick={() => track('call_click', { location: 'footer_contact_list' })}
                 className="flex items-center gap-3 text-surface-300 hover:text-white transition-colors"
               >
                 <Phone className="w-5 h-5 text-primary-400" />
@@ -95,7 +90,6 @@ export default function Footer() {
               </a>
               <a
                 href={BUSINESS.smsHref}
-                onClick={() => track('sms_click', { location: 'footer_contact_list' })}
                 className="flex items-center gap-3 text-surface-300 hover:text-white transition-colors"
               >
                 <MessageCircle className="w-5 h-5 text-primary-400" />
@@ -103,7 +97,6 @@ export default function Footer() {
               </a>
               <a
                 href={BUSINESS.whatsappHref}
-                onClick={() => track('whatsapp_click', { location: 'footer_contact_list' })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-surface-300 hover:text-white transition-colors"
@@ -121,7 +114,6 @@ export default function Footer() {
               </a>
               <a
                 href={BUSINESS.emailHref}
-                onClick={() => track('email_click', { location: 'footer_contact_list' })}
                 className="flex items-center gap-3 text-surface-300 hover:text-white transition-colors"
               >
                 <Mail className="w-5 h-5 text-primary-400" />
@@ -149,6 +141,7 @@ export default function Footer() {
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
                   <Link
+                    prefetch={false}
                     href={link.href}
                     className="text-surface-400 hover:text-white transition-colors"
                   >
@@ -166,6 +159,7 @@ export default function Footer() {
               {footerLinks.equipment.map((link) => (
                 <li key={link.name}>
                   <Link
+                    prefetch={false}
                     href={link.href}
                     className="text-surface-400 hover:text-white transition-colors"
                   >
@@ -183,6 +177,7 @@ export default function Footer() {
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
                   <Link
+                    prefetch={false}
                     href={link.href}
                     className="text-surface-400 hover:text-white transition-colors"
                   >
@@ -200,9 +195,7 @@ export default function Footer() {
         <div className="container-custom py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-surface-500">
             <div className="text-center md:text-left">
-              {/* suppressHydrationWarning: the year is baked in at build time;
-                  after a year boundary the client value differs until rebuild */}
-              <p suppressHydrationWarning>
+              <p>
                 © {new Date().getFullYear()} {BUSINESS.name}. All rights reserved.
               </p>
               <p className="mt-1">
@@ -212,6 +205,7 @@ export default function Footer() {
             <div className="flex items-center gap-6">
               {footerLinks.legal.map((link) => (
                 <Link
+                  prefetch={false}
                   key={link.name}
                   href={link.href}
                   className="hover:text-white transition-colors"
