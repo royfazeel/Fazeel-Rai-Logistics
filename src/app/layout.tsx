@@ -13,7 +13,7 @@ import './globals.css';
    the tall, narrow letterforms read like highway signage. Inter for body. */
 const displayFont = Barlow_Condensed({
   subsets: ['latin'],
-  weight: ['500', '600', '700'],
+  weight: ['600', '700'],
   variable: '--font-display',
   display: 'swap',
 });

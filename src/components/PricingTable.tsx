@@ -84,7 +84,16 @@ export function PricingPreview() {
         <p className="font-display uppercase tracking-wider text-white/70 font-semibold mb-4">Percentage dispatch plan</p>
         <p className="font-display text-7xl font-bold leading-none mb-3">{DISPATCH_RATE_RANGE}</p>
         <p className="text-white/80 leading-relaxed mb-6">of gross revenue on loads we dispatch, based on truck type. Confirm your equipment rate and billing terms before starting.</p>
-        <button onClick={() => { track('quote_modal_open', { location: 'pricing_preview_percentage' }); setIsQuoteModalOpen(true); }} className="btn-primary w-full">Get your dispatch quote<ArrowRight className="w-5 h-5" aria-hidden="true" /></button>
+        <a
+          href="/contact#contact-form"
+          onClick={event => {
+            if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            track('quote_modal_open', { location: 'pricing_preview_percentage' });
+            setIsQuoteModalOpen(true);
+          }}
+          className="btn-primary w-full"
+        >Get your dispatch quote<ArrowRight className="w-5 h-5" aria-hidden="true" /></a>
       </div>
       <div className="bg-white p-7 md:p-10">
         <h3 className="font-display text-3xl font-bold text-navy-950 mb-5">Support from load search to delivery</h3>

@@ -393,7 +393,7 @@ export default function ContactPageClient() {
             </div>
 
             {/* Contact form */}
-            <div className="lg:col-span-2">
+            <div id="contact-form" className="lg:col-span-2 scroll-mt-28">
               <ScrollReveal direction="right">
                 <div className="bg-white rounded-lg p-6 sm:p-8 border border-surface-200">
                   <h2 className="font-display text-3xl font-bold text-navy-950 mb-2">

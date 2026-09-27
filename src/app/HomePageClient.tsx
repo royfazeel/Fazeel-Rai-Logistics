@@ -154,13 +154,19 @@ export default function HomePage() {
             <div
               className="photo-hero-actions flex flex-col sm:flex-row gap-3 mb-10"
             >
-              <button
-                onClick={() => { track('quote_modal_open', { location: 'home_hero' }); setIsQuoteModalOpen(true); }}
+              <a
+                href="/contact#contact-form"
+                onClick={event => {
+                  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                  event.preventDefault();
+                  track('quote_modal_open', { location: 'home_hero' });
+                  setIsQuoteModalOpen(true);
+                }}
                 className="btn-primary h-14 px-8 text-base sm:text-lg"
               >
                 Get a free setup
                 <ArrowRight className="w-5 h-5" aria-hidden="true" />
-              </button>
+              </a>
               <a
                 href={BUSINESS.phoneHref}
                 onClick={() => track('call_click', { location: 'home_hero' })}
@@ -793,13 +799,19 @@ export default function HomePage() {
                   <MessageCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
                   Text us
                 </a>
-                <button
-                  onClick={() => { track('quote_modal_open', { location: 'home_final_cta' }); setIsQuoteModalOpen(true); }}
+                <a
+                  href="/contact#contact-form"
+                  onClick={event => {
+                    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                    event.preventDefault();
+                    track('quote_modal_open', { location: 'home_final_cta' });
+                    setIsQuoteModalOpen(true);
+                  }}
                   className="btn-ghost-light h-14"
                 >
                   Get a quote
                   <ArrowRight className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                </button>
+                </a>
               </div>
             </div>
 

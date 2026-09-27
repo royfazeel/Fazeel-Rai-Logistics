@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 /** The approved RAI Union identity, with a matching version for each surface. */
 export default function BrandLogo({
   onDark = false,
@@ -11,13 +9,17 @@ export default function BrandLogo({
   priority?: boolean;
 }) {
   return (
-    <Image
+    // The outlined SVG is served directly and needs no image runtime.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       src={`/brand/rai-dispatch-logo-${onDark ? 'dark' : 'light'}.svg`}
       alt="Rai Dispatch — Truck Dispatch Services"
       width={1330}
       height={200}
       className={`h-auto ${className}`}
-      priority={priority}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : undefined}
+      decoding="async"
     />
   );
 }
