@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import StaticPhoto from '@/components/StaticPhoto';
 
 import Link from 'next/link';
 
@@ -93,9 +93,9 @@ const serviceDetails = [
     id: 'route-strategy',
     icon: 'Route',
     title: 'Route & Lane Strategy',
-    subtitle: 'Strategic Planning for Maximum Profit',
+    subtitle: 'Plan Around Total Miles and Trip Costs',
     description:
-      'We analyze your routes, identify profitable lanes, and develop strategies to keep you moving with better-paying freight and fewer empty miles.',
+      'We compare available loads against your total miles, schedule and operating costs, then discuss lane options and repositioning with you before you approve a load.',
     benefits: [
       'Lane profitability analysis',
       'Deadhead reduction strategies',
@@ -155,7 +155,7 @@ export default function ServicesPageClient() {
           PAGE HERO — compact dark band over the highway photo.
           ============================================================ */}
       <section className="relative bg-navy-950 text-white py-16 sm:py-20 overflow-hidden">
-        <Image
+        <StaticPhoto
           fill
           priority
           sizes="100vw"

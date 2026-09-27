@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props) {
   const guide = GUIDES.find((item) => item.slug === slug);
   if (!guide) notFound();
   const metadata = pageMetadata(guide.metaTitle, guide.description, `/resources/${slug}`);
-  return { ...metadata, openGraph: { ...metadata.openGraph, type: 'article' as const, publishedTime: guide.published, modifiedTime: guide.published } };
+  return { ...metadata, openGraph: { ...metadata.openGraph, type: 'article' as const, publishedTime: guide.published, modifiedTime: guide.updated ?? guide.published } };
 }
 
 export default async function ResourceDetailPage({ params }: Props) {

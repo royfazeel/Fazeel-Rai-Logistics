@@ -2,6 +2,14 @@
 
 Research date: September 24, 2026. This is an editorial and information-architecture record, not evidence of rankings or search volume. The baseline is the 30-page migration release. All ten additional routes below are implemented and pass the local 40-page crawl; production verification is recorded in the SEO audit and migration record.
 
+## September 27 content refresh
+
+The existing equipment, carrier and operating-pattern pages remain the primary destinations for their query families. This refresh adds one distinct guide at `/resources/detention-layover-tonu-documentation`, covering detention, layover, truck ordered not used (TONU), lumper receipts and the request-documentation workflow. It includes a clearly hypothetical timestamp example, a practical checklist and references to Truckstop terminology and CloudTrucks' published process as an example of provider-specific requirements. It does not adopt either provider's rates, deadlines or service promises as Rai Dispatch policy.
+
+The new guide is linked from reefer dispatch, rate negotiation, appointment scheduling, paperwork support and the dispatch-fee guide. The existing load-booking page now explains full truckload (FTL), suitable partial loads, cargo compatibility, exclusive-use requirements and carrier approval. This is dispatch support for carriers, not an offer to operate an LTL shipping network. New and substantively revised article dates are recorded explicitly; no dates should be refreshed merely because the site rebuilds.
+
+Equipment benefit text now describes equipment-matched load search, reefer lane planning and appointment coordination instead of implying consistent freight or superior produce lanes. The content inventory is now 41 routes when combined with the existing base routes. Crawl, deployment and performance outcomes belong in the launch audit after verification; this plan does not establish rankings or traffic gains.
+
 ## Recommendation
 
 Expand around different carrier decisions: who needs dispatch, how the operation runs, and how to evaluate the service. The existing equipment and task pages already cover much of the commercial vocabulary. More useful coverage comes from explaining different operating needs, supported by practical examples and clear service boundaries. Do not create a page for every synonym, truck dimension, state, or city.

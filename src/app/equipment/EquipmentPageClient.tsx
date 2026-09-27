@@ -1,7 +1,7 @@
 'use client';
 
 import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
-import Image from 'next/image';
+import StaticPhoto from '@/components/StaticPhoto';
 import Link from 'next/link';
 import { ArrowRight, Box, CheckCircle, Container, Package, Phone, Snowflake, Truck } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES, MEDIA } from '@/lib/constants';
@@ -16,7 +16,7 @@ const equipmentIcons: Record<string, React.ElementType> = {
 export default function EquipmentPageClient() {
   return <>
     <section className="relative bg-navy-950 text-white py-16 sm:py-20 overflow-hidden">
-      <Image src={MEDIA.heroVideo.poster} alt="" fill priority sizes="100vw" className="object-cover" aria-hidden="true" />
+      <StaticPhoto src={MEDIA.heroVideo.poster} alt="" fill priority sizes="100vw" className="object-cover" aria-hidden="true" />
       <div className="absolute inset-0 bg-navy-950/85" aria-hidden="true" />
       <div className="container-custom relative z-10">
         <p className="eyebrow">Equipment we dispatch</p>

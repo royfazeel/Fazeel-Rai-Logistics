@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import StaticPhoto from '@/components/StaticPhoto';
 
 import {
   Phone,
@@ -61,7 +61,7 @@ export default function AboutPageClient() {
           PAGE HERO — compact dark band over the highway photo.
           ============================================================ */}
       <section className="relative bg-navy-950 text-white overflow-hidden">
-        <Image
+        <StaticPhoto
           fill
           priority
           sizes="100vw"

@@ -66,7 +66,7 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
       { question: 'Who decides the reefer temperature setting?', answer: 'The shipment instructions must come from the authorized shipping or brokerage party and be clear in writing. Dispatch helps clarify and communicate those instructions; it does not independently choose a cargo temperature.' },
       { question: 'Are lumper fees and detention always reimbursed?', answer: 'No. Reimbursement depends on the load agreement, required approvals and supporting documentation. Confirm the process before pickup and retain receipts and timestamps.' },
     ],
-    related: [{ label: 'Scheduling and follow-ups', href: '/services/scheduling' }, { label: 'Dispatch fee guide', href: '/resources/truck-dispatch-fees' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
+    related: [{ label: 'Scheduling and follow-ups', href: '/services/scheduling' }, { label: 'Detention and accessorial documents', href: '/resources/detention-layover-tonu-documentation' }, { label: 'Dispatch fee guide', href: '/resources/truck-dispatch-fees' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
   },
   {
     slug: 'flatbed', title: 'Flatbed dispatch services', metaTitle: `Flatbed Dispatch Services | ${getDispatchRateLabel('flatbed')} Fee`,
@@ -212,16 +212,17 @@ export const SERVICE_CONTENT: DispatchContent[] = [
       { question: 'Who accepts the final freight rate?', answer: 'You retain the final decision on the load and its terms. Dispatch presents the relevant details and coordinates a booking after approval.' },
       { question: 'Is negotiation included in the dispatch fee?', answer: `Rate negotiation is part of our dispatch support. The percentage plan is ${DISPATCH_RATE_RANGE} by equipment; scope, billing base and any specific exclusions are agreed before service.` },
     ],
-    related: [{ label: 'Freight rate calculation guide', href: '/resources/evaluate-freight-rate-per-mile' }, { label: 'Dispatch pricing', href: '/pricing' }, { label: 'Load booking', href: '/services/load-booking' }],
+    related: [{ label: 'Freight rate calculation guide', href: '/resources/evaluate-freight-rate-per-mile' }, { label: 'Detention, layover and TONU checklist', href: '/resources/detention-layover-tonu-documentation' }, { label: 'Dispatch pricing', href: '/pricing' }, { label: 'Load booking', href: '/services/load-booking' }],
   },
   {
     slug: 'load-booking', title: 'Truck load search and booking support', metaTitle: 'Truck Load Booking & Dispatch Services',
-    description: 'Carrier-approved load booking for owner-operators and small fleets. Equipment-fit review, broker requirements and rate-confirmation coordination.',
+    description: 'Full truckload and suitable partial-load dispatch for owner-operators and fleets. Review equipment, broker terms and appointments before approving a booking.',
     eyebrow: 'A clear path from available truck to approved load.',
     intro: 'Rai Dispatch searches for freight around your equipment, location and schedule, then helps coordinate the details needed for an informed booking. Your approval stays at the center of the process.',
     highlights: ['Equipment and lane preferences', 'Broker requirements reviewed', 'Written confirmations organized'],
     sections: [
       { id: 'search', title: 'Define a workable search before calling on loads', paragraphs: ['We need an accurate empty location, available time, equipment specifications and operating preferences. This helps screen out loads that cannot fit your truck or schedule before time is spent pursuing them.', 'Search criteria include pickup radius, destination preferences, home time and handling limits. The available freight and broker requirements determine which opportunities can move forward; dispatch does not guarantee access to a private shipper network or a dedicated contract.'] },
+      { id: 'full-and-partial', title: 'Review full truckload and partial-load requirements', paragraphs: ['For full truckload (FTL) dispatch, clarify the space and equipment reserved for the shipment, whether the trailer must be exclusive to that load, and the complete pickup and delivery plan. A shipment does not have to fill every pallet position to come with exclusive-use requirements.', 'For a partial load, check the cargo dimensions, weight, usable space and written terms before considering another shipment on the same truck. Loading access, compatible cargo, securement, stop order and appointment times all need to work together. Empty space alone is not approval to add freight.'], bullets: ['Confirm any exclusive-use, co-loading or handling restrictions.', 'Check each shipment against the truck’s remaining payload and usable space.', 'Get carrier approval for the complete route and every booking.'] },
       { id: 'booking', title: 'Review the details, approve, then confirm', paragraphs: ['A load needs more than a rate and destination. Commodity, weight, appointments, stops, loading method and special instructions are reviewed alongside the broker’s onboarding requirements. Missing details should be resolved before the carrier agrees to move.', 'After approval, we help coordinate the rate confirmation and dispatch information. Keep the driver’s truck status current so changes can be communicated quickly and the next pickup is not scheduled from an outdated empty time.'], bullets: ['Provide accurate truck specifications and availability.', 'Review the load and confirm your acceptance.', 'Keep written booking details accessible to the driver.'] },
     ],
     checklistTitle: 'Before the load search begins',
@@ -229,6 +230,7 @@ export const SERVICE_CONTENT: DispatchContent[] = [
     faqs: [
       { question: 'Can you guarantee a load on my first day?', answer: 'No. Timing depends on completed onboarding, broker acceptance, equipment and available freight. We discuss readiness and expectations before starting the search.' },
       { question: 'Do I have to accept every load you find?', answer: 'No. You approve the freight and terms. Your feedback helps refine the search, while recognizing that tighter requirements may reduce availability.' },
+      { question: 'Can you help find partial loads as well as full truckloads?', answer: 'We can review suitable partial-load opportunities within the agreed dispatch scope. Equipment, cargo compatibility, broker terms and the combined schedule must fit, and you approve each booking. This is carrier dispatch support, not a shipper-facing less-than-truckload (LTL) shipping network.' },
       { question: 'Do you work under my authority?', answer: 'Dispatch support is provided for your carrier operation under the written agreement. You retain your carrier authority, equipment and responsibility for accepting and operating the load.' },
     ],
     related: [{ label: 'Equipment we review', href: '/equipment' }, { label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Broker communication', href: '/services/broker-communication' }],
@@ -288,7 +290,7 @@ export const SERVICE_CONTENT: DispatchContent[] = [
       { question: 'Do you provide compliance or legal services?', answer: 'This service is dispatch-related document support. Regulatory filings, legal advice, insurance and full compliance management are not automatically included.' },
       { question: 'Do you guarantee detention payment?', answer: 'No. We can help organize and submit supporting information within the agreed scope. Payment depends on the written terms, evidence and approval by the responsible party.' },
     ],
-    related: [{ label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Broker communication', href: '/services/broker-communication' }, { label: 'Dispatch fee details', href: '/pricing' }],
+    related: [{ label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Accessorial documentation checklist', href: '/resources/detention-layover-tonu-documentation' }, { label: 'Broker communication', href: '/services/broker-communication' }, { label: 'Dispatch fee details', href: '/pricing' }],
   },
   {
     slug: 'scheduling', title: 'Truck appointment scheduling and follow-ups', metaTitle: 'Truck Appointment Scheduling & Dispatch Follow-ups',
@@ -307,13 +309,66 @@ export const SERVICE_CONTENT: DispatchContent[] = [
       { question: 'Do you provide around-the-clock dispatch coverage?', answer: 'The published dispatch desk hours are Monday through Saturday, 8 AM to 6 PM Central Time. Confirm any load-specific escalation or after-hours arrangement before booking.' },
       { question: 'Will detention automatically be paid after a delay?', answer: 'No. Free time, notification requirements, evidence and payment terms vary by load. Clarify them in writing before pickup and document the delay.' },
     ],
-    related: [{ label: 'Reefer dispatch', href: '/equipment/reefer' }, { label: 'Route and lane strategy', href: '/services/route-strategy' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
+    related: [{ label: 'Reefer dispatch', href: '/equipment/reefer' }, { label: 'Detention and delay documentation', href: '/resources/detention-layover-tonu-documentation' }, { label: 'Route and lane strategy', href: '/services/route-strategy' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
   },
 ];
 
-export type CarrierGuide = DispatchContent & { readTime: string; published: string; sources?: ContentLink[] };
+export type CarrierGuide = DispatchContent & { readTime: string; published: string; updated?: string; sources?: ContentLink[] };
 
 export const GUIDES: CarrierGuide[] = [
+  {
+    slug: 'detention-layover-tonu-documentation',
+    title: 'Detention, layover and TONU: a carrier documentation checklist',
+    metaTitle: 'Detention, Layover & TONU Documentation Guide',
+    description: 'Prepare detention, layover, TONU and lumper requests with clear load terms, timestamps, receipts and follow-ups. A practical carrier documentation checklist.',
+    eyebrow: 'Carrier guide · Delays and extra work',
+    readTime: '5 minute read', published: '2026-09-27', updated: '2026-09-27',
+    intro: 'When a load changes, keep the operational update and the compensation request connected. This checklist helps owner-operators and small fleets organize the facts, identify the relevant load terms and follow a request through to a recorded response.',
+    highlights: ['Check the written terms', 'Record what happened', 'Track the request and response'],
+    sections: [
+      {
+        id: 'terms', title: 'Identify the charge and its written conditions',
+        paragraphs: ['Accessorials concern work or events beyond the basic haul. Common examples include waiting, a load cancellation or unloading expenses. The following terms help identify the question to ask; the actual load agreement determines the applicable conditions.'],
+        table: {
+          caption: 'Common accessorial terms and the details to clarify',
+          headers: ['Term', 'What it concerns', 'Confirm before relying on it'],
+          rows: [
+            ['Detention', 'Waiting at a shipper or receiver beyond an agreed allowance.', 'Free time, start point, notice deadline and rate.'],
+            ['Layover', 'A delay extending the truck’s commitment to another day.', 'Qualifying delay, authorization and interaction with detention.'],
+            ['TONU — truck ordered not used', 'A booked truck that is no longer needed for the load.', 'Cancellation conditions and required evidence.'],
+            ['Lumper or other extra work', 'Unloading expenses or additional agreed handling.', 'Approval, receipt and reimbursement instructions.'],
+          ],
+        },
+      },
+      {
+        id: 'before-arrival', title: 'Put the reporting process beside the appointment',
+        paragraphs: ['Before the truck moves, identify the person who receives delay notices, the required channel and any submission deadline. Read the rate confirmation and relevant carrier terms together. Ask for clarification when they conflict or leave a condition unclear.', 'Do not assume that a previous broker’s free time, rate or approval process applies to the next load. Keep the instructions accessible to the driver and the person preparing the request.'],
+      },
+      {
+        id: 'record', title: 'Build a short, factual event record',
+        paragraphs: ['Record appointment, check-in and departure times with the date and local time zone. Keep the load number, facility name, messages and any signed arrival or departure record together. Report a delay promptly using the agreed process; do not wait until invoicing to mention it.', 'For cancelled loads, save the cancellation message and the truck’s status when that message arrived. For approved expenses, retain the receipt and approval. Submit legible, complete records rather than cropped images that omit the reference or total.'],
+      },
+      {
+        id: 'example', title: 'Example: separate the timeline from the amount requested',
+        paragraphs: ['Suppose a truck checks in at 9:00 AM Central, sends a delay update at 10:30 AM and leaves at 1:00 PM. Its event record shows four hours between arrival and departure. That does not, by itself, establish four payable hours.', 'The carrier must still identify the agreed clock start, free-time allowance, eligibility conditions and calculation. Write those separately from the observed timestamps. If an instruction is missing, mark it for clarification instead of guessing a payment amount. This is an example record, not a standard detention policy.'],
+        bullets: ['Observed: arrival 9:00 AM; delay notice 10:30 AM; departure 1:00 PM CT.', 'To verify: the agreed timing rule, allowance and request deadline.', 'To attach: the load reference, notice and supporting facility record.'],
+      },
+      {
+        id: 'close-out', title: 'Track the request until its status is clear',
+        paragraphs: ['Send the organized request through the agreed channel. Record the submission date, recipient, amount requested and missing items. Keep any revised rate confirmation or written response with the same load record.', 'Rai Dispatch can help coordinate documentation and follow-ups within your dispatch agreement. A submitted request is not an approved payment. Agree who handles the next follow-up, and distinguish pending, approved, declined and paid amounts in your records.'],
+      },
+    ],
+    checklistTitle: 'Keep this with the load record',
+    checklist: ['Rate confirmation and applicable conditions', 'Dated arrival, notice and departure records', 'Receipts, approvals and cancellation messages', 'Submission reference and latest written response'],
+    faqs: [
+      { question: 'Is detention automatically payable after two hours?', answer: 'Do not use a universal two-hour assumption. Check the load’s agreed allowance, timing conditions, notice process and evidence requirements before calculating a request.' },
+      { question: 'Can I request detention and layover for the same delay?', answer: 'Ask how the load terms treat the overlap. Do not count the same period twice or assume that both charges apply without confirming the agreement.' },
+      { question: 'Does a cancelled load always qualify for TONU?', answer: 'No automatic payment is promised. Keep the cancellation details and review the applicable conditions with the responsible contact before submitting a request.' },
+      { question: 'Does Rai Dispatch guarantee accessorial payment?', answer: 'No. We support the agreed document and communication process. Approval, payment and any dispute depend on the load terms and the relevant parties.' },
+    ],
+    related: [{ label: 'Rate negotiation support', href: '/services/rate-negotiation' }, { label: 'Dispatch paperwork support', href: '/services/paperwork-support' }, { label: 'Appointment scheduling', href: '/services/scheduling' }, { label: 'Dispatch fee billing questions', href: '/resources/truck-dispatch-fees' }],
+    sources: [{ label: 'Truckstop: accessorial terminology and load documentation', href: 'https://truckstop.com/blog/accessorial-charges/' }, { label: 'CloudTrucks: an example of a provider-specific accessorial process', href: 'https://cloudtrucks.zendesk.com/hc/en-us/articles/13975260832151-CloudTrucks-Accessorial-Policies-for-Drivers' }],
+  },
   ...ADDITIONAL_GUIDES,
   {
     slug: 'evaluate-freight-rate-per-mile', title: 'How to evaluate a freight rate before booking', metaTitle: 'Freight Rate Per Mile: How to Evaluate a Load',
@@ -340,7 +395,7 @@ export const GUIDES: CarrierGuide[] = [
   {
     slug: 'truck-dispatch-fees', title: 'Truck dispatch fees by equipment', metaTitle: `Truck Dispatch Fees by Equipment | ${DISPATCH_RATE_RANGE}`,
     description: `Compare ${DISPATCH_RATE_RANGE} truck dispatch fees by equipment. See dry van, reefer, flatbed, hotshot, box truck and cargo van pricing, with a dedicated dispatcher included.`,
-    eyebrow: 'Carrier guide · Dispatch pricing', readTime: '5 minute read', published: '2026-09-24',
+    eyebrow: 'Carrier guide · Dispatch pricing', readTime: '5 minute read', published: '2026-09-24', updated: '2026-09-27',
     intro: `Rai Dispatch charges ${DISPATCH_RATE_RANGE} according to equipment type and provides a dedicated dispatcher. Use the schedule below to find your rate, then confirm what revenue the fee applies to, the included service scope and the billing terms before starting.`,
     highlights: ['Exact rates by equipment', 'Dedicated dispatcher provided', 'Clear billing terms'],
     sections: [
@@ -359,7 +414,7 @@ export const GUIDES: CarrierGuide[] = [
       { question: 'Does the fee include fuel, insurance or factoring?', answer: 'No. A dispatch fee pays for the agreed dispatch service. Carrier operating expenses and third-party services are separate unless a specific agreement states otherwise.' },
       { question: 'Should I choose a dispatcher only by the percentage?', answer: 'No. Compare the billing base, service scope, communication, contract terms and fit for your equipment alongside the fee.' },
     ],
-    related: [{ label: 'Rai Dispatch pricing', href: '/pricing' }, { label: 'How to choose a dispatcher', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Evaluate a freight rate', href: '/resources/evaluate-freight-rate-per-mile' }],
+    related: [{ label: 'Rai Dispatch pricing', href: '/pricing' }, { label: 'Detention and accessorial documentation', href: '/resources/detention-layover-tonu-documentation' }, { label: 'How to choose a dispatcher', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Evaluate a freight rate', href: '/resources/evaluate-freight-rate-per-mile' }],
   },
   {
     slug: 'how-to-choose-a-truck-dispatcher', title: 'How to choose a truck dispatcher', metaTitle: 'How to Choose a Truck Dispatch Service',

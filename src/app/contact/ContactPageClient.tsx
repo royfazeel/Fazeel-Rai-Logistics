@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import StaticPhoto from '@/components/StaticPhoto';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -185,7 +185,7 @@ export default function ContactPageClient() {
           PAGE HERO — compact dark band over the highway photo.
           ============================================================ */}
       <section className="relative bg-navy-950 text-white py-16 sm:py-20 overflow-hidden">
-        <Image
+        <StaticPhoto
           fill
           priority
           sizes="100vw"

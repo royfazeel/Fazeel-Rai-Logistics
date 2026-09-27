@@ -59,7 +59,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
       <ContentJsonLd data={guide ? {
         '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`,
         headline: content.title, description: content.description, url,
-        datePublished: guide.published, dateModified: guide.published, inLanguage: 'en-US',
+        datePublished: guide.published, dateModified: guide.updated ?? guide.published, inLanguage: 'en-US',
         author: { '@type': 'Organization', '@id': `${SITE_URL}/#organization`, name: BUSINESS.name, url: SITE_URL },
         publisher: { '@id': `${SITE_URL}/#organization` },
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
@@ -84,7 +84,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
                 <p className="eyebrow">{content.eyebrow}</p>
                 <h1 className="max-w-4xl text-4xl leading-[1.04] sm:text-5xl lg:text-6xl">{content.title}</h1>
                 <p className="mt-6 max-w-3xl text-lg leading-relaxed text-navy-200">{content.intro}</p>
-                {guide && <p className="mt-5 text-sm text-navy-300">By {BUSINESS.name} · <time dateTime={guide.published}>{new Date(`${guide.published}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time> · {guide.readTime}</p>}
+                {guide && <p className="mt-5 text-sm text-navy-300">By {BUSINESS.name} · <time dateTime={guide.published}>{new Date(`${guide.published}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time> · {guide.readTime}{guide.updated && guide.updated !== guide.published && <> · Updated <time dateTime={guide.updated}>{new Date(`${guide.updated}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time></>}</p>}
                 <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white">
                   {content.highlights.map((highlight) => <li key={highlight} className="flex items-center gap-2"><Check size={17} className="shrink-0 text-primary-400" aria-hidden="true" />{highlight}</li>)}
                 </ul>
@@ -136,7 +136,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
                   {content.faqs.map((faq) => <div key={faq.question}><h3 className="mb-2 text-xl text-navy-950">{faq.question}</h3><p className="leading-7 text-navy-700">{faq.answer}</p></div>)}
                 </div>
               </section>
-              {guide?.sources && <section className="mt-10 border-t border-surface-300 pt-6" aria-labelledby="sources-title"><h2 id="sources-title" className="text-2xl">Official reference</h2><ul className="mt-3 space-y-2">{guide.sources.map((source) => <li key={source.href}><a href={source.href} className="text-accent-800 underline underline-offset-4 hover:text-accent-950">{source.label}</a></li>)}</ul><p className="mt-3 text-sm leading-6 text-navy-600">Check the current official source for entity-specific information. This guide explains dispatch preparation and is not a substitute for professional advice on your operation.</p></section>}
+              {guide?.sources && <section className="mt-10 border-t border-surface-300 pt-6" aria-labelledby="sources-title"><h2 id="sources-title" className="text-2xl">References</h2><ul className="mt-3 space-y-2">{guide.sources.map((source) => <li key={source.href}><a href={source.href} className="text-accent-800 underline underline-offset-4 hover:text-accent-950">{source.label}</a></li>)}</ul><p className="mt-3 text-sm leading-6 text-navy-600">Check the current source for entity-specific information. This guide explains dispatch preparation and is not a substitute for professional advice on your operation.</p></section>}
             </div>
 
             <aside className="space-y-6 lg:sticky lg:top-28">

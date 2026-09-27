@@ -5,6 +5,16 @@ import { HOME_HERO_IMAGE, SITE_URL } from '@/lib/seo';
 
 // Dates reflect the actual content revision; do not change merely on a rebuild.
 const CONTENT_UPDATED = '2026-09-24';
+const PAGE_REVISIONS: Record<string, string> = {
+  '': '2026-09-25',
+  '/services': '2026-09-27', '/equipment': '2026-09-27',
+  '/pricing': '2026-09-27', '/contact': '2026-09-27',
+  '/about': '2026-09-27', '/faq': '2026-09-27',
+  '/resources': '2026-09-27', '/equipment/reefer': '2026-09-27',
+  '/services/rate-negotiation': '2026-09-27', '/services/load-booking': '2026-09-27',
+  '/services/paperwork-support': '2026-09-27', '/services/scheduling': '2026-09-27',
+  ...Object.fromEntries(GUIDES.map(guide => [`/resources/${guide.slug}`, guide.updated ?? guide.published])),
+};
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     '', '/services', '/equipment', '/pricing', '/contact', '/about', '/faq',
@@ -16,7 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
   return paths.map((path) => ({
     url: `${SITE_URL}${path}`,
-    lastModified: CONTENT_UPDATED,
+    lastModified: PAGE_REVISIONS[path] ?? CONTENT_UPDATED,
     ...(path === '' ? { images: [`${SITE_URL}${HOME_HERO_IMAGE}`] } : {}),
   }));
 }

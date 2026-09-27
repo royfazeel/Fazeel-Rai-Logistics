@@ -1,12 +1,13 @@
 'use client';
 
-import Image from 'next/image';
+import StaticPhoto from '@/components/StaticPhoto';
+import type { StaticPhotoSource } from '@/lib/static-photo-assets';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Pause, Play } from 'lucide-react';
 
 interface VideoBackdropProps {
   src: string;
-  poster: string;
+  poster: StaticPhotoSource;
   loading?: 'eager' | 'lazy';
   className?: string;
 }
@@ -183,7 +184,7 @@ export default function VideoBackdrop({ src, poster, loading = 'lazy', className
   const label = isLoading ? 'Cancel video loading' : isPlaying ? 'Pause video' : issue === 'error' ? 'Retry video' : 'Play background video';
 
   return <>
-    <Image src={poster} alt="" aria-hidden="true" fill priority={loading === 'eager'} sizes="100vw" className={`object-cover ${className}`} />
+    <StaticPhoto src={poster} alt="" aria-hidden="true" fill priority={loading === 'eager'} sizes="100vw" className={`object-cover ${className}`} />
     <video
       ref={videoRef}
       className={`video-backdrop ${className}`}

@@ -69,14 +69,14 @@ export const EQUIPMENT_TYPES = [
     name: 'Dry Vans',
     percentage: getDispatchRateLabel('dry-van'),
     description: 'Dry van dispatch for regional and over-the-road carriers hauling general freight.',
-    benefits: ['Coast-to-coast lanes', 'Consistent freight', 'Rate negotiation expertise'],
+    benefits: ['Coast-to-coast lane planning', 'Equipment-matched load search', 'Rate negotiation support'],
   },
   {
     id: 'reefer',
     name: 'Reefers',
     percentage: getDispatchRateLabel('reefer'),
     description: 'Temperature-controlled freight dispatch with time-sensitive load expertise.',
-    benefits: ['Temperature-controlled loads', 'Top produce lanes', 'Time-critical shipments'],
+    benefits: ['Temperature-instruction review', 'Reefer lane planning', 'Appointment coordination'],
   },
   {
     id: 'flatbed',

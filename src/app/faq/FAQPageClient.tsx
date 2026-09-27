@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import StaticPhoto from '@/components/StaticPhoto';
 
 import { useState } from 'react';
 import { Phone, Search } from 'lucide-react';
@@ -23,7 +23,7 @@ export default function FAQPageClient() {
           PAGE HERO — compact dark band with the highway photo.
           ============================================================ */}
       <section className="relative bg-navy-950 text-white py-16 sm:py-20 overflow-hidden">
-        <Image
+        <StaticPhoto
           fill
           priority
           sizes="100vw"
