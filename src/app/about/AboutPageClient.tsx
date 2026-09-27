@@ -16,7 +16,7 @@ import {
   BadgeCheck,
   MessageCircle,
 } from 'lucide-react';
-import { ScrollReveal } from '@/components';
+import ScrollReveal from '@/components/ScrollReveal';
 import { BUSINESS, MEDIA, DISPATCHER, STATS } from '@/lib/constants';
 import { track } from '@/lib/track';
 

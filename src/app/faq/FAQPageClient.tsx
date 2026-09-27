@@ -4,7 +4,8 @@ import StaticPhoto from '@/components/StaticPhoto';
 
 import { useState } from 'react';
 import { Phone, Search } from 'lucide-react';
-import { ScrollReveal, FAQAccordion } from '@/components';
+import ScrollReveal from '@/components/ScrollReveal';
+import FAQAccordion from '@/components/FAQAccordion';
 import { BUSINESS, FAQS, MEDIA } from '@/lib/constants';
 import { track } from '@/lib/track';
 

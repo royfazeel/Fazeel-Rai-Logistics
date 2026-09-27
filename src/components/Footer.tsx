@@ -2,7 +2,6 @@
 
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, ArrowRight, MessageCircle, Clock } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 import { track } from '@/lib/track';
@@ -58,17 +57,15 @@ export default function Footer() {
                 Dedicated dispatchers nationwide. {DISPATCH_RATE_RANGE} fees by equipment.
               </p>
             </div>
-            <motion.a
+            <a
               href={BUSINESS.phoneHref}
               onClick={() => track('call_click', { location: 'footer_cta_banner' })}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xl rounded-md transition-colors"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-bold text-xl rounded-md transition-[background-color,transform] motion-safe:hover:scale-[1.02] motion-safe:active:scale-[0.98] motion-reduce:transition-none"
             >
               <Phone className="w-6 h-6" />
               {BUSINESS.phone}
               <ArrowRight className="w-5 h-5" />
-            </motion.a>
+            </a>
           </div>
         </div>
       </div>

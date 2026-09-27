@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, MessageCircle } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 import { track } from '@/lib/track';
@@ -35,11 +34,15 @@ export default function StickyCallWidgets() {
 
   // Pulse the Call button every 12s — subtle "tap me" signal
   useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
     const interval = setInterval(() => {
       setIsPulsing(true);
-      setTimeout(() => setIsPulsing(false), 2000);
+      timeout = setTimeout(() => setIsPulsing(false), 2000);
     }, 12000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (timeout) clearTimeout(timeout);
+    };
   }, []);
 
   // Inline WhatsApp glyph — lucide-react doesn't include one.
@@ -53,67 +56,52 @@ export default function StickyCallWidgets() {
   return (
     <>
       {/* Desktop Floating Widget */}
-      <AnimatePresence>
-        {isVisible && (
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 24 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed bottom-6 right-6 z-40 hidden md:flex flex-col gap-2 items-end"
-            onMouseEnter={() => setIsExpanded(true)}
-            onMouseLeave={() => setIsExpanded(false)}
-            // Keyboard access: expand while any child (the Call button) has
-            // focus, collapse only when focus leaves the whole stack.
-            onFocus={() => setIsExpanded(true)}
-            onBlur={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                setIsExpanded(false);
-              }
-            }}
-          >
-            {/* Expanded options — Text + WhatsApp stack above Call on hover */}
-            <AnimatePresence>
-              {isExpanded && (
-                <>
-                  <motion.a
-                    href={BUSINESS.whatsappHref}
-                    onClick={() => track('whatsapp_click', { location: 'sticky_desktop_expanded' })}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 12 }}
-                    transition={{ duration: 0.18, delay: 0.05 }}
-                    className="flex items-center gap-2 h-12 px-4 bg-white text-navy-900 text-sm font-semibold rounded-md shadow-medium hover:shadow-strong border border-surface-200 transition-shadow"
-                    aria-label="Message us on WhatsApp"
-                  >
-                    <WhatsAppIcon className="w-4 h-4 text-green-600" />
-                    <span>WhatsApp</span>
-                  </motion.a>
-                  <motion.a
-                    href={BUSINESS.smsHref}
-                    onClick={() => track('sms_click', { location: 'sticky_desktop_expanded' })}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 12 }}
-                    transition={{ duration: 0.18 }}
-                    className="flex items-center gap-2 h-12 px-4 bg-white text-navy-900 text-sm font-semibold rounded-md shadow-medium hover:shadow-strong border border-surface-200 transition-shadow"
-                    aria-label="Send us a text"
-                  >
-                    <MessageCircle className="w-4 h-4 text-primary-600" aria-hidden="true" />
-                    <span>Text Us</span>
-                  </motion.a>
-                </>
-              )}
-            </AnimatePresence>
+      {isVisible && (
+        <div
+          className="fixed bottom-6 right-6 z-40 hidden md:flex flex-col gap-2 items-end"
+          onMouseEnter={() => setIsExpanded(true)}
+          onMouseLeave={() => setIsExpanded(false)}
+          // Keyboard access: expand while any child (the Call button) has
+          // focus, collapse only when focus leaves the whole stack.
+          onFocus={() => setIsExpanded(true)}
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              setIsExpanded(false);
+            }
+          }}
+        >
+          {/* Expanded options — Text + WhatsApp stack above Call on hover */}
+          {isExpanded && (
+            <>
+              <a
+                href={BUSINESS.whatsappHref}
+                onClick={() => track('whatsapp_click', { location: 'sticky_desktop_expanded' })}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 h-12 px-4 bg-white text-navy-900 text-sm font-semibold rounded-md shadow-medium hover:shadow-strong border border-surface-200 transition-shadow motion-reduce:transition-none"
+                aria-label="Message us on WhatsApp"
+              >
+                <WhatsAppIcon className="w-4 h-4 text-green-600" />
+                <span>WhatsApp</span>
+              </a>
+              <a
+                href={BUSINESS.smsHref}
+                onClick={() => track('sms_click', { location: 'sticky_desktop_expanded' })}
+                className="flex items-center gap-2 h-12 px-4 bg-white text-navy-900 text-sm font-semibold rounded-md shadow-medium hover:shadow-strong border border-surface-200 transition-shadow motion-reduce:transition-none"
+                aria-label="Send us a text"
+              >
+                <MessageCircle className="w-4 h-4 text-primary-600" aria-hidden="true" />
+                <span>Text Us</span>
+              </a>
+            </>
+          )}
 
             {/* Call Button — always visible, primary CTA */}
             <a
               href={BUSINESS.phoneHref}
               onClick={() => track('call_click', { location: 'sticky_desktop_call' })}
               className={`group flex items-center gap-3 h-14 pl-3 pr-5 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-md shadow-strong transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/40 ${
-                isPulsing ? 'animate-call-pulse' : ''
+                isPulsing ? 'motion-safe:animate-[call-pulse_2s_ease-in-out_infinite]' : ''
               }`}
               aria-label={`Call ${BUSINESS.phone}`}
             >
@@ -127,9 +115,8 @@ export default function StickyCallWidgets() {
                 <span className="text-base font-bold">{BUSINESS.phone}</span>
               </div>
             </a>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
 
       {/* Mobile Sticky Bottom Bar — Call / Text / WhatsApp */}
       <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden">

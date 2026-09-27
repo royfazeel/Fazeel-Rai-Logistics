@@ -3,7 +3,6 @@
 import StaticPhoto from '@/components/StaticPhoto';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import {
   Phone,
   Mail,
@@ -18,7 +17,7 @@ import {
   MessageCircle,
   AlertTriangle,
 } from 'lucide-react';
-import { ScrollReveal } from '@/components';
+import ScrollReveal from '@/components/ScrollReveal';
 import { BUSINESS, MEDIA, EQUIPMENT_TYPES } from '@/lib/constants';
 import { track } from '@/lib/track';
 import {
@@ -411,9 +410,7 @@ export default function ContactPageClient() {
                   </p>
 
                   {isSubmitted ? (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                    <div
                       className="text-center py-12"
                     >
                       <div className="w-16 h-16 bg-primary-50 border border-primary-100 rounded-md flex items-center justify-center mx-auto mb-6">
@@ -441,7 +438,7 @@ export default function ContactPageClient() {
                       >
                         Send another message
                       </button>
-                    </motion.div>
+                    </div>
                   ) : (
                     <form noValidate onSubmit={handleSubmit} className="space-y-6">
                       {/* Spam trap — hidden from humans and assistive tech. If it

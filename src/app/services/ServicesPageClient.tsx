@@ -18,7 +18,7 @@ import {
   Clock,
   Users,
 } from 'lucide-react';
-import { ScrollReveal } from '@/components';
+import ScrollReveal from '@/components/ScrollReveal';
 import { BUSINESS, MEDIA, SERVICES } from '@/lib/constants';
 import { track } from '@/lib/track';
 

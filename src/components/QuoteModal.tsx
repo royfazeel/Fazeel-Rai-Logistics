@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 import { X, Phone, Send, Check, Loader2, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
 import { track } from '@/lib/track';
@@ -18,6 +18,7 @@ import {
 interface QuoteModalProps {
   isOpen: boolean;
   onClose: () => void;
+  returnFocusTo?: HTMLElement | null;
 }
 
 /* Honeypot wrapper — off-screen rather than display:none, because naive bots
@@ -57,7 +58,7 @@ const EMPTY_FORM = {
  * Accessibility: proper dialog semantics, focus is moved into the panel on
  * open and restored on close, Tab is trapped inside, and Escape closes.
  */
-export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
+export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModalProps) {
   const [formState, setFormState] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -109,12 +110,13 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
   // dismissed first — otherwise it fires against an unmounted component.
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
+  const mounted = useRef(true);
 
   // Focus management: remember the trigger, move focus into the dialog on
   // open, restore it on close, close on Escape, and trap Tab in the panel.
   useEffect(() => {
     if (!isOpen) return;
-    previouslyFocused.current = document.activeElement as HTMLElement | null;
+    previouslyFocused.current = returnFocusTo ?? document.activeElement as HTMLElement | null;
     // Lock the page behind the dialog so the background cannot scroll
     // under it (the Header does the same for the mobile menu).
     const previousOverflow = document.body.style.overflow;
@@ -157,11 +159,13 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
       document.body.style.overflow = previousOverflow;
       previouslyFocused.current?.focus();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, returnFocusTo]);
 
   // Clear any pending auto-close when the modal unmounts.
   useEffect(() => {
+    mounted.current = true;
     return () => {
+      mounted.current = false;
       if (closeTimer.current) clearTimeout(closeTimer.current);
     };
   }, []);
@@ -209,6 +213,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
         // API confirmed the lead was actually delivered — never on a failure,
         // or the campaign optimises towards submissions nobody received.
         track('lead_submit', { source: 'quote_modal' });
+        if (!mounted.current) return;
         setIsSubmitted(true);
 
         // Auto-reset and close after the confirmation has been on screen a beat.
@@ -221,14 +226,14 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
         // Covers 400 validation, 429, 503 not_configured, 502 delivery_failed.
         // Never claim delivery we can't stand behind — show the phone instead
         // and leave the filled-in form intact so nothing is retyped.
-        setSubmitFailed(true);
+        if (mounted.current) setSubmitFailed(true);
       }
     } catch {
       // Network error / offline / request blocked.
-      setSubmitFailed(true);
+      if (mounted.current) setSubmitFailed(true);
     } finally {
       // Always resolves — the user never sits on a spinner.
-      setIsSubmitting(false);
+      if (mounted.current) setIsSubmitting(false);
     }
   };
 
@@ -237,6 +242,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
   const labelCls = 'block text-sm font-medium text-navy-800 mb-1.5';
 
   return (
+    <MotionConfig reducedMotion="user">
     <AnimatePresence>
       {isOpen && (
         <div key="quote-modal" className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -623,5 +629,6 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
         </div>
       )}
     </AnimatePresence>
+    </MotionConfig>
   );
 }

@@ -1,7 +1,10 @@
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import type { Metadata, Viewport } from 'next';
 import { Barlow_Condensed, Inter } from 'next/font/google';
-import { Header, Footer, StickyCallWidgets, MotionProvider, Analytics } from '@/components';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import StickyCallWidgets from '@/components/StickyCallWidgets';
+import Analytics from '@/components/Analytics';
 import { BUSINESS } from '@/lib/constants';
 import { SITE_URL, pageMetadata } from '@/lib/seo';
 import './globals.css';
@@ -80,7 +83,6 @@ export default function RootLayout({
             hydration, then load the external tag after page load and idle. */}
         <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:p-4 focus:text-navy-950">Skip to main content</a>
         <Analytics />
-        <MotionProvider>
           <Header />
           <main id="main-content" className="pt-20">{children}</main>
           <Footer />
@@ -90,7 +92,6 @@ export default function RootLayout({
               src/components/LeadCapturePopup.tsx — re-add <LeadCapturePopup /> here
               to switch it back on. The quote modal is unaffected: it only opens
               when someone clicks a "Get a free setup" / "Get Started" button. */}
-        </MotionProvider>
         {/* Spacer for mobile sticky bar (14 = bar height; +safe-area for notched iOS) */}
         <div className="h-14 mb-safe md:hidden" aria-hidden="true" />
       </body>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, Menu, X, MessageCircle } from 'lucide-react';
 import { BUSINESS, NAVIGATION } from '@/lib/constants';
 import { track } from '@/lib/track';
@@ -68,7 +67,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 motion-reduce:transition-none ${
         overHero
           ? 'bg-navy-950/40 backdrop-blur-sm border-b border-white/10'
           : 'bg-white shadow-soft border-b border-surface-200'
@@ -113,12 +112,10 @@ export default function Header() {
                 >
                   {item.name}
                   {isActive && (
-                    <motion.span
-                      layoutId="nav-active-pill"
+                    <span
                       className={`absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full ${
                         overHero ? 'bg-white' : 'bg-primary-600'
                       }`}
-                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
                   )}
                 </Link>
@@ -145,7 +142,7 @@ export default function Header() {
             <a
               href={BUSINESS.phoneHref}
               onClick={() => track('call_click', { location: 'header_mobile_icon' })}
-              className="md:hidden inline-flex items-center justify-center w-11 h-11 bg-primary-600 text-white rounded-md active:scale-95 transition-transform"
+              className="md:hidden inline-flex items-center justify-center w-11 h-11 bg-primary-600 text-white rounded-md motion-safe:active:scale-95 transition-transform motion-reduce:transition-none"
               aria-label={`Call ${BUSINESS.phone}`}
             >
               <Phone className="w-5 h-5" strokeWidth={2.5} aria-hidden="true" />
@@ -163,103 +160,71 @@ export default function Header() {
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-nav"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                {isMobileMenuOpen ? (
-                  <motion.span
-                    key="x"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <X className="w-6 h-6" />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    <Menu className="w-6 h-6" />
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6" aria-hidden="true" />
+              ) : (
+                <Menu className="w-6 h-6" aria-hidden="true" />
+              )}
             </button>
           </div>
         </div>
       </nav>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            id="mobile-nav"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="xl:hidden bg-white border-t border-surface-200 max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain"
-          >
-            <div className="container-custom py-4 space-y-1">
-              {NAVIGATION.map((item, index) => {
-                const isActive =
-                  item.href === '/'
-                    ? pathname === '/'
-                    : pathname.startsWith(item.href);
-                return (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.04 }}
+      {isMobileMenuOpen && (
+        <div
+          id="mobile-nav"
+          className="xl:hidden bg-white border-t border-surface-200 max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain"
+        >
+          <div className="container-custom py-4 space-y-1">
+            {NAVIGATION.map((item) => {
+              const isActive =
+                item.href === '/'
+                  ? pathname === '/'
+                  : pathname.startsWith(item.href);
+              return (
+                <div key={item.name}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block px-4 py-3 rounded-md font-medium transition-colors ${
+                      isActive
+                        ? 'bg-primary-50 text-primary-700'
+                        : 'text-navy-800 hover:bg-surface-50'
+                    }`}
+                    aria-current={isActive ? 'page' : undefined}
                   >
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`block px-4 py-3 rounded-md font-medium transition-colors ${
-                        isActive
-                          ? 'bg-primary-50 text-primary-700'
-                          : 'text-navy-800 hover:bg-surface-50'
-                      }`}
-                      aria-current={isActive ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Link>
-                  </motion.div>
-                );
-              })}
-              {/* Two-CTA row: Call + Text — equal-sized 48px-tall buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="grid grid-cols-2 gap-2 pt-3 mt-2 border-t border-surface-100"
+                    {item.name}
+                  </Link>
+                </div>
+              );
+            })}
+            {/* Two-CTA row: Call + Text — equal-sized 48px-tall buttons */}
+            <div
+              className="grid grid-cols-2 gap-2 pt-3 mt-2 border-t border-surface-100"
+            >
+              <a
+                href={BUSINESS.phoneHref}
+                onClick={() => { track('call_click', { location: 'header_mobile_menu' }); setIsMobileMenuOpen(false); }}
+                className="inline-flex items-center justify-center gap-2 h-12 px-4 bg-primary-600 text-white font-semibold rounded-md motion-safe:active:scale-[0.98] transition-transform motion-reduce:transition-none"
+                aria-label={`Call ${BUSINESS.phone}`}
               >
-                <a
-                  href={BUSINESS.phoneHref}
-                  onClick={() => { track('call_click', { location: 'header_mobile_menu' }); setIsMobileMenuOpen(false); }}
-                  className="inline-flex items-center justify-center gap-2 h-12 px-4 bg-primary-600 text-white font-semibold rounded-md active:scale-[0.98] transition-transform"
-                  aria-label={`Call ${BUSINESS.phone}`}
-                >
-                  <Phone className="w-4 h-4" aria-hidden="true" />
-                  <span>Call</span>
-                </a>
-                <a
-                  href={BUSINESS.smsHref}
-                  onClick={() => { track('sms_click', { location: 'header_mobile_menu' }); setIsMobileMenuOpen(false); }}
-                  className="inline-flex items-center justify-center gap-2 h-12 px-4 bg-white text-navy-800 font-semibold rounded-md border border-surface-300 active:scale-[0.98] transition-transform"
-                  aria-label="Text us"
-                >
-                  <MessageCircle className="w-4 h-4 text-primary-600" aria-hidden="true" />
-                  <span>Text</span>
-                </a>
-              </motion.div>
+                <Phone className="w-4 h-4" aria-hidden="true" />
+                <span>Call</span>
+              </a>
+              <a
+                href={BUSINESS.smsHref}
+                onClick={() => { track('sms_click', { location: 'header_mobile_menu' }); setIsMobileMenuOpen(false); }}
+                className="inline-flex items-center justify-center gap-2 h-12 px-4 bg-white text-navy-800 font-semibold rounded-md border border-surface-300 motion-safe:active:scale-[0.98] transition-transform motion-reduce:transition-none"
+                aria-label="Text us"
+              >
+                <MessageCircle className="w-4 h-4 text-primary-600" aria-hidden="true" />
+                <span>Text</span>
+              </a>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

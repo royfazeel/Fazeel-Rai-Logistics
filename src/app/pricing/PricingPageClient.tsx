@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { ArrowRight, CheckCircle, Phone } from 'lucide-react';
-import { FAQAccordion, PricingTable } from '@/components';
+import FAQAccordion from '@/components/FAQAccordion';
+import PricingTable from '@/components/PricingTable';
 import FeeCalculator from '@/components/FeeCalculator';
 import StaticPhoto from '@/components/StaticPhoto';
 import { BUSINESS, MEDIA } from '@/lib/constants';

@@ -1,12 +1,60 @@
- 'use client';
+'use client';
 
-import { useState } from 'react';
+import { createContext, useContext, useLayoutEffect, useRef, useState, useCallback } from 'react';
+import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic';
 import Link from 'next/link';
 import { Phone, Check, ArrowRight } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
 import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
-import QuoteModal from './QuoteModal';
 import { track } from '@/lib/track';
+
+const QuoteCloseContext = createContext<(() => void) | null>(null);
+
+function QuoteModalLoading({ error, retry }: DynamicOptionsLoadingProps) {
+  const onClose = useContext(QuoteCloseContext);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    // The native dialog traps focus and supports Escape while the form loads.
+    dialog?.showModal();
+    return () => {
+      dialog?.close();
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  return <dialog
+    ref={dialogRef}
+    aria-labelledby="quote-loading-title"
+    onCancel={event => { event.preventDefault(); onClose?.(); }}
+    className="m-auto rounded-lg bg-white p-6 text-navy-950 shadow-strong backdrop:bg-navy-950/60 backdrop:backdrop-blur-sm"
+    style={{ width: 'min(32rem, calc(100% - 2rem))' }}
+  >
+    <h2 id="quote-loading-title" className="font-display text-2xl font-bold">Get a Free Quote</h2>
+    <p role={error ? 'alert' : 'status'} className="my-4 text-surface-700">{error ? 'The quote form could not load. Please try again or call us.' : 'Loading your quote form…'}</p>
+    <div className="flex flex-wrap gap-3">
+      <button type="button" onClick={() => onClose?.()} className="btn-primary">Close quote form</button>
+      {error && retry ? <button type="button" onClick={retry} className="btn-secondary">Try again</button> : null}
+      {error ? <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'quote_modal_loading_error' })} className="inline-flex items-center font-semibold text-primary-700">{BUSINESS.phone}</a> : null}
+    </div>
+  </dialog>;
+}
+
+const QuoteModal = dynamic(() => import('./QuoteModal'), {
+  ssr: false,
+  loading: QuoteModalLoading,
+});
+
+// Shared by the homepage and pricing preview; mount only after a quote request.
+export function DeferredQuoteModal({ onClose }: { onClose: () => void }) {
+  const [returnFocusTo] = useState(() => typeof document === 'undefined' ? null : document.activeElement as HTMLElement | null);
+  return <QuoteCloseContext.Provider value={onClose}>
+    <QuoteModal isOpen onClose={onClose} returnFocusTo={returnFocusTo} />
+  </QuoteCloseContext.Provider>;
+}
 
 export default function PricingTable() {
   return <div className="space-y-8">
@@ -29,6 +77,7 @@ export default function PricingTable() {
 // This summary is shared by the homepage and the detailed pricing page.
 export function PricingPreview() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const closeQuoteModal = useCallback(() => setIsQuoteModalOpen(false), []);
   return <>
     <div className="grid lg:grid-cols-[0.8fr_1.2fr] rounded-lg border border-surface-200 overflow-hidden shadow-soft">
       <div className="bg-navy-950 text-white p-7 md:p-10">
@@ -44,6 +93,6 @@ export function PricingPreview() {
         <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_preview' })} className="inline-flex items-center gap-2 mt-5 text-primary-700 font-semibold py-2"><Phone className="w-4 h-4" aria-hidden="true" />{BUSINESS.phone}</a>
       </div>
     </div>
-    <QuoteModal isOpen={isQuoteModalOpen} onClose={() => setIsQuoteModalOpen(false)} />
+    {isQuoteModalOpen ? <DeferredQuoteModal onClose={closeQuoteModal} /> : null}
   </>;
 }

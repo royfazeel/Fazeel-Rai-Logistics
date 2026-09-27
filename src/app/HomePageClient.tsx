@@ -1,9 +1,10 @@
 'use client';
 
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Link from 'next/link';
 import HeroPhoto from '@/components/HeroPhoto';
+import { DeferredQuoteModal, PricingPreview } from '@/components/PricingTable';
 import {
   Phone,
   ArrowRight,
@@ -27,13 +28,9 @@ import {
   Calendar,
   BadgeCheck,
 } from 'lucide-react';
-import {
-  ScrollReveal,
-  PricingPreview,
-  FAQAccordion,
-  QuoteModal,
-  VideoBackdrop,
-} from '@/components';
+import ScrollReveal from '@/components/ScrollReveal';
+import FAQAccordion from '@/components/FAQAccordion';
+import VideoBackdrop from '@/components/VideoBackdrop';
 import {
   BUSINESS,
   MEDIA,
@@ -87,6 +84,7 @@ const HERO_STATUS = `Dispatch desk hours · ${condenseHours(BUSINESS.hours)}`;
 
 export default function HomePage() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const closeQuoteModal = useCallback(() => setIsQuoteModalOpen(false), []);
 
   return (
     <>
@@ -815,7 +813,7 @@ export default function HomePage() {
       </section>
 
       {/* Quote Modal */}
-      <QuoteModal isOpen={isQuoteModalOpen} onClose={() => setIsQuoteModalOpen(false)} />
+      {isQuoteModalOpen ? <DeferredQuoteModal onClose={closeQuoteModal} /> : null}
     </>
   );
 }
