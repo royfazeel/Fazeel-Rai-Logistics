@@ -399,6 +399,7 @@ export default function LeadCapturePopup() {
                             {eq.name}
                           </option>
                         ))}
+                        <option value="other">Other truck type</option>
                       </select>
                     </div>
                     <div>

@@ -24,7 +24,9 @@ const footerLinks = {
     { name: 'Power Only', href: '/equipment/power-only' },
     { name: 'Step Deck', href: '/equipment/step-deck' },
     { name: 'Hotshot', href: '/equipment/hotshot' },
-    { name: 'Cargo & Sprinter Van', href: '/equipment/cargo-van' },
+    { name: 'Cargo Vans', href: '/equipment/cargo-van' },
+    { name: 'Sprinter Vans', href: '/equipment/sprinter-van' },
+    { name: 'All Equipment Types', href: '/equipment' },
   ],
   company: [
     { name: 'About Us', href: '/about' },

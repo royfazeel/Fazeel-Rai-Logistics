@@ -4,6 +4,7 @@ import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import { useCallback, useState } from 'react';
 import Link from 'next/link';
 import HeroPhoto from '@/components/HeroPhoto';
+import EquipmentPhoto from '@/components/EquipmentPhoto';
 import { DeferredQuoteModal, PricingPreview } from '@/components/PricingTable';
 import {
   Phone,
@@ -16,10 +17,6 @@ import {
   Users,
   MapPin,
   Zap,
-  Truck,
-  Container,
-  Snowflake,
-  Box,
   Package,
   MessageSquare,
   MessageCircle,
@@ -54,13 +51,7 @@ const iconComponents: Record<string, React.ElementType> = {
   Calendar,
 };
 
-const equipmentIcons: Record<string, React.ElementType> = {
-  'box-truck': Box,
-  'dry-van': Container,
-  'flatbed': Truck,
-  'reefer': Snowflake,
-  'power-only': Package,
-};
+const FEATURED_EQUIPMENT = EQUIPMENT_TYPES.slice(0, 8);
 
 /**
  * Squeezes BUSINESS.hours down to the micro-caps form the hero status line
@@ -319,8 +310,8 @@ export default function HomePage() {
       </section>
 
       {/* ============================================================
-          TRUCK TYPES — dark band, Logity-style equipment picker.
-          Fee percentage is the headline number on each card.
+          TRUCK TYPES — a focused selection with full equipment photos.
+          The complete equipment directory is one click away.
           ============================================================ */}
       <section id="equipment" className="section-padding bg-navy-950 text-white">
         <div className="container-custom">
@@ -331,22 +322,25 @@ export default function HomePage() {
                 Dispatch for your truck and trailer type.
               </h2>
               <p className="text-white/70 text-lg">
-                Dry van, reefer, flatbed, box truck, power only, step deck, hotshot,
-                and cargo van dispatch. We review your equipment and lane needs
-                before you start, with a dedicated dispatcher and equipment-based
-                dispatch fees of {DISPATCH_RATE_RANGE}.
+                From cargo vans to full-size trailers, explore {EQUIPMENT_TYPES.length} equipment
+                types. We review your truck and lane needs before you start,
+                with a dedicated dispatcher and equipment-based dispatch fees of {DISPATCH_RATE_RANGE}.
               </p>
+              <Link href="/equipment" className="mt-5 inline-flex items-center gap-2 py-2 font-semibold text-white underline underline-offset-4 hover:text-primary-300">View all {EQUIPMENT_TYPES.length} equipment types<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {EQUIPMENT_TYPES.map((equipment, idx) => {
-              const Icon = equipmentIcons[equipment.id] || Truck;
+            {FEATURED_EQUIPMENT.map((equipment, idx) => {
               return (
                 <ScrollReveal key={equipment.id} delay={idx * 0.06}>
-                  <div className="group h-full bg-navy-900 border border-white/10 hover:border-primary-500/60 rounded-lg p-6 transition-colors">
+                  <div className="group h-full overflow-hidden bg-navy-900 border border-white/10 hover:border-primary-500/60 rounded-lg transition-colors">
+                    <Link href={`/equipment/${equipment.id}`} aria-label={`Explore ${equipment.name.toLowerCase()} dispatch`} className="block bg-white">
+                      <EquipmentPhoto slug={equipment.id} sizes="(min-width: 1280px) 390px, (min-width: 1024px) 31vw, (min-width: 640px) 46vw, calc(100vw - 40px)" className="w-full h-auto" />
+                    </Link>
+                    <div className="p-6">
                     <div className="flex items-start justify-between mb-5">
-                      <Icon className="w-9 h-9 text-white/60" strokeWidth={1.75} aria-hidden="true" />
+                      <p className="text-xs font-semibold uppercase tracking-wider text-white/60">Dispatch fee</p>
                       <span className="font-display text-2xl font-bold text-primary-500 leading-none">
                         {equipment.percentage}
                         <span className="block text-[11px] font-semibold text-white/50 uppercase tracking-wider mt-1 text-right">
@@ -367,6 +361,7 @@ export default function HomePage() {
                       ))}
                     </ul>
                     <Link href={`/equipment/${equipment.id}`} className="inline-flex items-center gap-2 text-white font-semibold mt-5 py-2">Explore dispatch options<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+                    </div>
                   </div>
                 </ScrollReveal>
               );
@@ -403,6 +398,9 @@ export default function HomePage() {
                     <MessageCircle className="w-4 h-4" aria-hidden="true" />
                     Text us instead
                   </a>
+                  <Link href="/equipment" className="flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white underline underline-offset-4">
+                    Explore all {EQUIPMENT_TYPES.length} equipment types<ArrowRight className="w-4 h-4" aria-hidden="true" />
+                  </Link>
                 </div>
               </div>
             </ScrollReveal>

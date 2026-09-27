@@ -23,6 +23,9 @@ const nextConfig = {
     }, {
       source: '/images/photos/:path*',
       headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+    }, {
+      source: '/images/equipment/:path*',
+      headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
     }];
   },
   images: {

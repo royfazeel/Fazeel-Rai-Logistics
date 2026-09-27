@@ -1,19 +1,13 @@
 'use client';
 
 import { useId, useState } from 'react';
+import { EQUIPMENT_TYPES } from '@/lib/constants';
 import { getDispatchRate } from '@/lib/dispatch-pricing';
 
 const equipmentOptions = [
-  { value: 'dry-van', label: 'Dry van' },
-  { value: 'reefer', label: 'Reefer' },
-  { value: 'flatbed', label: 'Flatbed' },
-  { value: 'hotshot', label: 'Hotshot' },
-  { value: 'box-truck', label: 'Box truck' },
-  { value: 'power-only', label: 'Power only' },
-  { value: 'step-deck', label: 'Step deck' },
-  { value: 'cargo-van', label: 'Cargo or Sprinter van' },
+  ...EQUIPMENT_TYPES.map(({ id, name }) => ({ value: id, label: name })),
   { value: 'other', label: 'Other truck type' },
-] as const;
+];
 
 const dollars = new Intl.NumberFormat('en-US', {
   style: 'currency',

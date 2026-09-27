@@ -32,8 +32,15 @@ export const metadata: Metadata = {
   authors: [{ name: BUSINESS.name }],
   creator: BUSINESS.parentCompany,
   publisher: BUSINESS.name,
-  icons: { icon: [{ url: '/favicon.ico?v=forward-rd-v2', sizes: 'any' }, { url: '/favicon.svg?v=forward-rd-v2', type: 'image/svg+xml' }], apple: '/apple-touch-icon.png?v=forward-rd-v2' },
-  manifest: '/manifest.json?v=forward-rd-v2',
+  icons: {
+    icon: [
+      { url: '/favicon.ico?v=rai-union-v1', type: 'image/x-icon', sizes: '16x16 32x32 48x48 64x64 96x96' },
+      { url: '/favicon-96x96.png?v=rai-union-v1', type: 'image/png', sizes: '96x96' },
+      { url: '/favicon.svg?v=rai-union-v1', type: 'image/svg+xml', sizes: 'any' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png?v=rai-union-v1', type: 'image/png', sizes: '180x180' }],
+  },
+  manifest: '/manifest.json?v=rai-union-v1',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 } },
 };
 
@@ -51,7 +58,7 @@ const jsonLd = {
     {
       '@type': 'Organization', '@id': `${SITE_URL}/#organization`,
       name: BUSINESS.name, alternateName: 'Rai Logistics', legalName: BUSINESS.parentCompany,
-      url: SITE_URL, logo: `${SITE_URL}/icon-512.png?v=forward-rd-v2`,
+      url: SITE_URL, logo: `${SITE_URL}/icon-512.png?v=rai-union-v1`,
       description: BUSINESS.description, telephone: BUSINESS.phone, email: BUSINESS.email,
       address: { '@type': 'PostalAddress', streetAddress: BUSINESS.address.street, addressLocality: BUSINESS.address.city, addressRegion: BUSINESS.address.state, postalCode: BUSINESS.address.zip, addressCountry: 'US' },
       areaServed: { '@type': 'Country', name: 'United States' },

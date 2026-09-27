@@ -6,14 +6,24 @@ import FAQAccordion from '@/components/FAQAccordion';
 import PricingTable from '@/components/PricingTable';
 import FeeCalculator from '@/components/FeeCalculator';
 import StaticPhoto from '@/components/StaticPhoto';
-import { BUSINESS, MEDIA } from '@/lib/constants';
-import { DISPATCH_PRICING_SUMMARY, DISPATCH_RATE_RANGE, getDispatchRate } from '@/lib/dispatch-pricing';
+import { BUSINESS, EQUIPMENT_TYPES, MEDIA } from '@/lib/constants';
+import { DEFAULT_DISPATCH_RATE, DISPATCH_PRICING_SUMMARY, DISPATCH_RATE_RANGE, getDispatchRate } from '@/lib/dispatch-pricing';
 import { track } from '@/lib/track';
+
+const feeExamples = Array.from(new Set(EQUIPMENT_TYPES.map(({ id }) => getDispatchRate(id))))
+  .sort((a, b) => a - b)
+  .map(rate => ({
+    rate,
+    equipment: [
+      ...EQUIPMENT_TYPES.filter(({ id }) => getDispatchRate(id) === rate).map(({ name }) => name),
+      ...(rate === DEFAULT_DISPATCH_RATE ? ['Other truck types'] : []),
+    ].join(', '),
+  }));
 
 const pricingFaqs = [
   { id: 1, question: 'How much does Rai Dispatch charge?', answer: `${DISPATCH_PRICING_SUMMARY} Rates apply to gross revenue on loads we dispatch. Your dedicated dispatcher, service scope, billing base and invoice schedule are confirmed during onboarding.` },
   { id: 2, question: 'Is there a setup fee?', answer: 'There is no setup fee. Before signing, review the dispatch agreement for billing terms, notice requirements, and any outstanding-payment obligations.' },
-  { id: 3, question: 'What is the rate for a truck type not listed?', answer: 'All other truck types have a 7% dispatch fee, including power only and step deck. Tell us your equipment, payload, authority and lanes so we can confirm service availability before starting.' },
+  { id: 3, question: 'What is the rate for a truck type not listed?', answer: `All other truck types have a ${DEFAULT_DISPATCH_RATE}% dispatch fee. Tell us your equipment, payload, freight requirements, authority and lanes so we can confirm service availability before starting.` },
   { id: 4, question: 'Do you offer a fixed weekly or monthly plan?', answer: 'You can ask the dispatch desk about an alternative fixed-fee arrangement. Any fixed weekly or monthly fee, service scope, and billing conditions must be separately quoted and agreed in writing.' },
   { id: 5, question: 'Do I pay on loads I book myself?', answer: 'The advertised percentage applies to loads we dispatch. Confirm how self-booked freight, cancelled loads, detention, layover, and other accessorial payments are treated in your signed agreement.' },
   { id: 6, question: 'Does a dispatch fee guarantee profit or a certain number of loads?', answer: 'No. Freight rates, available loads, operating costs, and your weekly revenue vary. You decide which loads to accept and remain responsible for evaluating the costs of your trucking operation.' },
@@ -39,12 +49,7 @@ export default function PricingPageClient() {
             <table className="w-full text-left text-sm">
               <caption className="px-4 py-3 bg-surface-100 text-left font-semibold">Illustrative dispatch fees on a $2,000 load</caption>
               <thead><tr><th scope="col" className="p-4">Equipment</th><th scope="col" className="p-4">Rate</th><th scope="col" className="p-4">Fee</th></tr></thead>
-              <tbody>{[
-                { label: 'Dry van, flatbed or reefer', slug: 'dry-van' },
-                { label: 'Hotshot', slug: 'hotshot' },
-                { label: 'Box truck or other truck types', slug: 'box-truck' },
-                { label: 'Cargo or Sprinter van', slug: 'cargo-van' },
-              ].map(row => <tr key={row.slug} className="border-t border-surface-200"><th scope="row" className="p-4 font-medium">{row.label}</th><td className="p-4">{getDispatchRate(row.slug)}%</td><td className="p-4">${2000 * getDispatchRate(row.slug) / 100}</td></tr>)}</tbody>
+              <tbody>{feeExamples.map(row => <tr key={row.rate} className="border-t border-surface-200"><th scope="row" className="p-4 font-medium">{row.equipment}</th><td className="p-4">{row.rate}%</td><td className="p-4">${2000 * row.rate / 100}</td></tr>)}</tbody>
             </table>
           </div>
           <p className="text-surface-700 mb-5">These are fee calculations, not load offers or earnings forecasts.</p>

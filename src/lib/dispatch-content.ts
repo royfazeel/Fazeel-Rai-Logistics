@@ -1,5 +1,6 @@
 import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE, getDispatchRate, getDispatchRateLabel } from './dispatch-pricing';
 import { ADDITIONAL_GUIDES, ADDITIONAL_SERVICES } from './expanded-content';
+import { ADDITIONAL_EQUIPMENT_CONTENT } from './additional-equipment-content';
 
 export type ContentLink = { label: string; href: string };
 export type ContentSection = {
@@ -32,7 +33,7 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
     metaTitle: `Dry Van Dispatch Services | ${getDispatchRateLabel('dry-van')} Fee`,
     description: `Dry van dispatch at a ${getDispatchRateLabel('dry-van')} fee for owner-operators and fleets across the lower 48. Dedicated dispatcher, load search, rate negotiation and paperwork support.`,
     eyebrow: 'Enclosed freight. Clear decisions.',
-    intro: 'Your next dry van load should fit more than an empty trailer. Rai Dispatch helps owner-operators and small fleets compare freight against pickup distance, appointment times, operating costs and where the truck will be after delivery.',
+    intro: 'Your next dry van load should fit more than an empty trailer. Rai Dispatch helps owner-operators and small fleets compare full truckload (FTL) freight against pickup distance, appointment times, operating costs and where the truck will be after delivery.',
     highlights: ['Full truckload load search', 'Regional and OTR lane planning', 'Carrier-approved bookings'],
     sections: [
       { id: 'load-fit', title: 'Match the freight to the trailer', paragraphs: ['Dry van freight can include palletized consumer goods, packaged products and other cargo that does not need temperature control. Before discussing a load, we need the actual trailer length, interior dimensions, payload and condition. A 53-foot van is not automatically suitable for every posted van load.', 'We clarify loading method, live load or drop-and-hook instructions, pallet exchange, driver assist and any special requirements. If a shipment calls for food-grade equipment, a particular trailer age or a facility-specific appointment, those details belong in the decision before booking.'] },
@@ -52,7 +53,7 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
     slug: 'reefer', title: 'Reefer dispatch services', metaTitle: `Reefer Dispatch Services | ${getDispatchRateLabel('reefer')} Fee`,
     description: `Reefer dispatch at a ${getDispatchRateLabel('reefer')} fee with a dedicated dispatcher. Temperature-instruction review, appointment coordination and rate negotiation across the lower 48.`,
     eyebrow: 'Temperature-sensitive freight. Attentive coordination.',
-    intro: 'Refrigerated freight adds requirements that a general load search can miss. Rai Dispatch helps reefer carriers evaluate temperature instructions, appointment demands, washouts and trip costs before committing the truck.',
+    intro: 'Refrigerated truck dispatch adds requirements that a general load search can miss. Rai Dispatch helps reefer carriers evaluate temperature instructions, appointment demands, washouts and trip costs before committing the truck.',
     highlights: ['Temperature requirements reviewed', 'Appointment and broker follow-ups', 'Reefer-specific cost discussions'],
     sections: [
       { id: 'temperature', title: 'Clarify the handling instructions before pickup', paragraphs: ['Fresh, chilled and frozen shipments can require different setpoints, operating modes and preparation. We ask for the written commodity and temperature instructions and flag missing or conflicting details for clarification with the broker. The carrier and driver remain responsible for equipment operation and cargo handling.', 'Confirm whether the shipment requires a pre-cooled trailer, continuous operation, temperature records or special cleanliness standards. A rate confirmation should not leave the driver guessing how the equipment is expected to run.'] },
@@ -86,7 +87,7 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
       { question: 'Does flatbed dispatch include oversize permits?', answer: 'Permit services are not assumed to be included. Oversize or overweight work needs a separate capability and scope review before any booking, including responsibility for permits and route restrictions.' },
       { question: 'Can you find loads for a step deck?', answer: 'Step deck equipment has different deck and clearance considerations. See our step deck dispatch page and send the actual trailer specifications for an availability review.' },
     ],
-    related: [{ label: 'Step deck dispatch', href: '/equipment/step-deck' }, { label: 'Rate negotiation', href: '/services/rate-negotiation' }, { label: 'Evaluate a freight rate', href: '/resources/evaluate-freight-rate-per-mile' }],
+    related: [{ label: 'Step deck dispatch', href: '/equipment/step-deck' }, { label: 'Conestoga covered-freight dispatch', href: '/equipment/conestoga' }, { label: 'Rate negotiation', href: '/services/rate-negotiation' }, { label: 'Evaluate a freight rate', href: '/resources/evaluate-freight-rate-per-mile' }],
   },
   {
     slug: 'box-truck', title: 'Box truck dispatch services', metaTitle: `Box Truck Dispatch Services | ${getDispatchRateLabel('box-truck')} Fee`,
@@ -129,10 +130,10 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
     related: [{ label: 'Broker communication', href: '/services/broker-communication' }, { label: 'Load booking process', href: '/services/load-booking' }, { label: 'Dispatch fees explained', href: '/resources/truck-dispatch-fees' }],
   },
   {
-    slug: 'step-deck', title: 'Step deck dispatch services', metaTitle: `Step Deck Dispatch Services | ${getDispatchRateLabel('step-deck')} Fee`,
+    slug: 'step-deck', title: 'Step deck and drop deck dispatch services', metaTitle: `Step Deck & Drop Deck Dispatch | ${getDispatchRateLabel('step-deck')} Fee`,
     description: `Step deck dispatch at a ${getDispatchRateLabel('step-deck')} fee with a dedicated dispatcher. Review upper and lower deck dimensions, loading needs and lanes before confirming service fit.`,
     eyebrow: 'Specialized equipment. Start with the specifications.',
-    intro: 'Step deck freight requires a closer look at usable deck space and cargo height. Request a Rai Dispatch review of your trailer, preferred commodities and lanes before starting a specialized load search.',
+    intro: 'Step deck freight, also described as drop deck freight, requires a closer look at usable deck space and cargo height. Request a Rai Dispatch review of your trailer, preferred commodities and lanes before starting a specialized load search.',
     availability: 'Step deck dispatch availability is subject to equipment, lane and service-capability review before onboarding. Oversize, overweight and permit services require separate confirmation.',
     highlights: ['Upper and lower deck fit', 'Loading and securement questions', 'Availability reviewed first'],
     sections: [
@@ -147,7 +148,7 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
       { question: 'Do you arrange permits or escorts?', answer: 'These services are not automatically included in dispatch. Any permit-dependent move requires a separate scope and capability review with the responsible parties before booking.' },
       { question: 'Can flatbed loads fit on a step deck?', answer: 'Some may, but compatibility depends on usable deck space, loading method, cargo dimensions and shipper requirements. Each shipment needs its own review.' },
     ],
-    related: [{ label: 'Flatbed dispatch', href: '/equipment/flatbed' }, { label: 'Rate negotiation support', href: '/services/rate-negotiation' }, { label: 'Request an equipment review', href: '/contact' }],
+    related: [{ label: 'Flatbed dispatch', href: '/equipment/flatbed' }, { label: 'RGN and lowboy dispatch', href: '/equipment/rgn-lowboy' }, { label: 'Rate negotiation support', href: '/services/rate-negotiation' }, { label: 'Request an equipment review', href: '/contact' }],
   },
   {
     slug: 'hotshot', title: 'Hotshot dispatch services', metaTitle: `Hotshot Dispatch Services | ${getDispatchRateLabel('hotshot')} Fee`,
@@ -171,8 +172,8 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
     related: [{ label: 'Flatbed dispatch', href: '/equipment/flatbed' }, { label: 'Onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Rate per mile guide', href: '/resources/evaluate-freight-rate-per-mile' }],
   },
   {
-    slug: 'cargo-van', title: 'Cargo van and sprinter van dispatch', metaTitle: `Cargo & Sprinter Van Dispatch | ${getDispatchRateLabel('cargo-van')} Fee`,
-    description: `Cargo and sprinter van dispatch at an ${getDispatchRateLabel('cargo-van')} fee with a dedicated dispatcher. Review dimensions, payload, expedited freight and lanes before confirming fit.`,
+    slug: 'cargo-van', title: 'Cargo van dispatch services', metaTitle: `Cargo Van Dispatch Services | ${getDispatchRateLabel('cargo-van')} Fee`,
+    description: `Cargo van dispatch at an ${getDispatchRateLabel('cargo-van')} fee with a dedicated dispatcher. Review small-freight dimensions, payload, loading access and lanes before confirming service fit.`,
     eyebrow: 'Compact equipment. Exact-fit freight.',
     intro: 'Cargo vans and sprinter-style vans need freight that fits their door openings, interior space and payload. Rai Dispatch reviews the vehicle and your operating plan before confirming whether dispatch support is available.',
     availability: 'Cargo van and sprinter van service is subject to equipment, location, lane and service-capability review. Courier contracts, dedicated routes and expedited loads are not guaranteed.',
@@ -189,8 +190,9 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
       { question: 'Will I receive a dedicated courier route?', answer: 'A dedicated courier route is not included or guaranteed by a general dispatch inquiry. Any specific route, schedule or contract must be separately confirmed.' },
       { question: 'Can I stay local with a cargo van?', answer: 'You can request local-only work, but service availability and suitable freight must be assessed for your area. A limited radius can substantially narrow the options.' },
     ],
-    related: [{ label: 'Box truck dispatch', href: '/equipment/box-truck' }, { label: 'Choosing a dispatcher', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Discuss equipment availability', href: '/contact' }],
+    related: [{ label: 'Sprinter van dispatch', href: '/equipment/sprinter-van' }, { label: 'Box truck dispatch', href: '/equipment/box-truck' }, { label: 'Choosing a dispatcher', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Discuss equipment availability', href: '/contact' }],
   },
+  ...ADDITIONAL_EQUIPMENT_CONTENT,
 ];
 
 export const SERVICE_CONTENT: DispatchContent[] = [

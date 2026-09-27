@@ -108,10 +108,59 @@ export const EQUIPMENT_TYPES = [
   },
   {
     id: 'cargo-van',
-    name: 'Cargo & Sprinter Vans',
+    name: 'Cargo Vans',
     percentage: getDispatchRateLabel('cargo-van'),
-    description: 'Cargo van and Sprinter van dispatch for suitable expedited freight, subject to lane and broker availability.',
+    description: 'Cargo van dispatch built around usable dimensions, payload and suitable expedited freight.',
     benefits: ['Interior dimensions reviewed', 'Expedited freight search', 'Availability confirmed by lane'],
+  },
+  {
+    id: 'sprinter-van',
+    name: 'Sprinter Vans',
+    percentage: getDispatchRateLabel('sprinter-van'),
+    description: 'High-roof van dispatch with a review of door clearance, cargo space and time-sensitive delivery requirements.',
+    benefits: ['Door and interior measurements', 'Payload-based load review', 'Expedited scheduling'],
+  },
+  {
+    id: 'conestoga',
+    name: 'Conestoga Trailers',
+    percentage: getDispatchRateLabel('conestoga'),
+    description: 'Dispatch for rolling-tarp trailers, with cargo clearance and loading access checked before booking.',
+    benefits: ['Covered open-deck freight', 'Tarp-system clearance review', 'Loading access coordination'],
+  },
+  {
+    id: 'rgn-lowboy',
+    name: 'RGN & Lowboy Trailers',
+    percentage: getDispatchRateLabel('rgn-lowboy'),
+    description: 'Equipment-first review for low-deck and removable-gooseneck operations, subject to load and permit requirements.',
+    benefits: ['Deck and ramp fit reviewed', 'Cargo dimensions clarified', 'Specialized scope confirmed'],
+  },
+  {
+    id: 'car-hauler',
+    name: 'Car Haulers',
+    percentage: getDispatchRateLabel('car-hauler'),
+    description: 'Vehicle transport dispatch review around usable positions, loading capability and pickup condition records.',
+    benefits: ['Vehicle and trailer fit', 'Pickup and delivery sequencing', 'Condition-document coordination'],
+  },
+  {
+    id: 'tanker',
+    name: 'Tankers',
+    percentage: getDispatchRateLabel('tanker'),
+    description: 'A service-fit review for liquid and bulk operations, with commodity compatibility and handling requirements clarified.',
+    benefits: ['Commodity and tank review', 'Cleaning requirements checked', 'Carrier eligibility confirmed'],
+  },
+  {
+    id: 'dump-truck',
+    name: 'Dump Trucks & Trailers',
+    percentage: getDispatchRateLabel('dump-truck'),
+    description: 'Dispatch review for bulk-material hauling based on body type, payload, site access and the operating area.',
+    benefits: ['Body and material matching', 'Loading-site access review', 'Operating-radius planning'],
+  },
+  {
+    id: 'curtain-side',
+    name: 'Curtain-Side Trailers',
+    percentage: getDispatchRateLabel('curtain-side'),
+    description: 'Curtain-side dispatch with side-loading access, cargo dimensions and protection requirements reviewed.',
+    benefits: ['Side-access load review', 'Usable space and payload', 'Handling instructions clarified'],
   },
 ] as const;
 
@@ -174,7 +223,7 @@ export const FAQS = [
 export const STATS = [
   { label: 'Fees by truck type', value: DISPATCH_RATE_RANGE.replace('%', ''), prefix: '', suffix: '%' },
   { label: 'Contiguous states', value: '48', prefix: '', suffix: '' },
-  { label: 'Equipment types', value: '8', prefix: '', suffix: '' },
+  { label: 'Equipment types', value: String(EQUIPMENT_TYPES.length), prefix: '', suffix: '' },
   { label: 'Days of desk support', value: '6', prefix: '', suffix: '/week' },
 ] as const;
 

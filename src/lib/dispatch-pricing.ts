@@ -2,6 +2,7 @@
 // Keep website copy and written service terms aligned when changing this schedule.
 export const DISPATCH_RATES = {
   'cargo-van': 8,
+  'sprinter-van': 8,
   'box-truck': 7,
   hotshot: 6,
   'dry-van': 5,
@@ -9,6 +10,12 @@ export const DISPATCH_RATES = {
   reefer: 5,
   'power-only': 7,
   'step-deck': 7,
+  conestoga: 7,
+  'rgn-lowboy': 7,
+  'car-hauler': 7,
+  tanker: 7,
+  'dump-truck': 7,
+  'curtain-side': 7,
 } as const;
 
 export const DEFAULT_DISPATCH_RATE = 7;

@@ -3,6 +3,8 @@ import { ArrowRight, Check, ChevronRight, Phone } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
 import { DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
+import EquipmentPhoto from '@/components/EquipmentPhoto';
+import { EQUIPMENT_IMAGES } from '@/lib/equipment-images';
 import type { CarrierGuide, ContentLink, DispatchContent } from '@/lib/dispatch-content';
 
 export function ContentJsonLd({ data }: { data: Record<string, unknown> }) {
@@ -49,11 +51,46 @@ export function ContentCTA() {
   );
 }
 
+function EquipmentHero({ content, feeLabel, path }: { content: DispatchContent; feeLabel: string; path: string }) {
+  return (
+    <header className="border-b border-surface-200 bg-surface-50 py-8 sm:py-12">
+      <div className="container-custom">
+        <ContentBreadcrumbs items={[{ label: 'Equipment', href: '/equipment' }, { label: content.title, href: path }]} />
+        <div className="grid items-center gap-x-12 gap-y-6 lg:grid-cols-2">
+          <div>
+            <p className="eyebrow">{content.eyebrow}</p>
+            <h1 className="text-4xl leading-[1.05] text-navy-950 sm:text-5xl lg:text-[3.25rem]">{content.title}</h1>
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <p className="font-display text-4xl font-bold text-primary-700">{feeLabel}<span className="ml-2 font-sans text-sm font-medium text-navy-600">dispatch fee</span></p>
+              <span className="rounded-full border border-surface-300 bg-white px-3 py-1.5 text-sm font-medium text-navy-700">Dedicated dispatcher</span>
+            </div>
+          </div>
+          <div className="w-full overflow-hidden rounded-xl border border-surface-200 bg-white lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            <EquipmentPhoto slug={content.slug} priority sizes="(min-width: 1280px) 600px, (min-width: 1024px) 46vw, (min-width: 768px) 720px, calc(100vw - 40px)" className="w-full h-auto" />
+          </div>
+          <div className="lg:col-start-1 lg:row-start-2">
+            <p className="max-w-2xl text-base leading-relaxed text-navy-700 sm:text-lg">{content.intro}</p>
+            <ul className="mt-5 space-y-2.5 text-sm text-navy-800">
+              {content.highlights.map((highlight) => <li key={highlight} className="flex items-start gap-2"><Check size={17} className="mt-0.5 shrink-0 text-primary-600" aria-hidden="true" />{highlight}</li>)}
+            </ul>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Link href="/contact" className="btn-primary">Discuss your equipment <ArrowRight size={18} aria-hidden="true" /></Link>
+              <Link href="/pricing" className="inline-flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold text-navy-800 underline underline-offset-4 hover:text-primary-700">View pricing details</Link>
+            </div>
+            <p className="mt-4 max-w-xl text-xs leading-5 text-navy-600">Percentage of gross revenue on loads we dispatch. Confirm the billing base and service scope before starting.</p>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 export default function ContentDetail({ content, category, guide }: { content: DispatchContent; category: 'equipment' | 'services' | 'resources' | 'carriers'; guide?: CarrierGuide }) {
   const categoryLabel = { equipment: 'Equipment', services: 'Services', resources: 'Carrier resources', carriers: 'Carriers' }[category];
   const path = `/${category}/${content.slug}`;
   const url = `${SITE_URL}${path}`;
   const feeLabel = category === 'equipment' ? getDispatchRateLabel(content.slug) : DISPATCH_RATE_RANGE;
+  const equipmentImage = category === 'equipment' ? EQUIPMENT_IMAGES[content.slug] : undefined;
   return (
     <>
       <ContentJsonLd data={guide ? {
@@ -68,6 +105,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
         '@context': 'https://schema.org', '@type': 'Service', '@id': `${url}#service`,
         name: content.title, serviceType: content.title, description: content.availability ? `${content.description} ${content.availability}` : content.description,
         url, provider: { '@id': `${SITE_URL}/#organization` },
+        ...(equipmentImage ? { image: { '@type': 'ImageObject', url: `${SITE_URL}${equipmentImage.src}`, width: equipmentImage.width, height: equipmentImage.height, caption: equipmentImage.alt } } : {}),
         areaServed: { '@type': 'Place', name: 'Contiguous United States' },
         offers: {
           '@type': 'Offer', url: `${SITE_URL}/pricing`,
@@ -76,7 +114,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
       }} />
 
       <article>
-        <header className="bg-navy-950 py-10 text-white sm:py-14">
+        {equipmentImage ? <EquipmentHero content={content} feeLabel={feeLabel} path={path} /> : <header className="bg-navy-950 py-10 text-white sm:py-14">
           <div className="container-custom">
             <ContentBreadcrumbs dark items={[{ label: categoryLabel, href: `/${category}` }, { label: content.title, href: path }]} />
             <div className="grid items-end gap-10 lg:grid-cols-[1fr_320px]">
@@ -98,7 +136,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
               </div>}
             </div>
           </div>
-        </header>
+        </header>}
 
         <div className="container-custom py-12 sm:py-16">
           {content.availability && <p className="mb-10 border-l-4 border-accent-700 bg-accent-50 p-5 text-sm leading-relaxed text-navy-800"><strong>Availability review: </strong>{content.availability}</p>}

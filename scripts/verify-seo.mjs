@@ -5,12 +5,17 @@
  *        node scripts/verify-seo.mjs https://raidispatch.com
  * No browser or third-party service is used. Requires Node 18+.
  */
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
 
 const args = process.argv.slice(2);
 const jsonIndex = args.indexOf('--json');
 const outputPath = jsonIndex >= 0 ? args[jsonIndex + 1] : undefined;
-const requestedBase = args.find((value, index) => !value.startsWith('--') && (jsonIndex < 0 || index !== jsonIndex + 1)) || 'http://localhost:3000';
+const countIndex = args.indexOf('--expect-pages');
+const expectedPageCount = countIndex >= 0 ? Number(args[countIndex + 1]) : 54;
+if (!Number.isInteger(expectedPageCount) || expectedPageCount < 1) throw new Error('--expect-pages must be a positive integer.');
+const optionValues = new Set([jsonIndex, countIndex].filter(index => index >= 0).map(index => index + 1));
+const requestedBase = args.find((value, index) => !value.startsWith('--') && !optionValues.has(index)) || 'http://localhost:3000';
 const base = new URL(requestedBase);
 const canonicalOrigin = 'https://raidispatch.com';
 if (!['http:', 'https:'].includes(base.protocol) || base.username || base.password) throw new Error('Provide a plain HTTP(S) origin without credentials.');
@@ -25,7 +30,8 @@ const checkedLinks = new Set();
 // instruction. Do not import the site's pricing helper: this crawl must catch a
 // wrong value that has propagated consistently through the rendered website.
 const approvedFees = [
-  { slug: 'cargo-van', label: /cargo\s*(?:&|and|\/)\s*sprinter\s*vans?|cargo\s*vans?|sprinter\s*vans?/i, rate: 8 },
+  { slug: 'cargo-van', label: /cargo\s*vans?/i, rate: 8 },
+  { slug: 'sprinter-van', label: /sprinter\s*vans?/i, rate: 8 },
   { slug: 'box-truck', label: /box\s*trucks?/i, rate: 7 },
   { slug: 'hotshot', label: /hot\s*shot(?:\s*trucks?)?/i, rate: 6 },
   { slug: 'dry-van', label: /dry\s*vans?/i, rate: 5 },
@@ -33,6 +39,12 @@ const approvedFees = [
   { slug: 'reefer', label: /reefers?/i, rate: 5 },
   { slug: 'power-only', label: /power[\s-]*only/i, rate: 7 },
   { slug: 'step-deck', label: /step[\s-]*decks?/i, rate: 7 },
+  { slug: 'conestoga', label: /conestogas?/i, rate: 7 },
+  { slug: 'rgn-lowboy', label: /\brgn\b|low[\s-]*boys?/i, rate: 7 },
+  { slug: 'car-hauler', label: /car[\s-]*haulers?/i, rate: 7 },
+  { slug: 'tanker', label: /tankers?/i, rate: 7 },
+  { slug: 'dump-truck', label: /dump\s*trucks?/i, rate: 7 },
+  { slug: 'curtain-side', label: /curtain[\s-]*sides?/i, rate: 7 },
 ];
 const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 7 };
 const percentages = text => [...text.matchAll(/\b(\d+(?:\.\d+)?)\s*%/g)].map(match => Number(match[1]));
@@ -100,13 +112,14 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
     }
   }
   if (path !== '/pricing') return;
-  const tableRows = [...markup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].map(match => plain(match[1]));
+  const tableRows = [...markup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].map(match => ({ text: plain(match[1]), links: elements(match[1], 'a').map(link => link.href) }));
   for (const item of [...approvedFees, otherEquipmentFee]) {
-    const matchingRows = tableRows.filter(row => item.label.test(row));
+    const exactRows = item.slug ? tableRows.filter(row => row.links.some(href => href && normalizedPath(new URL(href, base).pathname) === `/equipment/${item.slug}`)) : [];
+    const matchingRows = exactRows.length ? exactRows : tableRows.filter(row => item.label.test(row.text));
     if (matchingRows.length) {
       for (const row of matchingRows) {
-        const rates = percentages(row);
-        if (rates.length !== 1 || rates[0] !== item.rate) issue(path, 'pricing-table-rate', `Expected ${item.slug || 'other equipment'} row at ${item.rate}%; received ${JSON.stringify(row)}.`);
+        const rates = percentages(row.text);
+        if (rates.length !== 1 || rates[0] !== item.rate) issue(path, 'pricing-table-rate', `Expected ${item.slug || 'other equipment'} row at ${item.rate}%; received ${JSON.stringify(row.text)}.`);
       }
     } else {
       // Supports a semantic equipment/rate card if the page is not a table.
@@ -130,6 +143,46 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
   for (const offer of otherOffers) checkOfferFee(path, offer, otherEquipmentFee.rate, 'other equipment');
 }
 
+// These checks use the approved URL convention, not the implementation's image
+// manifest. Copy/paste errors linking another truck's photo must fail the audit.
+function equipmentPhoto(url, slug) {
+  try {
+    const parsed = new URL(url, base);
+    if (![base.origin, canonicalOrigin].includes(parsed.origin)) return undefined;
+    const match = parsed.pathname.match(new RegExp(`^/images/equipment/${slug}-(\\d+)-v\\d+\\.(?:webp|avif|png)$`));
+    return match ? { width: Number(match[1]), height: Number(match[1]) * 2 / 3, url: parsed } : undefined;
+  } catch { return undefined; }
+}
+function checkEquipmentPhotos(path, markup, metas, nodes) {
+  const equipment = approvedFees.find(item => path === `/equipment/${item.slug}`);
+  if (!equipment) return;
+  const article = markup.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1] || markup;
+  const heroImages = elements(article, 'img').filter(img => equipmentPhoto(img.src, equipment.slug));
+  if (!heroImages.length) issue(path, 'equipment-photo', `No rendered ${equipment.slug} photo found.`);
+  for (const image of heroImages) if (!image.alt || image.alt.trim().length < 12) issue(path, 'equipment-photo-alt', 'Equipment photo must have a descriptive alt attribute.');
+  for (const field of ['og:image', 'twitter:image']) {
+    const images = metas.filter(meta => (meta.property || meta.name) === field);
+    if (!images.some(meta => equipmentPhoto(meta.content, equipment.slug))) issue(path, 'equipment-social-image', `${field} must identify this equipment's photo.`);
+  }
+  const og = metas.find(meta => meta.property === 'og:image');
+  const ogPhoto = equipmentPhoto(og?.content, equipment.slug);
+  if (ogPhoto) {
+    for (const dimension of ['width', 'height']) {
+      const value = metas.find(meta => meta.property === `og:image:${dimension}`)?.content;
+      if (Number(value) !== ogPhoto[dimension]) issue(path, 'equipment-image-dimensions', `og:image:${dimension} must be ${ogPhoto[dimension]} for ${og.content}; found ${value}.`);
+    }
+  }
+  const services = nodes.filter(node => hasType(node, 'Service') && (node.url === canonicalFor(path) || node['@id'] === `${canonicalFor(path)}#service`));
+  for (const service of services) {
+    const image = [service.image].flat().find(image => equipmentPhoto(typeof image === 'string' ? image : image?.url || image?.contentUrl, equipment.slug));
+    if (!image) { issue(path, 'equipment-schema-image', 'Page-specific Service must identify this equipment photo.'); continue; }
+    if (typeof image === 'object') {
+      const photo = equipmentPhoto(image.url || image.contentUrl, equipment.slug);
+      for (const dimension of ['width', 'height']) if (image[dimension] !== undefined && Number(image[dimension]) !== photo[dimension]) issue(path, 'equipment-schema-image-dimensions', `ImageObject ${dimension} must equal ${photo[dimension]}; found ${image[dimension]}.`);
+    }
+  }
+}
+
 console.log(`Auditing server-rendered pages at ${base.origin}; canonical target ${canonicalOrigin}`);
 const sitemap = await fetchPath('/sitemap.xml');
 if (sitemap.status !== 200) issue('/sitemap.xml', 'http', `Expected 200; received ${sitemap.status} ${sitemap.error || ''}`);
@@ -145,6 +198,17 @@ for (const location of locations) {
   } catch { issue('/sitemap.xml', 'invalid-url', location); }
 }
 const uniquePaths = [...new Set(paths)];
+if (uniquePaths.length !== expectedPageCount) issue('/sitemap.xml', 'page-count', `Expected ${expectedPageCount} pages for this release; received ${uniquePaths.length}. Override intentionally with --expect-pages N for later releases.`);
+const sitemapEntries = [...sitemap.text.matchAll(/<url\b[^>]*>([\s\S]*?)<\/url>/gi)].map(match => ({
+  location: decode(match[1].match(/<loc>\s*([\s\S]*?)\s*<\/loc>/)?.[1] || ''),
+  images: [...match[1].matchAll(/<image:loc>\s*([\s\S]*?)\s*<\/image:loc>/g)].map(image => decode(image[1])),
+}));
+for (const equipment of approvedFees) {
+  const path = `/equipment/${equipment.slug}`;
+  if (!uniquePaths.includes(path)) issue('/sitemap.xml', 'equipment-route', `Missing ${path}.`);
+  const entry = sitemapEntries.find(entry => entry.location === canonicalFor(path));
+  if (!entry?.images.some(url => url.startsWith(`${canonicalOrigin}/`) && equipmentPhoto(url, equipment.slug))) issue('/sitemap.xml', 'equipment-image', `Missing canonical ${equipment.slug} image reference for ${path}.`);
+}
 const robots = await fetchPath('/robots.txt');
 if (robots.status !== 200) issue('/robots.txt', 'http', `Expected 200; received ${robots.status}.`);
 if (!new RegExp(`^Sitemap:\\s*${canonicalOrigin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/sitemap\\.xml\\s*$`, 'mi').test(robots.text)) issue('/robots.txt', 'sitemap', 'Missing canonical sitemap directive.');
@@ -204,6 +268,7 @@ await batch(uniquePaths, async path => {
     } catch (error) { issue(path, 'json-ld-syntax', `Block ${index + 1}: ${error.message}`); }
   }
   checkRenderedPricing(path, markup, visibleText, title, description, pageSchemaNodes);
+  checkEquipmentPhotos(path, markup, metas, pageSchemaNodes);
   for (const anchor of elements(markup, 'a')) {
     if (!anchor.href || /^(mailto:|tel:|sms:|whatsapp:|data:)/i.test(anchor.href)) continue;
     try {
@@ -234,7 +299,7 @@ await batch(internalLinks, async link => {
 });
 
 const report = { baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
-if (outputPath) await writeFile(outputPath, JSON.stringify(report, null, 2) + '\n');
+if (outputPath) { await mkdir(dirname(outputPath), { recursive: true }); await writeFile(outputPath, JSON.stringify(report, null, 2) + '\n'); }
 for (const failure of failures) console.error(`FAIL ${failure.path} [${failure.check}] ${failure.detail}`);
 for (const warning of warnings) console.warn(`WARN ${warning.path} [${warning.check}] ${warning.detail}`);
 console.log(`${failures.length ? 'FAIL' : 'PASS'}: ${pages.length}/${locations.length} sitemap pages; ${checkedLinks.size} internal link targets; ${failures.length} failures; ${warnings.length} advisory warnings.`);

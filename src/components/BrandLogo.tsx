@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-/** The approved Forward RD identity, with a matching version for each surface. */
+/** The approved RAI Union identity, with a matching version for each surface. */
 export default function BrandLogo({
   onDark = false,
   className = '',
@@ -14,8 +14,8 @@ export default function BrandLogo({
     <Image
       src={`/brand/rai-dispatch-logo-${onDark ? 'dark' : 'light'}.svg`}
       alt="Rai Dispatch — Truck Dispatch Services"
-      width={1208}
-      height={166}
+      width={1330}
+      height={200}
       className={`h-auto ${className}`}
       priority={priority}
     />

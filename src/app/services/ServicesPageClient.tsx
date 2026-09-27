@@ -253,6 +253,8 @@ export default function ServicesPageClient() {
               { slug: 'regional-dispatch', title: 'Regional dispatch', description: 'Plan around your home base, preferred states, pickup radius and weekly schedule.' },
               { slug: 'otr-dispatch', title: 'OTR and long-haul dispatch', description: 'Review outbound trips, delivery windows, reload options and time away from home.' },
               { slug: 'dedicated-dispatcher', title: 'Dedicated dispatcher support', description: 'Agree on your dispatch contact, load approval, status updates and communication hours.' },
+              { slug: 'expedited-dispatch', title: 'Expedited freight dispatch', description: 'Coordinate time-sensitive freight around actual equipment, pickup readiness and achievable appointments.' },
+              { slug: 'backhaul-dispatch', title: 'Backhaul and reload dispatch', description: 'Review return-load options, destination freight and empty miles before committing to the next trip.' },
             ].map(plan => (
               <Link key={plan.slug} href={`/services/${plan.slug}`} className="rounded-lg border border-navy-600 bg-navy-900 p-7 hover:border-primary-400">
                 <h3 className="font-display text-2xl font-bold">{plan.title}</h3>
