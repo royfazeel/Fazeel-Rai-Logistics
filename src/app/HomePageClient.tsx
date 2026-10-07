@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import FAQAccordion from '@/components/FAQAccordion';
-import VideoBackdrop from '@/components/VideoBackdrop';
+import StaticPhoto from '@/components/StaticPhoto';
 import {
   BUSINESS,
   MEDIA,
@@ -757,11 +757,10 @@ export default function HomePage() {
       </section>
 
       {/* ============================================================
-          FINAL CTA — second slab of real footage. A truck rolls past
-          at ground level while the pitch closes.
+          FINAL CTA — static truck photo behind the closing message.
           ============================================================ */}
       <section className="relative section-padding bg-navy-950 text-white overflow-hidden">
-        <VideoBackdrop src={MEDIA.ctaVideo.src} poster={MEDIA.ctaVideo.poster} loading="lazy" />
+        <StaticPhoto src={MEDIA.ctaVideo.poster} alt="" aria-hidden="true" fill sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-navy-950/80" aria-hidden="true" />
 
         <div className="container-custom text-center relative z-10">
