@@ -1,6 +1,6 @@
 # Rai Dispatch indexing audit — October 26, 2026
 
-**Status: fixes implemented and local build/SEO verification passed; production release and new Search Console requests pending.** This record separates the existing live site's measurements from verification of the proposed release.
+**Status: fixes deployed and verified in production. Google accepted the privacy-page indexing request; final indexing and canonical selection remain Google's pending decision.** This record separates the previous live site's measurements from verification of the release.
 
 The audited site is `https://raidispatch.com`, with 54 intended indexable pages. The repository and release baseline is `53c8959` in `royfazeel/Fazeel-Rai-Logistics`; deployment uses the existing Vercel project `fazeel-rai-logistics`.
 
@@ -48,14 +48,22 @@ Local evidence snapshots are retained under `output/seo-oct26/`, including `gsc-
 | Proposed release local assets | 54 pages and 208 first-party resources; zero failures or warnings. |
 | Isolated lead delivery | 17/17 checks passed using a loopback fake email provider. Updated a stale test label to the current Cargo Vans category. Browser contact and quote confirmations accepted formatted phone input and moved focus correctly. |
 | Fee calculator | 121 checks passed across 16 equipment selections. |
-| Production release of these fixes | Pending. |
-| Post-release public SEO/indexing regression crawl | Pending. |
-| New Search Console sitemap/reindexing requests | Pending. |
+| Production release of these fixes | Commit `97b3fe706b22dd37b4995e6224bf0e77e4d0fde9`, Vercel Production / Ready on October 26. [Deployment](https://vercel.com/fazeel-arshads-projects/fazeel-rai-logistics/6vt5bXDaEZtBMu2STTzUhshnsGyt). |
+| Post-release public SEO/indexing regression crawl | 54/54 pages, 327 internal targets and 385 routing/indexing requests passed with zero failures/warnings; 208 first-party assets also passed. Evidence: `production-seo.json`, `production-indexing.json`, `production-assets.json`. |
+| Runtime error review | Vercel reported no runtime error clusters in the preceding hour. This is a bounded observation, not a guarantee about future errors. |
+| Google live privacy inspection | At 18:52 PKT, Google reported “URL is available to Google” and “Page can be indexed.” |
+| New Search Console reindexing request | Google confirmed “Indexing requested” for `/privacy`, adding it to a priority crawl queue. |
+| Updated sitemap | Resubmitted successfully October 26. Google immediately reported Success, last read October 26, and 54 discovered pages. |
+| Canonical validation | “Validation started,” dated October 26, for the duplicate-canonical issue. Completion remains pending with Google. |
+
+The optional manual `/resources` indexing request failed twice in Search Console with a reCAPTCHA service connection error. No success is claimed for that individual request. It remains included in the successfully processed 54-URL sitemap; the existing 13-page discovered validation continues. The separate privacy request succeeded without a manual CAPTCHA challenge. Evidence includes `gsc-privacy-indexing-requested.png`, `gsc-canonical-validation-started.png`, and `gsc-sitemap-after.txt`.
+
+Browser verification also passed contact/quote success, confirmation focus, form reset, mobile Tab/Shift+Tab containment, Escape focus restoration and release of mobile scroll locking at desktop width. No production lead was submitted. Git's command-line push had no login and the connector lacked repository write access; the existing signed-in GitHub Desktop session successfully pushed the same reviewed commit. No credentials were extracted or changed.
 
 iCloud-backed dependency files in the workspace were dataless, so verification used a clean temporary directory under `/tmp` with `npm ci` from the committed lockfile. This avoided treating unavailable local dependency files as an application build failure. The temporary build does not itself establish that production serves these changes.
 
 ## Completion criteria and limits
 
-After release, confirm the deployment commit and canonical public host, rerun the SEO and indexing regression scripts against production, check `/privacy` with Search Console's live inspection, and submit the updated sitemap/request indexing as appropriate. Record the resulting confirmations here without treating submission as completed indexing.
+The deployment commit, public host, production crawl and Google's live privacy-page inspection are confirmed above. An accepted indexing request is not completed indexing.
 
 The audit found no general robots or noindex barrier on the intended pages. Google controls recrawling, canonical selection, and indexing; technical fixes cannot guarantee that all pages will be indexed or that the report will update immediately. The old domains must continue redirecting while migration signals consolidate. PageSpeed lab results do not establish real-user Core Web Vitals. No live test email was sent, so inbox delivery is not established by this audit.
