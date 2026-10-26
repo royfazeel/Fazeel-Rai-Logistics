@@ -12,6 +12,7 @@ export function pageMetadata(title: string, description: string, path: string): 
     title: { absolute: `${title} | ${SITE_NAME}` },
     description,
     alternates: { canonical: url },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 } },
     openGraph: {
       type: 'website', locale: 'en_US', siteName: SITE_NAME,
       title: `${title} | ${SITE_NAME}`, description, url,

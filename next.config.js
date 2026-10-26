@@ -7,10 +7,15 @@ const nextConfig = {
 
   // Preserve every path and query when moving the public site to its new domain.
   async redirects() {
-    return ['railogistics.us', 'www.railogistics.us', 'www.raidispatch.com'].map((host) => ({
-      source: '/:path*', has: [{ type: 'host', value: host }],
-      destination: 'https://raidispatch.com/:path*', permanent: true,
-    }));
+    return [
+      ...['railogistics.us', 'www.railogistics.us', 'www.raidispatch.com', 'fazeel-rai-logistics.vercel.app'].map((host) => ({
+        source: '/:path*', has: [{ type: 'host', value: host }],
+        destination: 'https://raidispatch.com/:path*', permanent: true,
+      })),
+      // Next/Vercel also serves the homepage at /index. Consolidate that alias
+      // with a permanent redirect instead of leaving another indexable copy.
+      { source: '/index', destination: '/', permanent: true },
+    ];
   },
   async headers() {
     return [{ source: '/:path*', headers: [

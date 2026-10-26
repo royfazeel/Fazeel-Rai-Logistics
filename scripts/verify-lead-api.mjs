@@ -165,7 +165,7 @@ globalThis.fetch = function (input, options) {
     const [notification, acknowledgement] = deliveryRecords.slice(-2);
     assert.deepEqual(notification.to, [owner]);
     assert.equal(notification.reply_to, carrier);
-    assert.match(notification.subject, /Cargo & Sprinter Vans/);
+    assert.match(notification.subject, /Cargo Vans/);
     assert.deepEqual(acknowledgement.to, [carrier]);
     assert.equal(acknowledgement.reply_to, owner);
     assert.equal(acknowledgement.headers['Auto-Submitted'], 'auto-replied');

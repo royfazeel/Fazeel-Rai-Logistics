@@ -44,14 +44,18 @@ After a production build, with the site running on port 3000:
 
 ```sh
 node scripts/verify-seo.mjs http://localhost:3000
+node scripts/verify-indexing.mjs http://localhost:3000
 ```
 
 The read-only crawler follows the sitemap and checks HTTP status, one H1 per page, unique titles/descriptions, Rai Dispatch branding, self-canonicals, Open Graph URLs, JSON-LD syntax, indexability, internal links/fragments, robots directives, and removed review remnants. It also rejects the obsolete universal 5% ceiling, checks each equipment page's advertised fee and applicable structured data, and checks the pricing table's equipment/rate associations. The expected rates are independent acceptance criteria from the owner's pricing instruction, so an incorrect shared data value cannot make the audit pass by reproducing the same mistake. To retain a JSON report, add `--json /tmp/rai-seo-report.json`.
+
+The indexing regression script checks canonical sitemap URLs, trailing-slash and query variants, permanent old-domain/www/stable-Vercel-host redirects, the `/index` alias, and genuine 404 status/metadata. It uses a mobile Googlebot user-agent string. Local runs send alias Host headers to the local server without following redirects; production runs request the public aliases. Add `--json /tmp/rai-indexing-report.json` to save its report. These checks do not establish Google's actual crawl or indexing decisions. See the [October 26 indexing audit](docs/INDEXING-AUDIT-2026-10-26.md) for Search Console findings, implemented fixes, and release status.
 
 Run the same read-only audit after deployment:
 
 ```sh
 node scripts/verify-seo.mjs https://raidispatch.com
+node scripts/verify-indexing.mjs https://raidispatch.com
 ```
 
 Test the lead API without sending real emails:

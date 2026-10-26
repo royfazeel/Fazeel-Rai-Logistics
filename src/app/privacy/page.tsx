@@ -1,4 +1,4 @@
-import { pageMetadata } from '@/lib/seo';
+import { pageMetadata, SITE_URL } from '@/lib/seo';
 import Link from 'next/link';
 import {
   Shield,
@@ -11,10 +11,11 @@ import {
 } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 
-// Shared effective and revision date for this policy.
-const POLICY_UPDATED = 'September 28, 2026';
+// The site-identity clarification does not change the policy's effective terms.
+const POLICY_EFFECTIVE = 'September 28, 2026';
+const POLICY_UPDATED = 'October 26, 2026';
 
-export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Read how Rai Technologies LLC handles contact details, website operational logs and SMS communications for Rai Dispatch.', "/privacy");
+export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Privacy policy for raidispatch.com, operated by Rai Technologies LLC as Rai Dispatch. Read about contact details, operational logs and SMS communications.', "/privacy");
 
 // Website measurement disclosures reflect removal of Google Ads and GA4 tags.
 // The existing SMS program terms and other policy sections are retained.
@@ -27,11 +28,11 @@ export default function PrivacyPage() {
           <div className="max-w-3xl">
             <p className="eyebrow">Legal · 10DLC compliant</p>
             <h1 className="font-display text-4xl sm:text-5xl font-bold uppercase leading-[1.02] tracking-tight mb-4">
-              Privacy Policy &amp; SMS Terms
+              Rai Dispatch Privacy Policy &amp; SMS Terms
             </h1>
-            <p className="text-white/70 text-lg">{BUSINESS.parentCompany}</p>
+            <p className="text-white/70 text-lg">{BUSINESS.name}, operated by {BUSINESS.parentCompany}</p>
             <p className="text-white/50 text-sm mt-3">
-              Effective Date: {POLICY_UPDATED}
+              Effective Date: {POLICY_EFFECTIVE}
             </p>
           </div>
         </div>
@@ -81,6 +82,12 @@ export default function PrivacyPage() {
         <article className="max-w-3xl">
           {/* 1. Introduction */}
           <Section number="1" title="Introduction">
+            <p>
+              This policy applies to {BUSINESS.name} at{' '}
+              <Link href={SITE_URL} className="text-primary-700 font-medium underline hover:text-primary-800">raidispatch.com</Link>
+              {' '}and the dispatch-related communications described below.
+              {' '}{BUSINESS.name} is operated by {BUSINESS.parentCompany}.
+            </p>
             <p>
               {BUSINESS.parentCompany} (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or
               &ldquo;our&rdquo;) provides truck dispatching services and communicates

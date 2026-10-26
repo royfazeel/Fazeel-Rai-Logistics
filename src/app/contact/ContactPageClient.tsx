@@ -2,7 +2,7 @@
 
 import StaticPhoto from '@/components/StaticPhoto';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Phone,
   Mail,
@@ -113,6 +113,16 @@ export default function ContactPageClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitFailed, setSubmitFailed] = useState(false);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const focusNameAfterReset = useRef(false);
+
+  useEffect(() => {
+    if (isSubmitted) successHeadingRef.current?.focus();
+    else if (focusNameAfterReset.current) {
+      focusNameAfterReset.current = false;
+      document.getElementById('contact-name')?.focus();
+    }
+  }, [isSubmitted]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -172,9 +182,12 @@ export default function ContactPageClient() {
   };
 
   const resetForm = () => {
+    focusNameAfterReset.current = true;
     setIsSubmitted(false);
     setSubmitFailed(false);
     setFormState(EMPTY_FORM);
+    setErrors({});
+    setTouched({});
   };
 
   return (
@@ -415,7 +428,7 @@ export default function ContactPageClient() {
                       <div className="w-16 h-16 bg-primary-50 border border-primary-100 rounded-md flex items-center justify-center mx-auto mb-6">
                         <Check className="w-8 h-8 text-primary-600" aria-hidden="true" />
                       </div>
-                      <h3 className="font-display text-2xl font-bold text-navy-950 mb-3">
+                      <h3 ref={successHeadingRef} tabIndex={-1} className="font-display text-2xl font-bold text-navy-950 mb-3 focus:outline-none">
                         Message sent
                       </h3>
                       <p className="text-surface-700 mb-6">
@@ -496,7 +509,8 @@ export default function ContactPageClient() {
                             inputMode="tel"
                             autoComplete="tel"
                             required
-                            maxLength={14}
+                            // Allow pasted country codes and punctuation before masking.
+                            maxLength={32}
                             value={formState.phone}
                             onChange={(e) => {
                               const formatted = formatUsPhone(e.target.value);

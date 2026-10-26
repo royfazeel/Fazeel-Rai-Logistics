@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import StickyCallWidgets from '@/components/StickyCallWidgets';
 import { BUSINESS } from '@/lib/constants';
-import { SITE_URL, pageMetadata } from '@/lib/seo';
+import { SITE_URL } from '@/lib/seo';
 import './globals.css';
 
 /* Barlow Condensed for display type (headings, big numbers, wordmark) —
@@ -24,7 +24,8 @@ const bodyFont = Inter({
 });
 
 export const metadata: Metadata = {
-  ...pageMetadata(`Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees`, `Truck dispatch across the lower 48 with a dedicated dispatcher for every truck. ${DISPATCH_RATE_RANGE} of gross on dispatched loads, free setup and no forced dispatch.`, '/'),
+  // Real pages supply their own canonical, social metadata and indexing rules.
+  // Error pages must not inherit a homepage canonical or an affirmative index tag.
   title: { default: `Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees | Rai Dispatch`, template: '%s | Rai Dispatch' },
   metadataBase: new URL(SITE_URL),
   applicationName: 'Rai Dispatch',
@@ -40,7 +41,6 @@ export const metadata: Metadata = {
     apple: [{ url: '/apple-touch-icon.png?v=rai-union-v1', type: 'image/png', sizes: '180x180' }],
   },
   manifest: '/manifest.json?v=rai-union-v1',
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 } },
 };
 
 /* Tints the browser chrome on mobile (Android Chrome, iOS Safari) with

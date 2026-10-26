@@ -106,9 +106,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
   const [submitFailed, setSubmitFailed] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
-  // Tracked so the post-success auto-close can be cancelled if the modal is
-  // dismissed first — otherwise it fires against an unmounted component.
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
   const mounted = useRef(true);
 
@@ -127,9 +125,9 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
       panel
         ? Array.from(
             panel.querySelectorAll<HTMLElement>(
-              'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+              'a[href], button, input, select, textarea, [tabindex]'
             )
-          )
+          ).filter(element => element.tabIndex >= 0 && !element.hasAttribute('disabled') && !element.closest('[aria-hidden="true"]'))
         : [];
     focusables()[0]?.focus();
 
@@ -144,7 +142,10 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
       if (els.length === 0) return;
       const first = els[0];
       const last = els[els.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
+      if (!panel?.contains(document.activeElement)) {
+        e.preventDefault();
+        (e.shiftKey ? last : first).focus();
+      } else if (e.shiftKey && document.activeElement === first) {
         e.preventDefault();
         last.focus();
       } else if (!e.shiftKey && document.activeElement === last) {
@@ -161,12 +162,15 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
     };
   }, [isOpen, onClose, returnFocusTo]);
 
-  // Clear any pending auto-close when the modal unmounts.
+  // Keep the confirmation available until the visitor chooses to close it.
+  useEffect(() => {
+    if (isOpen && isSubmitted) successHeadingRef.current?.focus();
+  }, [isOpen, isSubmitted]);
+
   useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
-      if (closeTimer.current) clearTimeout(closeTimer.current);
     };
   }, []);
 
@@ -214,13 +218,6 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
         track('lead_submit', { source: 'quote_modal' });
         if (!mounted.current) return;
         setIsSubmitted(true);
-
-        // Auto-reset and close after the confirmation has been on screen a beat.
-        closeTimer.current = setTimeout(() => {
-          setIsSubmitted(false);
-          setFormState(EMPTY_FORM);
-          onClose();
-        }, 4500);
       } else {
         // Covers 400 validation, 429, 503 not_configured, 502 delivery_failed.
         // Never claim delivery we can't stand behind — show the phone instead
@@ -298,7 +295,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                   <div className="w-16 h-16 bg-primary-50 border border-primary-100 rounded-md flex items-center justify-center mx-auto mb-4">
                     <Check className="w-8 h-8 text-primary-600" />
                   </div>
-                  <h3 className="text-xl font-display font-bold text-navy-950 mb-2">
+                  <h3 ref={successHeadingRef} tabIndex={-1} className="text-xl font-display font-bold text-navy-950 mb-2 focus:outline-none">
                     Request sent
                   </h3>
                   <p className="text-surface-600">
@@ -313,6 +310,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                     </a>{' '}
                     or text us and we&apos;ll take it from there.
                   </p>
+                  <button type="button" onClick={onClose} className="btn-primary mt-6">Done</button>
                 </motion.div>
               ) : (
                 <form noValidate onSubmit={handleSubmit} className="space-y-4">
@@ -374,7 +372,8 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                         inputMode="tel"
                         required
                         autoComplete="tel"
-                        maxLength={14}
+                        // Allow pasted country codes and punctuation before masking.
+                        maxLength={32}
                         value={formState.phone}
                         onChange={(e) => {
                           const formatted = formatUsPhone(e.target.value);
