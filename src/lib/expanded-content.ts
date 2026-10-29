@@ -23,7 +23,7 @@ export const ADDITIONAL_SERVICES: DispatchContent[] = [
       { question: 'Do you provide local truck dispatch near my location?', answer: 'Share your location, radius and equipment. We coordinate remotely and review whether the available service and freight fit local or regional work in your area.' },
       { question: 'Can I change my preferred region?', answer: 'Yes. Update your preferences and available dates before the next search. Existing bookings and their agreed obligations still need to be handled appropriately.' },
     ],
-    related: [{ label: 'Nationwide service areas', href: '/service-areas' }, { label: 'OTR dispatch', href: '/services/otr-dispatch' }, { label: 'Box truck dispatch', href: '/equipment/box-truck' }, { label: 'Dispatch pricing', href: '/pricing' }],
+    related: [{ label: 'Compare local, regional and OTR plans', href: '/resources/local-vs-regional-vs-otr-trucking' }, { label: 'Nationwide service areas', href: '/service-areas' }, { label: 'OTR dispatch', href: '/services/otr-dispatch' }, { label: 'Box truck dispatch', href: '/equipment/box-truck' }, { label: 'Dispatch pricing', href: '/pricing' }],
   },
   {
     slug: 'otr-dispatch', title: 'OTR and long-haul truck dispatch services',
@@ -45,7 +45,7 @@ export const ADDITIONAL_SERVICES: DispatchContent[] = [
       { question: 'Are backhauls or return loads guaranteed?', answer: 'No. We consider return options when planning, but availability, requirements and appointments change. A particular load must be approved and booked before it is treated as confirmed.' },
       { question: 'Can a small fleet use OTR dispatch support?', answer: 'Yes. Identify each truck, its availability and the people authorized to approve loads. We review the coordination needs and service scope with the fleet before onboarding.' },
     ],
-    related: [{ label: 'Small fleet dispatch', href: '/carriers/small-fleets' }, { label: 'Backhaul and reload support', href: '/services/backhaul-dispatch' }, { label: 'Dry van dispatch', href: '/equipment/dry-van' }, { label: 'Reefer dispatch', href: '/equipment/reefer' }, { label: 'Evaluate a freight rate', href: '/resources/evaluate-freight-rate-per-mile' }],
+    related: [{ label: 'Local, regional or OTR planning guide', href: '/resources/local-vs-regional-vs-otr-trucking' }, { label: 'Small fleet dispatch', href: '/carriers/small-fleets' }, { label: 'Backhaul and reload support', href: '/services/backhaul-dispatch' }, { label: 'Dry van dispatch', href: '/equipment/dry-van' }, { label: 'Reefer dispatch', href: '/equipment/reefer' }, { label: 'Evaluate a freight rate', href: '/resources/evaluate-freight-rate-per-mile' }],
   },
   {
     slug: 'dedicated-dispatcher', title: 'Dedicated truck dispatcher support',
@@ -67,7 +67,7 @@ export const ADDITIONAL_SERVICES: DispatchContent[] = [
       { question: 'Does this include guaranteed dedicated lanes?', answer: 'No. Dedicated freight requires a separately confirmed arrangement. A dispatcher relationship alone does not establish recurring loads, a particular lane or a promised weekly gross.' },
       { question: 'What if my usual contact is unavailable?', answer: 'Ask about the backup and escalation process during onboarding. Keep the agreed contact details accessible to the carrier office and driver before a load begins.' },
     ],
-    related: [{ label: 'Owner-operator dispatch', href: '/carriers/owner-operators' }, { label: 'Broker communication', href: '/services/broker-communication' }, { label: 'Choose a dispatcher', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Contact Rai Dispatch', href: '/contact' }],
+    related: [{ label: 'What your truck dispatcher does', href: '/resources/what-does-a-truck-dispatcher-do' }, { label: 'Owner-operator dispatch', href: '/carriers/owner-operators' }, { label: 'Broker communication', href: '/services/broker-communication' }, { label: 'Choose a dispatcher', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Contact Rai Dispatch', href: '/contact' }],
   },
   {
     "slug": "expedited-dispatch",
@@ -282,6 +282,143 @@ export const ADDITIONAL_SERVICES: DispatchContent[] = [
 ];
 
 export const ADDITIONAL_GUIDES: CarrierGuide[] = [
+  {
+    slug: 'what-does-a-truck-dispatcher-do',
+    title: 'What does a truck dispatcher do for an owner-operator?',
+    metaTitle: 'What Does a Truck Dispatcher Do? Carrier Guide',
+    description: 'See how truck dispatch works from load search to delivery paperwork. Compare dispatcher tasks, carrier decisions, fees and a practical load-approval example.',
+    eyebrow: 'Carrier guide · From empty truck to completed load',
+    published: '2026-10-30', readTime: '6 minute read',
+    intro: 'A truck dispatcher supports the work around a carrier’s loads: searching suitable freight, discussing rates, coordinating bookings, communicating changes and organizing documents. The carrier supplies the truck, driver and operating information and decides which loads to accept. A useful dispatch arrangement makes each handoff clear before the first search.',
+    highlights: ['A complete load workflow', 'Clear carrier approval', 'Tasks and fees explained'],
+    sections: [
+      {
+        id: 'truck-profile', title: '1. Turn truck availability into a search brief',
+        paragraphs: ['The starting point is an accurate truck profile. Your dispatcher needs the equipment dimensions and payload, current location, realistic empty time, preferred lanes, home-time target and handling restrictions. These details turn “find me a load” into a search that can produce workable options.', 'For example, a box truck with no liftgate and a reefer ready after a washout need different searches. If the driver is delayed at the current receiver, update the available time before the next pickup is discussed. A dispatcher works from the information the carrier provides.'],
+      },
+      {
+        id: 'search-review', title: '2. Search freight and check the complete trip',
+        paragraphs: ['Load search can include approved load-board access and the broker contacts used for your operation. A posted opportunity still needs review: is it available, does the equipment fit, will the broker accept the carrier, and can the appointments work? The dispatcher helps collect answers and presents suitable options.', 'Rate negotiation belongs alongside that review. The offered compensation should be considered with pickup deadhead, loaded miles, loading work, waiting and the destination. A higher posted rate may involve more time or empty miles, so the carrier needs the whole trip before deciding.'],
+        table: { caption: 'Information a carrier needs before load approval', headers: ['Part of the proposal', 'What to confirm'], rows: [['Route and timing', 'Pickup and delivery locations, dates, appointments and time zones'], ['Equipment fit', 'Commodity, dimensions, weight, loading method and special instructions'], ['Trip economics', 'Agreed pay, known empty miles, loaded miles and extra work'], ['Carrier acceptance', 'Broker requirements, approval status and unresolved conditions']] },
+      },
+      {
+        id: 'approval', title: '3. Obtain carrier approval and keep the written terms',
+        paragraphs: ['At Rai Dispatch, you approve or decline the proposed load. Agree who can give that approval and how it is recorded. The dispatcher then coordinates the booking within the agreed scope and helps check that the written rate confirmation matches the approved details.', 'Suppose a dry van is available Tuesday afternoon, but a proposed pickup has a Tuesday morning appointment. The useful response is to clarify a later window before requesting approval. A good-looking route and rate do not make the original timing possible. If the broker changes the window, review the revised delivery plan too.'],
+      },
+      {
+        id: 'in-transit', title: '4. Keep appointments and status updates connected',
+        paragraphs: ['After booking, the driver and carrier provide actual status while the dispatch desk handles the agreed broker communication and appointment follow-ups. Keep pickup references, contacts and written instructions accessible. Report a delay with the current location, actual status and best available estimate.', 'For a detention or other accessorial request, preserve the agreed terms, arrival and departure records, notices and receipts. The dispatcher can organize and follow up on the request; the responsible party decides approval under the load terms. Confirm the desk hours and escalation process before relying on support during a trip.'],
+      },
+      {
+        id: 'close-load', title: '5. Close the paperwork and prepare the next search',
+        paragraphs: ['A completed delivery still needs a signed record and any supporting documents sent through the carrier’s agreed billing or factoring process. Dispatch paperwork support can help collect and organize those records. Keep the load number, documents and outstanding requests together so the next person can follow the file.', 'Review the actual empty location and time before searching for the next load. If the truck needs cleaning, trailer return or maintenance, include that work in availability. Compare the planned trip with actual total miles and time so future searches use better information.'],
+      },
+      {
+        id: 'scope-cost', title: 'What is included in a truck dispatch service?',
+        paragraphs: [`Rai Dispatch’s support includes agreed load search, rate negotiation, booking coordination, broker communication, route planning and paperwork follow-ups. A dedicated dispatcher and free setup are included. Published percentage fees are ${DISPATCH_RATE_RANGE} by equipment; the agreement confirms the billing base and detailed scope.`, 'Ask separately about subscriptions, insurance, permits, compliance management, accounting and other services. The carrier retains responsibility for its operation. FMCSA explains that the actual activities and relationships determine whether a dispatch service needs broker authority; the job title alone does not settle that question.'],
+      },
+    ],
+    checklistTitle: 'Your first dispatch conversation',
+    checklist: ['Truck specifications and current availability', 'Preferred lanes and home-time needs', 'Authorized load-approval contact', 'Written service scope, fee base and support hours'],
+    faqs: [
+      { question: 'Does a dispatcher find loads for owner-operators?', answer: 'Load search is a core part of the agreed service. Each opportunity still depends on equipment fit, carrier and broker approval, timing and availability. Rai Dispatch presents loads for the carrier’s decision.' },
+      { question: 'Can I reject a load offered by the dispatcher?', answer: 'Yes. At Rai Dispatch, the carrier approves or declines loads. Share the reason and any changed operating preferences so the next search reflects what you can accept.' },
+      { question: 'Is truck dispatch the same as finding a driving job?', answer: 'No. This service supports a carrier operating its own equipment and authority as applicable. It does not provide employment, a truck, a driver or a dispatch training course.' },
+      { question: 'Does dispatch take over carrier compliance and safety?', answer: 'No. The carrier and driver remain responsible for safe and lawful operation. Any additional administrative services must be specified separately in the agreement.' },
+    ],
+    related: [{ label: 'Truck dispatch services and scope', href: '/services' }, { label: 'Owner-operator dispatch support', href: '/carriers/owner-operators' }, { label: 'Dispatch fees by equipment', href: '/resources/truck-dispatch-fees' }, { label: 'Prepare for carrier onboarding', href: '/resources/carrier-onboarding-checklist' }, { label: 'Truck dispatcher vs freight broker', href: '/resources/truck-dispatcher-vs-freight-broker' }],
+    sources: [{ label: 'FMCSA: definitions of broker and bona fide agents', href: 'https://www.fmcsa.dot.gov/regulations/federal-register-documents/2023-13080' }],
+  },
+  {
+    slug: 'how-to-find-box-truck-loads',
+    title: 'How to find box truck loads that fit your operation',
+    metaTitle: 'Find Box Truck Loads | 26-Foot & Straight Trucks',
+    description: 'Find and evaluate box truck loads using actual dimensions, payload, loading access and trip costs. A practical search worksheet for straight-truck carriers.',
+    eyebrow: 'Carrier guide · Better box truck load searches',
+    published: '2026-10-30', readTime: '6 minute read',
+    intro: 'Finding box truck loads starts with a precise equipment profile and a workable search area. A 26-foot box truck, a shorter straight truck and a liftgate-equipped delivery truck can qualify for different work. Use this worksheet to narrow the search, ask better booking questions and compare a load with the cost of the whole trip.',
+    highlights: ['Equipment-fit worksheet', 'Load search and booking questions', 'Total-mile worked example'],
+    sections: [
+      {
+        id: 'equipment-sheet', title: 'Build a one-page equipment sheet before searching',
+        paragraphs: ['Record the actual interior dimensions, door opening, usable payload and loading capabilities. Keep the measurements in a form you can send to the dispatcher or broker. A description such as “26-foot box truck” does not establish the door height, pallet layout or weight you can carry.', 'Separate what the truck can do from the work the driver accepts. Liftgate capacity, pallet-jack availability, dock compatibility, inside delivery and driver assistance all affect the booking. Confirm loading and unloading arrangements at both ends.'],
+        table: { caption: 'Box truck load-search worksheet', headers: ['Record this', 'Use it to check'], rows: [['Interior length × width × height', 'Whether each piece and the complete arrangement fit'], ['Door opening and access', 'Whether the freight can enter and be unloaded as planned'], ['Actual available payload', 'Whether the shipment weight fits this truck’s operating limits'], ['Liftgate, pallet jack and dock access', 'Whether the pickup and delivery methods are workable'], ['Current location and available time', 'Whether the truck can reach the pickup window'], ['Accepted delivery work', 'Whether driver assist, inside delivery or extra stops are agreed']] },
+      },
+      {
+        id: 'search-sources', title: 'Use freight sources with the right equipment filters',
+        paragraphs: ['A load board can provide a starting list of opportunities; existing broker relationships can provide another. Use the provider’s available straight-truck or box-truck equipment filters and confirm the actual shipment details with the posting party. Check whether your current insurance, authority history and equipment meet the broker’s requirements before assuming a listing is available to your carrier.', 'DAT publishes a box truck load-board option, including information for 26-foot trucks. It is one example of a search tool, not a promise of loads in a particular area or a recommendation to purchase a subscription. Review the platform’s current terms, authorized access and costs for your operation.', 'If you use a dispatcher, agree which searches and calls they handle and how you share loads you find independently. Keep one current truck calendar so an attractive second posting does not create a conflicting booking.'],
+      },
+      {
+        id: 'load-questions', title: 'Ask these questions before treating a load as a match',
+        paragraphs: ['Ask for piece dimensions as well as pallet count and total weight. Two shipments with the same number of pallets can have different heights, overhang, stacking restrictions and handling needs. An empty space calculation also needs a workable loading plan.', 'Confirm whether the job is dock-to-dock, requires a liftgate, includes residential or inside delivery, or has additional stops. Clarify appointment windows, receiving hours, who unloads and what happens if delivery access differs from the instructions.'],
+        bullets: ['What are the dimensions and weight of every handling unit?', 'Is stacking permitted, and is the load exclusive use?', 'How will the freight be loaded and unloaded at each stop?', 'What driver labor, equipment and access are required?', 'Are the pickup, delivery and rate details confirmed in writing?'],
+      },
+      {
+        id: 'trip-example', title: 'Compare the whole trip, including empty miles',
+        paragraphs: ['Consider a hypothetical $900 box truck load with 300 loaded miles and 75 empty miles to pickup. The headline loaded rate is $3.00 per mile. Across the known 375 trip miles, the gross rate is $2.40 per mile.', `At Rai Dispatch’s ${getDispatchRateLabel('box-truck')} box truck fee on an agreed $900 billing base, the dispatch charge would be $${900 * getDispatchRate('box-truck') / 100}. The remaining $${900 - 900 * getDispatchRate('box-truck') / 100} equals $${((900 - 900 * getDispatchRate('box-truck') / 100) / 375).toFixed(2)} per known trip mile before fuel, maintenance, insurance, driver pay and other expenses. Add any required return miles and appointment delays before deciding.`, 'These numbers are an arithmetic example, not current market rates or an earnings forecast. Use your own costs and compare the time committed as well as the miles. A load with two difficult delivery stops may occupy more of the working day than the mileage suggests.'],
+      },
+      {
+        id: 'work-type', title: 'Decide whether local, regional or OTR work fits',
+        paragraphs: ['Start with the days the truck can work and when it must return. Local delivery can involve multiple stops and handling requirements; regional or over-the-road work can involve longer trips and time away. A load that is physically suitable may still conflict with the schedule you want.', 'For a new authority, broker acceptance can limit the search even with a complete equipment sheet. Keep the carrier packet current and ask about requirements before investing time in a load. A dispatcher can support the search and booking review, while each broker makes its own acceptance decision.'],
+      },
+    ],
+    checklistTitle: 'Before your next box truck search',
+    checklist: ['Measured cargo space, door opening and payload', 'Loading equipment and driver-assist preferences', 'Empty location, pickup radius and available dates', 'Complete trip costs, carrier approval and written load terms'],
+    faqs: [
+      { question: 'Can I find loads for a 26-foot box truck?', answer: 'You can search for suitable freight using box-truck or straight-truck tools and broker contacts. Actual dimensions, payload, loading access, broker acceptance and timing determine whether a particular load fits.' },
+      { question: 'Does every box truck load need a liftgate?', answer: 'No. The pickup and delivery arrangements determine what is needed. Confirm the loading method at each stop and provide the actual capabilities of your equipment.' },
+      { question: 'Are local delivery routes guaranteed with box truck dispatch?', answer: 'No. Share the service area, schedule and delivery work you accept for a fit review. A recurring route or dedicated contract needs its own confirmed terms.' },
+      { question: 'What does Rai Dispatch charge for box truck dispatch?', answer: `The published box truck dispatch fee is ${getDispatchRateLabel('box-truck')} of the agreed revenue base on loads we dispatch, with a dedicated dispatcher and free setup. Review the billing base and service scope before starting.` },
+    ],
+    related: [{ label: 'Box truck and straight-truck dispatch', href: '/equipment/box-truck' }, { label: 'New authority broker approval', href: '/resources/new-authority-broker-approval' }, { label: 'Load boards and dispatch services', href: '/resources/load-board-vs-dispatch-service' }, { label: 'Local, regional or OTR comparison', href: '/resources/local-vs-regional-vs-otr-trucking' }, { label: 'Box truck dispatch pricing', href: '/pricing' }],
+    sources: [{ label: 'DAT: box truck load-board information', href: 'https://www.dat.com/solutions/box-truck-load-board' }, { label: 'DAT: 26-foot box truck load search', href: 'https://www.dat.com/solutions/26ft-box-truck-loads' }],
+  },
+  {
+    slug: 'local-vs-regional-vs-otr-trucking',
+    title: 'Local, regional or OTR trucking: choose a workable dispatch plan',
+    metaTitle: 'Local vs Regional vs OTR Trucking',
+    description: 'Compare local, regional and OTR trucking by home time, appointments, total miles and reload planning. Build a useful lane brief for your dispatcher.',
+    eyebrow: 'Carrier guide · Your lanes and your schedule',
+    published: '2026-10-30', readTime: '5 minute read',
+    intro: 'The useful difference between local, regional and over-the-road trucking is how each trip fits your operation. Start with home time, equipment, working days and costs, then assess the actual freight. The label on a load does not confirm a return time or decide whether the trip is worth accepting.',
+    highlights: ['Compare time as well as mileage', 'Create a lane-search brief', 'Keep return plans realistic'],
+    sections: [
+      {
+        id: 'compare', title: 'Use the labels as a starting conversation',
+        paragraphs: ['For dispatch planning, local work describes trips within a practical area around a base; regional work covers an agreed operating region; OTR refers to over-the-road trips that can take the truck farther away for longer. Providers and carriers may use these terms differently. Agree the actual locations, dates and limits instead of relying on a universal mileage cutoff.', 'A local label does not necessarily mean a quick delivery, and a regional load does not promise daily home time. Loading appointments, stops, unloading and the final drive back can determine when the truck finishes.'],
+        table: { caption: 'Questions to compare operating patterns', headers: ['Plan', 'Main planning question', 'Details to check'], rows: [['Local', 'Can the complete job fit the working day?', 'Stops, handling, facility access, waiting and return drive'], ['Regional', 'Can this sequence stay within the preferred area and schedule?', 'Pickup radius, delivery dates, reload options and home-time deadline'], ['OTR / long haul', 'Does the full trip fit the time away and next destination?', 'Appointments, days committed, preparation and return or onward plans']] },
+      },
+      {
+        id: 'home-time', title: 'Set home time before searching the map',
+        paragraphs: ['State the latest acceptable return date and location, and identify which parts are flexible. “Home Friday” could mean available by Friday morning or arriving late that night. Clarifying that difference can prevent an unsuitable Thursday pickup from reaching the approval stage.', 'Then define the available days, overnight preferences, acceptable appointment windows and destinations to avoid. A smaller search area may reduce available options. Discuss that tradeoff explicitly while keeping firm scheduling needs visible.'],
+      },
+      {
+        id: 'time-example', title: 'Count the day, not just the road miles',
+        paragraphs: ['As a hypothetical example, a short round-trip job might involve three hours of driving, two hours for loading and unloading, and one hour of waiting. That is six hours committed before any additional preparation or delay. The mileage alone would not show the full demand on the day.', 'For a multi-day trip, write down the expected pickup, delivery, next available time and known return obligations. Compare each option using the same measures: confirmed compensation, total miles, days or hours committed, dispatch fees and your own expenses. These calculations help compare options; they do not predict profit or replace the driver’s assessment of a safe schedule.'],
+      },
+      {
+        id: 'equipment', title: 'Match the plan to the equipment and work',
+        paragraphs: ['For box trucks, a nearby delivery may require a liftgate, inside service or multiple stops. For reefers, washout time and receiving appointments can affect the next available day. Flatbed or step deck work may add loading-site access, tarping and securement considerations. These details belong in the planning conversation even when the route looks straightforward.', 'Power-only carriers also need to include trailer pickup, return or reposition obligations. An apparent end-of-day delivery may leave additional equipment work. Send the dispatcher a current equipment profile and explain the tasks or destinations your operation does not accept.'],
+      },
+      {
+        id: 'return', title: 'Keep possible reloads separate from confirmed loads',
+        paragraphs: ['Review the destination and the next search area before accepting the outbound load. A potential backhaul can inform planning, but it should stay marked as unconfirmed until the booking is approved. Decide whether the outbound trip remains acceptable if the hoped-for reload is unavailable.', 'If returning home by a fixed time is essential, include a workable alternative in the discussion. The carrier decides how much uncertainty it can accept. Tell the dispatcher when the current delivery changes so the next search uses a realistic empty time.'],
+      },
+      {
+        id: 'brief', title: 'Send a clear lane brief to your dispatcher',
+        paragraphs: ['A useful brief is specific enough to guide the next call: “Box truck, empty near my home base Monday morning; regional trips only; available through Thursday; must return by Friday noon; no inside delivery.” Add measurements, payload and the actual cities or states. Update the brief whenever the truck, driver or schedule changes.', `Rai Dispatch coordinates remotely for suitable operations across the lower 48, with published dispatch fees of ${DISPATCH_RATE_RANGE} by equipment. Discuss the lane plan and service fit before onboarding. Local availability, a recurring lane and a dedicated freight contract each need confirmation for the actual operation.`],
+      },
+    ],
+    checklistTitle: 'Your lane-planning brief',
+    checklist: ['Home base and firm return deadline', 'Available days, overnight limits and appointment preferences', 'Equipment capabilities, accepted work and pickup radius', 'Known next destination and alternatives if a reload is unavailable'],
+    faqs: [
+      { question: 'What is the difference between regional and OTR dispatch?', answer: 'Regional dispatch searches within the operating area and schedule agreed with the carrier. OTR dispatch supports longer trips and wider destinations. In either case, specify the actual lanes, available days and return needs.' },
+      { question: 'Can regional trucking keep me home every night?', answer: 'That depends on the actual route, appointments, loading, unloading and return drive. State daily home time as a requirement before discussing service fit; it is not implied by the regional label.' },
+      { question: 'Is OTR always more profitable than local work?', answer: 'No. Compare confirmed revenue with total miles, time committed, fees and your own operating expenses. A larger gross amount can come with more costs and time away.' },
+      { question: 'Do I need a dispatcher with an office near my truck?', answer: 'Remote dispatch can support the agreed search and communication work. Evaluate equipment knowledge, availability, communication and service scope. Rai Dispatch’s nationwide coverage does not imply a local office in every area.' },
+    ],
+    related: [{ label: 'Regional dispatch services', href: '/services/regional-dispatch' }, { label: 'OTR and long-haul dispatch', href: '/services/otr-dispatch' }, { label: 'Backhaul and return-load support', href: '/services/backhaul-dispatch' }, { label: 'Compare freight rates per mile', href: '/resources/evaluate-freight-rate-per-mile' }, { label: 'Nationwide service coverage', href: '/service-areas' }],
+  },
   {
     "slug": "load-board-vs-dispatch-service",
     "title": "Load board vs. dispatch service: what does each do?",

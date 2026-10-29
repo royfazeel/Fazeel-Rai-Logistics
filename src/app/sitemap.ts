@@ -7,18 +7,23 @@ import { EQUIPMENT_IMAGES } from '@/lib/equipment-images';
 // Dates reflect the actual content revision; do not change merely on a rebuild.
 const CONTENT_UPDATED = '2026-09-24';
 const PAGE_REVISIONS: Record<string, string> = {
-  '': '2026-10-07',
-  '/services': '2026-09-28', '/equipment': '2026-09-28',
+  '': '2026-10-30',
+  '/services': '2026-10-30', '/equipment': '2026-09-28',
   '/pricing': '2026-09-28', '/contact': '2026-09-28',
   '/about': '2026-09-28', '/faq': '2026-09-28',
   '/carriers': '2026-09-28', '/service-areas': '2026-09-28',
-  '/resources': '2026-09-28',
+  '/resources': '2026-10-30',
   '/privacy': '2026-10-26', '/terms': '2026-09-28',
   '/testimonials': '2026-09-28',
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(({ slug }) => [`/equipment/${slug}`, '2026-09-28'])),
   ...Object.fromEntries(SERVICE_CONTENT.map(({ slug }) => [`/services/${slug}`, '2026-09-28'])),
   ...Object.fromEntries(CARRIER_CONTENT.map(({ slug }) => [`/carriers/${slug}`, '2026-09-28'])),
   ...Object.fromEntries(GUIDES.map(guide => [`/resources/${guide.slug}`, guide.updated ?? guide.published])),
+  '/equipment/box-truck': '2026-10-30',
+  '/services/load-booking': '2026-10-30',
+  '/services/regional-dispatch': '2026-10-30',
+  '/services/otr-dispatch': '2026-10-30',
+  '/services/dedicated-dispatcher': '2026-10-30',
 };
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [

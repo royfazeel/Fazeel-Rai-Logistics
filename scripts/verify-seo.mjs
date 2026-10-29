@@ -12,7 +12,7 @@ const args = process.argv.slice(2);
 const jsonIndex = args.indexOf('--json');
 const outputPath = jsonIndex >= 0 ? args[jsonIndex + 1] : undefined;
 const countIndex = args.indexOf('--expect-pages');
-const expectedPageCount = countIndex >= 0 ? Number(args[countIndex + 1]) : 54;
+const expectedPageCount = countIndex >= 0 ? Number(args[countIndex + 1]) : 57;
 if (!Number.isInteger(expectedPageCount) || expectedPageCount < 1) throw new Error('--expect-pages must be a positive integer.');
 const optionValues = new Set([jsonIndex, countIndex].filter(index => index >= 0).map(index => index + 1));
 const requestedBase = args.find((value, index) => !value.startsWith('--') && !optionValues.has(index)) || 'http://localhost:3000';

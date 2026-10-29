@@ -1,100 +1,81 @@
-# Rai Dispatch keyword coverage plan
+# Rai Dispatch organic search coverage
 
-Research date: September 24, 2026. This is an editorial and information-architecture record, not evidence of rankings or search volume. The baseline is the 30-page migration release. All ten additional routes below are implemented and pass the local 40-page crawl; production verification is recorded in the SEO audit and migration record.
+Updated October 30, 2026. This document records the observed search baseline, the purpose of each main destination, and how to assess the current content update. Query examples describe relevant visitor needs; they are not search-volume estimates or ranking promises.
 
-## September 27 content refresh
+## Search Console baseline
 
-The existing equipment, carrier and operating-pattern pages remain the primary destinations for their query families. This refresh adds one distinct guide at `/resources/detention-layover-tonu-documentation`, covering detention, layover, truck ordered not used (TONU), lumper receipts and the request-documentation workflow. It includes a clearly hypothetical timestamp example, a practical checklist and references to Truckstop terminology and CloudTrucks' published process as an example of provider-specific requirements. It does not adopt either provider's rates, deadlines or service promises as Rai Dispatch policy.
+The live `raidispatch.com` domain-property report was reviewed with **3 months** selected. Its available data covered **September 23–October 27, 2026**:
 
-The new guide is linked from reefer dispatch, rate negotiation, appointment scheduling, paperwork support and the dispatch-fee guide. The existing load-booking page now explains full truckload (FTL), suitable partial loads, cargo compatibility, exclusive-use requirements and carrier approval. This is dispatch support for carriers, not an offer to operate an LTL shipping network. New and substantively revised article dates are recorded explicitly; no dates should be refreshed merely because the site rebuilds.
+| Measure | Observed value |
+| --- | ---: |
+| Clicks | 15 |
+| Impressions | 743 |
+| Click-through rate | 2% |
+| Average position | 28.4 |
+| Reported query rows | 53 |
 
-Equipment benefit text now describes equipment-matched load search, reefer lane planning and appointment coordination instead of implying consistent freight or superior produce lanes. The content inventory is now 41 routes when combined with the existing base routes. Crawl, deployment and performance outcomes belong in the launch audit after verification; this plan does not establish rankings or traffic gains.
+The report already contains nonbrand searches. Examples with one click each were **“sprinter van dispatch”** and **“sprinter van dispatchers.”** The user's screenshot showed a shorter 24-hour view with additional nonbrand queries such as straight truck dispatch, step deck dispatch services, dispatch fee and truck freight rates per mile.
 
-## Recommendation
+| Landing page | Clicks | Impressions | Average position |
+| --- | ---: | ---: | ---: |
+| `/equipment/sprinter-van` | 3 | 33 | 10.6 |
+| `/resources/carrier-onboarding-checklist` | 1 | 76 | 48.1 |
+| `/equipment/step-deck` | 0 | 41 | 71.6 |
 
-Expand around different carrier decisions: who needs dispatch, how the operation runs, and how to evaluate the service. The existing equipment and task pages already cover much of the commercial vocabulary. More useful coverage comes from explaining different operating needs, supported by practical examples and clear service boundaries. Do not create a page for every synonym, truck dimension, state, or city.
+These are historical observations, not evidence of a gain from the October 30 update. Search Console omits some query detail for privacy, so the displayed query rows cannot establish a complete branded/nonbrand share of the 743 impressions. Average position is an aggregate across the selected searches, locations and devices; it is not a fixed ranking for a page. The 24-hour view also includes preliminary data. [Google's report documentation](https://support.google.com/webmasters/answer/7576553)
 
-Priority here means fit with the advertised service and a distinct visitor need. It is not a search-volume or keyword-difficulty estimate. Public dispatcher pages establish that the terminology is used in the market; they do not prove demand, their claims, or Rai Dispatch's ability to deliver the same services.
+## Primary destinations and query families
 
-## Baseline coverage and gaps
+The starting site had 54 sitemap URLs: 13 main pages, 15 equipment pages, 11 service pages, three carrier pages and 12 guides. The October 30 expansion adds three guides, for 15 guides and 57 intended sitemap URLs. Preserve a primary destination for each distinct intent and use contextual links between related decisions. A single useful page can cover natural synonyms.
 
-The initial sitemap contains 12 base routes, eight equipment pages, six service pages, and four guides. Privacy and terms are included in the 30-route count but are not commercial keyword targets.
-
-| Existing destination | Query families already covered | Editorial direction |
+| Primary destination | Query family / visitor task | Page purpose and overlap control |
 | --- | --- | --- |
-| `/` and `/services` | truck dispatch service, trucking dispatch company, freight dispatch, independent truck dispatch | Keep the home page as the main commercial introduction; use the services hub to compare tasks and service arrangements. |
-| `/equipment/dry-van`, `/equipment/reefer`, `/equipment/flatbed`, `/equipment/box-truck`, `/equipment/power-only` | dry van dispatch, refrigerated truck dispatch, flatbed dispatch, box truck dispatcher, power only dispatch | Answer equipment-fit questions on their existing pages. Do not split every dimension or synonym into a new URL. |
-| `/equipment/step-deck`, `/equipment/hotshot`, `/equipment/cargo-van` | step deck dispatch, hot shot dispatch, cargo van dispatch, sprinter van dispatch | Preserve the requirement for equipment, lane, and service-availability review. |
-| Six existing `/services/` detail pages | load search and booking, rate negotiation, broker communication, route strategy, paperwork support, appointment scheduling | Explain the actual process and responsibilities; link to the relevant audience and operating-pattern pages. |
-| `/pricing` and `/resources/truck-dispatch-fees` | truck dispatch pricing, dispatch fee percentage, equipment-specific dispatch rates, cost of a truck dispatcher | Pricing explains Rai's equipment-specific offer; the guide teaches how to compare billing bases and scope. Restrict 5% language to dry van, flatbed, and reefer. Do not imply a universal 5% ceiling or an unsupported “lowest” claim. |
-| `/service-areas` | nationwide truck dispatch, dispatch services USA, lower 48, regional service availability, dispatch near me | Existing six regional sections already provide national context. Explain remote coordination and actual coverage without suggesting local offices. |
-| Four existing `/resources/` guides | freight rate per mile, dispatch fees, choosing a dispatcher, carrier onboarding documents | Add decision guides that answer a different question instead of repeating these articles. |
+| `/` | truck dispatch services, truck dispatch company, freight dispatch services USA | Introduce the service, equipment, pricing and carrier fit. Use the services hub for detailed scope. |
+| `/services` | truck dispatch service scope, load dispatch support | Compare load search, negotiation, communication, paperwork and scheduling, then link to the relevant detail. |
+| `/carriers/owner-operators` | owner-operator dispatch, independent truck dispatcher, dispatch for one truck | Explain the working relationship and the carrier's load decisions. |
+| `/carriers/small-fleets` | small fleet dispatch, dispatch for multiple trucks | Explain availability, truck assignment, contacts and coordinated schedules. |
+| `/carriers/new-authorities` | new authority dispatch, new MC dispatch service | Explain the service-fit review; link to onboarding and broker-approval guides for documents and eligibility. |
+| `/equipment/dry-van`, `/equipment/reefer`, `/equipment/flatbed` | dry van dispatch, refrigerated truck dispatcher, flatbed dispatch | Explain equipment-specific load fit, costs and handling questions. Keep sizes and synonyms on the relevant page. |
+| `/equipment/box-truck` | box truck dispatch, straight truck dispatch, 26-foot box truck dispatcher | Explain the offered dispatch support, payload, doors, loading access and available operating patterns. |
+| `/equipment/sprinter-van`, `/equipment/cargo-van` | Sprinter van dispatchers, cargo van dispatch | Preserve separate equipment details and accurate clearance/payload questions; do not imply guaranteed expedited freight. |
+| `/equipment/step-deck`, `/equipment/hotshot`, `/equipment/power-only` | drop deck dispatch, hot shot dispatcher, power only dispatch | Explain the actual configurations and booking checks. Other supported equipment remains discoverable through `/equipment`. |
+| `/pricing` | truck dispatch pricing, dispatch percentage, dispatch fee calculator | Show Rai's current offer and calculator. The fee guide explains billing bases and comparisons. |
+| `/resources/truck-dispatch-fees` | how much does a truck dispatcher cost, how dispatch fees work | Teach calculation, scope and invoice questions without duplicating the pricing page's sales purpose. |
+| `/services/regional-dispatch`, `/services/otr-dispatch` | regional dispatch, OTR dispatch, long-haul dispatcher | Explain the respective service workflows and planning information. |
+| `/services/dedicated-dispatcher`, `/services/expedited-dispatch`, `/services/backhaul-dispatch` | dedicated dispatcher, expedited dispatch, backhaul load support | Describe distinct working arrangements; a dedicated contact is not a guaranteed dedicated lane. |
+| `/service-areas` | nationwide truck dispatch, lower 48 dispatch coverage | Explain actual remote coverage and regional planning needs without suggesting unverified local offices. |
+| `/resources/carrier-onboarding-checklist`, `/resources/new-authority-broker-approval` | carrier onboarding documents, broker approval for new authority | Separate preparing a dispatch relationship from each broker's acceptance decision. |
+| `/resources/evaluate-freight-rate-per-mile`, `/resources/reduce-deadhead-miles` | freight rate per mile, total-trip rate, deadhead miles | Explain the arithmetic with hypothetical examples and carrier-supplied costs, not current market-rate promises. |
+| `/resources/how-to-choose-a-truck-dispatcher` | how to choose a dispatcher, best dispatch service for my truck | Provide evaluation criteria rather than an unsupported “best” claim. |
+| `/resources/self-dispatch-vs-dispatch-service`, `/resources/load-board-vs-dispatch-service` | should I hire a dispatcher, load board vs dispatch service | The first compares staffing and time; the second compares a search tool with agreed service work. |
 
-The largest gaps are audience-specific workflows, regional versus OTR operations, the meaning of a dedicated dispatcher, the decision to self-dispatch, and the distinction between dispatch assistance and brokerage.
+## October 30 content update
 
-## Twelve prioritized page intents
+The update strengthens descriptive headings, service-scope explanations and contextual links on existing commercial pages. The resources hub groups guides around choosing support, finding loads and evaluating trips, and preparing documents. Three new guides address distinct decisions:
 
-The first nine rows are distinct new detail-page intents. Together with the `/carriers` navigation hub, these form the implemented ten-route expansion. The final three rows guide improvements to existing destinations and do not require new URLs. Query examples are editorial hypotheses to validate in Search Console, not a scraped or volume-ranked keyword list.
+| Guide | Useful coverage | Boundary with existing pages |
+| --- | --- | --- |
+| `/resources/what-does-a-truck-dispatcher-do` | The dispatch workflow, information handoffs and responsibilities from load search through delivery records | Educational introduction; link to `/services` for Rai's offered scope and the dispatcher/broker guide for that comparison. |
+| `/resources/how-to-find-box-truck-loads` | A practical search and screening workflow using actual dimensions, payload, location and delivery requirements | Explain the carrier's task; keep the commercial box-truck offer at `/equipment/box-truck`. |
+| `/resources/local-vs-regional-vs-otr-trucking` | Compare operating radius, schedule, home-time goals and load-planning tradeoffs | Help the reader choose an operating pattern, then link to the regional and OTR service pages. |
 
-| Priority and intent | Destination | Natural query examples | Original value required and overlap control |
-| --- | --- | --- | --- |
-| P1: One-truck owner-operator support | `/carriers/owner-operators` | owner operator dispatch service; independent owner operator dispatcher; dispatch for one truck | Walk through a driver-owner's day: available location, load criteria, approval, pickup updates, and paperwork. Explain what the carrier still decides. Link to equipment pages for specifications and to pricing for fee details. |
-| P1: Small-fleet coordination | `/carriers/small-fleets` | small fleet dispatch service; trucking company dispatch support; dispatch for multiple trucks | Use a sample multi-truck availability table, contact responsibilities, conflicting appointments, and home-time preferences. Do not invent a TMS integration, fleet dashboard, reporting product, or unlimited capacity. |
-| P1: New-authority readiness | `/carriers/new-authorities` | new authority dispatch service; new MC dispatch; dispatch for new trucking companies | Separate readiness to request review from broker approval. Explain authority-age, insurance, equipment, and documentation questions, and how limited eligibility affects a search. Link to the existing onboarding checklist instead of reproducing it. No guaranteed broker acceptance or first-load timing. |
-| P1: Regional operations | `/services/regional-dispatch` | regional truck dispatch; regional freight dispatcher; dispatch with home-time preferences | Show how pickup radius, appointment time, return preferences, and reload windows interact. Include a clearly hypothetical regional planning example. Distinguish a preferred operating region from guaranteed daily home time or a dedicated route. |
-| P1: OTR operations | `/services/otr-dispatch` | OTR dispatch service; over the road truck dispatch; long haul dispatcher; interstate dispatch support | Explain multi-day load sequences, destination positioning, realistic reload windows, and total-trip costs. Keep truck-safe routing and operating decisions with the carrier. Avoid promising continuous loads or fixed weekly revenue. |
-| P1: Dedicated dispatch contact | `/services/dedicated-dispatcher` | dedicated truck dispatcher; personal truck dispatcher; dedicated dispatch support | Describe the working relationship: agreed contact person, truck profile, approval process, updates, and escalation arrangements. State published desk hours. Explain that a dedicated dispatcher does not mean dedicated freight, exclusive lanes, or 24/7 coverage. This workflow differentiates the page from the services overview. |
-| P1: Self-dispatch versus hiring help | `/resources/self-dispatch-vs-dispatch-service` | self dispatch vs dispatch service; should I hire a truck dispatcher; dispatch service vs load board | Compare the work retained, time spent, communication requirements, fees, and control. A simple hypothetical cost/time worksheet can help the reader decide. Do not claim a service necessarily increases net profit or replaces every carrier responsibility. |
-| P1: Dispatcher versus broker | `/resources/truck-dispatcher-vs-freight-broker` | truck dispatcher vs freight broker; dispatch service vs broker; what does a truck dispatcher do | Explain the customer-facing roles and why the actual activities and agreements matter. Reference FMCSA's official final guidance. Avoid a blanket legal conclusion that any business calling itself a dispatcher is exempt from broker authority. |
-| P2: Empty-mile decisions | `/resources/reduce-deadhead-miles` | reduce deadhead miles; deadhead meaning; backhaul planning; empty miles trucking | Define the calculation and compare two hypothetical loads using loaded plus empty miles. Explain that the shortest empty move is not automatically the strongest overall trip. Keep the existing rate-per-mile guide focused on rate evaluation and link between the two. No claim that empty miles can be eliminated. |
-| P1: Price comparison | Existing `/pricing` and fee guide | affordable truck dispatch; dry van dispatch 5%; box truck dispatch 7%; cargo van dispatch 8%; hotshot dispatch 6%; how much does dispatch cost | Use equipment-labeled numerical examples and identify the agreed billing base, inclusions, exclusions, and payment timing. Keep each rate associated with the correct equipment. Do not launch separate “cheap,” “best,” and percentage-variation pages with the same offer. |
-| P2: Equipment terminology and qualification | Existing eight `/equipment/` pages | 53 foot dry van dispatch; refrigerated trailer dispatch; open deck dispatch; 26 foot box truck dispatch; hot shot dispatcher; sprinter van dispatch | Explain relevant dimensions, payload, handling, and load-fit questions only where applicable. Treat sizes and aliases as sections of the appropriate equipment page. “Open deck” can introduce flatbed/step-deck choices without implying heavy-haul capability. |
-| P2: National and regional availability | Existing `/service-areas` | nationwide dispatch services; US truck dispatch; truck dispatcher near me; dispatch in Texas/California and other served states | Retain the useful regional planning context and a lane-review call to action. State names belong in genuine coverage explanations. Do not multiply the same landing page across all states or claim physical local presence. |
+Publication, crawl checks and deployment evidence must be verified separately. Adding a URL to the source or sitemap does not establish indexing, a ranking or traffic growth. Revise article and sitemap dates only when the content actually changes.
 
-The new `/carriers` hub should help visitors choose among owner-operator, small-fleet, and new-authority needs. A comparison of what information each audience needs is more useful than a second generic dispatch sales page.
+## Business facts and editorial limits
 
-## Service and claim boundaries
+- Published dispatch fees are **3% for dry van, flatbed and reefer; 4% for hotshot; 5% for all other equipment**. `src/lib/dispatch-pricing.ts` is the source for these rates. Confirm billing base and service scope in the agreement.
+- Coverage is the **48 contiguous United States**. Published desk hours are Monday–Saturday, 8 AM–6 PM Central Time. Contact email remains `sam@railogistics.us`.
+- Equipment and freight require a service-fit review. A published equipment category is not a promise of every commodity, permit service, broker acceptance, dedicated lane or load availability.
+- Keep new-authority, revenue, rate and scheduling claims conditional on actual requirements. Do not invent testimonials, local offices, case-study results, provider affiliations or platform access.
+- Do not create pages for every synonym or city, add hidden keyword blocks, or add a meta-keywords list. Google does not use the keywords meta tag, and its policies address keyword stuffing and doorway pages. [SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide), [spam policies](https://developers.google.com/search/docs/essentials/spam-policies)
 
-The current site supports owner-operators and small fleets, with new-authority inquiries reviewed against broker requirements. Advertised operations are the 48 contiguous states. Core equipment is dry van, reefer, flatbed, box truck, and power only; step deck, hotshot, and cargo van inquiries retain availability review. The published dispatch desk is Monday–Saturday, 8 AM–6 PM Central Time.
+## Measurement after publication
 
-The owner's revised fee schedule replaces the previous universal 5% ceiling: cargo and Sprinter vans 8%; box trucks 7%; hotshot 6%; dry van, flatbed, and reefer 5%; all other equipment 7%. Power only and step deck therefore use 7%. Confirm the billing base and scope in the agreement. The “other equipment” price is not proof of capability for every truck or freight type. The contact email remains `sam@railogistics.us` as explicitly confirmed by the owner.
+1. Verify the production URLs, canonical tags, sitemap, internal links and mobile reading experience. Inspect representative new pages in Search Console after release and check sitemap processing.
+2. Retain this baseline and the release date. After Google has had time to recrawl, compare complete 28-day windows using the same search type and filters. Check the longer three-month trend as well.
+3. Review query and page data by equipment, carrier type, service, pricing and educational intent. Pay particular attention to Sprinter dispatch, step deck and onboarding because the baseline already contains observations for them.
+4. Track nonbrand query diversity, impressions, clicks and relevant landing pages. Use consistent brand filters while remembering that filtered query data is incomplete. Do not subtract visible branded query totals from property totals to claim a precise nonbrand share.
+5. Where impressions grow without clicks, inspect query relevance, title/summary accuracy and page position before changing copy. Where two pages appear for the same intent, inspect their query/page data and clarify the primary purpose before considering consolidation.
+6. Review qualified dispatch inquiries alongside search traffic using available records. Search Console clicks alone do not measure leads, revenue or visitor quality. No new tracking tags or recurring monitoring are implied by this plan.
 
-Do not imply verified operations for tanker, hazmat, auto transport, heavy haul/oversize permitting, port drayage, household goods, Alaska, Hawaii, cross-border freight, or specific private freight platforms. Dedicated lanes, Amazon Relay approval, direct-shipper contracts, guaranteed revenue, a guaranteed number of loads, and round-the-clock support are not established by the current materials. They are not appropriate keyword landing-page promises without operational confirmation.
-
-“Best truck dispatcher” is a comparison intent: answer it with selection criteria and evidence on the existing selection guide. “Lowest dispatch fee” requires a supportable market comparison and is not established. “All truck types” and “all USA” should not erase the actual service limits.
-
-## National visibility without duplicate location pages
-
-Google's spam policies identify substantially similar city/region funnel pages as a doorway pattern, and also warn against unnatural keyword/location blocks and large amounts of low-value content. Keep the existing regional hub useful to someone planning a load. A future location page would need a distinct operating need, accurate local information, real service evidence, and standalone usefulness—not merely a replaced place name. [Google spam policies](https://developers.google.com/search/docs/essentials/spam-policies#doorway-abuse)
-
-Use meaningful query language in titles, headings, introductions, and relevant links. Let a single page naturally cover synonyms. Google explicitly explains that exact wording for every query variation is unnecessary and that page quantity is not a substitute for value. [Search Essentials](https://developers.google.com/search/docs/essentials), [Google's AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)
-
-The most useful next layer of content evidence is Rai's own reviewed workflow, an anonymized carrier example with permission, or a practical worksheet. Do not invent a named expert, testimonials, fleet size, dispatch results, or case-study statistics. Google's helpful-content guidance supports original value, accurate sourcing, and clear authorship; it does not prescribe a target word count. [Helpful content guidance](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)
-
-## Publishing and measurement
-
-1. Review every proposed page for a distinct visitor task and confirmed service scope. Merge material into an existing page when it does not stand alone.
-2. Give each published route a descriptive title, unique summary, self-referencing canonical, visible main heading, and relevant links. Add valid new routes to the sitemap and test direct navigation, mobile reading, and contact actions.
-3. Link from the appropriate hub, then between audience, equipment, operating-pattern, pricing, and guide pages where the reader needs the next answer. Avoid a sitewide list of every keyword variation.
-4. After launch, inspect representative new URLs and sitemap processing in Search Console. A successful sitemap submission is not proof that all pages are indexed or ranked.
-5. Review query and landing-page trends by family: owner-operator, fleet, new authority, regional/OTR, equipment, fees, and education. Compare impressions, clicks, query relevance, and qualified inquiries. Avoid treating a mixed-query average position as a universal ranking.
-6. Allow the new domain and expanded content time to be recrawled. Use actual query patterns and prospect questions to improve pages. No current search-volume dataset or post-expansion ranking dataset was obtained for this plan; there is no basis for a traffic forecast or an “all keywords” guarantee.
-
-## Primary-source research record
-
-Sources accessed September 24, 2026. Provider pages are references for terminology and how they present their own service, not independent verification of their marketing claims. No provider wording, testimonials, prices, or performance claims should be copied into Rai Dispatch content.
-
-| Source | What it grounds |
-| --- | --- |
-| [Google: Spam policies](https://developers.google.com/search/docs/essentials/spam-policies) | Doorway, keyword-stuffing, and scaled-content constraints for geographic and query-variation expansion. |
-| [Google: Helpful content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) | Originality, completeness, accurate authorship, and visitor usefulness as editorial review criteria. |
-| [Google: Search Essentials](https://developers.google.com/search/docs/essentials) | Descriptive search language and crawlable discovery as core practices. |
-| [Google: Generative AI optimization guide](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) | No requirement for one page per wording variation or special AI-only files. |
-| [Connexzia: Owner-operators](https://www.connexzia.com/trucking-dispatch/owner-operators) | Market use of owner-operator dispatch terminology and carrier load-approval positioning. |
-| [Connexzia: New authority](https://www.connexzia.com/trucking-dispatch/new-authority) and [small fleets](https://www.connexzia.com/trucking-dispatch/small-fleets) | Real provider audience segmentation; no inference about Rai's broker access or capacity. |
-| [HaulNex: Dispatch offering](https://haulnexdispatch.com/) | Public use of regional, long-haul OTR, dedicated dispatcher, and owner-operator/small-fleet terminology. Its guarantees are not Rai's guarantees. |
-| [Areesit Logistics: Dispatch offering](https://www.areesitlogistics.com/) | Common customer questions around fee scope, no forced dispatch, assigned contact, and carrier paperwork. |
-| [FMCSA: Final broker and bona fide agent guidance announcement](https://www.fmcsa.dot.gov/newsroom/fmcsa-issues-final-guidance-clarifying-broker-and-bona-fide-agents-definitions) and [official final-guidance document](https://public-inspection.federalregister.gov/2023-13080.pdf) | Authority for a carefully qualified dispatcher/broker comparison based on activities and relationships. |
-| [DAT: Backhaul versus headhaul](https://www.dat.com/resources/backhaul-vs-headhaul) and [deadhead explanation](https://www.dat.com/resources/how-to-avoid-deadhead-trucking) | Industry terminology and why empty-mile decisions must be evaluated within the full trip. Does not establish Rai's results or subscriptions. |
-
-Local baseline reviewed: `src/app/sitemap.ts`, `src/app/service-areas/page.tsx`, `src/lib/dispatch-content.ts`, and `src/lib/constants.ts`.
+Google controls crawling, canonical selection, indexing and ranking. Useful content and sound technical signals support eligibility; they cannot guarantee a maximum keyword count, visitor count or indexation date. Google advises allowing time to assess changes, often weeks or longer. [Google's SEO guidance](https://developers.google.com/search/docs/fundamentals/seo-starter-guide)

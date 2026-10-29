@@ -51,7 +51,9 @@ const iconComponents: Record<string, React.ElementType> = {
   Calendar,
 };
 
-const FEATURED_EQUIPMENT = EQUIPMENT_TYPES.slice(0, 8);
+const FEATURED_EQUIPMENT = EQUIPMENT_TYPES.filter(equipment => [
+  'box-truck', 'dry-van', 'reefer', 'flatbed', 'power-only', 'step-deck', 'hotshot', 'sprinter-van',
+].includes(equipment.id));
 
 /**
  * Squeezes BUSINESS.hours down to the micro-caps form the hero status line
@@ -129,15 +131,15 @@ export default function HomePage() {
               className="font-display text-sm sm:text-base font-semibold uppercase tracking-[0.22em] text-white/70 mb-5 lg:mb-7 flex items-center gap-3"
             >
               <span className="inline-block w-10 h-[3px] bg-primary-500" aria-hidden="true" />
-              Truck dispatch services · 48 contiguous states
+              Owner-operators &amp; fleets · 48 contiguous states
             </p>
 
             <h1
               className="photo-hero-title font-display font-bold uppercase text-white leading-[0.95] tracking-tight mb-6 lg:mb-7"
             >
-              We manage the loads.
+              Truck dispatch
               <br />
-              <span className="text-primary-500">You drive the miles.</span>
+              <span className="text-primary-500">services for carriers.</span>
             </h1>
 
             <HeroPhoto />
@@ -145,10 +147,9 @@ export default function HomePage() {
             <p
               className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"
             >
-              <span className="hidden sm:inline">A dedicated dispatcher for every truck. We find freight, negotiate rates, and
-              handle load paperwork across the lower 48. Free setup and {DISPATCH_RATE_RANGE} of gross revenue
+              <span className="hidden sm:inline">We manage the loads. You drive the miles. Dedicated freight dispatch for owner-operators and small fleets: load search, rate negotiation, booking and paperwork across the lower 48. Free setup and {DISPATCH_RATE_RANGE} of gross revenue
               on loads we dispatch, based on your equipment.</span>
-              <span className="sm:hidden">A dedicated dispatcher for every truck. Load search, rate negotiation and paperwork across the lower 48. Free setup; {DISPATCH_RATE_RANGE} of gross on loads we dispatch.</span>
+              <span className="sm:hidden">Dedicated freight dispatch for owner-operators and small fleets. Load search, rate negotiation and paperwork across the lower 48. Free setup; {DISPATCH_RATE_RANGE} of gross on loads we dispatch.</span>
             </p>
 
             <div
@@ -428,11 +429,11 @@ export default function HomePage() {
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { title: 'Owner-operators', description: 'A dedicated dispatch contact while you stay in control of load acceptance and your own authority.' },
-              { title: 'Small fleets', description: 'Coordinate truck availability, driver preferences, and paperwork across your equipment.' },
-              { title: 'Regional & OTR carriers', description: 'Balance longer lanes, local reload opportunities, and the schedule that works for you.' },
-              { title: 'New authorities', description: 'Review insurance, authority age, and broker eligibility before setting expectations for available loads.' },
-            ].map(item => <div key={item.title} className="card p-6"><h3 className="font-display text-2xl font-bold text-navy-950 mb-3">{item.title}</h3><p className="text-surface-700 leading-relaxed">{item.description}</p></div>)}
+              { title: 'Owner-operator dispatch', href: '/carriers/owner-operators', description: 'A dedicated dispatch contact while you stay in control of load acceptance and your own authority.' },
+              { title: 'Small fleet dispatch', href: '/carriers/small-fleets', description: 'Coordinate truck availability, driver preferences, and paperwork across your equipment.' },
+              { title: 'Regional truck dispatch', href: '/services/regional-dispatch', description: 'Set your pickup radius, preferred states and home-time target before planning the next load.' },
+              { title: 'New authority dispatch', href: '/carriers/new-authorities', description: 'Review insurance, authority age, and broker eligibility before setting expectations for available loads.' },
+            ].map(item => <Link prefetch={false} href={item.href} key={item.title} className="card p-6 hover:border-primary-300"><h3 className="font-display text-2xl font-bold text-navy-950 mb-3">{item.title}</h3><p className="text-surface-700 leading-relaxed">{item.description}</p><span className="mt-5 inline-flex items-center gap-2 font-semibold text-primary-700">Review service fit<ArrowRight className="w-4 h-4" aria-hidden="true" /></span></Link>)}
           </div>
         </div>
       </section>

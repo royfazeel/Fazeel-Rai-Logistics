@@ -111,7 +111,7 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = [
       { question: 'Can a box truck with new authority get dispatch help?', answer: 'You can request an onboarding review. Some brokers or loads have authority-age and insurance requirements that limit availability, so acceptance and load timing cannot be guaranteed.' },
       { question: 'Do you guarantee local or dedicated delivery routes?', answer: 'No. Share your preferred area and schedule, and we will assess whether the available service and freight fit. A dedicated route must be separately confirmed in writing.' },
     ],
-    related: [{ label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Cargo van dispatch review', href: '/equipment/cargo-van' }, { label: 'View dispatch pricing', href: '/pricing' }],
+    related: [{ label: 'How to find suitable box truck loads', href: '/resources/how-to-find-box-truck-loads' }, { label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Cargo van dispatch review', href: '/equipment/cargo-van' }, { label: 'View dispatch pricing', href: '/pricing' }],
   },
   {
     slug: 'power-only', title: 'Power only dispatch services', metaTitle: `Power Only Dispatch Services | ${getDispatchRateLabel('power-only')} Fee`,
@@ -239,7 +239,7 @@ export const SERVICE_CONTENT: DispatchContent[] = [
       { question: 'Can you help find partial loads as well as full truckloads?', answer: 'We can review suitable partial-load opportunities within the agreed dispatch scope. Equipment, cargo compatibility, broker terms and the combined schedule must fit, and you approve each booking. This is carrier dispatch support, not a shipper-facing less-than-truckload (LTL) shipping network.' },
       { question: 'Do you work under my authority?', answer: 'Dispatch support is provided for your carrier operation under the written agreement. You retain your carrier authority, equipment and responsibility for accepting and operating the load.' },
     ],
-    related: [{ label: 'Equipment we review', href: '/equipment' }, { label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Broker communication', href: '/services/broker-communication' }],
+    related: [{ label: 'How truck dispatch works', href: '/resources/what-does-a-truck-dispatcher-do' }, { label: 'Equipment we review', href: '/equipment' }, { label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Broker communication', href: '/services/broker-communication' }],
   },
   {
     slug: 'broker-communication', title: 'Broker communication for owner-operators', metaTitle: 'Broker Communication & Dispatch Support',
@@ -449,7 +449,7 @@ export const GUIDES: CarrierGuide[] = [
   {
     slug: 'carrier-onboarding-checklist', title: 'Truck dispatch onboarding checklist', metaTitle: 'Carrier Dispatch Onboarding Checklist',
     description: 'Prepare carrier documents, equipment specifications, lane preferences and dispatch terms. A clear onboarding checklist for owner-operators and fleets.',
-    eyebrow: 'Carrier guide · Getting started', readTime: '5 minute read', published: '2026-09-24', updated: '2026-09-28',
+    eyebrow: 'Carrier guide · Getting started', readTime: '5 minute read', published: '2026-09-24', updated: '2026-10-30',
     intro: 'A useful onboarding process establishes what the truck can do, when it can work and how the carrier approves freight. Gather the business documents first, then give your dispatcher the operating details needed for a realistic load search.',
     highlights: ['Documents and equipment details', 'Operating preferences', 'Written terms and approval process'],
     sections: [
@@ -466,6 +466,6 @@ export const GUIDES: CarrierGuide[] = [
       { question: 'Can a new authority request dispatch service?', answer: 'Yes, a new carrier can request a review. Some brokers have authority-history requirements, so available loads and approval timing may be more limited.' },
       { question: 'Should I upload my documents through an ordinary contact form?', answer: 'Start with the business and equipment information requested by the form. Arrange document submission directly with the team rather than adding sensitive documents to an unrelated field.' },
     ],
-    related: [{ label: 'Request a carrier review', href: '/contact' }, { label: 'Equipment dispatch options', href: '/equipment' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
+    related: [{ label: 'What happens after dispatch onboarding', href: '/resources/what-does-a-truck-dispatcher-do' }, { label: 'Request a carrier review', href: '/contact' }, { label: 'Equipment dispatch options', href: '/equipment' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
   },
 ];

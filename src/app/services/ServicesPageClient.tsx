@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import { BUSINESS, MEDIA, SERVICES } from '@/lib/constants';
+import { getDispatchRateLabel } from '@/lib/dispatch-pricing';
 import { track } from '@/lib/track';
 
 const iconComponents: Record<string, React.ElementType> = {
@@ -63,7 +64,7 @@ const serviceDetails = [
       'Broker eligibility checks',
       'Equipment-specific load matching',
       'Lane preference consideration',
-      'Minimize deadhead miles',
+      'Pickup deadhead review',
     ],
     stats: [
       { value: 'Your', label: 'Load Approval' },
@@ -76,7 +77,7 @@ const serviceDetails = [
     title: 'Broker & RC Communication',
     subtitle: 'Professional Communication on Your Behalf',
     description:
-      'From the initial rate call to delivery confirmation, we handle all broker and shipper communications. You focus on driving while we manage the details.',
+      'From the initial rate call to delivery confirmation, we coordinate broker calls, shipment updates and written instructions. Agree who handles urgent issues and after-hours contact before the first load.',
     benefits: [
       'Rate confirmation handling',
       'Appointment scheduling',
@@ -114,7 +115,7 @@ const serviceDetails = [
     title: 'Paperwork Support',
     subtitle: 'Documentation Done Right',
     description:
-      'We ensure all your load documentation is complete and accurate. From rate confirmations to BOLs, we keep your paperwork organized and ready for factoring.',
+      'We help organize rate confirmations, bills of lading and proof of delivery, and follow up on missing load documents. You provide accurate records and approve agreements; any factoring coordination follows your agreed service scope.',
     benefits: [
       'Rate confirmation management',
       'BOL organization and storage',
@@ -133,7 +134,7 @@ const serviceDetails = [
     title: 'Scheduling & Follow-ups',
     subtitle: 'Keep Pickup and Delivery Details Organized',
     description:
-      'We coordinate all pickup and delivery appointments, monitor your schedule, and ensure proactive communication to keep loads moving smoothly.',
+      'We help coordinate pickup and delivery appointments, clarify facility instructions and communicate schedule changes. Current truck status and driver availability guide the next booking.',
     benefits: [
       'Pickup/delivery scheduling',
       'Appointment confirmation calls',
@@ -170,11 +171,12 @@ export default function ServicesPageClient() {
           <div className="max-w-3xl">
             <p className="eyebrow">Our services</p>
             <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">
-              Full-service truck dispatch
+              Truck dispatch services for owner-operators and fleets
             </h1>
             <p className="text-white/70 text-lg max-w-2xl mb-8">
-              From finding loads to handling paperwork, we cover the whole back
-              office — so you can focus on what matters most: driving and earning.
+              Get help finding freight, negotiating rates, booking approved loads,
+              scheduling appointments and organizing paperwork. Choose support for
+              your equipment and lanes while you keep control of load acceptance.
             </p>
             <a
               href={BUSINESS.phoneHref}
@@ -202,8 +204,9 @@ export default function ServicesPageClient() {
                 Six jobs. One dispatcher.
               </h2>
               <p className="text-surface-700 text-lg">
-                Everything between you and a loaded trailer, handled by one
-                person who knows your truck. Pick a service to see how it works.
+                See what your dispatcher handles before pickup, during the trip
+                and after delivery. Each service explains the information we need
+                from your operation and the decisions that stay with you.
               </p>
             </div>
           </ScrollReveal>
@@ -360,20 +363,47 @@ export default function ServicesPageClient() {
         );
       })}
 
-      {/* ============================================================
-          WHY TRUST RAI — three flat cards, homepage "Why Rai" pattern.
-          ============================================================ */}
+      <section className="section-padding bg-white" aria-labelledby="service-equipment-heading">
+        <div className="container-custom">
+          <div className="max-w-3xl mb-8">
+            <p className="eyebrow">Match the service to the truck</p>
+            <h2 id="service-equipment-heading" className="section-heading">What does your dispatcher need to check?</h2>
+            <p className="mt-5 text-surface-700 text-lg leading-relaxed">The booking process changes with the freight you can carry. Use your actual truck specifications to review service fit, then confirm the load details before accepting.</p>
+          </div>
+          <div className="overflow-x-auto rounded-lg border border-surface-300">
+            <table className="w-full min-w-[520px] text-left text-sm sm:text-base">
+              <caption className="sr-only">Equipment-specific dispatch checks and published percentage fees</caption>
+              <thead className="bg-navy-950 text-white"><tr><th scope="col" className="p-4 sm:p-5">Equipment dispatch</th><th scope="col" className="p-4 sm:p-5">Confirm before booking</th><th scope="col" className="p-4 sm:p-5">Fee</th></tr></thead>
+              <tbody className="divide-y divide-surface-200">
+                {[
+                  { slug: 'dry-van', title: 'Dry van', check: 'Trailer dimensions, loading method and appointment windows.' },
+                  { slug: 'reefer', title: 'Reefer', check: 'Written temperature instructions, preparation and delivery timing.' },
+                  { slug: 'flatbed', title: 'Flatbed', check: 'Cargo dimensions, tarping and loading or securement requirements.' },
+                  { slug: 'box-truck', title: 'Box / straight truck', check: 'Usable space, payload, dock access, liftgate and unloading responsibility.' },
+                  { slug: 'sprinter-van', title: 'Sprinter van', check: 'Door opening, usable cargo dimensions and actual available payload.' },
+                  { slug: 'step-deck', title: 'Step deck', check: 'Deck configuration, cargo height, loading method and equipment fit.' },
+                  { slug: 'hotshot', title: 'Hotshot', check: 'Truck and trailer specifications, payload and required loading access.' },
+                  { slug: 'power-only', title: 'Power only', check: 'Trailer compatibility, interchange terms and pickup or return instructions.' },
+                ].map(equipment => <tr key={equipment.slug} className="even:bg-surface-50"><th scope="row" className="p-4 sm:p-5 font-semibold"><Link prefetch={false} href={`/equipment/${equipment.slug}`} className="text-primary-700 underline underline-offset-4 hover:text-primary-800">{equipment.title} dispatch</Link></th><td className="p-4 sm:p-5 text-surface-700 leading-relaxed">{equipment.check}</td><td className="p-4 sm:p-5 font-semibold text-navy-950 whitespace-nowrap">{getDispatchRateLabel(equipment.slug)}</td></tr>)}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-5 max-w-3xl text-sm leading-7 text-surface-700">Fees are a percentage of gross revenue on loads we dispatch. Specialized equipment and local-only work require a service availability review. <Link prefetch={false} href="/pricing" className="font-semibold text-primary-700 underline underline-offset-4">Review the fee and billing terms</Link> or <Link prefetch={false} href="/equipment" className="font-semibold text-primary-700 underline underline-offset-4">explore every equipment type</Link>.</p>
+        </div>
+      </section>
+
       <section className="section-padding bg-surface-50">
         <div className="container-custom">
           <ScrollReveal>
             <div className="max-w-2xl mb-12 sm:mb-16">
-              <p className="eyebrow">Why trust Rai Dispatch</p>
+              <p className="eyebrow">Before choosing a dispatch company</p>
               <h2 className="section-heading mb-4">
-                Built on experience, transparency, and driver success
+                Compare the working agreement, not just the fee.
               </h2>
               <p className="text-surface-700 text-lg">
-                Our dispatch services are built on experience, transparency, and
-                a commitment to driver success.
+                A useful dispatch service fits how your trucking business runs.
+                Review the scope, communication and approval process before the
+                first load is booked.
               </p>
             </div>
           </ScrollReveal>
@@ -382,21 +412,24 @@ export default function ServicesPageClient() {
             {[
               {
                 icon: Shield,
-                title: 'Experienced Dispatchers',
+                title: 'Service scope',
+                href: '/resources/how-to-choose-a-truck-dispatcher',
                 description:
-                  'Our team understands trucking inside and out. We speak the language and know how to get results.',
+                  'Confirm which broker calls, scheduling tasks and document follow-ups are included, and what the carrier must provide.',
               },
               {
                 icon: Clock,
-                title: 'Fast & Responsive',
+                title: 'Communication plan',
+                href: '/services/dedicated-dispatcher',
                 description:
-                  'When you need support, we are here. Quick response times and proactive communication.',
+                  'Agree your dispatcher contact, desk hours, update method and what to do when an appointment changes outside those hours.',
               },
               {
                 icon: Users,
-                title: 'Driver-First Mindset',
+                title: 'Load approval and fees',
+                href: '/pricing',
                 description:
-                  'Your success is our success. We treat every driver like a partner, not just a customer.',
+                  'You approve each load. Confirm your equipment rate, the revenue used to calculate it and billing terms in writing.',
               },
             ].map((item, idx) => (
               <ScrollReveal key={item.title} delay={idx * 0.1}>
@@ -415,6 +448,7 @@ export default function ServicesPageClient() {
                     <p className="text-surface-700 text-sm leading-relaxed">
                       {item.description}
                     </p>
+                    <Link prefetch={false} href={item.href} className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary-700 hover:underline">Review {item.title.toLowerCase()}<ArrowRight size={16} aria-hidden="true" /></Link>
                   </div>
                 </div>
               </ScrollReveal>

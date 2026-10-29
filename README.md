@@ -8,14 +8,14 @@ For lead delivery and the current website-measurement status, read [SETUP.md](SE
 
 ## What the site includes
 
-- **54 indexable page URLs**: 13 core/hub pages, 15 equipment pages, 11 service pages, three carrier audience pages, and 12 guides.
+- **57 indexable page URLs**: 13 core/hub pages, 15 equipment pages, 11 service pages, three carrier audience pages, and 15 guides.
 - Equipment coverage for dry van, reefer, flatbed, box truck, power only, step deck, hotshot, cargo van, Sprinter van, Conestoga, RGN/lowboy, car hauler, tanker, dump truck and curtain-side operations.
 - Separate content for owner-operators, small fleets, new authorities, regional and OTR operations, and dedicated dispatcher support. Practical guides cover fees, onboarding, choosing a dispatcher, freight rates, self-dispatch, broker roles and empty-mile planning.
 - Page-specific titles, descriptions, canonical URLs, Open Graph metadata, JSON-LD, sitemap, and robots rules.
 - Phone, SMS, WhatsApp, contact form, and quote modal. Percentage pricing is explained with a clearly labeled fee example.
-- Server-rendered FAQ answers and content that remains visible without scroll-triggered JavaScript. Background video is deferred, with Play/Pause controls on mobile and desktop.
+- Server-rendered FAQ answers and content that remains visible without scroll-triggered JavaScript. The homepage uses a responsive static hero image.
 
-The hero uses `/video/hero-highway-hd.mp4`: a 20.07-second, 1920×1080 H.264 excerpt (4,602,916 bytes), copied from the original footage without re-encoding and optimized for progressive playback. The old 960×540 source is no longer selected. The still image remains visible until playback starts and returns on a media error. Mobile and desktop use muted inline playback. Autoplay respects reduced-motion, data-saver and slow-connection settings; a visible Play control lets visitors start playback explicitly. The control reflects actual playback, allows cancellation while loading, and offers retry after a media error or timeout. Offscreen videos pause; the lower CTA does not load until it becomes visible.
+The homepage uses responsive static AVIF/WebP hero artwork. The decorative background video was removed from the active homepage in the October 26 performance release.
 
 The retained `/testimonials` route now explains the carrier experience. It does not publish unverified testimonials or ratings. The unused testimonial carousel, sample load ticker, and lead popup components are not mounted in the active site.
 
@@ -66,7 +66,7 @@ node scripts/verify-lead-api.mjs
 
 This harness requires a completed production build. It starts its own loopback Next server and fake Resend sink, uses reserved `.example` addresses, clears webhook delivery, and blocks non-loopback fetches in the test server. It accepts no remote URL. Checks include owner notification, carrier acknowledgement, validation, escaping, spam controls, rate limits, provider failures, and unconfigured delivery. Temporary processes and files are cleaned up afterward.
 
-The earlier September 24 release produced **46 build outputs**, including 40 indexable pages. Local verification on that date passed **40/40 sitemap pages** and **212 internal link/fragment targets**, with **zero failures or advisory warnings**. The lead API also previously passed **17/17 isolated checks**. Those are historical results; rerun verification for the current 54-page site after changes. The crawler also checks equipment-specific pricing in page content, metadata and percentage Offer descriptions. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
+The earlier September 24 release produced **46 build outputs**, including 40 indexable pages. Local verification on that date passed **40/40 sitemap pages** and **212 internal link/fragment targets**, with **zero failures or advisory warnings**. The lead API also previously passed **17/17 isolated checks**. Those are historical results; rerun verification for the current 57-page site after changes. The crawler also checks equipment-specific pricing in page content, metadata and percentage Offer descriptions. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
 
 ## Deploy to the existing Vercel project
 
