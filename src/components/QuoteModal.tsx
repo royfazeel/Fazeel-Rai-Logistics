@@ -335,7 +335,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                     <span>We do not sell your contact details. See our <Link href="/privacy" onClick={onClose} className="underline underline-offset-2 hover:text-primary-700">Privacy Policy</Link>.</span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label htmlFor="quote-name" className={labelCls}>
                         Your Name *
@@ -394,7 +394,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label htmlFor="quote-email" className={labelCls}>
                         Email (optional)
@@ -481,7 +481,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                     )}
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label htmlFor="quote-status" className={labelCls}>
                         Current Status

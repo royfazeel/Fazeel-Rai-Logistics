@@ -1,10 +1,10 @@
 import { pageMetadata, SITE_URL } from '@/lib/seo';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
-import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
+import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
 import { ContentJsonLd } from '@/components/content/ContentDetail';
 import PricingPageClient from './PricingPageClient';
 
-export const metadata = pageMetadata(`Truck Dispatch Pricing | ${DISPATCH_RATE_RANGE} & Free Setup`, `Compare ${DISPATCH_RATE_RANGE} dispatch fees by truck type. Check box truck, dry van, reefer, flatbed, hotshot and van rates. Free setup and a dedicated dispatcher included.`, '/pricing');
+export const metadata = pageMetadata(`Truck Dispatch Pricing | Box Trucks ${getDispatchRateLabel('box-truck')}`, `Box truck dispatch costs ${getDispatchRateLabel('box-truck')} of gross revenue on dispatched loads. Compare ${DISPATCH_RATE_RANGE} fees for all equipment, with free setup and a dedicated dispatcher.`, '/pricing');
 
 export default function PricingPage() {
   return <>

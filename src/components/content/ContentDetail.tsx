@@ -157,7 +157,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
             </details>
           </nav>
           <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-16">
-            <div className="max-w-3xl">
+            <div className="min-w-0 max-w-3xl">
               {!guide && <section id="service-details" className="mb-12 scroll-mt-28 rounded-xl border border-surface-300 bg-surface-50 p-6 sm:p-8" aria-labelledby="service-details-title">
                 <p className="eyebrow">Rai Dispatch · Service details</p>
                 <h2 id="service-details-title" className="mb-6 text-3xl text-navy-950">Dispatch service at a glance</h2>

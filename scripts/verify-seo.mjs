@@ -180,14 +180,14 @@ function checkRenderedCalculator(path, markup) {
   }
   if (options.length !== approvedFees.length + 1) issue(path, 'calculator-options', `Expected 16 approved calculator equipment options; found ${options.length}.`);
   const selected = options.find(option => option.selected) || options[0];
-  if (selected?.value !== 'dry-van') issue(path, 'calculator-default-equipment', `Expected dry-van default; received ${selected?.value}.`);
+  if (selected?.value !== 'box-truck') issue(path, 'calculator-default-equipment', `Expected box-truck default; received ${selected?.value}.`);
   const revenueInput = elements(markup, 'input').find(input => /-revenue$/.test(input.id || ''));
-  if (revenueInput?.value !== '5000') issue(path, 'calculator-default-revenue', `Expected 5000 initial revenue; received ${revenueInput?.value}.`);
+  if (revenueInput?.value !== '2000') issue(path, 'calculator-default-revenue', `Expected 2000 initial revenue; received ${revenueInput?.value}.`);
   const amounts = [...markup.matchAll(/<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/gi)].map(match => ({ label: plain(match[1]), amount: plain(match[2]) }));
   const expected = [
-    { label: /^Gross revenue entered$/i, amount: '$5,000.00' },
-    { label: /^Dispatch fee\s*\(5%\)$/i, amount: '$250.00' },
-    { label: /^Revenue after dispatch fee$/i, amount: '$4,750.00' },
+    { label: /^Gross revenue entered$/i, amount: '$2,000.00' },
+    { label: /^Dispatch fee\s*\(7%\)$/i, amount: '$140.00' },
+    { label: /^Revenue after dispatch fee$/i, amount: '$1,860.00' },
   ];
   for (const item of expected) {
     const result = amounts.find(pair => item.label.test(pair.label));
