@@ -32,6 +32,9 @@ export const metadata: Metadata = {
   authors: [{ name: BUSINESS.name }],
   creator: BUSINESS.parentCompany,
   publisher: BUSINESS.name,
+  verification: {
+    other: { 'msvalidate.01': '43D367AF26BF0F46B0DBFA8064241E02' },
+  },
   icons: {
     icon: [
       { url: '/favicon.ico?v=rai-union-v1', type: 'image/x-icon', sizes: '16x16 32x32 48x48 64x64 96x96' },

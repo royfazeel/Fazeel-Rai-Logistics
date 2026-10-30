@@ -702,7 +702,7 @@ export default function HomePage() {
               { title: 'How dispatch fees work', href: 'truck-dispatch-fees', text: 'Compare percentage fees, fixed plans, and the terms to confirm in writing.' },
               { title: 'Choose a truck dispatcher', href: 'how-to-choose-a-truck-dispatcher', text: 'Ask about load approval, communication, service scope, and cancellation.' },
               { title: 'Get ready for onboarding', href: 'carrier-onboarding-checklist', text: 'Prepare authority, insurance, equipment details, and your lane preferences.' },
-              { title: 'Evaluate a freight rate', href: 'evaluate-freight-rate-per-mile', text: 'Account for deadhead, time, fuel, and delivery requirements before accepting.' },
+              { title: 'Find and compare box truck loads', href: 'how-to-find-box-truck-loads', text: 'Check equipment fit, prepare your availability brief, and compare two offers using the worked example.' },
             ].map(item => <Link prefetch={false} key={item.href} href={`/resources/${item.href}`} className="card p-6 hover:border-primary-300"><h3 className="font-display text-2xl font-bold text-navy-950 mb-3">{item.title}</h3><p className="text-surface-700 mb-5">{item.text}</p><span className="inline-flex items-center gap-2 font-semibold text-primary-700">Read the guide<ArrowRight className="w-4 h-4" aria-hidden="true" /></span></Link>)}
           </div>
           <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3">

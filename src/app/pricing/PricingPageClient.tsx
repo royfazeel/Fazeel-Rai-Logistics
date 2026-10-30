@@ -7,7 +7,7 @@ import PricingTable from '@/components/PricingTable';
 import FeeCalculator from '@/components/FeeCalculator';
 import StaticPhoto from '@/components/StaticPhoto';
 import { BUSINESS, EQUIPMENT_TYPES, MEDIA } from '@/lib/constants';
-import { DEFAULT_DISPATCH_RATE, DISPATCH_PRICING_SUMMARY, DISPATCH_RATE_RANGE, getDispatchRate } from '@/lib/dispatch-pricing';
+import { DEFAULT_DISPATCH_RATE, DISPATCH_PRICING_SUMMARY, DISPATCH_RATE_RANGE, getDispatchRate, getDispatchRateLabel } from '@/lib/dispatch-pricing';
 import { track } from '@/lib/track';
 
 const feeExamples = Array.from(new Set(EQUIPMENT_TYPES.map(({ id }) => getDispatchRate(id))))
@@ -37,7 +37,7 @@ export default function PricingPageClient() {
       <div className="absolute inset-0 bg-navy-950/85" aria-hidden="true" />
       <div className="container-custom relative z-10"><p className="eyebrow">Transparent truck dispatch pricing</p><h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-tight mb-5 max-w-3xl">Truck dispatch fees by equipment: <span className="text-primary-400">{DISPATCH_RATE_RANGE}.</span></h1><p className="text-white/80 text-lg max-w-2xl mb-8">A dedicated truck dispatcher for your operation across the 48 contiguous states. No setup fee. You approve the loads. Know your equipment rate before the first booking.</p><a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_hero' })} className="btn-primary"><Phone className="w-5 h-5" aria-hidden="true" />Discuss your dispatch rate</a></div>
     </section>
-    <section className="section-padding bg-white"><div className="container-custom"><div className="max-w-2xl mb-10"><p className="eyebrow">Full service. Clear terms.</p><h2 className="section-heading mb-4">A dispatch partner for your next load.</h2><p className="text-surface-700 text-lg">Load search, rate negotiation, broker communication, lane planning, and paperwork support with an agreed percentage fee.</p></div><PricingTable /></div></section>
+    <section className="section-padding bg-white"><div className="container-custom"><div className="max-w-2xl mb-10"><p className="eyebrow">Full service. Clear terms.</p><h2 className="section-heading mb-4">A dispatch partner for your next load.</h2><p className="text-surface-700 text-lg">Load search, rate negotiation, broker communication, lane planning, and paperwork support with an agreed percentage fee.</p></div><PricingTable /><p className="mt-6 max-w-3xl text-sm leading-7 text-surface-700"><strong>Box truck pricing updated <time dateTime="2026-10-30">October 30, 2026</time>:</strong> Rai Dispatch’s current <Link href="/equipment/box-truck" className="font-semibold text-primary-700 underline underline-offset-4">box truck dispatch</Link> fee is {getDispatchRateLabel('box-truck')} of gross revenue on loads we dispatch.</p></div></section>
     <section className="section-padding bg-surface-50">
       <div id="fee-calculator" className="container-custom mb-12 scroll-mt-28"><FeeCalculator /></div>
       <div className="container-custom grid lg:grid-cols-2 gap-10">
