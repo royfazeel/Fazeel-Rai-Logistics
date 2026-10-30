@@ -1,4 +1,4 @@
-import { DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
+import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 
 export const GLOSSARY_PATH = '/resources/trucking-dispatch-glossary';
 export const GLOSSARY_REVIEWED = '2026-10-30';
@@ -98,7 +98,7 @@ export const GLOSSARY_GROUPS: { id: string; title: string; description: string; 
       { id: 'partial-truckload', name: 'Partial truckload', definition: 'A partial truckload uses only part of a truck’s available capacity under the agreed shipment arrangement. Combining compatible freight still requires approval of space, weight, loading order, appointments and any exclusive-use restrictions; spare deck space alone is not enough.', related: { label: 'Review partial-load decisions', href: '/resources/partial-truckload-vs-ltl' } },
       { id: 'load-board', name: 'Load board', definition: 'A load board is a platform where freight opportunities and available truck capacity can be listed or searched. A listing begins the review: current availability, carrier acceptance, shipment details and agreed booking terms still need confirmation.', related: { label: 'Compare a load board with dispatch support', href: '/resources/load-board-vs-dispatch-service' }, sourceId: 'source-terms' },
       { id: 'drop-and-hook', name: 'Drop and hook', definition: 'Drop and hook involves leaving one trailer and connecting to another instead of waiting for that same trailer to be loaded or unloaded. Confirm the trailer identifiers, condition, interchange arrangement and appointments; the method does not guarantee an immediate departure.', related: { label: 'Check power-only and trailer arrangements', href: '/equipment/power-only' } },
-      { id: 'dispatch-fee', name: 'Dispatch fee', definition: `A dispatch fee pays for the work specified in the carrier’s dispatch agreement. Rai Dispatch’s published rates are ${DISPATCH_RATE_RANGE}: ${getDispatchRateLabel('dry-van')} for dry van, flatbed and reefer; ${getDispatchRateLabel('hotshot')} for hotshot; and ${getDispatchRateLabel('box-truck')} for other equipment, with the revenue base and scope confirmed before service.`, related: { label: 'Check equipment fees and the calculator', href: '/pricing' } },
+      { id: 'dispatch-fee', name: 'Dispatch fee', definition: `A dispatch fee pays for the work specified in the carrier’s dispatch agreement. Rai Dispatch’s published rates are ${DISPATCH_RATE_RANGE} depending on the equipment category, with the revenue base and scope confirmed before service.`, related: { label: 'Check equipment fees and the calculator', href: '/pricing' } },
     ],
   },
 ];

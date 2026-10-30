@@ -23,6 +23,7 @@ const footerLinks = {
     { name: 'Hotshot', href: '/equipment/hotshot' },
     { name: 'Cargo Vans', href: '/equipment/cargo-van' },
     { name: 'Sprinter Vans', href: '/equipment/sprinter-van' },
+    { name: 'Conestoga Trailers', href: '/equipment/conestoga' },
     { name: 'All Equipment Types', href: '/equipment' },
   ],
   company: [

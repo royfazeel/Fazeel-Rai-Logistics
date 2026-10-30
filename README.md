@@ -1,6 +1,6 @@
 # Rai Dispatch
 
-Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. Published dispatch fees depend on equipment: **3% dry van/flatbed/reefer, 4% hotshot, and 5% all other equipment, including cargo and Sprinter vans**. The billing base, service availability, and terms must be confirmed in the written agreement. The website's supported-equipment scope still applies; a fee category does not establish that every specialized operation is available.
+Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. The current fee schedule, approved October 30, 2026, is **box truck 7%, dry van 5%, reefer 4%, flatbed 5%, power only 5%, step deck 5%, hotshot 6%, cargo van 12%, and Conestoga 4%**. Sprinter vans and other equipment remain **5%**; the published range is **4–12%**. The billing base, equipment classification, service availability, and terms must be confirmed in the written agreement. The website's supported-equipment scope still applies; a fee category does not establish that every specialized operation is available. This schedule records the approved revision, not deployment or test evidence for it.
 
 The source is configured for **https://raidispatch.com**. The existing GitHub repository is [royfazeel/Fazeel-Rai-Logistics](https://github.com/royfazeel/Fazeel-Rai-Logistics), connected to the existing Vercel project **fazeel-rai-logistics**. Repository and project names can retain the old brand without affecting the public website.
 

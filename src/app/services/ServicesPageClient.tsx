@@ -380,6 +380,8 @@ export default function ServicesPageClient() {
                   { slug: 'reefer', title: 'Reefer', check: 'Written temperature instructions, preparation and delivery timing.' },
                   { slug: 'flatbed', title: 'Flatbed', check: 'Cargo dimensions, tarping and loading or securement requirements.' },
                   { slug: 'box-truck', title: 'Box / straight truck', check: 'Usable space, payload, dock access, liftgate and unloading responsibility.' },
+                  { slug: 'cargo-van', title: 'Cargo van', check: 'Door openings, usable cargo space, payload and delivery access.' },
+                  { slug: 'conestoga', title: 'Conestoga trailer', check: 'Rolling-tarp clearance, loading access and weather-protection requirements.' },
                   { slug: 'sprinter-van', title: 'Sprinter van', check: 'Door opening, usable cargo dimensions and actual available payload.' },
                   { slug: 'step-deck', title: 'Step deck', check: 'Deck configuration, cargo height, loading method and equipment fit.' },
                   { slug: 'hotshot', title: 'Hotshot', check: 'Truck and trailer specifications, payload and required loading access.' },

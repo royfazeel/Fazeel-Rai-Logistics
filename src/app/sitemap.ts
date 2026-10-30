@@ -8,8 +8,8 @@ import { EQUIPMENT_IMAGES } from '@/lib/equipment-images';
 const CONTENT_UPDATED = '2026-09-24';
 const PAGE_REVISIONS: Record<string, string> = {
   '': '2026-10-30',
-  '/services': '2026-10-30', '/equipment': '2026-09-28',
-  '/pricing': '2026-09-28', '/contact': '2026-09-28',
+  '/services': '2026-10-30', '/equipment': '2026-10-30',
+  '/pricing': '2026-10-30', '/contact': '2026-09-28',
   '/about': '2026-09-28', '/faq': '2026-09-28',
   '/carriers': '2026-09-28', '/service-areas': '2026-09-28',
   '/resources': '2026-10-30',
@@ -18,7 +18,7 @@ const PAGE_REVISIONS: Record<string, string> = {
   '/editorial-standards': '2026-10-30',
   '/privacy': '2026-10-26', '/terms': '2026-09-28',
   '/testimonials': '2026-09-28',
-  ...Object.fromEntries(EQUIPMENT_CONTENT.map(({ slug }) => [`/equipment/${slug}`, '2026-09-28'])),
+  ...Object.fromEntries(EQUIPMENT_CONTENT.map(({ slug }) => [`/equipment/${slug}`, '2026-10-30'])),
   ...Object.fromEntries(SERVICE_CONTENT.map(({ slug }) => [`/services/${slug}`, '2026-09-28'])),
   ...Object.fromEntries(CARRIER_CONTENT.map(({ slug }) => [`/carriers/${slug}`, '2026-09-28'])),
   ...Object.fromEntries(GUIDES.map(guide => [`/resources/${guide.slug}`, guide.updated ?? guide.published])),

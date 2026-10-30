@@ -45,8 +45,8 @@ export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
   },
   {
     slug: 'conestoga',
-    title: 'Conestoga dispatch services',
-    metaTitle: `Conestoga Dispatch Services | ${getDispatchRateLabel('conestoga')} Fee`,
+    title: 'Conestoga trailer dispatch services',
+    metaTitle: `Conestoga Trailer Dispatch | ${getDispatchRateLabel('conestoga')} Fee`,
     description: `Conestoga dispatch at a ${getDispatchRateLabel('conestoga')} fee with a dedicated dispatcher. Review rolling-tarp clearance, loading access, protected freight and regional or OTR lane fit.`,
     eyebrow: 'Rolling-tarp equipment. Clear load specifications.',
     intro: 'Conestoga dispatch starts with the space and access inside the rolling-tarp system. Rai Dispatch helps carriers evaluate weather-sensitive freight, loading requirements and lane economics across the contiguous United States, with the equipment configuration reviewed before service begins.',

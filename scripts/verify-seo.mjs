@@ -30,16 +30,16 @@ const checkedLinks = new Set();
 // instruction. Do not import the site's pricing helper: this crawl must catch a
 // wrong value that has propagated consistently through the rendered website.
 const approvedFees = [
-  { slug: 'cargo-van', label: /cargo\s*vans?/i, rate: 5 },
+  { slug: 'cargo-van', label: /cargo\s*vans?/i, rate: 12 },
   { slug: 'sprinter-van', label: /sprinter\s*vans?/i, rate: 5 },
-  { slug: 'box-truck', label: /box\s*trucks?/i, rate: 5 },
-  { slug: 'hotshot', label: /hot\s*shot(?:\s*trucks?)?/i, rate: 4 },
-  { slug: 'dry-van', label: /dry\s*vans?/i, rate: 3 },
-  { slug: 'flatbed', label: /flatbeds?/i, rate: 3 },
-  { slug: 'reefer', label: /reefers?/i, rate: 3 },
+  { slug: 'box-truck', label: /box\s*trucks?/i, rate: 7 },
+  { slug: 'hotshot', label: /hot\s*shot(?:\s*trucks?)?/i, rate: 6 },
+  { slug: 'dry-van', label: /dry\s*vans?/i, rate: 5 },
+  { slug: 'flatbed', label: /flatbeds?/i, rate: 5 },
+  { slug: 'reefer', label: /reefers?/i, rate: 4 },
   { slug: 'power-only', label: /power[\s-]*only/i, rate: 5 },
   { slug: 'step-deck', label: /step[\s-]*decks?/i, rate: 5 },
-  { slug: 'conestoga', label: /conestogas?/i, rate: 5 },
+  { slug: 'conestoga', label: /conestogas?/i, rate: 4 },
   { slug: 'rgn-lowboy', label: /\brgn\b|low[\s-]*boys?/i, rate: 5 },
   { slug: 'car-hauler', label: /car[\s-]*haulers?/i, rate: 5 },
   { slug: 'tanker', label: /tankers?/i, rate: 5 },
@@ -49,9 +49,11 @@ const approvedFees = [
 const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 5 };
 const percentages = text => [...text.matchAll(/\b(\d+(?:\.\d+)?)\s*%/g)].map(match => Number(match[1]));
 const hasType = (node, type) => [node?.['@type']].flat().includes(type);
-// The September 28 schedule supersedes 5–8%; 'up to 5%' is now valid.
-const obsoletePricing = /\b5\s*%?\s*(?:[–—-]|to)\s*8\s*%|\b[678](?:\.0+)?\s*%|\bsame\s+(?:maximum\s+)?percentage\s+(?:across|for)\s+(?:all|our)/i;
-const approvedRange = /\b3\s*%?\s*(?:[–—-]|to)\s*5\s*%/i;
+// The owner's current schedule is 4–12%. Both earlier ranges and a 3% fee
+// are stale; 6%, 7% and 12% are now valid equipment rates. Numeric boundaries
+// prevent decimal percentages such as 11.3% from being mistaken for 3%.
+const obsoletePricing = /(?<![\d.])(?:3\s*%?\s*(?:[–—-]|to)\s*5|5\s*%?\s*(?:[–—-]|to)\s*8)\s*%|(?<![\d.])3(?:\.0+)?\s*%|\bsame\s+(?:maximum\s+)?percentage\s+(?:across|for)\s+(?:all|our)/i;
+const approvedRange = /\b4\s*%?\s*(?:[–—-]|to)\s*12\s*%/i;
 
 const issue = (path, check, detail) => failures.push({ path, check, detail });
 const decode = value => value.replace(/&(?:amp|quot|apos|lt|gt|nbsp|#(\d+)|#x([0-9a-f]+));/gi, (match, decimal, hex) => {
@@ -114,8 +116,8 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
     }
   }
   if (path === '/' || path === '/pricing') {
-    if (!approvedRange.test(visibleText)) issue(path, 'published-range', 'Expected the approved 3–5% fee range in visible text.');
-    if (!approvedRange.test(`${title} ${description}`)) issue(path, 'metadata-range', 'Expected the approved 3–5% fee range in title or description.');
+    if (!approvedRange.test(visibleText)) issue(path, 'published-range', 'Expected the approved 4–12% fee range in visible text.');
+    if (!approvedRange.test(`${title} ${description}`)) issue(path, 'metadata-range', 'Expected the approved 4–12% fee range in title or description.');
     if (!/free\s+(?:setup|onboarding)|no\s+(?:setup|onboarding)\s+fees?/i.test(visibleText)) issue(path, 'free-setup', 'Free setup or no setup fee must remain visible.');
   }
   if (path !== '/pricing') return;
@@ -170,8 +172,8 @@ function checkRenderedCalculator(path, markup) {
   const amounts = [...markup.matchAll(/<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/gi)].map(match => ({ label: plain(match[1]), amount: plain(match[2]) }));
   const expected = [
     { label: /^Gross revenue entered$/i, amount: '$5,000.00' },
-    { label: /^Dispatch fee\s*\(3%\)$/i, amount: '$150.00' },
-    { label: /^Revenue after dispatch fee$/i, amount: '$4,850.00' },
+    { label: /^Dispatch fee\s*\(5%\)$/i, amount: '$250.00' },
+    { label: /^Revenue after dispatch fee$/i, amount: '$4,750.00' },
   ];
   for (const item of expected) {
     const result = amounts.find(pair => item.label.test(pair.label));
@@ -334,7 +336,7 @@ await batch(internalLinks, async link => {
   }
 });
 
-const report = { approvedPricing: { range: '3–5%', equipment: Object.fromEntries(approvedFees.map(({ slug, rate }) => [slug, rate])), other: otherEquipmentFee.rate }, baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
+const report = { approvedPricing: { range: '4–12%', equipment: Object.fromEntries(approvedFees.map(({ slug, rate }) => [slug, rate])), other: otherEquipmentFee.rate }, baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
 if (outputPath) { await mkdir(dirname(outputPath), { recursive: true }); await writeFile(outputPath, JSON.stringify(report, null, 2) + '\n'); }
 for (const failure of failures) console.error(`FAIL ${failure.path} [${failure.check}] ${failure.detail}`);
 for (const warning of warnings) console.warn(`WARN ${warning.path} [${warning.check}] ${warning.detail}`);

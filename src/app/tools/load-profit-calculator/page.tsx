@@ -1,13 +1,18 @@
 import Link from 'next/link';
+import { calculateLoadEconomics, EXAMPLE_LOAD } from '@/lib/load-economics';
 import { ArrowRight } from 'lucide-react';
 import LoadProfitCalculator from '@/components/LoadProfitCalculator';
 import { ContentBreadcrumbs, ContentCTA, ContentJsonLd } from '@/components/content/ContentDetail';
 import { pageMetadata, SITE_URL } from '@/lib/seo';
 
+const money = (dollars: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(dollars);
+
 const path = '/tools/load-profit-calculator';
 export const metadata = pageMetadata('Truck Load Profit & Break-Even Calculator', 'Compare load pay, deadhead, fuel and dispatch fees. Calculate revenue per total mile, remaining after entered costs and the load pay needed to cover them.', path);
 
 export default function LoadProfitCalculatorPage() {
+  const example = calculateLoadEconomics(EXAMPLE_LOAD);
+  if (!example.valid) throw new Error('The published load example must contain valid inputs.');
   return <>
     <ContentJsonLd data={{ '@context': 'https://schema.org', '@type': 'WebPage', '@id': `${SITE_URL}${path}#page`, url: `${SITE_URL}${path}`, name: 'Truck load profit and break-even calculator', description: 'An interactive carrier worksheet for load pay, total miles, fuel, dispatch fees and other entered trip costs.', isPartOf: { '@id': `${SITE_URL}/#website` } }} />
     <header className="bg-navy-950 py-10 text-white sm:py-16">
@@ -24,9 +29,9 @@ export default function LoadProfitCalculatorPage() {
         <div>
           <p className="eyebrow">Illustrative example</p>
           <h2 id="worked-example-heading" className="section-heading">A $2,000 load with 100 empty miles</h2>
-          <p className="mt-5 leading-8 text-navy-700">Suppose a dry van load pays $2,000 for 800 loaded miles, plus 100 empty miles. At 6 MPG and $4 per gallon, the 900-mile trip uses an estimated 150 gallons and $600 in fuel. The 3% dispatch fee is $60. With $150 of other costs entered, $1,190 remains.</p>
-          <p className="mt-4 leading-8 text-navy-700">The headline rate is $2.50 per loaded mile. Including deadhead lowers gross revenue to $2.22 per total mile. The remaining amount is about $1.32 per total mile, or $59.50 per hour if the trip takes 20 hours. These figures still exclude any costs you have not entered.</p>
-          <p className="mt-4 leading-8 text-navy-700">For that same trip, $773.20 in load pay covers the $750 of entered fuel and other costs after allowing for the 3% dispatch fee. That is a cost-recovery estimate for this worksheet, not a suggested market rate or a profitable quote for your business.</p>
+          <p className="mt-5 leading-8 text-navy-700">Suppose a dry van load pays $2,000 for 800 loaded miles, plus 100 empty miles. At 6 MPG and $4 per gallon, the 900-mile trip uses an estimated 150 gallons and $600 in fuel. The {example.dispatchRate}% dispatch fee is {money(example.dispatchFeeCents / 100)}. With $150 of other costs entered, {money(example.remainingCents / 100)} remains.</p>
+          <p className="mt-4 leading-8 text-navy-700">The headline rate is $2.50 per loaded mile. Including deadhead lowers gross revenue to $2.22 per total mile. The remaining amount is about {money(example.remainingPerAllMile)} per total mile, or {money(example.remainingPerHour ?? 0)} per hour if the trip takes 20 hours. These figures still exclude any costs you have not entered.</p>
+          <p className="mt-4 leading-8 text-navy-700">For that same trip, {money(example.breakEvenCents / 100)} in load pay covers the $750 of entered fuel and other costs after allowing for the {example.dispatchRate}% dispatch fee. That is a cost-recovery estimate for this worksheet, not a suggested market rate or a profitable quote for your business.</p>
         </div>
         <div className="rounded-xl border border-surface-300 bg-white p-6 sm:p-8">
           <h2 className="text-3xl">How the calculator works</h2>

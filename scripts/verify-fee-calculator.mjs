@@ -25,20 +25,20 @@ if (jsonIndex >= 0 && (!output || output.startsWith('--'))) throw new Error('--j
 // Deliberately independent of src/lib/dispatch-pricing.ts. An incorrect published
 // helper must fail even if the calculator consistently uses that wrong helper.
 const expectedFees = {
-  'dry-van': 3, reefer: 3, flatbed: 3, hotshot: 4,
-  'box-truck': 5, 'cargo-van': 5, 'sprinter-van': 5, 'power-only': 5,
-  'step-deck': 5, conestoga: 5, 'rgn-lowboy': 5, 'car-hauler': 5,
+  'dry-van': 5, reefer: 4, flatbed: 5, hotshot: 6,
+  'box-truck': 7, 'cargo-van': 12, 'sprinter-van': 5, 'power-only': 5,
+  'step-deck': 5, conestoga: 4, 'rgn-lowboy': 5, 'car-hauler': 5,
   tanker: 5, 'dump-truck': 5, 'curtain-side': 5, other: 5,
 };
 // Explicit currency fixtures, not the component's math copied as a test oracle.
 const examples = [
-  { input: '5000', gross: '$5,000.00', rates: { 3: ['$150.00', '$4,850.00'], 4: ['$200.00', '$4,800.00'], 5: ['$250.00', '$4,750.00'] } },
-  { input: '5,000.50', gross: '$5,000.50', rates: { 3: ['$150.02', '$4,850.48'], 4: ['$200.02', '$4,800.48'], 5: ['$250.03', '$4,750.47'] } },
-  { input: '19.99', gross: '$19.99', rates: { 3: ['$0.60', '$19.39'], 4: ['$0.80', '$19.19'], 5: ['$1.00', '$18.99'] } },
-  { input: '0.10', gross: '$0.10', rates: { 3: ['$0.00', '$0.10'], 4: ['$0.00', '$0.10'], 5: ['$0.01', '$0.09'] } },
-  { input: '0.01', gross: '$0.01', rates: { 3: ['$0.00', '$0.01'], 4: ['$0.00', '$0.01'], 5: ['$0.00', '$0.01'] } },
-  { input: '0', gross: '$0.00', rates: { 3: ['$0.00', '$0.00'], 4: ['$0.00', '$0.00'], 5: ['$0.00', '$0.00'] } },
-  { input: '1,000,000,000', gross: '$1,000,000,000.00', rates: { 3: ['$30,000,000.00', '$970,000,000.00'], 4: ['$40,000,000.00', '$960,000,000.00'], 5: ['$50,000,000.00', '$950,000,000.00'] } },
+  { input: '5000', gross: '$5,000.00', rates: { 4: ['$200.00', '$4,800.00'], 5: ['$250.00', '$4,750.00'], 6: ['$300.00', '$4,700.00'], 7: ['$350.00', '$4,650.00'], 12: ['$600.00', '$4,400.00'] } },
+  { input: '5,000.50', gross: '$5,000.50', rates: { 4: ['$200.02', '$4,800.48'], 5: ['$250.03', '$4,750.47'], 6: ['$300.03', '$4,700.47'], 7: ['$350.04', '$4,650.46'], 12: ['$600.06', '$4,400.44'] } },
+  { input: '19.99', gross: '$19.99', rates: { 4: ['$0.80', '$19.19'], 5: ['$1.00', '$18.99'], 6: ['$1.20', '$18.79'], 7: ['$1.40', '$18.59'], 12: ['$2.40', '$17.59'] } },
+  { input: '0.10', gross: '$0.10', rates: { 4: ['$0.00', '$0.10'], 5: ['$0.01', '$0.09'], 6: ['$0.01', '$0.09'], 7: ['$0.01', '$0.09'], 12: ['$0.01', '$0.09'] } },
+  { input: '0.01', gross: '$0.01', rates: { 4: ['$0.00', '$0.01'], 5: ['$0.00', '$0.01'], 6: ['$0.00', '$0.01'], 7: ['$0.00', '$0.01'], 12: ['$0.00', '$0.01'] } },
+  { input: '0', gross: '$0.00', rates: { 4: ['$0.00', '$0.00'], 5: ['$0.00', '$0.00'], 6: ['$0.00', '$0.00'], 7: ['$0.00', '$0.00'], 12: ['$0.00', '$0.00'] } },
+  { input: '1,000,000,000', gross: '$1,000,000,000.00', rates: { 4: ['$40,000,000.00', '$960,000,000.00'], 5: ['$50,000,000.00', '$950,000,000.00'], 6: ['$60,000,000.00', '$940,000,000.00'], 7: ['$70,000,000.00', '$930,000,000.00'], 12: ['$120,000,000.00', '$880,000,000.00'] } },
 ];
 const invalidInputs = ['', ' ', '-1', '5,00', '1e3', 'NaN', 'Infinity', '5000.001', '1,000,000,000.01'];
 let controlledState;
@@ -88,6 +88,7 @@ for (const [equipment, rate] of Object.entries(expectedFees)) {
       return received === amount ? [] : [{ label, expected: amount, received: received || 'missing' }];
     });
     if (!html.includes('aria-invalid="false"')) mismatches.push({ label: 'validation', expected: 'valid', received: 'invalid' });
+    if (!html.includes('4–12%')) mismatches.push({ label: 'published range', expected: '4–12%', received: 'missing or outdated' });
     checks.push({ equipment, rate, input: example.input, pass: !mismatches.length, mismatches });
   }
 }
