@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** Actual calculator logic + SSR component checks. No network or lead submission. */
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
@@ -16,22 +16,29 @@ const { renderToStaticMarkup } = require('react-dom/server');
 let controlledInput;
 const modules = new Map();
 function loadSource(filename) {
-  const path = resolve(root, filename);
+  const basePath = resolve(root, filename);
+  const path = [basePath, `${basePath}.ts`, `${basePath}.tsx`].find(candidate => existsSync(candidate));
+  if (!path) throw new Error(`Source module not found: ${filename}`);
   if (modules.has(path)) return modules.get(path).exports;
   const module = { exports: {} };
   modules.set(path, module);
   const code = ts.transpileModule(readFileSync(path, 'utf8'), { fileName: path, compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
   const localRequire = specifier => {
-    if (specifier === 'react') return { ...React, useId: () => 'load-audit', useState: initial => [controlledInput ?? initial, () => {}] };
-    if (specifier.startsWith('@/')) return loadSource(`src/${specifier.slice(2)}.ts`);
-    if (specifier.startsWith('.')) return loadSource(resolve(dirname(path), `${specifier}.ts`));
+    if (specifier === 'react') return { ...React, useId: () => 'load-audit', useState: initial => {
+      const value = controlledInput ?? initial;
+      return [value, update => { controlledInput = typeof update === 'function' ? update(controlledInput ?? value) : update; }];
+    } };
+    if (specifier.startsWith('@/')) return loadSource(`src/${specifier.slice(2)}`);
+    if (specifier.startsWith('.')) return loadSource(resolve(dirname(path), specifier));
     return require(specifier);
   };
   new Script(`(function(require,module,exports){${code}\n})`, { filename: path }).runInThisContext()(localRequire, module, module.exports);
   return module.exports;
 }
-const { calculateLoadEconomics } = loadSource('src/lib/load-economics.ts');
+const { calculateLoadEconomics, normalizeEquipmentSelection } = loadSource('src/lib/load-economics.ts');
 const Calculator = loadSource('src/components/LoadProfitCalculator.tsx').default;
+const calculatorPage = loadSource('src/app/tools/load-profit-calculator/page.tsx');
+const { LEARNING_LINKS } = loadSource('src/lib/learning-links.ts');
 // Independent fixtures: do not import the example or pricing constants as an oracle.
 const base = { equipment: 'dry-van', loadPay: '2000', loadedMiles: '800', emptyMiles: '100', totalHours: '20', fuelPrice: '4', mpg: '6', otherCosts: '150' };
 const checks = [];
@@ -66,11 +73,27 @@ check('Worked example reconciles every entered cost and both rate-per-mile measu
 const fees = { 'dry-van': 5, reefer: 4, flatbed: 5, hotshot: 6, 'box-truck': 7, 'cargo-van': 12, 'sprinter-van': 5, 'power-only': 5, 'step-deck': 5, conestoga: 4, 'rgn-lowboy': 5, 'car-hauler': 5, tanker: 5, 'dump-truck': 5, 'curtain-side': 5, other: 5 };
 const feeExamples = { 4: { fee: 8000, remaining: 117000, breakEven: 78125 }, 5: { fee: 10000, remaining: 115000, breakEven: 78948 }, 6: { fee: 12000, remaining: 113000, breakEven: 79788 }, 7: { fee: 14000, remaining: 111000, breakEven: 80646 }, 12: { fee: 24000, remaining: 101000, breakEven: 85228 } };
 for (const [equipment, rate] of Object.entries(fees)) check(`${equipment} uses its independently expected fee`, () => {
+  assert.equal(normalizeEquipmentSelection(equipment), equipment);
   const actual = result({ equipment });
   assert.equal(actual.dispatchRate, rate);
   assert.equal(actual.dispatchFeeCents, feeExamples[rate].fee);
   assert.equal(actual.remainingCents, feeExamples[rate].remaining);
   assert.equal(actual.breakEvenCents, feeExamples[rate].breakEven);
+});
+for (const value of [undefined, '', 'not-a-truck', 'BOX-TRUCK', ' box-truck ', '__proto__', 'constructor', [], ['box-truck'], ['box-truck', 'dry-van'], ['box-truck', 'box-truck']]) {
+  check(`Missing, unknown or repeated equipment ${JSON.stringify(value)} selects the dry-van default`, () => {
+    const equipment = normalizeEquipmentSelection(value);
+    assert.equal(equipment, 'dry-van');
+    assert.equal(result({ equipment }).dispatchFeeCents, 10000);
+  });
+}
+check('Both box-truck discovery links select the 7% calculator preset', () => {
+  for (const path of ['/equipment/box-truck', '/resources/how-to-find-box-truck-loads']) {
+    const link = LEARNING_LINKS[path].find(item => item.href.startsWith('/tools/load-profit-calculator'));
+    assert.equal(link?.href, '/tools/load-profit-calculator?equipment=box-truck');
+    const equipment = normalizeEquipmentSelection(new URL(link.href, 'https://raidispatch.com').searchParams.get('equipment'));
+    assert.equal(result({ equipment }).dispatchFeeCents, 14000);
+  }
 });
 check('Zero load pay produces a loss, not an invalid division', () => {
   const actual = result({ loadPay: '0' });
@@ -146,8 +169,29 @@ check('All supported numeric extremes remain finite', () => {
 check('Default SSR contains the worked estimate and explicit profit limitation', () => {
   controlledInput = undefined;
   const html = renderToStaticMarkup(React.createElement(Calculator));
-  for (const expected of ['$1,150.00', '$789.48', '$600.00', '$100.00', '$2.22', '$57.50', 'This is not net profit.', 'aria-live="polite"', 'for="load-audit-mpg"']) assert.ok(html.includes(expected), expected);
+  for (const expected of ['Dry Vans · 5% dispatch fee', '$1,150.00', '$789.48', '$600.00', '$100.00', '$2.22', '$57.50', 'This is not net profit.', 'aria-live="polite"', 'for="load-audit-mpg"']) assert.ok(html.includes(expected), expected);
   assert.ok(!html.includes('aria-invalid="true"'));
+});
+check('Box-truck SSR initial selection names the equipment and shows the $140 fee', () => {
+  controlledInput = undefined;
+  const html = renderToStaticMarkup(React.createElement(Calculator, { initialEquipment: 'box-truck' }));
+  for (const expected of ['Box Trucks · 7% dispatch fee', '$140.00', '$1,110.00', '$806.46', '$55.50', '<option value="box-truck" selected="">']) assert.ok(html.includes(expected), expected);
+  assert.ok(!html.includes('<option value="dry-van" selected="">'));
+});
+function findElement(node, predicate) {
+  if (!node || typeof node !== 'object') return undefined;
+  if (Array.isArray(node)) return node.map(child => findElement(child, predicate)).find(Boolean);
+  if (predicate(node)) return node;
+  return findElement(node.props?.children, predicate);
+}
+check('Reset restores example trip inputs while retaining the currently selected truck', () => {
+  controlledInput = { ...base, equipment: 'cargo-van', loadPay: '9000', loadedMiles: '50', emptyMiles: '25', totalHours: '', mpg: '14', fuelPrice: '3', otherCosts: '90' };
+  const tree = Calculator({ initialEquipment: 'box-truck' });
+  const reset = findElement(tree, node => node.type === 'button' && node.props.children === 'Reset example values');
+  assert.ok(reset, 'Reset button exists');
+  reset.props.onClick();
+  assert.deepEqual(controlledInput, { ...base, equipment: 'cargo-van', fuelPrice: '4.00' });
+  assert.equal(calculateLoadEconomics(controlledInput).dispatchFeeCents, 24000);
 });
 check('Invalid component input is labelled and hides calculated amounts', () => {
   controlledInput = { ...base, mpg: '0' };
@@ -164,6 +208,28 @@ check('Optional blank hours hides only the hourly output', () => {
   assert.ok(!html.includes('Remaining per trip hour'));
   assert.ok(html.includes('$1,150.00'));
 });
+
+for (const [name, query, equipment, fee, feeAmount, remainder] of [
+  ['box preset', { equipment: 'box-truck' }, 'box-truck', 7, '$140', '$1,110'],
+  ['generic default', {}, 'dry-van', 5, '$100', '$1,150'],
+  ['invalid preset', { equipment: 'not-a-truck' }, 'dry-van', 5, '$100', '$1,150'],
+  ['repeated preset', { equipment: ['box-truck', 'dry-van'] }, 'dry-van', 5, '$100', '$1,150'],
+]) {
+  controlledInput = undefined;
+  const tree = await calculatorPage.default({ searchParams: Promise.resolve(query) });
+  check(`Server page ${name} aligns the keyed client and worked example with one canonical`, () => {
+    const client = findElement(tree, node => node.type === Calculator);
+    assert.equal(client.props.initialEquipment, equipment);
+    assert.equal(client.key, equipment);
+    const example = findElement(tree, node => node.props?.['aria-labelledby'] === 'worked-example-heading');
+    const exampleHtml = renderToStaticMarkup(example);
+    assert.ok(exampleHtml.includes(`Dispatch fee: ${fee}%`));
+    assert.ok(exampleHtml.includes(`The ${fee}% dispatch fee is ${feeAmount}.`));
+    assert.ok(exampleHtml.includes(`${remainder} remains.`));
+    assert.ok(exampleHtml.includes(equipment === 'box-truck' ? 'Equipment: Box Trucks' : 'Equipment: Dry Vans'));
+    assert.equal(calculatorPage.metadata.alternates.canonical, 'https://raidispatch.com/tools/load-profit-calculator');
+  });
+}
 
 const failures = checks.filter(item => !item.pass);
 const report = { checkedAt: new Date().toISOString(), checks: checks.length, passed: checks.length - failures.length, failures, cases: checks };

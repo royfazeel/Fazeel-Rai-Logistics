@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { calculateLoadEconomics, EXAMPLE_LOAD } from '@/lib/load-economics';
+import { calculateLoadEconomics, EXAMPLE_LOAD, normalizeEquipmentSelection } from '@/lib/load-economics';
+import { EQUIPMENT_TYPES } from '@/lib/constants';
 import { ArrowRight } from 'lucide-react';
 import LoadProfitCalculator from '@/components/LoadProfitCalculator';
 import { ContentBreadcrumbs, ContentCTA, ContentJsonLd } from '@/components/content/ContentDetail';
@@ -10,8 +11,10 @@ const money = (dollars: number) => new Intl.NumberFormat('en-US', { style: 'curr
 const path = '/tools/load-profit-calculator';
 export const metadata = pageMetadata('Truck Load Profit & Break-Even Calculator', 'Compare load pay, deadhead, fuel and dispatch fees. Calculate revenue per total mile, remaining after entered costs and the load pay needed to cover them.', path);
 
-export default function LoadProfitCalculatorPage() {
-  const example = calculateLoadEconomics(EXAMPLE_LOAD);
+export default async function LoadProfitCalculatorPage({ searchParams }: { searchParams: Promise<{ equipment?: string | string[] }> }) {
+  const initialEquipment = normalizeEquipmentSelection((await searchParams).equipment);
+  const equipmentName = EQUIPMENT_TYPES.find(equipment => equipment.id === initialEquipment)?.name ?? 'Other truck type';
+  const example = calculateLoadEconomics({ ...EXAMPLE_LOAD, equipment: initialEquipment });
   if (!example.valid) throw new Error('The published load example must contain valid inputs.');
   return <>
     <ContentJsonLd data={{ '@context': 'https://schema.org', '@type': 'WebPage', '@id': `${SITE_URL}${path}#page`, url: `${SITE_URL}${path}`, name: 'Truck load profit and break-even calculator', description: 'An interactive carrier worksheet for load pay, total miles, fuel, dispatch fees and other entered trip costs.', isPartOf: { '@id': `${SITE_URL}/#website` } }} />
@@ -23,13 +26,14 @@ export default function LoadProfitCalculatorPage() {
         <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">A load’s headline rate does not show what the whole trip costs. Compare loaded and empty miles, fuel, the dispatch fee and other costs you enter. The result shows remaining revenue for your review, not your business’s net profit.</p>
       </div>
     </header>
-    <div className="container-custom py-12 sm:py-16"><LoadProfitCalculator /></div>
+    <div className="container-custom py-12 sm:py-16"><LoadProfitCalculator key={initialEquipment} initialEquipment={initialEquipment} /></div>
     <section className="bg-surface-50 py-12 sm:py-16" aria-labelledby="worked-example-heading">
       <div className="container-custom grid gap-10 lg:grid-cols-2">
         <div>
           <p className="eyebrow">Illustrative example</p>
           <h2 id="worked-example-heading" className="section-heading">A $2,000 load with 100 empty miles</h2>
-          <p className="mt-5 leading-8 text-navy-700">Suppose a dry van load pays $2,000 for 800 loaded miles, plus 100 empty miles. At 6 MPG and $4 per gallon, the 900-mile trip uses an estimated 150 gallons and $600 in fuel. The {example.dispatchRate}% dispatch fee is {money(example.dispatchFeeCents / 100)}. With $150 of other costs entered, {money(example.remainingCents / 100)} remains.</p>
+          <p className="mt-5 font-semibold text-navy-950">Equipment: {equipmentName} · Dispatch fee: {example.dispatchRate}%</p>
+          <p className="mt-4 leading-8 text-navy-700">Suppose a load pays $2,000 for 800 loaded miles, plus 100 empty miles. At 6 MPG and $4 per gallon, the 900-mile trip uses an estimated 150 gallons and $600 in fuel. The {example.dispatchRate}% dispatch fee is {money(example.dispatchFeeCents / 100)}. With $150 of other costs entered, {money(example.remainingCents / 100)} remains.</p>
           <p className="mt-4 leading-8 text-navy-700">The headline rate is $2.50 per loaded mile. Including deadhead lowers gross revenue to $2.22 per total mile. The remaining amount is about {money(example.remainingPerAllMile)} per total mile, or {money(example.remainingPerHour ?? 0)} per hour if the trip takes 20 hours. These figures still exclude any costs you have not entered.</p>
           <p className="mt-4 leading-8 text-navy-700">For that same trip, {money(example.breakEvenCents / 100)} in load pay covers the $750 of entered fuel and other costs after allowing for the {example.dispatchRate}% dispatch fee. That is a cost-recovery estimate for this worksheet, not a suggested market rate or a profitable quote for your business.</p>
         </div>

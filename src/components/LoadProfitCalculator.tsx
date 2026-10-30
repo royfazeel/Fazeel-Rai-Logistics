@@ -3,8 +3,8 @@
 import { useId, useState } from 'react';
 import { EQUIPMENT_TYPES } from '@/lib/constants';
 import { getDispatchRate } from '@/lib/dispatch-pricing';
-import { calculateLoadEconomics, EXAMPLE_LOAD } from '@/lib/load-economics';
-import type { LoadNumberField } from '@/lib/load-economics';
+import { calculateLoadEconomics, DEFAULT_LOAD_EQUIPMENT, EXAMPLE_LOAD, normalizeEquipmentSelection } from '@/lib/load-economics';
+import type { LoadEquipment, LoadNumberField } from '@/lib/load-economics';
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 const number = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
@@ -19,13 +19,15 @@ const fields: { key: LoadNumberField; label: string; help: string }[] = [
 ];
 const inputClass = 'min-h-[48px] w-full rounded-lg border border-surface-400 bg-white px-4 py-3 text-base text-navy-950 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600/30';
 
-export default function LoadProfitCalculator() {
+export default function LoadProfitCalculator({ initialEquipment = DEFAULT_LOAD_EQUIPMENT }: { initialEquipment?: LoadEquipment }) {
   const id = useId();
-  const [input, setInput] = useState({ ...EXAMPLE_LOAD });
+  const [input, setInput] = useState({ ...EXAMPLE_LOAD, equipment: initialEquipment });
   const result = calculateLoadEconomics(input);
+  const equipmentName = EQUIPMENT_TYPES.find(equipment => equipment.id === input.equipment)?.name ?? 'Other truck type';
+  const equipmentSummary = `${equipmentName} · ${getDispatchRate(input.equipment)}% dispatch fee`;
   const errors: Partial<Record<LoadNumberField, string>> = result.valid ? {} : result.errors;
   const summary = result.valid
-    ? `${currency.format(result.remainingCents / 100)} remains after entered costs. Break-even load pay is ${currency.format(result.breakEvenCents / 100)} for those costs only.`
+    ? `${equipmentSummary}. ${currency.format(result.remainingCents / 100)} remains after entered costs. Break-even load pay is ${currency.format(result.breakEvenCents / 100)} for those costs only.`
     : 'Correct the highlighted inputs to calculate this trip.';
 
   return (
@@ -39,7 +41,7 @@ export default function LoadProfitCalculator() {
         <form onSubmit={event => event.preventDefault()} className="space-y-6 p-6 sm:p-8" aria-label="Load cost inputs">
           <div>
             <label htmlFor={`${id}-equipment`} className="mb-2 block font-semibold text-navy-950">Truck or equipment type</label>
-            <select id={`${id}-equipment`} value={input.equipment} onChange={event => setInput(previous => ({ ...previous, equipment: event.target.value }))} className={inputClass} aria-describedby={`${id}-equipment-help`}>
+            <select id={`${id}-equipment`} value={input.equipment} onChange={event => setInput(previous => ({ ...previous, equipment: normalizeEquipmentSelection(event.target.value) }))} className={inputClass} aria-describedby={`${id}-equipment-help`}>
               {EQUIPMENT_TYPES.map(equipment => <option key={equipment.id} value={equipment.id}>{equipment.name} — {getDispatchRate(equipment.id)}%</option>)}
               <option value="other">Other truck type — {getDispatchRate('other')}%</option>
             </select>
@@ -51,10 +53,14 @@ export default function LoadProfitCalculator() {
             <p id={`${id}-${field.key}-help`} className="mt-2 text-sm leading-6 text-surface-700">{field.help}</p>
             {errors[field.key] ? <p id={`${id}-${field.key}-error`} className="mt-2 text-sm font-semibold text-primary-700">{errors[field.key]}</p> : null}
           </div>)}
-          <button type="button" className="min-h-[44px] rounded-lg border border-surface-400 px-5 py-3 font-semibold text-navy-900 hover:border-primary-600 hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600" onClick={() => setInput({ ...EXAMPLE_LOAD })}>Reset illustrative example</button>
+          <div>
+            <button type="button" className="min-h-[44px] rounded-lg border border-surface-400 px-5 py-3 font-semibold text-navy-900 hover:border-primary-600 hover:text-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600" onClick={() => setInput(previous => ({ ...EXAMPLE_LOAD, equipment: previous.equipment }))}>Reset example values</button>
+            <p className="mt-2 text-sm leading-6 text-surface-700">Keeps your selected equipment and resets the illustrative trip inputs.</p>
+          </div>
         </form>
         <div className="rounded-b-xl bg-navy-950 p-6 text-white sm:p-8 lg:sticky lg:top-24 lg:rounded-bl-none">
           <p className="eyebrow">Load cost estimate</p>
+          <p className="mb-5 text-lg font-semibold">{equipmentSummary}</p>
           <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{summary}</p>
           {result.valid ? <>
             <dl className="space-y-4">

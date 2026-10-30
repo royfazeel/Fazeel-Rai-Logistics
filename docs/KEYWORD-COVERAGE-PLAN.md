@@ -1,6 +1,6 @@
 # Rai Dispatch organic search coverage
 
-Updated October 30, 2026. This document records the observed search baseline, the purpose of each main destination, and how to assess the current content update. Query examples describe relevant visitor needs; they are not search-volume estimates or ranking promises.
+Updated October 31, 2026. This document records the observed search baseline, the purpose of each main destination, and how to assess the current content update. Query examples describe relevant visitor needs; they are not search-volume estimates or ranking promises.
 
 ## Search Console baseline
 
@@ -72,7 +72,7 @@ The subsequent **October 30 equipment and pricing revision** focuses on the nine
 ## Business facts and editorial limits
 
 - The current fee schedule approved **October 30, 2026** is **box truck 7%, dry van 5%, reefer 4%, flatbed 5%, power only 5%, step deck 5%, hotshot 6%, cargo van 12%, and Conestoga 4%**. Sprinter vans and other equipment remain **5%**, for a **4–12%** range. `src/lib/dispatch-pricing.ts` is the source for these rates. Confirm equipment classification, billing base and service scope in the agreement; do not group cargo/Sprinter or dry van/reefer as sharing a fee.
-- Coverage is the **48 contiguous United States**. Published desk hours are Monday–Saturday, 8 AM–6 PM Central Time. Contact email remains `sam@railogistics.us`.
+- Coverage is the **48 contiguous United States**. Active carriers receive 24/7 live dispatch support. New-carrier setup desk hours are Monday–Saturday, 8 AM–6 PM Central Time. Contact email remains `sam@railogistics.us`.
 - Equipment and freight require a service-fit review. A published equipment category is not a promise of every commodity, permit service, broker acceptance, dedicated lane or load availability.
 - Keep new-authority, revenue, rate and scheduling claims conditional on actual requirements. Do not invent testimonials, local offices, case-study results, provider affiliations or platform access.
 - Do not create pages for every synonym or city, add hidden keyword blocks, or add a meta-keywords list. Google does not use the keywords meta tag, and its policies address keyword stuffing and doorway pages. [SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide), [spam policies](https://developers.google.com/search/docs/essentials/spam-policies)
@@ -110,3 +110,11 @@ Google’s AI features use ordinary SEO fundamentals. Eligibility requires an in
 Robots wildcard permissions already allow Googlebot, Bingbot, OAI-SearchBot, Claude-SearchBot and PerplexityBot on public pages. The new access check tests representative declared user-agent requests; it does not prove access from verified engine IP ranges or actual inclusion. IndexNow notifications tell participating engines which published canonical URLs changed and are distinct from Google sitemap submission. [IndexNow protocol](https://www.indexnow.org/documentation)
 
 The next evidence needed is post-release crawl/index data, qualified nonbrand clicks and real carrier outcomes. The user chose to retain verified site information; no new named experts, reviews or case-study results were supplied. Do not manufacture these signals. No automated rank-monitoring job, paid link acquisition, ads or analytics tracking is included.
+
+## October 31 box-truck price and comparison follow-up
+
+The box-truck page and its ChatGPT citation URL both serve the approved 7% fee. The calculator discovery links previously lost the box-truck context and opened a generic dry-van 5% example. Both box-truck links now select the 7% preset, with matching server-rendered examples and equipment-labelled results. Reset preserves the selected equipment. Parameter variants retain the calculator's single canonical URL. This fixes a real customer journey ambiguity; it does not establish why an external AI answer quoted an older price.
+
+The existing dispatcher-selection guide now includes a practical box-truck comparison worksheet covering specifications, delivery tasks, approval information, billing base and backup support. Reciprocal links connect that buying decision to the commercial box-truck page. A concise, dated pricing answer reinforces the current offer without adding duplicate keyword pages or unsupported superiority claims.
+
+Live Vercel evidence showed verified OAI-SearchBot requests receiving 2xx/3xx responses over the inspected 12-hour window. This confirms crawler access for those requests, not ranking or coverage of every URL. The renewed ChatGPT UI test failed to load twice, so a corrected ChatGPT answer could not be confirmed. Keep indexing submissions and rankings separate: IndexNow receipt is not an indexing result, and Google requests remain subject to quota and the existing scheduled retry.

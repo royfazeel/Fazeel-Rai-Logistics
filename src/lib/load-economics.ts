@@ -1,4 +1,14 @@
-import { getDispatchRate } from './dispatch-pricing';
+import { DISPATCH_RATES, getDispatchRate } from './dispatch-pricing';
+
+export type LoadEquipment = keyof typeof DISPATCH_RATES | 'other';
+export const DEFAULT_LOAD_EQUIPMENT: LoadEquipment = 'dry-van';
+
+/** Only one recognized equipment query value may select the starting example. */
+export function normalizeEquipmentSelection(value: string | string[] | undefined): LoadEquipment {
+  return typeof value === 'string' && (value === 'other' || Object.prototype.hasOwnProperty.call(DISPATCH_RATES, value))
+    ? value as LoadEquipment
+    : DEFAULT_LOAD_EQUIPMENT;
+}
 
 export type LoadEconomicsInput = {
   equipment: string;
@@ -14,7 +24,7 @@ export type LoadEconomicsInput = {
 export type LoadNumberField = Exclude<keyof LoadEconomicsInput, 'equipment'>;
 
 export const EXAMPLE_LOAD: LoadEconomicsInput = {
-  equipment: 'dry-van', loadPay: '2000', loadedMiles: '800', emptyMiles: '100',
+  equipment: DEFAULT_LOAD_EQUIPMENT, loadPay: '2000', loadedMiles: '800', emptyMiles: '100',
   totalHours: '20', fuelPrice: '4.00', mpg: '6', otherCosts: '150',
 };
 
