@@ -1,5 +1,6 @@
 import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE, getDispatchRate, getDispatchRateLabel } from './dispatch-pricing';
 import { ADDITIONAL_GUIDES, ADDITIONAL_SERVICES } from './expanded-content';
+import { CARRIER_EDUCATION_GUIDES } from './carrier-education';
 import { ADDITIONAL_EQUIPMENT_CONTENT } from './additional-equipment-content';
 
 const exampleLoadRevenue = 2_000;
@@ -376,6 +377,7 @@ export const GUIDES: CarrierGuide[] = [
     sources: [{ label: 'Truckstop: accessorial terminology and load documentation', href: 'https://truckstop.com/blog/accessorial-charges/' }, { label: 'CloudTrucks: an example of a provider-specific accessorial process', href: 'https://cloudtrucks.zendesk.com/hc/en-us/articles/13975260832151-CloudTrucks-Accessorial-Policies-for-Drivers' }],
   },
   ...ADDITIONAL_GUIDES,
+  ...CARRIER_EDUCATION_GUIDES,
   {
     slug: 'evaluate-freight-rate-per-mile', title: 'How to evaluate a freight rate before booking', metaTitle: 'Freight Rate Per Mile: How to Evaluate a Load',
     description: 'Compare loaded miles, deadhead, dispatch fees and trip time with a worked example. A practical rate-per-mile checklist for owner-operators.',

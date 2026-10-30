@@ -715,7 +715,7 @@ export default function HomePage() {
         <div className="container-custom">
           <p className="eyebrow">Carrier resources</p>
           <h2 className="section-heading mb-5">Make your next dispatch decision with better information.</h2>
-          <p className="text-surface-700 text-lg max-w-2xl mb-8">Practical guides to dispatch costs, onboarding, selecting a dispatcher, and evaluating a load beyond the headline rate.</p>
+          <p className="text-surface-700 text-lg max-w-2xl mb-8">Dispatch articles, equipment checklists and planning tools to compare fees, prepare carrier documents and evaluate a load beyond its headline rate.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
               { title: 'How dispatch fees work', href: 'truck-dispatch-fees', text: 'Compare percentage fees, fixed plans, and the terms to confirm in writing.' },
@@ -724,7 +724,11 @@ export default function HomePage() {
               { title: 'Evaluate a freight rate', href: 'evaluate-freight-rate-per-mile', text: 'Account for deadhead, time, fuel, and delivery requirements before accepting.' },
             ].map(item => <Link prefetch={false} key={item.href} href={`/resources/${item.href}`} className="card p-6 hover:border-primary-300"><h3 className="font-display text-2xl font-bold text-navy-950 mb-3">{item.title}</h3><p className="text-surface-700 mb-5">{item.text}</p><span className="inline-flex items-center gap-2 font-semibold text-primary-700">Read the guide<ArrowRight className="w-4 h-4" aria-hidden="true" /></span></Link>)}
           </div>
-          <Link prefetch={false} href="/resources" className="inline-flex items-center gap-2 text-primary-700 font-semibold mt-8 py-2">All carrier resources<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
+            <Link prefetch={false} href="/resources" className="inline-flex items-center gap-2 py-2 font-semibold text-primary-700">All carrier resources<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+            <Link prefetch={false} href="/tools/load-profit-calculator" className="inline-flex items-center gap-2 py-2 font-semibold text-primary-700">Calculate a load’s costs<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+            <Link prefetch={false} href="/resources/trucking-dispatch-glossary" className="inline-flex items-center gap-2 py-2 font-semibold text-primary-700">Trucking glossary<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+          </div>
         </div>
       </section>
 

@@ -32,10 +32,13 @@ const footerLinks = {
     { name: 'Carrier Experience', href: '/testimonials' },
     { name: 'Service Areas', href: '/service-areas' },
     { name: 'Carrier Resources', href: '/resources' },
+    { name: 'Load Cost Calculator', href: '/tools/load-profit-calculator' },
+    { name: 'Trucking Glossary', href: '/resources/trucking-dispatch-glossary' },
     { name: 'FAQ', href: '/faq' },
     { name: 'Contact', href: '/contact' },
   ],
   legal: [
+    { name: 'Editorial Standards', href: '/editorial-standards' },
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '/terms' },
   ],

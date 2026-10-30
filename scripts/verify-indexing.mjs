@@ -18,7 +18,7 @@ import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 
 function options(argv) {
-  const result = { base: 'http://localhost:3000', json: false, output: undefined, expectedPages: 57, concurrency: 6, timeout: 20_000 };
+  const result = { base: 'http://localhost:3000', json: false, output: undefined, expectedPages: 67, concurrency: 6, timeout: 20_000 };
   let hasBase = false;
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];

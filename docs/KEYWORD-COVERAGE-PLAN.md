@@ -26,7 +26,7 @@ These are historical observations, not evidence of a gain from the October 30 up
 
 ## Primary destinations and query families
 
-The starting site had 54 sitemap URLs: 13 main pages, 15 equipment pages, 11 service pages, three carrier pages and 12 guides. The October 30 expansion adds three guides, for 15 guides and 57 intended sitemap URLs. Preserve a primary destination for each distinct intent and use contextual links between related decisions. A single useful page can cover natural synonyms.
+The starting site had 54 sitemap URLs: 13 main pages, 15 equipment pages, 11 service pages, three carrier pages and 12 guides. The first October 30 expansion added three guides, for 15 guides and 57 sitemap URLs. The subsequent detailed SEO release adds seven further guides, a glossary, calculator and editorial standards page, for 22 guides and 67 intended sitemap URLs. Preserve a primary destination for each distinct intent and use contextual links between related decisions. A single useful page can cover natural synonyms.
 
 | Primary destination | Query family / visitor task | Page purpose and overlap control |
 | --- | --- | --- |
@@ -79,3 +79,26 @@ Publication, crawl checks and deployment evidence must be verified separately. A
 6. Review qualified dispatch inquiries alongside search traffic using available records. Search Console clicks alone do not measure leads, revenue or visitor quality. No new tracking tags or recurring monitoring are implied by this plan.
 
 Google controls crawling, canonical selection, indexing and ranking. Useful content and sound technical signals support eligibility; they cannot guarantee a maximum keyword count, visitor count or indexation date. Google advises allowing time to assess changes, often weeks or longer. [Google's SEO guidance](https://developers.google.com/search/docs/fundamentals/seo-starter-guide)
+
+## Detailed SEO and AI search expansion — October 30
+
+| Page or group | Search intent and reader outcome |
+| --- | --- |
+| Dispatch service agreement checklist | Review approval rights, fee base, scope, cancellation and handover before engaging dispatch support. |
+| Fuel surcharge calculation for carriers | Understand the agreed index, base, MPG factor and mileage with a labelled hypothetical calculation. |
+| Verify freight broker identity | Check identity through independent FMCSA records and established contact channels before sharing documents or accepting changed instructions. |
+| Reefer load temperature checklist | Gather authorized temperature and handling instructions; distinguish dispatch coordination from cargo acceptance or food-safety decisions. |
+| Flatbed load tarping checklist | Confirm freight dimensions, loading, tarp scope, driver work and carrier securement review. |
+| Power-only trailer interchange checklist | Evaluate trailer condition, permission, insurance questions, return obligations and complete-trip miles. |
+| Hotshot load planning checklist | Screen actual combination capacity, cargo dimensions, pickup work, appointment feasibility and total-mile economics. |
+| Trucking dispatch glossary | 40 definitions in six groups; stable anchors and contextual links to operational guides. |
+| Load profit and break-even calculator | Transparent, interactive loaded/empty-mile, fuel, dispatch fee and other-cost worksheet; remaining revenue is not net profit. |
+| Editorial standards | Explain organization authorship, AI-assisted drafting, sources, dates, illustrative assumptions, commercial context and how to report corrections. |
+
+Existing equipment and service pages link to relevant new guides. The homepage and footer expose the calculator and glossary, and the resource hub organizes all 22 guides. This provides discoverable coverage of distinct questions without separate pages for near-identical keyword variants or fabricated local offices.
+
+Google’s AI features use ordinary SEO fundamentals. Eligibility requires an indexed, snippet-eligible page; neither special AI text files nor special schema is required. Visible textual answers, primary-source citations, accessible navigation and matching structured data help readers and machines understand the site. [Google AI features](https://developers.google.com/search/docs/appearance/ai-features)
+
+Robots wildcard permissions already allow Googlebot, Bingbot, OAI-SearchBot, Claude-SearchBot and PerplexityBot on public pages. The new access check tests representative declared user-agent requests; it does not prove access from verified engine IP ranges or actual inclusion. IndexNow notifications tell participating engines which published canonical URLs changed and are distinct from Google sitemap submission. [IndexNow protocol](https://www.indexnow.org/documentation)
+
+The next evidence needed is post-release crawl/index data, qualified nonbrand clicks and real carrier outcomes. The user chose to retain verified site information; no new named experts, reviews or case-study results were supplied. Do not manufacture these signals. No automated rank-monitoring job, paid link acquisition, ads or analytics tracking is included.

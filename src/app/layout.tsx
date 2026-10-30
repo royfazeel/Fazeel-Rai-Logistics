@@ -56,6 +56,7 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Organization', '@id': `${SITE_URL}/#organization`,
+      publishingPrinciples: `${SITE_URL}/editorial-standards`,
       name: BUSINESS.name, alternateName: 'Rai Logistics', legalName: BUSINESS.parentCompany,
       url: SITE_URL, logo: `${SITE_URL}/icon-512.png?v=rai-union-v1`,
       description: BUSINESS.description, telephone: BUSINESS.phone, email: BUSINESS.email,

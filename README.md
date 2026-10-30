@@ -8,7 +8,7 @@ For lead delivery and the current website-measurement status, read [SETUP.md](SE
 
 ## What the site includes
 
-- **57 indexable page URLs**: 13 core/hub pages, 15 equipment pages, 11 service pages, three carrier audience pages, and 15 guides.
+- **67 indexable page URLs**: 14 core/hub and editorial pages, 15 equipment pages, 11 service pages, three carrier audience pages, 22 guides, a 40-term glossary and an interactive load cost calculator.
 - Equipment coverage for dry van, reefer, flatbed, box truck, power only, step deck, hotshot, cargo van, Sprinter van, Conestoga, RGN/lowboy, car hauler, tanker, dump truck and curtain-side operations.
 - Separate content for owner-operators, small fleets, new authorities, regional and OTR operations, and dedicated dispatcher support. Practical guides cover fees, onboarding, choosing a dispatcher, freight rates, self-dispatch, broker roles and empty-mile planning.
 - Page-specific titles, descriptions, canonical URLs, Open Graph metadata, JSON-LD, sitemap, and robots rules.
@@ -66,7 +66,7 @@ node scripts/verify-lead-api.mjs
 
 This harness requires a completed production build. It starts its own loopback Next server and fake Resend sink, uses reserved `.example` addresses, clears webhook delivery, and blocks non-loopback fetches in the test server. It accepts no remote URL. Checks include owner notification, carrier acknowledgement, validation, escaping, spam controls, rate limits, provider failures, and unconfigured delivery. Temporary processes and files are cleaned up afterward.
 
-The earlier September 24 release produced **46 build outputs**, including 40 indexable pages. Local verification on that date passed **40/40 sitemap pages** and **212 internal link/fragment targets**, with **zero failures or advisory warnings**. The lead API also previously passed **17/17 isolated checks**. Those are historical results; rerun verification for the current 57-page site after changes. The crawler also checks equipment-specific pricing in page content, metadata and percentage Offer descriptions. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
+The earlier September 24 release produced **46 build outputs**, including 40 indexable pages. Local verification on that date passed **40/40 sitemap pages** and **212 internal link/fragment targets**, with **zero failures or advisory warnings**. The lead API also previously passed **17/17 isolated checks**. Those are historical results; rerun verification for the current 67-page site after changes. The crawler also checks equipment-specific pricing in page content, metadata and percentage Offer descriptions. These checks do not establish live inbox receipt, Google indexing/rankings, structured-data rich-result eligibility, or real-user Core Web Vitals. Inspect the rendered site on desktop and mobile as well. See the [keyword coverage plan](docs/KEYWORD-COVERAGE-PLAN.md) for page intents and query families.
 
 ## Deploy to the existing Vercel project
 
@@ -132,3 +132,19 @@ Legacy public analytics/advertising environment variables no longer enable track
 Email: [sam@railogistics.us](mailto:sam@railogistics.us) · Phone: [(213) 371-6155](tel:+12133716155)
 
 Private — all rights reserved.
+
+### Search discovery checks and notifications
+
+The resources are server-rendered, with organization bylines, references, article dates, linked editorial standards and contextual service links. The calculator runs locally in the visitor’s browser without submitting input.
+
+```bash
+node scripts/verify-load-economics.mjs
+node scripts/verify-search-access.mjs https://raidispatch.com output/search-access.json
+node scripts/submit-indexnow.mjs
+# After a verified release, explicitly submit changed canonical URLs:
+node scripts/submit-indexnow.mjs --url https://raidispatch.com/resources --submit --output output/indexnow.json
+```
+
+Search access checks use declared crawler headers on representative public URLs; they do not impersonate verified crawler IPs or prove citations. The existing robots wildcard allows public content and excludes `/api/`. No special AI files or schema are required for Google AI features.
+
+IndexNow is manual and dry-run by default. It reads the production sitemap, limits notifications to canonical `raidispatch.com` URLs and verifies the deployed ownership file before submission. The verification key is intentionally hosted publicly under `public/`; it is not an account credential. A successful response only acknowledges the notification, not indexing. No tracking tags or recurring jobs were added.

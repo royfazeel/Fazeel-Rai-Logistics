@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Check, ChevronRight, Phone } from 'lucide-react';
+import { LEARNING_LINKS } from '@/lib/learning-links';
 import { BUSINESS } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
 import { DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
@@ -89,6 +90,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
   const categoryLabel = { equipment: 'Equipment', services: 'Services', resources: 'Carrier resources', carriers: 'Carriers' }[category];
   const path = `/${category}/${content.slug}`;
   const url = `${SITE_URL}${path}`;
+  const related = [...(LEARNING_LINKS[path] ?? []), ...content.related].filter((item, index, items) => items.findIndex(link => link.href === item.href) === index);
   const feeLabel = category === 'equipment' ? getDispatchRateLabel(content.slug) : DISPATCH_RATE_RANGE;
   const equipmentImage = category === 'equipment' ? EQUIPMENT_IMAGES[content.slug] : undefined;
   return (
@@ -101,6 +103,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
         publisher: { '@id': `${SITE_URL}/#organization` },
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
         image: `${SITE_URL}/opengraph-image`,
+        ...(guide.sources?.length ? { citation: guide.sources.map(source => source.href) } : {}),
       } : {
         '@context': 'https://schema.org', '@type': 'Service', '@id': `${url}#service`,
         name: content.title, serviceType: content.title, description: content.availability ? `${content.description} ${content.availability}` : content.description,
@@ -122,7 +125,8 @@ export default function ContentDetail({ content, category, guide }: { content: D
                 <p className="eyebrow">{content.eyebrow}</p>
                 <h1 className="max-w-4xl text-4xl leading-[1.04] sm:text-5xl lg:text-6xl">{content.title}</h1>
                 <p className="mt-6 max-w-3xl text-lg leading-relaxed text-navy-200">{content.intro}</p>
-                {guide && <p className="mt-5 text-sm text-navy-300">By {BUSINESS.name} · <time dateTime={guide.published}>{new Date(`${guide.published}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time> · {guide.readTime}{guide.updated && guide.updated !== guide.published && <> · Updated <time dateTime={guide.updated}>{new Date(`${guide.updated}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time></>}</p>}
+                {guide && <p className="mt-5 text-sm text-navy-300">By <Link href="/about" className="underline underline-offset-4">{BUSINESS.name}</Link> · <time dateTime={guide.published}>{new Date(`${guide.published}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time> · {guide.readTime}{guide.updated && guide.updated !== guide.published && <> · Updated <time dateTime={guide.updated}>{new Date(`${guide.updated}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time></>}</p>}
+                {guide && <Link href="/editorial-standards" className="mt-3 inline-block text-sm text-navy-200 underline underline-offset-4 hover:text-white">Sources, examples and corrections</Link>}
                 <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white">
                   {content.highlights.map((highlight) => <li key={highlight} className="flex items-center gap-2"><Check size={17} className="shrink-0 text-primary-400" aria-hidden="true" />{highlight}</li>)}
                 </ul>
@@ -192,7 +196,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
               </section>
               <section className="rounded-lg border border-surface-300 p-6">
                 <h2 className="text-xl">Continue exploring</h2>
-                <ul className="mt-4 space-y-4">{content.related.map((item) => <li key={item.href}><Link href={item.href} className="inline-flex items-center gap-2 text-sm font-medium text-accent-800 hover:underline">{item.label}<ArrowRight className="shrink-0" size={15} aria-hidden="true" /></Link></li>)}</ul>
+                <ul className="mt-4 space-y-4">{related.map((item) => <li key={item.href}><Link href={item.href} className="inline-flex items-center gap-2 text-sm font-medium text-accent-800 hover:underline">{item.label}<ArrowRight className="shrink-0" size={15} aria-hidden="true" /></Link></li>)}</ul>
               </section>
             </aside>
           </div>
