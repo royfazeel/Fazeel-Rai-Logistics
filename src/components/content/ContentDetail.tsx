@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Check, ChevronRight, Phone } from 'lucide-react';
 import { LEARNING_LINKS } from '@/lib/learning-links';
-import { BUSINESS } from '@/lib/constants';
+import { BUSINESS, DISPATCH_SPECIALTIES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
 import { DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
 import EquipmentPhoto from '@/components/EquipmentPhoto';
@@ -64,6 +64,7 @@ function EquipmentHero({ content, feeLabel, path }: { content: DispatchContent; 
             <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
               <p className="font-display text-4xl font-bold text-primary-700">{feeLabel}<span className="ml-2 font-sans text-sm font-medium text-navy-600">dispatch fee</span></p>
               <span className="rounded-full border border-surface-300 bg-white px-3 py-1.5 text-sm font-medium text-navy-700">Dedicated dispatcher</span>
+              {DISPATCH_SPECIALTIES.some(equipment => equipment.id === content.slug) && <span className="rounded-full border border-primary-200 bg-primary-50 px-3 py-1.5 text-sm font-medium text-primary-800">Dispatch specialty</span>}
             </div>
           </div>
           <div className="w-full overflow-hidden rounded-xl border border-surface-200 bg-white lg:col-start-2 lg:row-span-2 lg:row-start-1">

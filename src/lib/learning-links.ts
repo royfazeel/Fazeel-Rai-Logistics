@@ -2,6 +2,10 @@ import type { ContentLink } from './dispatch-content';
 
 // Contextual routes connect service decisions to the supporting carrier worksheet.
 export const LEARNING_LINKS: Record<string, ContentLink[]> = {
+  '/equipment/box-truck': [{ label: 'Calculate box truck trip costs', href: '/tools/load-profit-calculator' }],
+  '/resources/how-to-find-box-truck-loads': [{ label: 'Compare your box truck load costs', href: '/tools/load-profit-calculator' }],
+  '/carriers/owner-operators': [{ label: 'Box truck dispatch for owner-operators', href: '/equipment/box-truck' }],
+  '/carriers/new-authorities': [{ label: 'Box truck dispatch and equipment review', href: '/equipment/box-truck' }],
   '/equipment/reefer': [{ label: 'Reefer temperature and handoff checklist', href: '/resources/reefer-load-temperature-checklist' }],
   '/equipment/flatbed': [{ label: 'Flatbed tarping and load preparation', href: '/resources/flatbed-load-tarping-checklist' }],
   '/equipment/step-deck': [{ label: 'Open-deck load preparation checklist', href: '/resources/flatbed-load-tarping-checklist' }],

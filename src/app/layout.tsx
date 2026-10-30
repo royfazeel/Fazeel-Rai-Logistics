@@ -4,7 +4,7 @@ import { Barlow_Condensed, Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import StickyCallWidgets from '@/components/StickyCallWidgets';
-import { BUSINESS } from '@/lib/constants';
+import { BUSINESS, DISPATCH_SPECIALTIES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
 import './globals.css';
 
@@ -61,8 +61,10 @@ const jsonLd = {
       url: SITE_URL, logo: `${SITE_URL}/icon-512.png?v=rai-union-v1`,
       description: BUSINESS.description, telephone: BUSINESS.phone, email: BUSINESS.email,
       address: { '@type': 'PostalAddress', streetAddress: BUSINESS.address.street, addressLocality: BUSINESS.address.city, addressRegion: BUSINESS.address.state, postalCode: BUSINESS.address.zip, addressCountry: 'US' },
-      areaServed: { '@type': 'Country', name: 'United States' },
-      contactPoint: { '@type': 'ContactPoint', telephone: BUSINESS.phone, contactType: 'customer service', areaServed: 'US', availableLanguage: 'English' },
+      areaServed: { '@type': 'Place', name: BUSINESS.serviceArea },
+      knowsAbout: DISPATCH_SPECIALTIES.map(equipment => `${equipment.name} dispatch`),
+      hasOfferCatalog: { '@id': `${SITE_URL}/equipment#dispatch-specialties` },
+      contactPoint: { '@type': 'ContactPoint', telephone: BUSINESS.phone, contactType: 'customer service', areaServed: { '@type': 'Place', name: BUSINESS.serviceArea }, availableLanguage: 'English' },
     },
     {
       '@type': 'WebSite', '@id': `${SITE_URL}/#website`, url: SITE_URL,

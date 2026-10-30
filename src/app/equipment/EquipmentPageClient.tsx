@@ -4,7 +4,7 @@ import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE } from '@/lib/dispatch-prici
 import EquipmentPhoto from '@/components/EquipmentPhoto';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle, Phone } from 'lucide-react';
-import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
+import { BUSINESS, EQUIPMENT_TYPES, DISPATCH_SPECIALTY_SUMMARY } from '@/lib/constants';
 import { track } from '@/lib/track';
 
 export default function EquipmentPageClient() {
@@ -14,6 +14,7 @@ export default function EquipmentPageClient() {
         <div>
           <p className="eyebrow">Equipment we dispatch</p>
           <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.04] tracking-tight mb-5 max-w-2xl">Truck dispatch services<br /><span className="text-primary-400">by equipment type.</span></h1>
+          <p className="text-white/90 text-lg leading-relaxed max-w-2xl mb-5">Rai Dispatch specializes in dispatching {DISPATCH_SPECIALTY_SUMMARY}.</p>
           <p className="text-white/80 text-lg leading-relaxed max-w-2xl mb-7">Explore {EQUIPMENT_TYPES.length} truck and trailer types, from cargo vans to specialized open-deck equipment. Get a dedicated dispatcher across the 48 contiguous states, with {DISPATCH_RATE_RANGE} fees based on equipment.</p>
           <a href="#equipment-options" className="btn-primary">Find your equipment<ArrowRight className="w-5 h-5" aria-hidden="true" /></a>
           <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'equipment_hero' })} className="mt-4 flex w-fit items-center gap-2 py-2 font-semibold text-white/90 hover:text-white"><Phone className="w-4 h-4" aria-hidden="true" />Talk about your truck</a>

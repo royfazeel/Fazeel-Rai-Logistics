@@ -32,6 +32,7 @@ import {
   BUSINESS,
   MEDIA,
   EQUIPMENT_TYPES,
+  DISPATCH_SPECIALTIES,
   SERVICES,
   HOW_IT_WORKS,
   STATS,
@@ -50,10 +51,6 @@ const iconComponents: Record<string, React.ElementType> = {
   FileText,
   Calendar,
 };
-
-const FEATURED_EQUIPMENT = EQUIPMENT_TYPES.filter(equipment => [
-  'box-truck', 'dry-van', 'reefer', 'flatbed', 'power-only', 'step-deck', 'hotshot', 'sprinter-van',
-].includes(equipment.id));
 
 /**
  * Squeezes BUSINESS.hours down to the micro-caps form the hero status line
@@ -325,21 +322,19 @@ export default function HomePage() {
         <div className="container-custom">
           <ScrollReveal>
             <div className="max-w-2xl mb-12 sm:mb-16">
-              <p className="eyebrow">Choose your truck type</p>
+              <p className="eyebrow">Our dispatch specialties</p>
               <h2 className="font-display text-3xl sm:text-4xl md:text-[2.75rem] font-bold leading-[1.08] mb-4">
-                Dispatch for your truck and trailer type.
+                Specialized dispatch for nine truck and trailer types.
               </h2>
               <p className="text-white/70 text-lg">
-                From cargo vans to full-size trailers, explore {EQUIPMENT_TYPES.length} equipment
-                types. We review your truck and lane needs before you start,
-                with a dedicated dispatcher and equipment-based dispatch fees of {DISPATCH_RATE_RANGE}.
+                Box trucks lead our nine dispatch specialties below. Each service pairs a dedicated dispatcher with equipment-specific load search, rate negotiation and booking support across the lower 48. You approve each load; published fees are {DISPATCH_RATE_RANGE} by equipment.
               </p>
               <Link prefetch={false} href="/equipment" className="mt-5 inline-flex items-center gap-2 py-2 font-semibold text-white underline underline-offset-4 hover:text-primary-300">View all {EQUIPMENT_TYPES.length} equipment types<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {FEATURED_EQUIPMENT.map((equipment, idx) => {
+            {DISPATCH_SPECIALTIES.map((equipment, idx) => {
               return (
                 <ScrollReveal key={equipment.id} delay={idx * 0.06}>
                   <div className="group h-full overflow-hidden bg-navy-900 border border-white/10 hover:border-primary-500/60 rounded-lg transition-colors">
@@ -375,9 +370,9 @@ export default function HomePage() {
               );
             })}
 
-            {/* Final slot: direct line CTA */}
-            <ScrollReveal delay={0.3}>
-              <div className="h-full bg-primary-600 rounded-lg p-6 flex flex-col justify-between">
+            {/* A full-width contact panel follows the nine specialty cards. */}
+            <ScrollReveal delay={0.3} className="sm:col-span-2 lg:col-span-3">
+              <div className="h-full bg-primary-600 rounded-lg p-6 flex flex-col gap-6 md:flex-row md:items-center md:gap-12 justify-between">
                 <div>
                   <Phone className="w-9 h-9 text-white/90 mb-5" strokeWidth={1.75} aria-hidden="true" />
                   <h3 className="font-display text-2xl font-bold mb-2">

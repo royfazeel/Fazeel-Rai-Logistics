@@ -1,5 +1,9 @@
 import type { ContentLink, ContentSection } from './dispatch-content';
-import { getDispatchRateLabel } from './dispatch-pricing';
+import { getDispatchRate, getDispatchRateLabel } from './dispatch-pricing';
+
+const boxTruckExampleBillingBase = 2_000;
+const boxTruckExampleFee = boxTruckExampleBillingBase * getDispatchRate('box-truck') / 100;
+const boxTruckExampleRemainder = boxTruckExampleBillingBase - boxTruckExampleFee;
 
 // Equipment characteristics checked against manufacturer and agency references:
 // https://www.maxonlift.com/products/product-selector?page=1
@@ -18,16 +22,19 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
   'box-truck': {
     sections: [
       {
-        id: 'straight-truck-service-fit', title: 'Box truck dispatch for dock freight or liftgate deliveries',
-        paragraphs: ['Tell us which delivery environments your straight truck can serve. A dock-to-dock pallet move and a delivery to a business without a receiving dock can require different equipment and driver work. We use that distinction when discussing freight, so the search reflects the operation you actually run.', 'For liftgate work, provide the gate model, usable platform and rated capability for carrier review, along with pallet-jack availability and any delivery restrictions. A liftgate fitted to the truck does not prove that an oversized handling unit can use it safely. We clarify the shipment and facility details before asking you to approve the job.'],
+        id: 'straight-truck-service-fit', title: 'Specialized box truck dispatch for owner-operators and fleets',
+        paragraphs: [`Rai Dispatch specializes in box truck dispatch for owner-operators and small fleets across the lower 48 states. Our ${getDispatchRateLabel('box-truck')} dispatch service includes a dedicated dispatcher, free setup, load search, rate negotiation, booking coordination, broker communication, appointment follow-ups and paperwork support within the agreed scope. You approve each load.`, 'We review 26-foot box trucks and other straight-truck configurations using actual dimensions, available payload and delivery capabilities. Dock freight, liftgate delivery and inside delivery need different arrangements. For liftgate work, share the gate’s rated capability and usable platform, pallet-jack availability and the work your driver accepts. We confirm shipment and facility requirements before presenting a booking for your decision.'],
         table: { caption: 'Choose the box truck work you are prepared to accept', headers: ['Delivery arrangement', 'Details to confirm'], rows: [['Dock-to-dock', 'Dock access, truck compatibility and who loads and unloads'], ['Liftgate delivery', 'Handling-unit fit, gate capability and unloading responsibility'], ['Inside or multiple-stop delivery', 'Driver tasks, access, stop sequence and agreed compensation']] },
       },
       {
-        id: '26-foot-booking-scenario', title: 'How we review a 26-foot box truck load proposal',
-        paragraphs: ['Suppose a posted load appears suitable for a 26-foot box truck but lists only pallet count and weight. We first seek the piece dimensions, loading method and appointment details. If the receiver has no dock, we then confirm the unloading arrangement rather than treating the available truck length as a complete match.', 'You receive the proposed route, timing, known empty miles, pay and special requirements together. A missing delivery detail remains an open question until the responsible party answers it. This helps avoid booking a manageable linehaul trip with an unsuitable final delivery.', `Our published box truck dispatch fee is ${getDispatchRateLabel('box-truck')}, with the revenue base and service scope agreed before starting. Bring your current location, equipment sheet and preferred work to the first conversation; use the box truck load guide below for a fuller search worksheet and total-trip example.`],
+        id: '26-foot-booking-scenario', title: 'How box truck dispatch works and what it costs',
+        paragraphs: ['Start with your truck specifications, empty location, available time and preferred lanes. Your dispatcher searches suitable freight and clarifies dimensions, loading access, appointments, compensation and known empty miles. You review the complete proposal and approve or decline it. After approval, we coordinate the booking, agreed updates and delivery-document follow-ups.', `On a hypothetical $${boxTruckExampleBillingBase.toLocaleString('en-US')} agreed billing base, the ${getDispatchRateLabel('box-truck')} box truck dispatch fee is $${boxTruckExampleFee.toLocaleString('en-US')}. The remaining $${boxTruckExampleRemainder.toLocaleString('en-US')} is before fuel, maintenance, insurance, driver pay and other operating expenses; it is not profit or an earnings forecast. Confirm how fuel surcharge and accessorials are treated in your written billing terms.`],
+        table: { caption: 'Illustrative box truck dispatch fee — not a quoted freight rate', headers: ['Item', 'Amount'], rows: [['Agreed example billing base', `$${boxTruckExampleBillingBase.toLocaleString('en-US')}`], [`Dispatch fee at ${getDispatchRateLabel('box-truck')}`, `$${boxTruckExampleFee.toLocaleString('en-US')}`], ['Remaining before operating expenses', `$${boxTruckExampleRemainder.toLocaleString('en-US')}`]] },
       },
     ],
     faqs: [
+      { question: 'Does Rai Dispatch specialize in box truck dispatch?', answer: `Yes. Rai Dispatch specializes in box truck dispatch for owner-operators and small fleets, including 26-foot and other straight-truck configurations. The published fee is ${getDispatchRateLabel('box-truck')}, with a dedicated dispatcher and free setup. Equipment fit, lanes and service scope are reviewed before starting.` },
+      { question: 'What is the dispatch fee on a $2,000 box truck load?', answer: `If $${boxTruckExampleBillingBase.toLocaleString('en-US')} is the agreed billing base, the ${getDispatchRateLabel('box-truck')} dispatch fee is $${boxTruckExampleFee.toLocaleString('en-US')}. That leaves $${boxTruckExampleRemainder.toLocaleString('en-US')} before operating expenses. The agreement determines which revenue items form the billing base; this example does not promise a load or profit.` },
       { question: 'Can my box truck accept a load posted for a dry van?', answer: 'Only if the responsible party and carrier confirm that the actual truck meets every shipment requirement. Do not substitute a straight truck merely because the freight seems small enough; loading access, payload, appointments and equipment acceptance still matter.' },
       { question: 'Is liftgate or inside delivery automatically included in a box truck booking?', answer: 'No. Confirm the requested work, equipment capability, unloading responsibility and compensation before approving the load. Tell the dispatcher which delivery tasks your operation accepts.' },
     ],

@@ -164,6 +164,11 @@ export const EQUIPMENT_TYPES = [
   },
 ] as const;
 
+// The nine dispatch specialties confirmed by the business owner.
+export const DISPATCH_SPECIALTY_IDS = ['box-truck', 'dry-van', 'reefer', 'flatbed', 'power-only', 'step-deck', 'hotshot', 'cargo-van', 'conestoga'] as const;
+export const DISPATCH_SPECIALTIES = EQUIPMENT_TYPES.filter(equipment => DISPATCH_SPECIALTY_IDS.some(id => id === equipment.id));
+export const DISPATCH_SPECIALTY_SUMMARY = 'box trucks, dry vans, reefers, flatbeds, power only tractors, step decks, hotshot trucks, cargo vans and Conestoga trailers';
+
 export const SERVICES = [
   {
     id: 'rate-negotiation',
@@ -207,7 +212,7 @@ export const FAQS = [
   { id: 1, question: 'How much does a truck dispatch service cost?', answer: `${DISPATCH_PRICING_SUMMARY} These fees apply to gross revenue on loads we dispatch. Confirm the billing base, schedule and service scope in writing before starting.` },
   { id: 2, question: 'What documents do I need to get started?', answer: 'Prepare your operating authority details where applicable, Certificate of Insurance, W-9, equipment specifications, and a signed dispatch agreement. A factoring notice of assignment may also be needed. Broker requirements vary by load and carrier.' },
   { id: 3, question: 'Where do you provide truck dispatch services?', answer: 'We support carriers across the 48 contiguous United States. Tell us whether you prefer local, regional, dedicated, or over-the-road work. Load availability depends on your equipment, authority, location, and the market.' },
-  { id: 4, question: 'Which truck and trailer types can you dispatch?', answer: 'We support dry vans, reefers, flatbeds, box trucks, power only tractors, step decks, hotshot trucks, and cargo or Sprinter vans. Specialized equipment and freight requirements are reviewed before accepting or booking a load.' },
+  { id: 4, question: 'Which truck and trailer types can you dispatch?', answer: 'We specialize in dispatching box trucks, dry vans, reefers, flatbeds, power only tractors, step decks, hotshot trucks, cargo vans and Conestoga trailers. We also review Sprinter vans and other listed equipment. Actual equipment, lane and load requirements are confirmed before booking.' },
   { id: 5, question: 'Do I have to accept every load?', answer: 'No. You choose which loads to accept. We present the rate, pickup and delivery details, equipment requirements, and route considerations so you can decide before booking.' },
   { id: 6, question: 'Do you work with new authorities and owner-operators?', answer: 'Owner-operators, small fleets, and carriers with new authority can discuss their setup with us. Each broker sets its own authority-age, insurance, safety, and equipment requirements, so not every load will be available to every carrier.' },
   { id: 7, question: 'How do you find loads for my truck?', answer: 'We search load boards and available broker freight, review lane fit and carrier requirements, negotiate terms, and present suitable options for your approval. We consider loaded and empty miles as well as pickup and delivery schedules.' },

@@ -2,6 +2,7 @@ import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import HomePageClient from './HomePageClient';
 import { HOME_HERO_IMAGE, pageMetadata, SITE_URL } from '@/lib/seo';
 import { BUSINESS, SERVICES } from '@/lib/constants';
+import { specialtyOfferCatalog } from '@/lib/equipment-schema';
 import { HERO_IMAGES } from '@/lib/hero-images';
 
 export const metadata = pageMetadata(`Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees`, `Dedicated truck dispatch for owner-operators and fleets across 48 states. Load booking, rate negotiation and paperwork. ${DISPATCH_RATE_RANGE} fees by equipment.`, '/');
@@ -15,7 +16,7 @@ export default function HomePage() {
     areaServed: { '@type': 'Place', name: '48 contiguous United States' },
     hasOfferCatalog: {
       '@type': 'OfferCatalog', name: 'Truck dispatch support',
-      itemListElement: SERVICES.map(item => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: item.title, url: `${SITE_URL}/services/${item.id}` } })),
+      itemListElement: [specialtyOfferCatalog(), ...SERVICES.map(item => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', '@id': `${SITE_URL}/services/${item.id}#service`, name: item.title, url: `${SITE_URL}/services/${item.id}` } }))],
     },
   };
   const jsonLd = {

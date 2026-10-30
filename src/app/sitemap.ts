@@ -10,7 +10,7 @@ const PAGE_REVISIONS: Record<string, string> = {
   '': '2026-10-30',
   '/services': '2026-10-30', '/equipment': '2026-10-30',
   '/pricing': '2026-10-30', '/contact': '2026-09-28',
-  '/about': '2026-09-28', '/faq': '2026-09-28',
+  '/about': '2026-10-30', '/faq': '2026-10-30',
   '/carriers': '2026-09-28', '/service-areas': '2026-09-28',
   '/resources': '2026-10-30',
   '/resources/trucking-dispatch-glossary': '2026-10-30',
