@@ -1,11 +1,12 @@
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Link from 'next/link';
 import { Phone, Mail, MapPin, ArrowRight, MessageCircle, Clock } from 'lucide-react';
-import { BUSINESS } from '@/lib/constants';
+import { ACTIVE_CARRIER_SUPPORT, BUSINESS, SETUP_DESK_HOURS } from '@/lib/constants';
 import BrandLogo from './BrandLogo';
 
 const footerLinks = {
   services: [
+    { name: 'Dedicated Dispatcher', href: '/services/dedicated-dispatcher' },
     { name: 'Rate Negotiation', href: '/services/rate-negotiation' },
     { name: 'Load Booking', href: '/services/load-booking' },
     { name: 'Broker Communication', href: '/services/broker-communication' },
@@ -129,11 +130,17 @@ export default function Footer() {
               </div>
               <div className="flex items-start gap-3 text-surface-300">
                 <Clock className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" />
-                <span>
-                  {BUSINESS.hours.days}
-                  <br />
-                  <span className="text-surface-400 text-sm">{BUSINESS.hours.time}</span>
-                </span>
+                <div>
+                  <p>{ACTIVE_CARRIER_SUPPORT}.</p>
+                  <p className="mt-1 text-sm text-surface-400">Use your agreed dispatch contact.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 text-surface-300">
+                <Clock className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p>New-carrier setup desk</p>
+                  <p className="mt-1 text-sm text-surface-400">{SETUP_DESK_HOURS}</p>
+                </div>
               </div>
             </div>
           </div>

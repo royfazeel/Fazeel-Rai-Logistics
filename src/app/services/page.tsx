@@ -1,7 +1,7 @@
 import { pageMetadata } from '@/lib/seo';
 import ServicesPageClient from './ServicesPageClient';
 
-export const metadata = pageMetadata('Truck Dispatch Services for Owner-Operators & Fleets', 'Compare freight dispatch services: load booking, rate negotiation, broker calls, appointment scheduling and paperwork. Find support for your truck and lanes.', "/services");
+export const metadata = pageMetadata('Truck Dispatch Services for Owner-Operators & Fleets', 'Dedicated truck dispatch, load booking, rate negotiation and paperwork for owner-operators and fleets. Active carriers receive 24/7 live dispatch support.', "/services");
 
 export default function ServicesPage() {
   return <ServicesPageClient />;

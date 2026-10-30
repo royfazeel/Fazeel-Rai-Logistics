@@ -5,7 +5,7 @@ import { specialtyOfferCatalog } from '@/lib/equipment-schema';
 import { ContentJsonLd } from '@/components/content/ContentDetail';
 import EquipmentPageClient from './EquipmentPageClient';
 
-export const metadata = pageMetadata('Truck Dispatch Services by Equipment Type', `Explore 15 truck and trailer types, from dry vans and reefers to Sprinter vans, Conestogas and lowboys. ${DISPATCH_RATE_RANGE} dispatch fees, free setup and dedicated support.`, '/equipment');
+export const metadata = pageMetadata('Truck Dispatch Services by Equipment Type', `Dispatch for 15 truck and trailer types, led by box truck specialists. Dedicated dispatchers, 24/7 live support for active carriers and ${DISPATCH_RATE_RANGE} fees.`, '/equipment');
 
 export default function EquipmentPage() {
   return <>

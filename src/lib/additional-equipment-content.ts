@@ -1,5 +1,6 @@
 import type { DispatchContent } from './dispatch-content';
 import { getDispatchRateLabel } from './dispatch-pricing';
+import { ACTIVE_CARRIER_SUPPORT } from './constants';
 
 export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
   {
@@ -18,7 +19,7 @@ export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
       },
       {
         id: 'expedited-timing', title: 'Turn an urgent request into a workable schedule',
-        paragraphs: ['Expedited Sprinter van loads need a clear ready time, pickup contact and delivery commitment. Your dispatcher asks when the freight is actually available, how long loading may take and whether the receiver will be open when you arrive. Share your current location and realistic availability before an offer is presented.', 'A direct trip, a scheduled business delivery and a shipment with several stops create different commitments. Agree on the communication schedule and any tracking request. Discuss after-hours requirements with the dispatch desk before booking; an urgent shipment does not automatically include round-the-clock support.'],
+        paragraphs: ['Expedited Sprinter van loads need a clear ready time, pickup contact and delivery commitment. Your dispatcher asks when the freight is actually available, how long loading may take and whether the receiver will be open when you arrive. Share your current location and realistic availability before an offer is presented.', `A direct trip, a scheduled business delivery and a shipment with several stops create different commitments. Rai Dispatch provides ${ACTIVE_CARRIER_SUPPORT}. Agree on the communication process, any tracking request and the contacts responsible for pickup or delivery changes before booking.`],
       },
       {
         id: 'trip-value', title: 'Include positioning and the next available day',

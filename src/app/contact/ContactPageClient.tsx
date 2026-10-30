@@ -18,7 +18,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
-import { BUSINESS, MEDIA, EQUIPMENT_TYPES } from '@/lib/constants';
+import { ACTIVE_CARRIER_SUPPORT, BUSINESS, MEDIA, EQUIPMENT_TYPES, SETUP_DESK_HOURS } from '@/lib/constants';
 import { track } from '@/lib/track';
 import {
   formatUsPhone,
@@ -272,6 +272,11 @@ export default function ContactPageClient() {
                 </h2>
 
                 <div className="space-y-4">
+                  <div className="rounded-lg border border-primary-200 bg-primary-50 p-5">
+                    <h3 className="font-display text-xl font-bold text-navy-950">Active carrier support</h3>
+                    <p className="mt-2 font-semibold text-navy-800">{ACTIVE_CARRIER_SUPPORT}.</p>
+                    <p className="mt-2 text-sm leading-6 text-surface-700">Use the dispatch contact and escalation process agreed during onboarding for help with your active operation.</p>
+                  </div>
                   <div className="bg-white rounded-lg p-5 border border-surface-200">
                     <div className="flex items-start gap-4">
                       <div className="w-11 h-11 bg-primary-50 border border-primary-100 rounded-md flex items-center justify-center flex-shrink-0">
@@ -279,7 +284,7 @@ export default function ContactPageClient() {
                       </div>
                       <div>
                         <h3 className="font-display text-lg font-bold text-navy-950 mb-0.5">
-                          Call
+                          New-carrier setup
                         </h3>
                         <a
                           href={BUSINESS.phoneHref}
@@ -290,7 +295,7 @@ export default function ContactPageClient() {
                           {BUSINESS.phone}
                         </a>
                         <p className="text-sm text-surface-600 mt-1">
-                          {BUSINESS.hours.days}, {BUSINESS.hours.time}
+                          {SETUP_DESK_HOURS}
                         </p>
                       </div>
                     </div>
@@ -313,7 +318,7 @@ export default function ContactPageClient() {
                           {BUSINESS.phone}
                         </a>
                         <p className="text-sm text-surface-600 mt-1">
-                          Quick replies, even on the road
+                          Send your setup questions by text
                         </p>
                       </div>
                     </div>
@@ -361,7 +366,7 @@ export default function ContactPageClient() {
                           {BUSINESS.email}
                         </a>
                         <p className="text-sm text-surface-600 mt-1">
-                          We respond within 24 hours
+                          Send your equipment details and preferred lanes
                         </p>
                       </div>
                     </div>
@@ -392,7 +397,7 @@ export default function ContactPageClient() {
                       </div>
                       <div>
                         <h3 className="font-display text-lg font-bold text-navy-950 mb-0.5">
-                          Hours
+                          New-carrier setup desk hours
                         </h3>
                         <p className="text-navy-800">{BUSINESS.hours.days}</p>
                         <p className="text-navy-800">{BUSINESS.hours.time}</p>

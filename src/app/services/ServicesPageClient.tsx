@@ -424,7 +424,7 @@ export default function ServicesPageClient() {
                 title: 'Communication plan',
                 href: '/services/dedicated-dispatcher',
                 description:
-                  'Agree your dispatcher contact, desk hours, update method and what to do when an appointment changes outside those hours.',
+                  'Active carriers receive 24/7 live dispatch support. Agree your assigned contact, team backup, update method and escalation process before the first load.',
               },
               {
                 icon: Users,

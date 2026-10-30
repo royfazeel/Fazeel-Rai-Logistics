@@ -1,5 +1,7 @@
 import { DISPATCH_PRICING_SUMMARY, DISPATCH_RATE_RANGE, getDispatchRateLabel } from './dispatch-pricing';
 
+export const ACTIVE_CARRIER_SUPPORT = '24/7 live dispatch support for active carriers';
+
 export const BUSINESS = {
   name: 'Rai Dispatch',
   parentCompany: 'Rai Technologies LLC',
@@ -21,12 +23,15 @@ export const BUSINESS = {
   hours: {
     days: 'Monday – Saturday',
     time: '8:00 AM – 6:00 PM CT',
-    note: 'Contact the dispatch desk to confirm availability for your schedule.',
+    note: 'New-carrier setup and onboarding hours. Active carriers use their agreed dispatch contact for 24/7 live support.',
   },
   serviceArea: 'All 48 contiguous United States',
   tagline: 'Professional Truck Dispatching Services',
-  description: `Truck dispatch for owner-operators and fleets across the 48 contiguous states. A dedicated dispatcher for every truck, free setup, and ${DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch. Support for 15 truck and trailer types.`,
+  description: `Truck dispatch for owner-operators and fleets across the 48 contiguous states. A dedicated dispatcher for every truck, ${ACTIVE_CARRIER_SUPPORT}, free setup, and ${DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch. Support for 15 truck and trailer types.`,
 } as const;
+
+// These hours apply to new-carrier setup; active-carrier live support is 24/7.
+export const SETUP_DESK_HOURS = `${BUSINESS.hours.days}, ${BUSINESS.hours.time}`;
 
 // Locally hosted media. Muted inline playback is deferred on every screen size;
 // motion/data preferences keep the poster until the visitor chooses Play.
@@ -185,7 +190,7 @@ export const SERVICES = [
   {
     id: 'broker-communication',
     title: 'Broker Communication',
-    description: 'We handle all broker and shipper communications, rate confirmations, and negotiations.',
+    description: 'We coordinate agreed broker updates, load instructions and rate-confirmation questions, with carrier approval for material changes.',
     icon: 'MessageSquare',
   },
   {
@@ -197,7 +202,7 @@ export const SERVICES = [
   {
     id: 'paperwork-support',
     title: 'Paperwork Support',
-    description: 'From rate confirmations to BOLs, we ensure your documentation is always in order.',
+    description: 'We help organize carrier packets, rate confirmations, BOLs and PODs, and follow up on missing dispatch documents.',
     icon: 'FileText',
   },
   {
@@ -217,9 +222,9 @@ export const FAQS = [
   { id: 6, question: 'Do you work with new authorities and owner-operators?', answer: 'Owner-operators, small fleets, and carriers with new authority can discuss their setup with us. Each broker sets its own authority-age, insurance, safety, and equipment requirements, so not every load will be available to every carrier.' },
   { id: 7, question: 'How do you find loads for my truck?', answer: 'We search load boards and available broker freight, review lane fit and carrier requirements, negotiate terms, and present suitable options for your approval. We consider loaded and empty miles as well as pickup and delivery schedules.' },
   { id: 8, question: 'Are freight rates or weekly earnings guaranteed?', answer: 'No. Freight availability, load rates, operating costs, and weekly revenue change with equipment, markets, hours available, and the loads you accept. Dispatch support helps you evaluate opportunities; it does not guarantee a particular income.' },
-  { id: 9, question: 'Will I have a dedicated dispatcher?', answer: 'Yes. Rai Dispatch assigns a dedicated dispatcher for every truck, with load planning around its equipment, preferred lanes, schedule and load criteria. Confirm your contact person, working hours and escalation process during free setup.' },
+  { id: 9, question: 'Will I have a dedicated dispatcher?', answer: 'Yes. Rai Dispatch assigns a dedicated dispatcher for every truck, with load planning around its equipment, preferred lanes, schedule and load criteria. Active carriers receive 24/7 live dispatch support through their agreed contact and escalation process. Confirm contact details and backup arrangements during free setup.' },
   { id: 10, question: 'Do you help with detention and layover requests?', answer: 'We help document arrival and departure times and request eligible detention or layover pay under the agreed load terms. Payment depends on the broker or shipper agreement and supporting documentation.' },
-  { id: 11, question: 'What are your business hours?', answer: 'Our published dispatch desk hours are Monday through Saturday, 8:00 AM to 6:00 PM Central Time. Discuss any after-hours needs during your setup call.' },
+  { id: 11, question: 'Is dispatch support available 24/7?', answer: `Yes. Rai Dispatch provides ${ACTIVE_CARRIER_SUPPORT}. Active carriers should use the dispatch contact and escalation process agreed during onboarding. New-carrier setup desk hours are ${SETUP_DESK_HOURS}.` },
   { id: 12, question: 'Do you handle rate confirmations and factoring paperwork?', answer: 'We assist with carrier packets, rate confirmations, bills of lading, proof of delivery, and communication with your chosen factoring provider. The carrier remains responsible for accurate records and compliance.' },
   { id: 13, question: 'How quickly can dispatch begin?', answer: 'We review your documents, equipment, lanes, and broker eligibility during onboarding. Timing depends on complete paperwork and suitable freight availability. Call the dispatch desk for a realistic start date.' },
   { id: 14, question: 'Can I cancel dispatch services?', answer: 'Services are offered without a long-term commitment. Follow the notice and outstanding-payment requirements in your signed dispatch agreement. Review those terms before starting.' },
@@ -229,7 +234,7 @@ export const STATS = [
   { label: 'Fees by truck type', value: DISPATCH_RATE_RANGE.replace('%', ''), prefix: '', suffix: '%' },
   { label: 'Contiguous states', value: '48', prefix: '', suffix: '' },
   { label: 'Equipment types', value: String(EQUIPMENT_TYPES.length), prefix: '', suffix: '' },
-  { label: 'Days of desk support', value: '6', prefix: '', suffix: '/week' },
+  { label: 'Live support for active carriers', value: '24', prefix: '', suffix: '/7' },
 ] as const;
 
 export const HOW_IT_WORKS = [
@@ -290,11 +295,11 @@ export const DISPATCHER = {
   initials: 'RD',
   // photo: '/team/dispatch-manager.jpg',  // <-- add when available
   intro:
-    'Work with a dispatch contact who understands your equipment, preferred lanes, and schedule. We help search freight, discuss rates, organize load details, and keep broker communication moving. You approve loads and stay in control of your operation.',
+    'Work with a dedicated dispatcher who understands your equipment, preferred lanes and schedule. We help search freight, discuss rates, organize load details and coordinate broker communication. Active carriers receive 24/7 live dispatch support through their agreed contact and escalation process. You approve each load.',
   commitments: [
-    'Clear contact details and published desk hours',
-    'We negotiate every load like it is our own',
-    'We tell you the truth, even when it is not what you want to hear',
-    'If we are not the right fit, we will say so',
+    ACTIVE_CARRIER_SUPPORT,
+    'Clear dispatch contact and escalation process',
+    'Equipment and lane preferences guide the search',
+    'Carrier approval before each load is booked',
   ],
 } as const;

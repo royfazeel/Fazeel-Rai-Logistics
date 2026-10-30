@@ -54,6 +54,7 @@ const hasType = (node, type) => [node?.['@type']].flat().includes(type);
 // prevent decimal percentages such as 11.3% from being mistaken for 3%.
 const obsoletePricing = /(?<![\d.])(?:3\s*%?\s*(?:[–—-]|to)\s*5|5\s*%?\s*(?:[–—-]|to)\s*8)\s*%|(?<![\d.])3(?:\.0+)?\s*%|\bsame\s+(?:maximum\s+)?percentage\s+(?:across|for)\s+(?:all|our)/i;
 const approvedRange = /\b4\s*%?\s*(?:[–—-]|to)\s*12\s*%/i;
+const activeCarrierSupport = /\b24\s*\/\s*7\s+live\s+dispatch\s+support\s+for\s+active\s+carriers\b/i;
 
 const issue = (path, check, detail) => failures.push({ path, check, detail });
 const decode = value => value.replace(/&(?:amp|quot|apos|lt|gt|nbsp|#(\d+)|#x([0-9a-f]+));/gi, (match, decimal, hex) => {
@@ -94,9 +95,22 @@ function checkOfferFee(path, offer, rate, label) {
 }
 
 function checkRenderedPricing(path, markup, visibleText, title, description, nodes) {
+  // This guide previously grouped reefer and flatbed under one rate. Check the
+  // rendered cost explanation against the approved schedule, not shared data.
+  if (path === '/resources/evaluate-freight-rate-per-mile') {
+    const costSection = [...markup.matchAll(/<section\b([^>]*)>([\s\S]*?)<\/section>/gi)].find(match => attributes(match[1]).id === 'costs');
+    const costText = plain(costSection?.[2] || '');
+    for (const item of approvedFees.filter(item => ['dry-van', 'reefer', 'flatbed'].includes(item.slug))) {
+      const association = new RegExp(`(?:${item.label.source})[^%]{0,65}?\\b(\\d+(?:\\.\\d+)?)\\s*%`, 'gi');
+      const rates = [...costText.matchAll(association)].map(match => Number(match[1]));
+      if (!rates.length || rates.some(rate => rate !== item.rate)) issue(path, 'guide-equipment-pricing', `The cost explanation must associate ${item.slug} with ${item.rate}%; found ${JSON.stringify(rates)}.`);
+    }
+  }
   const equipment = approvedFees.find(item => path === `/equipment/${item.slug}`);
   if (equipment) {
-    const article = markup.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1] || markup;
+    const articleContent = markup.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1];
+    const article = articleContent || markup;
+    if (!activeCarrierSupport.test(plain(articleContent || ''))) issue(path, 'equipment-active-carrier-support', 'Equipment content must explicitly publish 24/7 live dispatch support for active carriers.');
     const hero = article.match(/<header\b[^>]*>([\s\S]*?)<\/header>/i)?.[1];
     const headlineRates = percentages(hero ? plain(hero) : `${title} ${description}`);
     if (!headlineRates.includes(equipment.rate) || headlineRates.some(rate => rate !== equipment.rate)) issue(path, 'equipment-pricing', `Primary equipment offer must advertise ${equipment.rate}%; found ${JSON.stringify(headlineRates)}.`);
@@ -262,6 +276,9 @@ await batch(uniquePaths, async path => {
   if (!/text\/html/i.test(response.type)) issue(path, 'content-type', `Expected HTML, received ${response.type}.`);
   const html = response.text;
   const markup = pageMarkup(html);
+  const ids = [...markup.matchAll(/<[a-z][^>]*>/gi)].map(match => attributes(match[0]).id).filter(Boolean);
+  const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
+  if (duplicateIds.length) issue(path, 'duplicate-html-id', `Repeated IDs make fragment navigation ambiguous: ${duplicateIds.join(', ')}.`);
   const body = markup.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] || markup;
   const visibleText = plain(body.replace(/<svg\b[^>]*>[\s\S]*?<\/svg>/gi, ''));
   const h1s = [...markup.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map(match => plain(match[1]));

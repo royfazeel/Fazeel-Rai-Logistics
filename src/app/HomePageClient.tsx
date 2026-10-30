@@ -30,6 +30,8 @@ import FAQAccordion from '@/components/FAQAccordion';
 import StaticPhoto from '@/components/StaticPhoto';
 import {
   BUSINESS,
+  ACTIVE_CARRIER_SUPPORT,
+  SETUP_DESK_HOURS,
   MEDIA,
   EQUIPMENT_TYPES,
   DISPATCH_SPECIALTIES,
@@ -52,25 +54,7 @@ const iconComponents: Record<string, React.ElementType> = {
   Calendar,
 };
 
-/**
- * Squeezes BUSINESS.hours down to the micro-caps form the hero status line
- * needs — "Monday – Saturday" + "8:00 AM – 6:00 PM CST" becomes
- * "MON–SAT 8A–6P CST". Derived rather than hardcoded so the hero can never
- * drift from the hours shown in the footer and on /contact.
- */
-function condenseHours(hours: { days: string; time: string }): string {
-  const days = hours.days
-    .split(/\s*[–—-]\s*/)
-    .map((day) => day.trim().slice(0, 3))
-    .join('–');
-  const time = hours.time
-    .replace(/:00/g, '')
-    .replace(/\s*([AP])M\b/gi, '$1')
-    .replace(/\s*[–—-]\s*/g, '–');
-  return `${days} ${time}`.toUpperCase();
-}
-
-const HERO_STATUS = `Dispatch desk hours · ${condenseHours(BUSINESS.hours)}`;
+const HOME_FAQS = [1, 9, 4, 11, 2, 5, 6, 8].flatMap(id => FAQS.filter(faq => faq.id === id));
 
 export default function HomePage() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
@@ -102,10 +86,10 @@ export default function HomePage() {
             className="photo-hero-frame pointer-events-none absolute inset-y-0 left-8 right-8 hidden lg:block"
             aria-hidden="true"
           >
-            {/* Status line — hours come from BUSINESS.hours */}
+            {/* Active-carrier support is distinct from new-carrier setup hours. */}
             <div className="absolute right-4 top-[100px] flex items-center gap-2.5 font-display text-[0.8125rem] font-semibold uppercase tracking-[0.2em] text-white/80 [text-shadow:0_1px_6px_rgba(20,22,28,0.75)]">
               <span className="block h-[7px] w-[7px] bg-primary-600" />
-              {HERO_STATUS}
+              {ACTIVE_CARRIER_SUPPORT}
             </div>
 
             {/* Hairline rule under the status line, red tick where it meets the rail */}
@@ -144,9 +128,8 @@ export default function HomePage() {
             <p
               className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"
             >
-              <span className="hidden sm:inline">We manage the loads. You drive the miles. Dedicated freight dispatch for owner-operators and small fleets: load search, rate negotiation, booking and paperwork across the lower 48. Free setup and {DISPATCH_RATE_RANGE} of gross revenue
-              on loads we dispatch, based on your equipment.</span>
-              <span className="sm:hidden">Dedicated freight dispatch for owner-operators and small fleets. Load search, rate negotiation and paperwork across the lower 48. Free setup; {DISPATCH_RATE_RANGE} of gross on loads we dispatch.</span>
+              <span className="hidden sm:inline">We manage the loads. You drive the miles. A dedicated dispatcher for every truck, with load search, rate negotiation and paperwork across the lower 48. Active carriers receive 24/7 live dispatch support. Free setup; {DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch, based on equipment.</span>
+              <span className="sm:hidden">Dedicated truck dispatch across the lower 48, with 24/7 live support for active carriers. Free setup; {DISPATCH_RATE_RANGE} of gross on loads we dispatch.</span>
             </p>
 
             <div
@@ -538,6 +521,9 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
+              <Link prefetch={false} href="/services/dedicated-dispatcher" className="mt-7 inline-flex items-center gap-2 py-2 font-semibold text-white underline underline-offset-4 hover:text-primary-300">
+                How your dedicated dispatcher works <ArrowRight size={18} aria-hidden="true" />
+              </Link>
             </ScrollReveal>
           </div>
         </div>
@@ -740,7 +726,7 @@ export default function HomePage() {
           </ScrollReveal>
 
           <ScrollReveal>
-            <FAQAccordion faqs={FAQS.slice(0, 8)} columns={2} />
+            <FAQAccordion faqs={HOME_FAQS} columns={2} />
           </ScrollReveal>
 
           <ScrollReveal className="mt-10">
@@ -771,7 +757,7 @@ export default function HomePage() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500" />
               </span>
               <span className="text-sm font-semibold text-white">
-                Dispatch desk · {BUSINESS.hours.days}
+                {ACTIVE_CARRIER_SUPPORT}
               </span>
             </div>
 
@@ -785,6 +771,7 @@ export default function HomePage() {
               your dedicated dispatcher, documents, and the {DISPATCH_RATE_RANGE} fee
               for your equipment.
             </p>
+            <p className="mb-7 text-sm leading-6 text-white/75">New-carrier setup desk: {SETUP_DESK_HOURS}. Active carriers use their agreed dispatch contact.</p>
 
             <div className="flex flex-col gap-3 max-w-md mx-auto mb-8">
               <a

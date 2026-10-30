@@ -18,7 +18,7 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
-import { BUSINESS, MEDIA, DISPATCHER, STATS, DISPATCH_SPECIALTIES, DISPATCH_SPECIALTY_SUMMARY } from '@/lib/constants';
+import { BUSINESS, ACTIVE_CARRIER_SUPPORT, MEDIA, DISPATCHER, STATS, DISPATCH_SPECIALTIES, DISPATCH_SPECIALTY_SUMMARY } from '@/lib/constants';
 import { track } from '@/lib/track';
 
 const values = [
@@ -83,8 +83,9 @@ export default function AboutPageClient() {
               <p className="text-white/70 text-lg leading-relaxed max-w-2xl mb-8">
                 Rai Dispatch is a professional truck dispatch company operating
                 under Rai Technologies LLC. We are dedicated to helping
-                owner-operators and small fleets maximize their earnings through
-                expert dispatch services.
+                owner-operators and small fleets plan loads with a dedicated dispatcher.
+                We specialize in box trucks and provide 24/7 live dispatch support
+                for active carriers across the lower 48 states.
               </p>
               <a
                 href={BUSINESS.phoneHref}
@@ -129,6 +130,7 @@ export default function AboutPageClient() {
         <div className="container-custom">
           <h2 id="dispatch-specialties-heading" className="section-heading">Our truck dispatch specialties</h2>
           <p className="mt-5 max-w-4xl text-lg leading-8 text-surface-700">Rai Dispatch specializes in dispatching {DISPATCH_SPECIALTY_SUMMARY} for owner-operators and small fleets across the 48 contiguous states. Our work includes load search, rate negotiation, booking coordination, broker communication and paperwork support. The carrier approves each load.</p>
+          <p className="mt-5 max-w-4xl text-lg leading-8 text-surface-700">{ACTIVE_CARRIER_SUPPORT}. Your dedicated dispatcher and the support team coordinate through the contact and escalation process agreed during setup. <Link href="/services/dedicated-dispatcher" className="font-semibold text-primary-700 underline underline-offset-4">Meet the dispatch workflow.</Link></p>
           <ul className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{DISPATCH_SPECIALTIES.map(equipment => <li key={equipment.id}><Link prefetch={false} href={`/equipment/${equipment.id}`} className="flex justify-between gap-4 rounded-lg border border-surface-300 bg-white p-4 font-semibold text-navy-900 hover:border-primary-500"><span>{equipment.name} dispatch</span><span className="text-primary-700">{equipment.percentage}</span></Link></li>)}</ul>
           <p className="mt-5 text-sm leading-7 text-surface-700">Fees apply to gross revenue on loads we dispatch. We confirm the equipment, lanes, billing base and service scope before starting.</p>
         </div>

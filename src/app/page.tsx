@@ -5,7 +5,7 @@ import { BUSINESS, SERVICES } from '@/lib/constants';
 import { specialtyOfferCatalog } from '@/lib/equipment-schema';
 import { HERO_IMAGES } from '@/lib/hero-images';
 
-export const metadata = pageMetadata(`Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees`, `Dedicated truck dispatch for owner-operators and fleets across 48 states. Load booking, rate negotiation and paperwork. ${DISPATCH_RATE_RANGE} fees by equipment.`, '/');
+export const metadata = pageMetadata(`Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees`, `Dedicated truck dispatch across the lower 48. Box truck specialists, 24/7 live support for active carriers, free setup and ${DISPATCH_RATE_RANGE} fees by equipment.`, '/');
 
 export default function HomePage() {
   const service = {

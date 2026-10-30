@@ -4,11 +4,10 @@ import { BUSINESS } from '@/lib/constants';
 import { DISPATCH_PRICING_SUMMARY } from '@/lib/dispatch-pricing';
 
 /**
- * Single source of truth for the date shown at the top and bottom of this
- * page. Keep it in step with POLICY_UPDATED in src/app/privacy/page.tsx —
- * two legal pages carrying dates a year apart reads as neglect.
+ * Date of the latest substantive Terms revision, including the published
+ * dispatch fee schedule. Keep the visible date and sitemap revision aligned.
  */
-const TERMS_UPDATED = 'September 28, 2026';
+const TERMS_UPDATED = 'October 30, 2026';
 
 export const metadata = pageMetadata('Terms of Service', 'Rai Dispatch service terms, carrier responsibilities, dispatch fees, load approvals, payment arrangements and cancellation conditions.', "/terms");
 

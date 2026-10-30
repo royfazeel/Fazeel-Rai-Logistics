@@ -9,18 +9,19 @@ const CONTENT_UPDATED = '2026-09-24';
 const PAGE_REVISIONS: Record<string, string> = {
   '': '2026-10-30',
   '/services': '2026-10-30', '/equipment': '2026-10-30',
-  '/pricing': '2026-10-30', '/contact': '2026-09-28',
+  '/pricing': '2026-10-30', '/contact': '2026-10-30',
   '/about': '2026-10-30', '/faq': '2026-10-30',
-  '/carriers': '2026-09-28', '/service-areas': '2026-09-28',
+  '/carriers': '2026-10-30', '/service-areas': '2026-10-30',
   '/resources': '2026-10-30',
   '/resources/trucking-dispatch-glossary': '2026-10-30',
   '/tools/load-profit-calculator': '2026-10-30',
   '/editorial-standards': '2026-10-30',
-  '/privacy': '2026-10-26', '/terms': '2026-09-28',
-  '/testimonials': '2026-09-28',
+  '/privacy': '2026-10-26', '/terms': '2026-10-30',
+  '/testimonials': '2026-10-30',
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(({ slug }) => [`/equipment/${slug}`, '2026-10-30'])),
-  ...Object.fromEntries(SERVICE_CONTENT.map(({ slug }) => [`/services/${slug}`, '2026-09-28'])),
-  ...Object.fromEntries(CARRIER_CONTENT.map(({ slug }) => [`/carriers/${slug}`, '2026-09-28'])),
+  ...Object.fromEntries(SERVICE_CONTENT.map(({ slug }) => [`/services/${slug}`, '2026-10-30'])),
+  // Each carrier page's published fee range changed with the October 30 schedule.
+  ...Object.fromEntries(CARRIER_CONTENT.map(({ slug }) => [`/carriers/${slug}`, '2026-10-30'])),
   ...Object.fromEntries(GUIDES.map(guide => [`/resources/${guide.slug}`, guide.updated ?? guide.published])),
   '/equipment/reefer': '2026-10-30',
   '/equipment/flatbed': '2026-10-30',
@@ -36,6 +37,9 @@ const PAGE_REVISIONS: Record<string, string> = {
   '/services/regional-dispatch': '2026-10-30',
   '/services/otr-dispatch': '2026-10-30',
   '/services/dedicated-dispatcher': '2026-10-30',
+  '/services/scheduling': '2026-10-30',
+  '/services/expedited-dispatch': '2026-10-30',
+  '/services/backhaul-dispatch': '2026-10-30',
 };
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [

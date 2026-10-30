@@ -4,7 +4,7 @@ import { Barlow_Condensed, Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import StickyCallWidgets from '@/components/StickyCallWidgets';
-import { BUSINESS, DISPATCH_SPECIALTIES } from '@/lib/constants';
+import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, DISPATCH_SPECIALTIES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
 import './globals.css';
 
@@ -64,7 +64,22 @@ const jsonLd = {
       areaServed: { '@type': 'Place', name: BUSINESS.serviceArea },
       knowsAbout: DISPATCH_SPECIALTIES.map(equipment => `${equipment.name} dispatch`),
       hasOfferCatalog: { '@id': `${SITE_URL}/equipment#dispatch-specialties` },
-      contactPoint: { '@type': 'ContactPoint', telephone: BUSINESS.phone, contactType: 'customer service', areaServed: { '@type': 'Place', name: BUSINESS.serviceArea }, availableLanguage: 'English' },
+      contactPoint: [
+        {
+          '@type': 'ContactPoint', '@id': `${SITE_URL}/#active-carrier-support`,
+          name: ACTIVE_CARRIER_SUPPORT, contactType: 'dispatch support for active carriers',
+          description: 'Active carriers use the dispatch contact and escalation process agreed during setup.',
+          url: `${SITE_URL}/contact`, areaServed: { '@type': 'Place', name: BUSINESS.serviceArea }, availableLanguage: 'en-US',
+          hoursAvailable: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '00:00', closes: '23:59' },
+        },
+        {
+          '@type': 'ContactPoint', '@id': `${SITE_URL}/#carrier-setup-contact`,
+          name: 'New-carrier setup desk', contactType: 'new-carrier setup',
+          telephone: BUSINESS.phone, email: BUSINESS.email, url: `${SITE_URL}/contact`,
+          description: `New-carrier setup hours: ${SETUP_DESK_HOURS}.`,
+          areaServed: { '@type': 'Place', name: BUSINESS.serviceArea }, availableLanguage: 'en-US',
+        },
+      ],
     },
     {
       '@type': 'WebSite', '@id': `${SITE_URL}/#website`, url: SITE_URL,

@@ -27,7 +27,7 @@ const pricingFaqs = [
   { id: 4, question: 'Do you offer a fixed weekly or monthly plan?', answer: 'You can ask the dispatch desk about an alternative fixed-fee arrangement. Any fixed weekly or monthly fee, service scope, and billing conditions must be separately quoted and agreed in writing.' },
   { id: 5, question: 'Do I pay on loads I book myself?', answer: 'The advertised percentage applies to loads we dispatch. Confirm how self-booked freight, cancelled loads, detention, layover, and other accessorial payments are treated in your signed agreement.' },
   { id: 6, question: 'Does a dispatch fee guarantee profit or a certain number of loads?', answer: 'No. Freight rates, available loads, operating costs, and your weekly revenue vary. You decide which loads to accept and remain responsible for evaluating the costs of your trucking operation.' },
-  { id: 7, question: 'Is a dedicated truck dispatcher included?', answer: 'Yes. Clients receive a dedicated truck dispatcher for their agreed load search, rate negotiation, booking coordination and broker communication. Confirm your contact person, desk hours and escalation process during onboarding.' },
+  { id: 7, question: 'Is a dedicated truck dispatcher included?', answer: 'Yes. Clients receive a dedicated truck dispatcher for their agreed load search, rate negotiation, booking coordination and broker communication. Active carriers receive 24/7 live dispatch support. Confirm your assigned contact, team coverage and escalation process during onboarding.' },
 ];
 
 export default function PricingPageClient() {

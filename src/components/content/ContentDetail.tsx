@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Check, ChevronRight, Phone } from 'lucide-react';
 import { LEARNING_LINKS } from '@/lib/learning-links';
-import { BUSINESS, DISPATCH_SPECIALTIES } from '@/lib/constants';
+import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, DISPATCH_SPECIALTIES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
 import { DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
 import EquipmentPhoto from '@/components/EquipmentPhoto';
@@ -91,7 +91,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
   const categoryLabel = { equipment: 'Equipment', services: 'Services', resources: 'Carrier resources', carriers: 'Carriers' }[category];
   const path = `/${category}/${content.slug}`;
   const url = `${SITE_URL}${path}`;
-  const related = [...(LEARNING_LINKS[path] ?? []), ...content.related].filter((item, index, items) => items.findIndex(link => link.href === item.href) === index);
+  const related = [...(category === 'equipment' ? [{ label: 'Your dedicated truck dispatcher', href: '/services/dedicated-dispatcher' }] : []), ...(LEARNING_LINKS[path] ?? []), ...content.related].filter((item, index, items) => items.findIndex(link => link.href === item.href) === index);
   const feeLabel = category === 'equipment' ? getDispatchRateLabel(content.slug) : DISPATCH_RATE_RANGE;
   const equipmentImage = category === 'equipment' ? EQUIPMENT_IMAGES[content.slug] : undefined;
   return (
@@ -109,11 +109,12 @@ export default function ContentDetail({ content, category, guide }: { content: D
         '@context': 'https://schema.org', '@type': 'Service', '@id': `${url}#service`,
         name: content.title, serviceType: content.title, description: content.availability ? `${content.description} ${content.availability}` : content.description,
         url, provider: { '@id': `${SITE_URL}/#organization` },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': url, isPartOf: { '@id': `${SITE_URL}/#website` }, inLanguage: 'en-US' },
         ...(equipmentImage ? { image: { '@type': 'ImageObject', url: `${SITE_URL}${equipmentImage.src}`, width: equipmentImage.width, height: equipmentImage.height, caption: equipmentImage.alt } } : {}),
         areaServed: { '@type': 'Place', name: 'Contiguous United States' },
         offers: {
           '@type': 'Offer', url: `${SITE_URL}/pricing`,
-          description: `${feeLabel} of gross revenue on loads we dispatch.${category === 'equipment' ? '' : ' Rate depends on truck type.'} Dedicated truck dispatcher included; billing terms confirmed before service.`,
+          description: `${feeLabel} of gross revenue on loads we dispatch.${category === 'equipment' ? '' : ' Rate depends on truck type.'} Dedicated truck dispatcher and 24/7 live dispatch support for active carriers included; billing terms confirmed before service.`,
         },
       }} />
 
@@ -149,6 +150,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
             <details>
               <summary className="cursor-pointer font-semibold text-navy-900">Explore this {guide ? 'guide' : 'service'}</summary>
               <ul className="mt-4 space-y-3 text-sm leading-6 text-navy-700">
+                {!guide && <li><a href="#service-details" className="hover:text-primary-700 hover:underline">Dispatch service at a glance</a></li>}
                 {content.sections.map((section) => <li key={section.id}><a href={`#${section.id}`} className="hover:text-primary-700 hover:underline">{section.title}</a></li>)}
                 <li><a href="#questions" className="hover:text-primary-700 hover:underline">Common questions</a></li>
               </ul>
@@ -156,6 +158,18 @@ export default function ContentDetail({ content, category, guide }: { content: D
           </nav>
           <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-16">
             <div className="max-w-3xl">
+              {!guide && <section id="service-details" className="mb-12 scroll-mt-28 rounded-xl border border-surface-300 bg-surface-50 p-6 sm:p-8" aria-labelledby="service-details-title">
+                <p className="eyebrow">Rai Dispatch · Service details</p>
+                <h2 id="service-details-title" className="mb-6 text-3xl text-navy-950">Dispatch service at a glance</h2>
+                <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-2 text-sm leading-6">
+                  <div><dt className="font-semibold text-navy-950">Your dispatcher</dt><dd className="mt-1 text-navy-700">A dedicated dispatcher for your truck.{path !== '/services/dedicated-dispatcher' && <> <Link href="/services/dedicated-dispatcher" className="text-accent-800 underline underline-offset-4">See how the team works.</Link></>}</dd></div>
+                  <div><dt className="font-semibold text-navy-950">Dispatch fee</dt><dd className="mt-1 text-navy-700">{feeLabel} of gross revenue on loads we dispatch{category === 'equipment' ? '.' : ', based on equipment.'} <Link href="/pricing" className="text-accent-800 underline underline-offset-4">Review the billing terms.</Link></dd></div>
+                  <div><dt className="font-semibold text-navy-950">Service area</dt><dd className="mt-1 text-navy-700">{BUSINESS.serviceArea}. <Link href="/service-areas" className="text-accent-800 underline underline-offset-4">Plan your lanes and coverage.</Link></dd></div>
+                  <div><dt className="font-semibold text-navy-950">Load approval</dt><dd className="mt-1 text-navy-700">You review the rate, appointments and requirements, then approve each load before booking.</dd></div>
+                  <div><dt className="font-semibold text-navy-950">Getting started</dt><dd className="mt-1 text-navy-700">Free setup, an equipment review and a written dispatch agreement. New-carrier setup desk: {SETUP_DESK_HOURS}. <Link href="/resources/carrier-onboarding-checklist" className="text-accent-800 underline underline-offset-4">Prepare your carrier details.</Link></dd></div>
+                  <div><dt className="font-semibold text-navy-950">Active-carrier support</dt><dd className="mt-1 text-navy-700">{ACTIVE_CARRIER_SUPPORT}. Use your agreed dispatch contact and escalation process.</dd></div>
+                </dl>
+              </section>}
               {content.sections.map((section) => (
                 <section id={section.id} key={section.id} className="mb-12 scroll-mt-28">
                   <h2 className="mb-5 text-3xl leading-tight text-navy-950">{section.title}</h2>
@@ -186,7 +200,8 @@ export default function ContentDetail({ content, category, guide }: { content: D
               <nav aria-label="On this page" className="hidden rounded-lg border border-surface-300 p-6 lg:block">
                 <h2 className="text-xl">On this page</h2>
                 <ul className="mt-4 space-y-3 text-sm leading-6 text-navy-700">
-                  {content.sections.map((section) => <li key={section.id}><a href={`#${section.id}`} className="hover:text-primary-700 hover:underline">{section.title}</a></li>)}
+                  {!guide && <li><a href="#service-details" className="hover:text-primary-700 hover:underline">Dispatch service at a glance</a></li>}
+                {content.sections.map((section) => <li key={section.id}><a href={`#${section.id}`} className="hover:text-primary-700 hover:underline">{section.title}</a></li>)}
                   <li><a href="#questions" className="hover:text-primary-700 hover:underline">Common questions</a></li>
                 </ul>
               </nav>

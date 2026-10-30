@@ -1,5 +1,6 @@
 import type { ContentLink, ContentSection } from './dispatch-content';
 import { getDispatchRate, getDispatchRateLabel } from './dispatch-pricing';
+import { ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS } from './constants';
 
 const boxTruckExampleBillingBase = 2_000;
 const boxTruckExampleFee = boxTruckExampleBillingBase * getDispatchRate('box-truck') / 100;
@@ -34,11 +35,12 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
     ],
     faqs: [
       { question: 'Does Rai Dispatch specialize in box truck dispatch?', answer: `Yes. Rai Dispatch specializes in box truck dispatch for owner-operators and small fleets, including 26-foot and other straight-truck configurations. The published fee is ${getDispatchRateLabel('box-truck')}, with a dedicated dispatcher and free setup. Equipment fit, lanes and service scope are reviewed before starting.` },
+      { question: 'Does Rai Dispatch offer 24/7 box truck dispatch support?', answer: `Yes. Rai Dispatch provides ${ACTIVE_CARRIER_SUPPORT}, including box truck owner-operators and fleets. Your assigned dispatcher works with team backup coverage, and you receive the active-load contact and escalation process during onboarding. New-carrier setup desk hours are ${SETUP_DESK_HOURS}. Support availability does not guarantee loads, routes or revenue.` },
       { question: 'What is the dispatch fee on a $2,000 box truck load?', answer: `If $${boxTruckExampleBillingBase.toLocaleString('en-US')} is the agreed billing base, the ${getDispatchRateLabel('box-truck')} dispatch fee is $${boxTruckExampleFee.toLocaleString('en-US')}. That leaves $${boxTruckExampleRemainder.toLocaleString('en-US')} before operating expenses. The agreement determines which revenue items form the billing base; this example does not promise a load or profit.` },
       { question: 'Can my box truck accept a load posted for a dry van?', answer: 'Only if the responsible party and carrier confirm that the actual truck meets every shipment requirement. Do not substitute a straight truck merely because the freight seems small enough; loading access, payload, appointments and equipment acceptance still matter.' },
       { question: 'Is liftgate or inside delivery automatically included in a box truck booking?', answer: 'No. Confirm the requested work, equipment capability, unloading responsibility and compensation before approving the load. Tell the dispatcher which delivery tasks your operation accepts.' },
     ],
-    related: [{ label: 'Box truck load-search worksheet', href: '/resources/how-to-find-box-truck-loads' }, { label: 'Regional or OTR dispatch planning', href: '/resources/local-vs-regional-vs-otr-trucking' }],
+    related: [{ label: 'Box truck load-search worksheet', href: '/resources/how-to-find-box-truck-loads' }, { label: 'Dedicated dispatcher and 24/7 active-carrier support', href: '/services/dedicated-dispatcher' }, { label: 'Regional or OTR dispatch planning', href: '/resources/local-vs-regional-vs-otr-trucking' }],
   },
   'dry-van': {
     sections: [

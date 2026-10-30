@@ -15,12 +15,12 @@ export default function EquipmentPageClient() {
           <p className="eyebrow">Equipment we dispatch</p>
           <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.04] tracking-tight mb-5 max-w-2xl">Truck dispatch services<br /><span className="text-primary-400">by equipment type.</span></h1>
           <p className="text-white/90 text-lg leading-relaxed max-w-2xl mb-5">Rai Dispatch specializes in dispatching {DISPATCH_SPECIALTY_SUMMARY}.</p>
-          <p className="text-white/80 text-lg leading-relaxed max-w-2xl mb-7">Explore {EQUIPMENT_TYPES.length} truck and trailer types, from cargo vans to specialized open-deck equipment. Get a dedicated dispatcher across the 48 contiguous states, with {DISPATCH_RATE_RANGE} fees based on equipment.</p>
+          <p className="text-white/80 text-lg leading-relaxed max-w-2xl mb-7">Explore {EQUIPMENT_TYPES.length} truck and trailer types, from cargo vans to specialized open-deck equipment. Get a dedicated dispatcher across the 48 contiguous states, with 24/7 live support for active carriers and {DISPATCH_RATE_RANGE} fees based on equipment.</p>
           <a href="#equipment-options" className="btn-primary">Find your equipment<ArrowRight className="w-5 h-5" aria-hidden="true" /></a>
           <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'equipment_hero' })} className="mt-4 flex w-fit items-center gap-2 py-2 font-semibold text-white/90 hover:text-white"><Phone className="w-4 h-4" aria-hidden="true" />Talk about your truck</a>
         </div>
         <div className="w-full max-w-xl justify-self-center overflow-hidden rounded-xl border border-white/15 bg-white">
-          <EquipmentPhoto slug="dry-van" priority sizes="(min-width: 1024px) 540px, (min-width: 640px) 576px, calc(100vw - 40px)" className="w-full h-auto" />
+          <EquipmentPhoto slug="box-truck" priority sizes="(min-width: 1024px) 540px, (min-width: 640px) 576px, calc(100vw - 40px)" className="w-full h-auto" />
           <p className="border-t border-surface-200 px-5 py-4 text-sm font-medium text-navy-700">Load planning starts with your equipment, capacity and lanes.</p>
         </div>
       </div>
