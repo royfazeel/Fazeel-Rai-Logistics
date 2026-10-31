@@ -2,7 +2,7 @@ import PageBreadcrumbs from '@/components/PageBreadcrumbs';
 import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { BUSINESS } from '@/lib/constants';
-import { DISPATCH_PRICING_SUMMARY } from '@/lib/dispatch-pricing';
+import { DISPATCH_FEE_POLICY, DISPATCH_PRICING_SUMMARY } from '@/lib/dispatch-pricing';
 
 /**
  * Date of the latest substantive Terms revision, including the published
@@ -111,9 +111,9 @@ export default function TermsPage() {
               <li>Broker and shipper rate decisions, which are theirs to make, not ours</li>
             </ul>
             <p className="text-navy-800 leading-relaxed mt-4">
-              We are paid a dispatch fee for the work of finding freight and negotiating on
-              your behalf. That fee is owed for the service performed regardless of the
-              revenue any individual load produces.
+              Our dispatch fee is the equipment-specific percentage of the agreed
+              gross revenue on loads we book. This percentage fee does not guarantee
+              that a load will cover your operating costs or produce a profit.
             </p>
           </section>
 
@@ -130,7 +130,7 @@ export default function TermsPage() {
               <li>Provide accurate and current documentation</li>
               <li>Communicate promptly about load status and issues</li>
               <li>Honor load commitments once accepted</li>
-              <li>Pay dispatch fees according to the agreed plan</li>
+              <li>Pay the equipment-specific percentage dispatch fee on the agreed billing base</li>
             </ul>
           </section>
 
@@ -145,8 +145,7 @@ export default function TermsPage() {
               individual dispatch agreement before service begins.
             </p>
             <p className="text-navy-800 leading-relaxed">
-              A fixed weekly or monthly arrangement applies only if separately agreed
-              in writing. Its fee and billing terms are confirmed before starting.
+              {DISPATCH_FEE_POLICY}
             </p>
             <p className="text-navy-800 leading-relaxed mt-4">
               Payment terms, billing frequency, and specific rates will be outlined in your
@@ -163,7 +162,7 @@ export default function TermsPage() {
               as specified in your individual agreement. Upon termination:
             </p>
             <ul className="list-disc pl-6 text-navy-800 leading-relaxed space-y-2">
-              <li>All outstanding fees become immediately due</li>
+              <li>All outstanding percentage dispatch fees become immediately due</li>
               <li>We will complete dispatch on any loads in progress</li>
               <li>You remain responsible for completing accepted loads</li>
             </ul>

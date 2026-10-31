@@ -3,7 +3,7 @@ import { ArrowRight, Check, ChevronRight, Phone } from 'lucide-react';
 import { LEARNING_LINKS } from '@/lib/learning-links';
 import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, DISPATCH_SPECIALTIES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
-import { DISPATCH_RATE_RANGE, getDispatchRateLabel, getEquipmentOfferDescription } from '@/lib/dispatch-pricing';
+import { DISPATCH_FEE_POLICY, DISPATCH_RATE_RANGE, getDispatchRateLabel, getEquipmentOfferDescription } from '@/lib/dispatch-pricing';
 import { buildFaqPageSchema } from '@/lib/faq-schema';
 import { PAGE_SEO_OVERRIDES } from '@/lib/page-overrides';
 import EquipmentPhoto from '@/components/EquipmentPhoto';
@@ -120,7 +120,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
         areaServed: { '@type': 'Place', name: 'Contiguous United States' },
         offers: {
           '@type': 'Offer', url: category === 'equipment' ? url : `${SITE_URL}/pricing`,
-          description: category === 'equipment' ? getEquipmentOfferDescription(content.slug) : `${feeLabel} of gross revenue on loads we book, based on equipment. A dedicated dispatcher and 24/7 live dispatch support for active carriers are included. Confirm the applicable equipment category, billing base and service scope in writing.`,
+          description: category === 'equipment' ? getEquipmentOfferDescription(content.slug) : `${feeLabel} of gross revenue on loads we book, based on equipment. A dedicated dispatcher and 24/7 live dispatch support for active carriers are included. ${DISPATCH_FEE_POLICY} Confirm the applicable equipment category, billing base and service scope in writing.`,
         },
       }} />
       {faqSchema && <ContentJsonLd data={faqSchema} />}
@@ -171,7 +171,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
                 <h2 id="service-details-title" className="mb-6 text-3xl text-navy-950">Dispatch service at a glance</h2>
                 <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-2 text-sm leading-6">
                   <div><dt className="font-semibold text-navy-950">Your dispatcher</dt><dd className="mt-1 text-navy-700">A dedicated dispatcher for your truck.{path !== '/services/dedicated-dispatcher' && <> <Link href="/services/dedicated-dispatcher" className="text-accent-800 underline underline-offset-4">See how the team works.</Link></>}</dd></div>
-                  <div><dt className="font-semibold text-navy-950">Dispatch fee</dt><dd className="mt-1 text-navy-700">{feeLabel} of gross revenue on loads we book{category === 'equipment' ? '.' : ', based on equipment.'} <Link href="/pricing" className="text-accent-800 underline underline-offset-4">Review the billing terms.</Link></dd></div>
+                  <div><dt className="font-semibold text-navy-950">Dispatch fee</dt><dd className="mt-1 text-navy-700">{feeLabel} of gross revenue on loads we book{category === 'equipment' ? '.' : ', based on equipment.'} {DISPATCH_FEE_POLICY} <Link href="/pricing" className="text-accent-800 underline underline-offset-4">Review the billing terms.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Service area</dt><dd className="mt-1 text-navy-700">{BUSINESS.serviceArea}. <Link href="/service-areas" className="text-accent-800 underline underline-offset-4">Plan your lanes and coverage.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Load approval</dt><dd className="mt-1 text-navy-700">You review the rate, appointments and requirements, then approve each load before booking.</dd></div>
                   <div><dt className="font-semibold text-navy-950">Getting started</dt><dd className="mt-1 text-navy-700">Free setup, an equipment review and a written dispatch agreement. New-carrier setup desk: {SETUP_DESK_HOURS}. <Link href="/resources/carrier-onboarding-checklist" className="text-accent-800 underline underline-offset-4">Prepare your carrier details.</Link></dd></div>

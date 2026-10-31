@@ -695,7 +695,7 @@ export default function HomePage() {
           <p className="text-surface-700 text-lg max-w-2xl mb-8">Dispatch articles, equipment checklists and planning tools to compare fees, prepare carrier documents and evaluate a load beyond its headline rate.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { title: 'How dispatch fees work', href: 'truck-dispatch-fees', text: 'Compare percentage fees, fixed plans, and the terms to confirm in writing.' },
+              { title: 'How dispatch fees work', href: 'truck-dispatch-fees', text: 'Review equipment percentages, billing terms and included dispatch support.' },
               { title: 'Choose a truck dispatcher', href: 'how-to-choose-a-truck-dispatcher', text: 'Ask about load approval, communication, service scope, and cancellation.' },
               { title: 'Get ready for onboarding', href: 'carrier-onboarding-checklist', text: 'Prepare authority, insurance, equipment details, and your lane preferences.' },
               { title: 'Find and compare box truck loads', href: 'how-to-find-box-truck-loads', text: 'Check equipment fit, prepare your availability brief, and compare two offers using the worked example.' },

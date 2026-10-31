@@ -1,7 +1,7 @@
 import { ACTIVE_CARRIER_SUPPORT, BUSINESS, FAQS, SETUP_DESK_HOURS } from './constants';
 import { EQUIPMENT_CONTENT, GUIDES, SERVICE_CONTENT } from './dispatch-content';
 import type { CarrierGuide, DispatchContent } from './dispatch-content';
-import { DISPATCH_FEES_ANSWER, OTHER_EQUIPMENT_NOTICE, getDispatchRateLabel } from './dispatch-pricing';
+import { DISPATCH_FEES_ANSWER, DISPATCH_FEE_POLICY, OTHER_EQUIPMENT_NOTICE, getDispatchRateLabel } from './dispatch-pricing';
 import { SITE_URL } from './seo';
 
 const sitePages = [
@@ -57,7 +57,7 @@ function pricing() {
     ...EQUIPMENT_CONTENT.map(content => `- ${link(content.title, `/equipment/${content.slug}`)}: ${getDispatchRateLabel(content.slug)} of gross revenue on loads we book.`),
     '',
     OTHER_EQUIPMENT_NOTICE,
-    'No standard fixed weekly box truck fee is published. An alternative fixed-fee arrangement requires an individual written quote and agreement.',
+    DISPATCH_FEE_POLICY,
     '',
   ];
 }
