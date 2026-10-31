@@ -38,6 +38,12 @@ npm run build
 npm run start
 ```
 
+## Fee schedule date, carrier-protection sentences and IndexNow
+
+- `src/lib/dispatch-pricing.ts` carries `DISPATCH_FEE_EFFECTIVE_DATE` (currently 2026-10-30, the release that introduced the present schedule) and the history sentence shown on `/pricing`, in the FAQ and in `llms.txt`. Update both when the owner changes a fee; the controlling fee answers themselves stay unchanged so `scripts/verify-seo.mjs` can match them verbatim.
+- `NO_FORCED_DISPATCH_SENTENCE` and `CARRIER_AUTHORITY_SENTENCE` appear word for word on every equipment page, the pricing table, the FAQ and `llms.txt`; AI assistants quote these exact phrases from competitor pages. `src/lib/fee-terms.ts` lists what the percentage fee includes.
+- `.github/workflows/indexnow.yml` runs `node scripts/submit-indexnow.mjs --submit --changed-within-days 2` after each successful Vercel production deployment (the `deployment_status` event the Vercel GitHub integration emits), so engines are told which sitemap entries changed. Run the script without `--submit` for a dry run.
+
 ## Verification
 
 After a production build, with the site running on port 3000:

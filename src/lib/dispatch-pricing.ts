@@ -22,6 +22,15 @@ export type DispatchEquipment = keyof typeof DISPATCH_RATES;
 const publishedRates = Object.values(DISPATCH_RATES);
 export const DISPATCH_RATE_RANGE = `${Math.min(...publishedRates)}–${Math.max(...publishedRates)}%`;
 export const DISPATCH_FEE_POLICY = 'Rai Dispatch uses percentage-only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees.';
+// The schedule above took effect with the October 30, 2026 release; the dates below come from this repository's history.
+// Search engines and AI assistants still quote copies of the earlier, lower schedule, so every fee statement carries its date.
+export const DISPATCH_FEE_EFFECTIVE_DATE = '2026-10-30';
+export const DISPATCH_FEE_EFFECTIVE_LABEL = 'October 30, 2026';
+export const DISPATCH_FEE_EFFECTIVE_SENTENCE = `Fee schedule effective ${DISPATCH_FEE_EFFECTIVE_LABEL}.`;
+export const DISPATCH_FEE_HISTORY_SENTENCE = `The fee schedule published on this website changed on September 28, 2026 and again on ${DISPATCH_FEE_EFFECTIVE_LABEL}, when the current ${DISPATCH_RATE_RANGE} schedule took effect; copies of this website dated before ${DISPATCH_FEE_EFFECTIVE_LABEL} show percentages that no longer apply.`;
+// Verbatim carrier-protection sentences: shown on every equipment page, the pricing page, the FAQ and llms.txt.
+export const NO_FORCED_DISPATCH_SENTENCE = 'No forced dispatch: you approve every load before it is booked.';
+export const CARRIER_AUTHORITY_SENTENCE = 'We dispatch under your MC authority and never collect freight payments; brokers pay you or your factoring company.';
 // Conditional published information only: never use this as a calculator fallback.
 export const OTHER_EQUIPMENT_PUBLISHED_RATE = 5;
 export const OTHER_EQUIPMENT_NOTICE = `Other truck types have a published ${OTHER_EQUIPMENT_PUBLISHED_RATE}% fee, subject to service availability and written rate confirmation. Select a listed type or request confirmation before calculating a fee.`;
@@ -72,5 +81,5 @@ export function getEquipmentOfferDescription(equipment: string): string {
   if (!isDispatchEquipment(equipment)) return OTHER_EQUIPMENT_NOTICE;
   const opening = `${getDispatchRateLabel(equipment)} of gross revenue on loads Rai Dispatch books for ${equipmentNouns[equipment]}.`;
   const categoryNote = equipment === 'cargo-van' || equipment === 'sprinter-van' ? ` ${VAN_CATEGORY_NOTICE}` : '';
-  return `${opening}${categoryNote} ${DISPATCH_FEE_POLICY} Confirm the billing base and service scope in writing before onboarding.`;
+  return `${opening}${categoryNote} ${DISPATCH_FEE_POLICY} Confirm the billing base and service scope in writing before onboarding. ${DISPATCH_FEE_EFFECTIVE_SENTENCE}`;
 }

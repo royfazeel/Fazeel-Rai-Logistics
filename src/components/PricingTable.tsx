@@ -5,7 +5,7 @@ import dynamic, { type DynamicOptionsLoadingProps } from 'next/dynamic';
 import Link from 'next/link';
 import { Phone, Check, ArrowRight } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
-import { DISPATCH_FEE_POLICY, DISPATCH_RATE_RANGE, getDispatchRateLabel, OTHER_EQUIPMENT_NOTICE, VAN_CATEGORY_NOTICE } from '@/lib/dispatch-pricing';
+import { CARRIER_AUTHORITY_SENTENCE, DISPATCH_FEE_EFFECTIVE_SENTENCE, DISPATCH_FEE_HISTORY_SENTENCE, DISPATCH_FEE_POLICY, DISPATCH_RATE_RANGE, NO_FORCED_DISPATCH_SENTENCE, getDispatchRateLabel, OTHER_EQUIPMENT_NOTICE, VAN_CATEGORY_NOTICE } from '@/lib/dispatch-pricing';
 import { track } from '@/lib/track';
 
 const QuoteCloseContext = createContext<(() => void) | null>(null);
@@ -102,7 +102,8 @@ export function PricingPreview() {
       <div className="bg-white p-7 md:p-10">
         <h3 className="font-display text-3xl font-bold text-navy-950 mb-5">Support from load search to delivery</h3>
         <ul className="grid sm:grid-cols-2 gap-4 mb-7">{['Dedicated truck dispatcher', 'Load search and booking', 'Freight rate negotiation', 'Broker communication', 'Lane and route planning', 'Rate confirmations and paperwork'].map(feature => <li key={feature} className="flex items-start gap-2 text-navy-900"><Check className="w-5 h-5 shrink-0 text-primary-600" aria-hidden="true" />{feature}</li>)}</ul>
-        <p className="text-surface-700 border-t border-surface-200 pt-5">{DISPATCH_FEE_POLICY} You approve every load; there is no forced dispatch.</p>
+        <p className="text-surface-700 border-t border-surface-200 pt-5">{DISPATCH_FEE_POLICY} {NO_FORCED_DISPATCH_SENTENCE} {CARRIER_AUTHORITY_SENTENCE}</p>
+        <p className="text-surface-700 mt-3 text-sm leading-6">{DISPATCH_FEE_EFFECTIVE_SENTENCE} {DISPATCH_FEE_HISTORY_SENTENCE}</p>
         <a href={BUSINESS.phoneHref} onClick={() => track('call_click', { location: 'pricing_preview' })} className="inline-flex items-center gap-2 mt-5 text-primary-700 font-semibold py-2"><Phone className="w-4 h-4" aria-hidden="true" />{BUSINESS.phone}</a>
       </div>
     </div>

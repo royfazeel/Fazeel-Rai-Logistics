@@ -1,0 +1,31 @@
+# After every successful Vercel production deployment, tell IndexNow (Bing and partner engines)
+# which sitemap entries were revised in the last two days. Search engines and AI assistants were
+# still quoting copies of the pre-October-30 fee schedule, so changed pages must be re-fetched quickly.
+# The script dry-runs by default; --submit posts to api.indexnow.org using the key file in /public.
+name: IndexNow after production deploy
+
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Give the production alias time to serve the new build
+        run: sleep 90
+      - name: Notify IndexNow of pages revised in the last 2 days
+        run: node scripts/submit-indexnow.mjs --submit --changed-within-days 2 --output indexnow-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: indexnow-report
+          path: indexnow-report.json
+          if-no-files-found: ignore

@@ -1,4 +1,4 @@
-import { DISPATCH_FEES_ANSWER, DISPATCH_RATE_RANGE, getDispatchRateLabel } from './dispatch-pricing';
+import { CARRIER_AUTHORITY_SENTENCE, DISPATCH_FEES_ANSWER, DISPATCH_FEE_EFFECTIVE_SENTENCE, DISPATCH_FEE_HISTORY_SENTENCE, DISPATCH_RATE_RANGE, NO_FORCED_DISPATCH_SENTENCE, getDispatchRateLabel } from './dispatch-pricing';
 
 export const ACTIVE_CARRIER_SUPPORT = '24/7 live dispatch support for active carriers';
 
@@ -218,7 +218,7 @@ export const FAQS = [
   { id: 2, question: 'What documents do I need to get started?', answer: 'Prepare your operating authority details where applicable, Certificate of Insurance, W-9, equipment specifications, and a signed dispatch agreement. A factoring notice of assignment may also be needed. Broker requirements vary by load and carrier.' },
   { id: 3, question: 'Where do you provide truck dispatch services?', answer: 'We support carriers across the 48 contiguous United States. Tell us whether you prefer local, regional, dedicated, or over-the-road work. Load availability depends on your equipment, authority, location, and the market.' },
   { id: 4, question: 'Which truck and trailer types can you dispatch?', answer: 'We specialize in dispatching box trucks, dry vans, reefers, flatbeds, power only tractors, step decks, hotshot trucks, cargo vans and Conestoga trailers. We also review Sprinter vans and other listed equipment. Actual equipment, lane and load requirements are confirmed before booking.' },
-  { id: 5, question: 'Do I have to accept every load?', answer: 'No. You choose which loads to accept. We present the rate, pickup and delivery details, equipment requirements, and route considerations so you can decide before booking.' },
+  { id: 5, question: 'Do I have to accept every load?', answer: `No. ${NO_FORCED_DISPATCH_SENTENCE} We present the rate, pickup and delivery details, equipment requirements, and route considerations so you can decide before booking.` },
   { id: 6, question: 'Do you work with new authorities and owner-operators?', answer: 'Owner-operators, small fleets, and carriers with new authority can discuss their setup with us. Each broker sets its own authority-age, insurance, safety, and equipment requirements, so not every load will be available to every carrier.' },
   { id: 7, question: 'How do you find loads for my truck?', answer: 'We search load boards and available broker freight, review lane fit and carrier requirements, negotiate terms, and present suitable options for your approval. We consider loaded and empty miles as well as pickup and delivery schedules.' },
   { id: 8, question: 'Are freight rates or weekly earnings guaranteed?', answer: 'No. Freight availability, load rates, operating costs, and weekly revenue change with equipment, markets, hours available, and the loads you accept. Dispatch support helps you evaluate opportunities; it does not guarantee a particular income.' },
@@ -228,6 +228,8 @@ export const FAQS = [
   { id: 12, question: 'Do you handle rate confirmations and factoring paperwork?', answer: 'We assist with carrier packets, rate confirmations, bills of lading, proof of delivery, and communication with your chosen factoring provider. The carrier remains responsible for accurate records and compliance.' },
   { id: 13, question: 'How quickly can dispatch begin?', answer: 'We review your documents, equipment, lanes, and broker eligibility during onboarding. Timing depends on complete paperwork and suitable freight availability. Call the dispatch desk for a realistic start date.' },
   { id: 14, question: 'Can I cancel dispatch services?', answer: 'Services are offered without a long-term commitment. Follow the notice and outstanding-payment requirements in your signed dispatch agreement. Review those terms before starting.' },
+  { id: 15, question: 'Does Rai Dispatch work under its own authority or handle freight payments?', answer: `No. ${CARRIER_AUTHORITY_SENTENCE} Rai Dispatch is a dispatch service for motor carriers, not a freight broker or a carrier, and it is paid only by the carrier under the written dispatch agreement.` },
+  { id: 16, question: 'When did the current dispatch fee schedule take effect?', answer: `${DISPATCH_FEE_EFFECTIVE_SENTENCE} ${DISPATCH_FEE_HISTORY_SENTENCE} The pricing page and each equipment page show the current percentage for that truck type.` },
 ] as const;
 
 export const STATS = [
