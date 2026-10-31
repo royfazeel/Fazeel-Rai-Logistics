@@ -170,10 +170,8 @@ export default function ServicesPageClient() {
         <div className="container-custom relative z-10">
           <div className="max-w-3xl">
             <p className="eyebrow">Our services</p>
-            <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">
-              Truck dispatch services for owner-operators and fleets
-            </h1>
-            <p className="text-white/70 text-lg max-w-2xl mb-8">
+            <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">Truck dispatch services for owner-operators and fleets</h1>
+            <p id="answer-block" className="text-white/70 text-lg max-w-2xl mb-8">
               Get help finding freight, negotiating rates, booking approved loads,
               scheduling appointments and organizing paperwork. Choose support for
               your equipment and lanes while you keep control of load acceptance.
@@ -390,7 +388,7 @@ export default function ServicesPageClient() {
               </tbody>
             </table>
           </div>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-surface-700">Fees are a percentage of gross revenue on loads we dispatch. Specialized equipment and local-only work require a service availability review. <Link prefetch={false} href="/pricing" className="font-semibold text-primary-700 underline underline-offset-4">Review the fee and billing terms</Link> or <Link prefetch={false} href="/equipment" className="font-semibold text-primary-700 underline underline-offset-4">explore every equipment type</Link>.</p>
+          <p className="mt-5 max-w-3xl text-sm leading-7 text-surface-700">Fees are a percentage of gross revenue on loads we book. Specialized equipment and local-only work require a service availability review. <Link prefetch={false} href="/pricing" className="font-semibold text-primary-700 underline underline-offset-4">Review the fee and billing terms</Link> or <Link prefetch={false} href="/equipment" className="font-semibold text-primary-700 underline underline-offset-4">explore every equipment type</Link>.</p>
         </div>
       </section>
 

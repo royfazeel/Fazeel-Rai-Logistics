@@ -48,7 +48,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
         id: 'pricing',
         title: 'Understand the fee before the first load',
         paragraphs: [
-          `Our percentage dispatch fee is ${DISPATCH_RATE_RANGE} by equipment on loads we dispatch. Your exact rate, billing base, service scope and invoice schedule are confirmed in writing before service starts. Clarify how fuel surcharge, accessorials, cancelled loads and freight you book yourself are treated.`,
+          `Our percentage dispatch fee is ${DISPATCH_RATE_RANGE} by equipment on loads we book. Your exact rate, billing base, service scope and invoice schedule are confirmed in writing before service starts. Clarify how fuel surcharge, accessorials, cancelled loads and freight you book yourself are treated.`,
           'There is no setup fee. Review the agreement’s notice and outstanding-payment requirements, then compare the dispatch service with the time and support your business needs. The amount left after a dispatch fee is still before your other operating expenses.',
         ],
       },
@@ -124,7 +124,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
         title: 'Review service and costs at truck level',
         paragraphs: [
           'Compare completed loads, total miles, time waiting and home-time fit for each truck. A strong fleet gross can hide one truck spending too much time empty or unavailable. Share that feedback when reviewing the next week’s search preferences.',
-          `Percentage dispatch fees are ${DISPATCH_RATE_RANGE} by equipment on loads we dispatch. Confirm the exact rate, billing base, included trucks and service scope in writing. Agree how invoices identify each truck and how accessorials, cancellations or changes in active fleet size are handled. Any fixed-fee arrangement requires a separate written quote.`,
+          `Percentage dispatch fees are ${DISPATCH_RATE_RANGE} by equipment on loads we book. Confirm the exact rate, billing base, included trucks and service scope in writing. Agree how invoices identify each truck and how accessorials, cancellations or changes in active fleet size are handled. Any fixed-fee arrangement requires a separate written quote.`,
         ],
       },
     ],
@@ -133,7 +133,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
     faqs: [
       { question: 'Can you support a fleet with different truck types?', answer: 'We can review mixed equipment, including dry vans, reefers, flatbeds, box trucks and power only operations. Specialized equipment and each truck’s lanes require a service-fit review.' },
       { question: 'Can dispatch coordinate with our fleet manager?', answer: 'Yes. Identify the manager and approval process during onboarding. Dispatch support can work alongside your existing operations, with responsibilities agreed before starting.' },
-      { question: 'Are fleet dispatch fees charged to every load we haul?', answer: 'The advertised percentage applies to loads we dispatch. Confirm the included trucks, billing base and treatment of independently booked freight in the signed agreement.' },
+      { question: 'Are fleet dispatch fees charged to every load we haul?', answer: 'The advertised percentage applies to loads we book. Confirm the included trucks, billing base and treatment of independently booked freight in the signed agreement.' },
     ],
     related: [
       { label: 'Compare equipment dispatch requirements', href: '/equipment' },
@@ -190,7 +190,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
         id: 'fees-and-timing',
         title: 'Agree fees and expectations before starting',
         paragraphs: [
-          `Rai Dispatch charges equipment-specific dispatch fees of ${DISPATCH_RATE_RANGE} on loads we dispatch, with a dedicated dispatcher for each truck and no setup fee. Your equipment rate, billing base, service scope and invoice timing are confirmed in writing. Ask how cancelled loads, accessorials and freight you book yourself affect the fee.`,
+          `Rai Dispatch charges equipment-specific dispatch fees of ${DISPATCH_RATE_RANGE} on loads we book, with a dedicated dispatcher for each truck and no setup fee. Your equipment rate, billing base, service scope and invoice timing are confirmed in writing. Ask how cancelled loads, accessorials and freight you book yourself affect the fee.`,
           'A start-date estimate follows the review of your documents, equipment and lanes. Keep onboarding completion separate from a confirmed booking when planning your first week. Available freight, broker approval and operating costs make fixed income or immediate-load promises unreliable planning assumptions.',
         ],
       },

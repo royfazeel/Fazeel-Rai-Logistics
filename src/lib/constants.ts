@@ -1,4 +1,4 @@
-import { DISPATCH_PRICING_SUMMARY, DISPATCH_RATE_RANGE, getDispatchRateLabel } from './dispatch-pricing';
+import { DISPATCH_FEES_ANSWER, DISPATCH_RATE_RANGE, getDispatchRateLabel } from './dispatch-pricing';
 
 export const ACTIVE_CARRIER_SUPPORT = '24/7 live dispatch support for active carriers';
 
@@ -27,7 +27,7 @@ export const BUSINESS = {
   },
   serviceArea: 'All 48 contiguous United States',
   tagline: 'Professional Truck Dispatching Services',
-  description: `Truck dispatch for owner-operators and fleets across the 48 contiguous states. A dedicated dispatcher for every truck, ${ACTIVE_CARRIER_SUPPORT}, free setup, and ${DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch. Support for 15 truck and trailer types.`,
+  description: `Truck dispatch for owner-operators and fleets across the 48 contiguous states. A dedicated dispatcher for every truck, ${ACTIVE_CARRIER_SUPPORT}, free setup, and ${DISPATCH_RATE_RANGE} of gross revenue on loads we book. Support for 15 truck and trailer types.`,
 } as const;
 
 // These hours apply to new-carrier setup; active-carrier live support is 24/7.
@@ -122,7 +122,7 @@ export const EQUIPMENT_TYPES = [
     id: 'sprinter-van',
     name: 'Sprinter Vans',
     percentage: getDispatchRateLabel('sprinter-van'),
-    description: 'High-roof van dispatch with a review of door clearance, cargo space and time-sensitive delivery requirements.',
+    description: 'Separately listed Sprinter van dispatch. Confirm your vehicle’s service category, usable space and delivery requirements before onboarding.',
     benefits: ['Door and interior measurements', 'Payload-based load review', 'Expedited scheduling'],
   },
   {
@@ -214,7 +214,7 @@ export const SERVICES = [
 ] as const;
 
 export const FAQS = [
-  { id: 1, question: 'How much does a truck dispatch service cost?', answer: `${DISPATCH_PRICING_SUMMARY} These fees apply to gross revenue on loads we dispatch. Confirm the billing base, schedule and service scope in writing before starting.` },
+  { id: 1, question: 'How much does a truck dispatch service cost?', answer: DISPATCH_FEES_ANSWER },
   { id: 2, question: 'What documents do I need to get started?', answer: 'Prepare your operating authority details where applicable, Certificate of Insurance, W-9, equipment specifications, and a signed dispatch agreement. A factoring notice of assignment may also be needed. Broker requirements vary by load and carrier.' },
   { id: 3, question: 'Where do you provide truck dispatch services?', answer: 'We support carriers across the 48 contiguous United States. Tell us whether you prefer local, regional, dedicated, or over-the-road work. Load availability depends on your equipment, authority, location, and the market.' },
   { id: 4, question: 'Which truck and trailer types can you dispatch?', answer: 'We specialize in dispatching box trucks, dry vans, reefers, flatbeds, power only tractors, step decks, hotshot trucks, cargo vans and Conestoga trailers. We also review Sprinter vans and other listed equipment. Actual equipment, lane and load requirements are confirmed before booking.' },

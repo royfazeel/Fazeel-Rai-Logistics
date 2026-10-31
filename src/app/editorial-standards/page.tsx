@@ -11,8 +11,8 @@ export default function EditorialStandardsPage() {
     <header className="bg-navy-950 py-10 text-white sm:py-16"><div className="container-custom">
       <ContentBreadcrumbs dark items={[{ label: 'Editorial standards', href: '/editorial-standards' }]} />
       <p className="eyebrow">About our carrier resources</p>
-      <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Clear sources. Useful examples. A way to correct errors.</h1>
-      <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Our resources help owner-operators and small fleets prepare dispatch questions, compare load costs and organize information. They are published by {BUSINESS.name}, a commercial truck dispatch service.</p>
+      <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Editorial standards: clear sources, useful examples and corrections</h1>
+      <p id="answer-block" className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Our resources help owner-operators and small fleets prepare dispatch questions, compare load costs and organize information. They are published by {BUSINESS.name}, a commercial truck dispatch service.</p>
       <p className="mt-5 text-sm text-navy-300">Published <time dateTime="2026-10-30">October 30, 2026</time></p>
     </div></header>
     <article className="container-custom py-12 sm:py-16"><div className="max-w-3xl space-y-10 text-navy-700">

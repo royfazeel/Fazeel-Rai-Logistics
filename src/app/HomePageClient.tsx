@@ -117,19 +117,15 @@ export default function HomePage() {
 
             <h1
               className="photo-hero-title font-display font-bold uppercase text-white leading-[0.95] tracking-tight mb-6 lg:mb-7"
-            >
-              Truck dispatch
-              <br />
-              <span className="text-primary-500">services for carriers.</span>
-            </h1>
+            >Truck dispatch services for owner-operators and small fleets</h1>
 
             <HeroPhoto />
 
-            <p
+            <p id="answer-block"
               className="text-lg sm:text-xl text-white/85 mb-8 lg:mb-9 max-w-xl leading-relaxed"
             >
-              <span className="hidden sm:inline">We manage the loads. You drive the miles. A dedicated dispatcher for every truck, with load search, rate negotiation and paperwork across the lower 48. Active carriers receive 24/7 live dispatch support. Free setup; {DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch, based on equipment.</span>
-              <span className="sm:hidden">Dedicated truck dispatch across the lower 48, with 24/7 live support for active carriers. Free setup; {DISPATCH_RATE_RANGE} of gross on loads we dispatch.</span>
+              <span className="hidden sm:inline">We manage the loads. You drive the miles. A dedicated dispatcher for every truck, with load search, rate negotiation and paperwork across the lower 48. Active carriers receive 24/7 live dispatch support. Free setup; {DISPATCH_RATE_RANGE} of gross revenue on loads we book, based on equipment.</span>
+              <span className="sm:hidden">Dedicated truck dispatch across the lower 48, with 24/7 live support for active carriers. Free setup; {DISPATCH_RATE_RANGE} of gross on loads we book.</span>
             </p>
 
             <div
@@ -641,7 +637,7 @@ export default function HomePage() {
                 icon: DollarSign,
                 title: 'Affordable rates',
                 description:
-                  `Equipment-based dispatch fees of ${DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch, confirmed before you start.`,
+                  `Equipment-based dispatch fees of ${DISPATCH_RATE_RANGE} of gross revenue on loads we book, confirmed before you start.`,
               },
               {
                 icon: Users,

@@ -1,3 +1,4 @@
+import PageBreadcrumbs from '@/components/PageBreadcrumbs';
 import { pageMetadata, SITE_URL } from '@/lib/seo';
 import Link from 'next/link';
 import {
@@ -13,7 +14,7 @@ import { BUSINESS } from '@/lib/constants';
 
 // The site-identity clarification does not change the policy's effective terms.
 const POLICY_EFFECTIVE = 'September 28, 2026';
-const POLICY_UPDATED = 'October 26, 2026';
+const POLICY_UPDATED = 'October 31, 2026';
 
 export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Privacy policy for raidispatch.com, operated by Rai Technologies LLC as Rai Dispatch. Read about contact details, operational logs and SMS communications.', "/privacy");
 
@@ -22,14 +23,13 @@ export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Privacy poli
 export default function PrivacyPage() {
   return (
     <div className="bg-white">
+      <PageBreadcrumbs label="Privacy policy" path="/privacy" />
       {/* Page hero — compact dark band */}
       <section className="bg-navy-950 text-white py-16 sm:py-20">
         <div className="container-custom">
           <div className="max-w-3xl">
-            <p className="eyebrow">Legal · 10DLC compliant</p>
-            <h1 className="font-display text-4xl sm:text-5xl font-bold uppercase leading-[1.02] tracking-tight mb-4">
-              Rai Dispatch Privacy Policy &amp; SMS Terms
-            </h1>
+            <p className="eyebrow">Legal · Privacy and communications</p>
+            <h1 className="font-display text-4xl sm:text-5xl font-bold uppercase leading-[1.02] tracking-tight mb-4">Privacy policy</h1>
             <p className="text-white/70 text-lg">{BUSINESS.name}, operated by {BUSINESS.parentCompany}</p>
             <p className="text-white/50 text-sm mt-3">
               Effective Date: {POLICY_EFFECTIVE}
@@ -247,7 +247,7 @@ export default function PrivacyPage() {
           <Section
             number="7"
             title="SMS Terms & Conditions"
-            badge={{ icon: MessageSquare, text: '10DLC Required Section' }}
+            badge={{ icon: MessageSquare, text: 'Dispatch-related messages' }}
           >
             <SubSection letter="A" title="Program Description">
               <p>
@@ -263,8 +263,7 @@ export default function PrivacyPage() {
 
             <SubSection letter="B" title="SMS Consent">
               <p>
-                By providing your mobile number to {BUSINESS.parentCompany}, you
-                consent to receive SMS messages for dispatch-related communication.
+                Website inquiries receive manual replies and requested callbacks. Submitting a phone number on our website does not enroll you in automated marketing calls or texts. Operational messages for active carriers follow the communication arrangements agreed during onboarding.
               </p>
             </SubSection>
 

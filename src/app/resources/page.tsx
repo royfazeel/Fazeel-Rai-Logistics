@@ -21,8 +21,8 @@ export default function ResourcesPage() {
         <div className="container-custom">
           <ContentBreadcrumbs dark items={[{ label: 'Carrier resources', href: '/resources' }]} />
           <p className="eyebrow">The carrier’s desk</p>
-          <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch resources for owner-operators.</h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Practical articles, dispatch checklists and planning tools for owner-operators and small fleets. Understand the fee, evaluate the whole trip and prepare the information your dispatcher needs.</p>
+          <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch resources for owner-operators</h1>
+          <p id="answer-block" className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Practical articles, dispatch checklists and planning tools for owner-operators and small fleets. Understand the fee, evaluate the whole trip and prepare the information your dispatcher needs.</p>
         </div>
       </section>
       <section className="section-padding bg-surface-50" aria-labelledby="guides-heading">

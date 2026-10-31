@@ -1,4 +1,4 @@
-import { DEFAULT_DISPATCH_RATE, DISPATCH_RATE_RANGE, DISPATCH_PRICING_SUMMARY, getDispatchRate, getDispatchRateLabel } from './dispatch-pricing';
+import { OTHER_EQUIPMENT_NOTICE, DISPATCH_RATE_RANGE, DISPATCH_PRICING_SUMMARY, getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement } from './dispatch-pricing';
 import { ADDITIONAL_GUIDES, ADDITIONAL_SERVICES } from './expanded-content';
 import { CARRIER_EDUCATION_GUIDES } from './carrier-education';
 import { ADDITIONAL_EQUIPMENT_CONTENT } from './additional-equipment-content';
@@ -202,14 +202,29 @@ const BASE_EQUIPMENT_CONTENT: DispatchContent[] = [
   ...ADDITIONAL_EQUIPMENT_CONTENT,
 ];
 
+const PRIORITY_FEE_QUESTIONS: Record<string, string> = {
+  'box-truck': 'How much does Rai Dispatch charge for box truck dispatch?',
+  'cargo-van': 'How much does Rai Dispatch charge for cargo van dispatch?',
+  'sprinter-van': 'How much is the Sprinter van dispatch fee?',
+};
+
 export const EQUIPMENT_CONTENT: DispatchContent[] = BASE_EQUIPMENT_CONTENT.map(content => {
   const enhancement = EQUIPMENT_SEARCH_ENHANCEMENTS[content.slug];
-  if (!enhancement) return content;
+  const feeQuestion = PRIORITY_FEE_QUESTIONS[content.slug];
+  const faqs = [...content.faqs, ...(enhancement?.faqs ?? [])];
+  const related = [...content.related, ...(enhancement?.related ?? [])];
+  const companion = content.slug === 'cargo-van'
+    ? { label: `Sprinter van dispatch — ${getDispatchRateLabel('sprinter-van')}`, href: '/equipment/sprinter-van' }
+    : content.slug === 'sprinter-van'
+      ? { label: `Cargo van dispatch — ${getDispatchRateLabel('cargo-van')}`, href: '/equipment/cargo-van' }
+      : undefined;
   return {
     ...content,
-    sections: [...content.sections, ...enhancement.sections],
-    faqs: [...content.faqs, ...enhancement.faqs],
-    related: [...content.related, ...(enhancement.related ?? [])],
+    // One map-derived sentence is shared by the lead answer and matching FAQ.
+    intro: feeQuestion ? getEquipmentFeeStatement(content.slug) : content.intro,
+    sections: [...content.sections, ...(enhancement?.sections ?? [])],
+    faqs: feeQuestion ? [{ question: feeQuestion, answer: getEquipmentFeeStatement(content.slug) }, ...faqs.filter(faq => faq.question !== feeQuestion)] : faqs,
+    related: companion ? [companion, ...related.filter(link => link.href !== companion.href)] : related,
   };
 });
 
@@ -420,8 +435,8 @@ export const GUIDES: CarrierGuide[] = [
     intro: `Rai Dispatch charges ${DISPATCH_RATE_RANGE} according to equipment type, with a dedicated dispatcher for each truck and free setup. Use the schedule below to find your rate, then confirm what revenue the fee applies to, the included service scope and the billing terms before starting.`,
     highlights: ['Exact rates by equipment', 'Dedicated dispatcher for each truck', 'Free setup'],
     sections: [
-      { id: 'equipment-rates', title: 'The dispatch rate for your truck', paragraphs: ['The equipment type determines the published percentage. A dedicated dispatcher is provided for each truck to learn its equipment, preferred lanes and schedule, coordinate the agreed dispatch work and present loads for your approval.', 'For a mixed fleet, use the rate for the equipment assigned to each dispatched load. Confirm the equipment classification and billing base in the agreement. Specialized operations still require a service-fit review before onboarding.'], table: { caption: 'Rai Dispatch percentage fees by equipment', headers: ['Equipment', 'Dispatch fee'], rows: [['Dry van', getDispatchRateLabel('dry-van')], ['Reefer', getDispatchRateLabel('reefer')], ['Flatbed', getDispatchRateLabel('flatbed')], ['Hotshot', getDispatchRateLabel('hotshot')], ['Box truck', getDispatchRateLabel('box-truck')], ['Power only', getDispatchRateLabel('power-only')], ['Step deck', getDispatchRateLabel('step-deck')], ['Cargo van', getDispatchRateLabel('cargo-van')], ['Sprinter van', getDispatchRateLabel('sprinter-van')], ['Conestoga', getDispatchRateLabel('conestoga')], ['RGN / lowboy', getDispatchRateLabel('rgn-lowboy')], ['Car hauler', getDispatchRateLabel('car-hauler')], ['Tanker', getDispatchRateLabel('tanker')], ['Dump truck / trailer', getDispatchRateLabel('dump-truck')], ['Curtain-side trailer', getDispatchRateLabel('curtain-side')], ['All other equipment', `${DEFAULT_DISPATCH_RATE}%`]] } },
-      { id: 'percentage', title: 'Calculate the fee using your equipment rate', paragraphs: [`Multiply the agreed revenue base by the equipment’s percentage. For example, a dry van load with a $2,000 billing base has a $${exampleDryVanFee} dispatch fee at ${getDispatchRateLabel('dry-van')}. Use the individual equipment rate below for each truck; cargo vans and Sprinter vans have separate published rates.`, 'The examples below use the same hypothetical $2,000 billing base to make that difference clear. They are fee calculations, not live load offers or earnings forecasts. The amount remaining is before fuel, insurance, maintenance and other carrier expenses.'], table: { caption: 'Illustrative dispatch fees on a $2,000 billing base', headers: ['Equipment example', 'Percentage', 'Dispatch fee'], rows: [['Box truck', 'box-truck'], ['Dry van', 'dry-van'], ['Reefer', 'reefer'], ['Flatbed', 'flatbed'], ['Power only', 'power-only'], ['Step deck', 'step-deck'], ['Hotshot', 'hotshot'], ['Cargo van', 'cargo-van'], ['Conestoga trailer', 'conestoga'], ['Sprinter van', 'sprinter-van']].map(([equipment, slug]) => [equipment, getDispatchRateLabel(slug), `$${2000 * getDispatchRate(slug) / 100}`]) } },
+      { id: 'equipment-rates', title: 'The dispatch rate for your truck', paragraphs: ['The equipment type determines the published percentage. A dedicated dispatcher is provided for each truck to learn its equipment, preferred lanes and schedule, coordinate the agreed dispatch work and present loads for your approval.', 'For a mixed fleet, use the rate for the equipment assigned to each dispatched load. Confirm the equipment classification and billing base in the agreement. Specialized operations still require a service-fit review before onboarding.'], table: { caption: 'Rai Dispatch percentage fees by equipment', headers: ['Equipment', 'Dispatch fee'], rows: [['Dry van', getDispatchRateLabel('dry-van')], ['Reefer', getDispatchRateLabel('reefer')], ['Flatbed', getDispatchRateLabel('flatbed')], ['Hotshot', getDispatchRateLabel('hotshot')], ['Box truck', getDispatchRateLabel('box-truck')], ['Power only', getDispatchRateLabel('power-only')], ['Step deck', getDispatchRateLabel('step-deck')], ['Cargo van', getDispatchRateLabel('cargo-van')], ['Sprinter van', getDispatchRateLabel('sprinter-van')], ['Conestoga', getDispatchRateLabel('conestoga')], ['RGN / lowboy', getDispatchRateLabel('rgn-lowboy')], ['Car hauler', getDispatchRateLabel('car-hauler')], ['Tanker', getDispatchRateLabel('tanker')], ['Dump truck / trailer', getDispatchRateLabel('dump-truck')], ['Curtain-side trailer', getDispatchRateLabel('curtain-side')], ['Other equipment', OTHER_EQUIPMENT_NOTICE]] } },
+      { id: 'percentage', title: 'Calculate the fee using your equipment rate', paragraphs: [`Multiply the agreed revenue base by the equipment’s percentage. For example, a dry van load with a $2,000 billing base has a $${exampleDryVanFee} dispatch fee at ${getDispatchRateLabel('dry-van')}. Use the individual equipment rate below for each truck; cargo vans and Sprinter vans have separate published rates.`, 'The examples below use the same hypothetical $2,000 billing base to make that difference clear. They are fee calculations, not live load offers or earnings forecasts. The amount remaining is before fuel, insurance, maintenance and other carrier expenses.'], table: { caption: 'Illustrative dispatch fees on a $2,000 billing base', headers: ['Equipment example', 'Percentage', 'Dispatch fee'], rows: ([['Box truck', 'box-truck'], ['Dry van', 'dry-van'], ['Reefer', 'reefer'], ['Flatbed', 'flatbed'], ['Power only', 'power-only'], ['Step deck', 'step-deck'], ['Hotshot', 'hotshot'], ['Cargo van', 'cargo-van'], ['Conestoga trailer', 'conestoga'], ['Sprinter van', 'sprinter-van']] as const).map(([equipment, slug]) => [equipment, getDispatchRateLabel(slug), `$${2000 * getDispatchRate(slug) / 100}`]) } },
       { id: 'base', title: 'Ask what counts toward the billing base', paragraphs: ['Two quotes with the same percentage may produce different invoices. Ask whether the fee applies to linehaul only or also to fuel surcharge, detention, layover, extra stops, tarping and other accessorials. Clarify how a cancellation, unpaid load or payment dispute is handled.', 'Put those answers in the agreement and compare a sample invoice with a sample rate confirmation. That exercise often reveals more than comparing headline percentages alone.'] },
       { id: 'scope', title: 'Compare the actual services', paragraphs: ['A dispatch arrangement may include load search, rate negotiation, booking coordination, broker communication, lane planning and document follow-ups. Check who does each task and which items require a separate arrangement.', 'Ask about the dispatcher contact, desk hours, escalation process and how you approve loads. Factoring, compliance management, insurance, permits, accounting and legal advice should not be assumed to be included just because a plan is described as full service.'] },
       { id: 'alternatives', title: 'Compare a fixed fee using the same assumptions', paragraphs: ['Some dispatchers quote a fixed weekly or monthly fee. To compare one with a percentage quote, use a realistic revenue scenario and the same service scope. The following arithmetic is hypothetical, not a current Rai Dispatch fixed-fee offer: a $300 weekly fee equals 5% of a $6,000 billing base; below that base it is a larger share, and above it a smaller share.', 'Ask how downtime, holidays and weeks with no booked freight are billed before deciding which structure fits your operation.'] },

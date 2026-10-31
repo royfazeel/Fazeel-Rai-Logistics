@@ -39,10 +39,8 @@ export default function FAQPageClient() {
           <ScrollReveal>
             <div className="max-w-3xl">
               <p className="eyebrow">Help center</p>
-              <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-4">
-                Frequently asked questions
-              </h1>
-              <p className="text-white/70 text-lg mb-8 max-w-2xl">
+              <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-4">Frequently asked questions about truck dispatch</h1>
+              <p id="answer-block" className="text-white/70 text-lg mb-8 max-w-2xl">
                 Straight answers about plans, pricing, paperwork, and how
                 dispatch works. Can&apos;t find what you need? Give us a call.
               </p>

@@ -1,3 +1,4 @@
+import { validateEquipmentSelection } from '@/lib/formValidation';
 import { NextResponse } from 'next/server';
 import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
 
@@ -473,7 +474,7 @@ function buildAutoReplyText(lead: Lead): string {
     summary,
     '',
     `The fastest way to speak to a dispatcher is to call ${BUSINESS.phone}. You can text or WhatsApp the same number.`,
-    `Dispatch desk: ${BUSINESS.hours.days}, ${BUSINESS.hours.time}.`,
+    `New-carrier setup desk: ${BUSINESS.hours.days}, ${BUSINESS.hours.time}.`,
     '',
     'If anything above is wrong, just reply to this email and we will correct it.',
     '',
@@ -519,7 +520,7 @@ function buildAutoReplyHtml(lead: Lead): string {
     )}" style="color:#C8232C;font-weight:700;text-decoration:none;">${escapeHtml(
       BUSINESS.phone
     )}</a>. You can text or WhatsApp the same number.</p>`,
-    `<p style="margin:0 0 14px;">Dispatch desk: ${escapeHtml(BUSINESS.hours.days)}, ${escapeHtml(
+    `<p style="margin:0 0 14px;">New-carrier setup desk: ${escapeHtml(BUSINESS.hours.days)}, ${escapeHtml(
       BUSINESS.hours.time
     )}.</p>`,
     `<p style="margin:0 0 18px;">If anything above is wrong, just reply to this email and we will correct it.</p>`,
@@ -714,6 +715,9 @@ export async function POST(req: Request) {
   if (values.email && !isPlausibleEmail(values.email)) {
     return fail(400, 'invalid_email', 'That email address does not look right — please check it.');
   }
+
+  const equipmentError = validateEquipmentSelection(values.equipment);
+  if (equipmentError) return fail(400, 'invalid_equipment', equipmentError);
 
   // 6. Is anything actually wired up? Check BEFORE claiming success.
   const emailReady = resendConfigured();

@@ -15,19 +15,19 @@ export default async function LoadProfitCalculatorPage({ searchParams }: { searc
   const initialEquipment = normalizeEquipmentSelection((await searchParams).equipment);
   const equipmentName = EQUIPMENT_TYPES.find(equipment => equipment.id === initialEquipment)?.name ?? 'Other truck type';
   const example = calculateLoadEconomics({ ...EXAMPLE_LOAD, equipment: initialEquipment });
-  if (!example.valid) throw new Error('The published load example must contain valid inputs.');
   return <>
+    <ContentJsonLd data={{ '@context': 'https://schema.org', '@type': 'WebApplication', '@id': `${SITE_URL}${path}#calculator`, name: 'Truck load profit and break-even calculator', url: `${SITE_URL}${path}`, applicationCategory: 'BusinessApplication', operatingSystem: 'Web', isAccessibleForFree: true, offers: { '@type': 'Offer', price: 0, priceCurrency: 'USD', url: `${SITE_URL}${path}` }, provider: { '@id': `${SITE_URL}/#organization` } }} />
     <ContentJsonLd data={{ '@context': 'https://schema.org', '@type': 'WebPage', '@id': `${SITE_URL}${path}#page`, url: `${SITE_URL}${path}`, name: 'Truck load profit and break-even calculator', description: 'An interactive carrier worksheet for load pay, total miles, fuel, dispatch fees and other entered trip costs.', isPartOf: { '@id': `${SITE_URL}/#website` } }} />
     <header className="bg-navy-950 py-10 text-white sm:py-16">
       <div className="container-custom">
         <ContentBreadcrumbs dark items={[{ label: 'Carrier resources', href: '/resources' }, { label: 'Load cost calculator', href: path }]} />
         <p className="eyebrow">Carrier planning tool</p>
         <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck load profit and break-even calculator</h1>
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">A load’s headline rate does not show what the whole trip costs. Compare loaded and empty miles, fuel, the dispatch fee and other costs you enter. The result shows remaining revenue for your review, not your business’s net profit.</p>
+        <p id="answer-block" className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">A load’s headline rate does not show what the whole trip costs. Compare loaded and empty miles, fuel, the dispatch fee and other costs you enter. The result shows remaining revenue for your review, not your business’s net profit.</p>
       </div>
     </header>
     <div className="container-custom py-12 sm:py-16"><LoadProfitCalculator key={initialEquipment} initialEquipment={initialEquipment} /></div>
-    <section className="bg-surface-50 py-12 sm:py-16" aria-labelledby="worked-example-heading">
+    {example.valid && <section className="bg-surface-50 py-12 sm:py-16" aria-labelledby="worked-example-heading">
       <div className="container-custom grid gap-10 lg:grid-cols-2">
         <div>
           <p className="eyebrow">Illustrative example</p>
@@ -51,6 +51,7 @@ export default async function LoadProfitCalculatorPage({ searchParams }: { searc
         </div>
       </div>
     </section>
+    }
     <section className="container-custom py-12 sm:py-16" aria-labelledby="calculator-next-heading">
       <h2 id="calculator-next-heading" className="section-heading">Use the numbers in your next load decision.</h2>
       <div className="mt-8 grid gap-6 md:grid-cols-3">

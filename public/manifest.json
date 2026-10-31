@@ -1,7 +1,7 @@
 {
   "name": "Rai Dispatch",
   "short_name": "Rai Dispatch",
-  "description": "Professional Truck Dispatch Services - Box Trucks, Dry Vans, Flatbeds, Reefers",
+  "description": "Truck dispatch for owner-operators and small fleets: box trucks, dry vans, reefers, flatbeds, power only, step decks, hotshots, cargo and sprinter vans, Conestoga and more.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",

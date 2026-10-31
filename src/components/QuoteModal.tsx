@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 import { X, Phone, Send, Check, Loader2, ShieldCheck, AlertTriangle } from 'lucide-react';
-import { BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
+import { SETUP_DESK_HOURS, BUSINESS, EQUIPMENT_TYPES } from '@/lib/constants';
 import { track } from '@/lib/track';
 import {
   formatUsPhone,
@@ -12,7 +12,7 @@ import {
   validatePhone,
   validateEmail,
   validateMcNumber,
-  validateRequiredSelect,
+  validateEquipmentSelection,
 } from '@/lib/formValidation';
 
 interface QuoteModalProps {
@@ -70,7 +70,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
     phone: validatePhone,
     email: (v) => validateEmail(v, false),
     mcNumber: validateMcNumber,
-    equipment: (v) => validateRequiredSelect(v, 'your equipment type'),
+    equipment: validateEquipmentSelection,
   };
   const inputIds: Record<string, string> = {
     name: 'quote-name',
@@ -299,8 +299,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                     Request sent
                   </h3>
                   <p className="text-surface-600">
-                    We&apos;ve got your details. The fastest way to get set up is
-                    still a quick call — dial{' '}
+                    Thanks. A dispatcher will reply during our setup-desk hours: {SETUP_DESK_HOURS}. {formState.requestCallback ? 'You requested a callback.' : 'We will respond to your inquiry manually.'} You can also call{' '}
                     <a
                       href={BUSINESS.phoneHref}
                       onClick={() => track('call_click', { location: 'quote_modal_success' })}
@@ -598,6 +597,8 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                     </div>
                   )}
 
+                  <p className="text-sm leading-6 text-surface-700">We use your details to reply manually to this inquiry or make a requested callback. This form does not sign you up for automated marketing calls or texts. Read our <Link href="/privacy" onClick={onClose} className="underline">Privacy Policy</Link> and <Link href="/terms" onClick={onClose} className="underline">Terms of Service</Link>.</p>
+
                   <div className="pt-2 flex flex-col sm:flex-row gap-3">
                     <button
                       type="submit"
@@ -609,7 +610,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                       ) : (
                         <Send className="w-5 h-5" />
                       )}
-                      {isSubmitting ? 'Sending…' : 'Send Request'}
+                      {isSubmitting ? 'Sending…' : formState.requestCallback ? 'Request a setup call' : 'Send setup inquiry'}
                     </button>
                     <a
                       href={BUSINESS.phoneHref}

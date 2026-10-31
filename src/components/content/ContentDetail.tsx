@@ -3,7 +3,9 @@ import { ArrowRight, Check, ChevronRight, Phone } from 'lucide-react';
 import { LEARNING_LINKS } from '@/lib/learning-links';
 import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, DISPATCH_SPECIALTIES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
-import { DISPATCH_RATE_RANGE, getDispatchRateLabel } from '@/lib/dispatch-pricing';
+import { DISPATCH_RATE_RANGE, getDispatchRateLabel, getEquipmentOfferDescription } from '@/lib/dispatch-pricing';
+import { buildFaqPageSchema } from '@/lib/faq-schema';
+import { PAGE_SEO_OVERRIDES } from '@/lib/page-overrides';
 import EquipmentPhoto from '@/components/EquipmentPhoto';
 import { EQUIPMENT_IMAGES } from '@/lib/equipment-images';
 import type { CarrierGuide, ContentLink, DispatchContent } from '@/lib/dispatch-content';
@@ -52,7 +54,7 @@ export function ContentCTA() {
   );
 }
 
-function EquipmentHero({ content, feeLabel, path }: { content: DispatchContent; feeLabel: string; path: string }) {
+function EquipmentHero({ content, feeLabel, path, heading }: { content: DispatchContent; feeLabel: string; path: string; heading: string }) {
   return (
     <header className="border-b border-surface-200 bg-surface-50 py-8 sm:py-12">
       <div className="container-custom">
@@ -60,7 +62,7 @@ function EquipmentHero({ content, feeLabel, path }: { content: DispatchContent; 
         <div className="grid items-center gap-x-12 gap-y-6 lg:grid-cols-2">
           <div>
             <p className="eyebrow">{content.eyebrow}</p>
-            <h1 className="text-4xl leading-[1.05] text-navy-950 sm:text-5xl lg:text-[3.25rem]">{content.title}</h1>
+            <h1 className="text-4xl leading-[1.05] text-navy-950 sm:text-5xl lg:text-[3.25rem]">{heading}</h1>
             <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
               <p className="font-display text-4xl font-bold text-primary-700">{feeLabel}<span className="ml-2 font-sans text-sm font-medium text-navy-600">dispatch fee</span></p>
               <span className="rounded-full border border-surface-300 bg-white px-3 py-1.5 text-sm font-medium text-navy-700">Dedicated dispatcher</span>
@@ -71,7 +73,8 @@ function EquipmentHero({ content, feeLabel, path }: { content: DispatchContent; 
             <EquipmentPhoto slug={content.slug} priority sizes="(min-width: 1280px) 600px, (min-width: 1024px) 46vw, (min-width: 768px) 720px, calc(100vw - 40px)" className="w-full h-auto" />
           </div>
           <div className="lg:col-start-1 lg:row-start-2">
-            <p className="max-w-2xl text-base leading-relaxed text-navy-700 sm:text-lg">{content.intro}</p>
+            <p id="answer-block" className="max-w-2xl text-base leading-relaxed text-navy-700 sm:text-lg">{content.intro}</p>
+            {(content.slug === 'cargo-van' || content.slug === 'sprinter-van') && <p className="mt-3 text-sm leading-6 text-navy-700">Separately listed services: <Link href="/equipment/cargo-van" className="font-semibold text-accent-800 underline underline-offset-4">Cargo van dispatch — {getDispatchRateLabel('cargo-van')}</Link>{' · '}<Link href="/equipment/sprinter-van" className="font-semibold text-accent-800 underline underline-offset-4">Sprinter van dispatch — {getDispatchRateLabel('sprinter-van')}</Link>.</p>}
             <ul className="mt-5 space-y-2.5 text-sm text-navy-800">
               {content.highlights.map((highlight) => <li key={highlight} className="flex items-start gap-2"><Check size={17} className="mt-0.5 shrink-0 text-primary-600" aria-hidden="true" />{highlight}</li>)}
             </ul>
@@ -79,7 +82,7 @@ function EquipmentHero({ content, feeLabel, path }: { content: DispatchContent; 
               <Link href="/contact" className="btn-primary">Discuss your equipment <ArrowRight size={18} aria-hidden="true" /></Link>
               <Link href="/pricing" className="inline-flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold text-navy-800 underline underline-offset-4 hover:text-primary-700">View pricing details</Link>
             </div>
-            <p className="mt-4 max-w-xl text-xs leading-5 text-navy-600">Percentage of gross revenue on loads we dispatch. Confirm the billing base and service scope before starting.</p>
+            <p className="mt-4 max-w-xl text-xs leading-5 text-navy-600">Percentage of gross revenue on loads we book. Confirm the billing base and service scope before starting.</p>
           </div>
         </div>
       </div>
@@ -91,6 +94,8 @@ export default function ContentDetail({ content, category, guide }: { content: D
   const categoryLabel = { equipment: 'Equipment', services: 'Services', resources: 'Carrier resources', carriers: 'Carriers' }[category];
   const path = `/${category}/${content.slug}`;
   const url = `${SITE_URL}${path}`;
+  const heading = PAGE_SEO_OVERRIDES[path]?.h1 ?? content.title;
+  const faqSchema = buildFaqPageSchema(content.faqs, url);
   const related = [...(category === 'equipment' ? [{ label: 'Your dedicated truck dispatcher', href: '/services/dedicated-dispatcher' }] : []), ...(LEARNING_LINKS[path] ?? []), ...content.related].filter((item, index, items) => items.findIndex(link => link.href === item.href) === index);
   const feeLabel = category === 'equipment' ? getDispatchRateLabel(content.slug) : DISPATCH_RATE_RANGE;
   const equipmentImage = category === 'equipment' ? EQUIPMENT_IMAGES[content.slug] : undefined;
@@ -98,7 +103,8 @@ export default function ContentDetail({ content, category, guide }: { content: D
     <>
       <ContentJsonLd data={guide ? {
         '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`,
-        headline: content.title, description: content.description, url,
+        headline: heading, description: content.description, url,
+        about: { '@type': 'Thing', name: content.title },
         datePublished: guide.published, dateModified: guide.updated ?? guide.published, inLanguage: 'en-US',
         author: { '@type': 'Organization', '@id': `${SITE_URL}/#organization`, name: BUSINESS.name, url: SITE_URL },
         publisher: { '@id': `${SITE_URL}/#organization` },
@@ -113,21 +119,22 @@ export default function ContentDetail({ content, category, guide }: { content: D
         ...(equipmentImage ? { image: { '@type': 'ImageObject', url: `${SITE_URL}${equipmentImage.src}`, width: equipmentImage.width, height: equipmentImage.height, caption: equipmentImage.alt } } : {}),
         areaServed: { '@type': 'Place', name: 'Contiguous United States' },
         offers: {
-          '@type': 'Offer', url: `${SITE_URL}/pricing`,
-          description: `${feeLabel} of gross revenue on loads we dispatch.${category === 'equipment' ? '' : ' Rate depends on truck type.'} Dedicated truck dispatcher and 24/7 live dispatch support for active carriers included; billing terms confirmed before service.`,
+          '@type': 'Offer', url: category === 'equipment' ? url : `${SITE_URL}/pricing`,
+          description: category === 'equipment' ? getEquipmentOfferDescription(content.slug) : `${feeLabel} of gross revenue on loads we book, based on equipment. A dedicated dispatcher and 24/7 live dispatch support for active carriers are included. Confirm the applicable equipment category, billing base and service scope in writing.`,
         },
       }} />
+      {faqSchema && <ContentJsonLd data={faqSchema} />}
 
       <article>
-        {equipmentImage ? <EquipmentHero content={content} feeLabel={feeLabel} path={path} /> : <header className="bg-navy-950 py-10 text-white sm:py-14">
+        {equipmentImage ? <EquipmentHero content={content} feeLabel={feeLabel} path={path} heading={heading} /> : <header className="bg-navy-950 py-10 text-white sm:py-14">
           <div className="container-custom">
             <ContentBreadcrumbs dark items={[{ label: categoryLabel, href: `/${category}` }, { label: content.title, href: path }]} />
             <div className="grid items-end gap-10 lg:grid-cols-[1fr_320px]">
               <div>
                 <p className="eyebrow">{content.eyebrow}</p>
-                <h1 className="max-w-4xl text-4xl leading-[1.04] sm:text-5xl lg:text-6xl">{content.title}</h1>
-                <p className="mt-6 max-w-3xl text-lg leading-relaxed text-navy-200">{content.intro}</p>
-                {guide && <p className="mt-5 text-sm text-navy-300">By <Link href="/about" className="underline underline-offset-4">{BUSINESS.name}</Link> · <time dateTime={guide.published}>{new Date(`${guide.published}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time> · {guide.readTime}{guide.updated && guide.updated !== guide.published && <> · Updated <time dateTime={guide.updated}>{new Date(`${guide.updated}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time></>}</p>}
+                <h1 className="max-w-4xl text-4xl leading-[1.04] sm:text-5xl lg:text-6xl">{heading}</h1>
+                <p id="answer-block" className="mt-6 max-w-3xl text-lg leading-relaxed text-navy-200">{content.intro}</p>
+                {guide && <p className="mt-5 text-sm text-navy-300">By <Link href="/about" className="underline underline-offset-4">{BUSINESS.name}</Link> · Published <time dateTime={guide.published}>{new Date(`${guide.published}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time> · Updated <time dateTime={guide.updated ?? guide.published}>{new Date(`${guide.updated ?? guide.published}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}</time> · {guide.readTime}</p>}
                 {guide && <Link href="/editorial-standards" className="mt-3 inline-block text-sm text-navy-200 underline underline-offset-4 hover:text-white">Sources, examples and corrections</Link>}
                 <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white">
                   {content.highlights.map((highlight) => <li key={highlight} className="flex items-center gap-2"><Check size={17} className="shrink-0 text-primary-400" aria-hidden="true" />{highlight}</li>)}
@@ -145,6 +152,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
         </header>}
 
         <div className="container-custom py-12 sm:py-16">
+          {!guide && <p className="mb-8 max-w-4xl text-sm leading-7 text-navy-700">Freight availability and carrier results vary; no specific load rate or weekly revenue is guaranteed.</p>}
           {content.availability && <p className="mb-10 border-l-4 border-accent-700 bg-accent-50 p-5 text-sm leading-relaxed text-navy-800"><strong>Availability review: </strong>{content.availability}</p>}
           <nav aria-label="On this page" className="mb-8 rounded-lg border border-surface-300 p-5 lg:hidden">
             <details>
@@ -163,7 +171,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
                 <h2 id="service-details-title" className="mb-6 text-3xl text-navy-950">Dispatch service at a glance</h2>
                 <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-2 text-sm leading-6">
                   <div><dt className="font-semibold text-navy-950">Your dispatcher</dt><dd className="mt-1 text-navy-700">A dedicated dispatcher for your truck.{path !== '/services/dedicated-dispatcher' && <> <Link href="/services/dedicated-dispatcher" className="text-accent-800 underline underline-offset-4">See how the team works.</Link></>}</dd></div>
-                  <div><dt className="font-semibold text-navy-950">Dispatch fee</dt><dd className="mt-1 text-navy-700">{feeLabel} of gross revenue on loads we dispatch{category === 'equipment' ? '.' : ', based on equipment.'} <Link href="/pricing" className="text-accent-800 underline underline-offset-4">Review the billing terms.</Link></dd></div>
+                  <div><dt className="font-semibold text-navy-950">Dispatch fee</dt><dd className="mt-1 text-navy-700">{feeLabel} of gross revenue on loads we book{category === 'equipment' ? '.' : ', based on equipment.'} <Link href="/pricing" className="text-accent-800 underline underline-offset-4">Review the billing terms.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Service area</dt><dd className="mt-1 text-navy-700">{BUSINESS.serviceArea}. <Link href="/service-areas" className="text-accent-800 underline underline-offset-4">Plan your lanes and coverage.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Load approval</dt><dd className="mt-1 text-navy-700">You review the rate, appointments and requirements, then approve each load before booking.</dd></div>
                   <div><dt className="font-semibold text-navy-950">Getting started</dt><dd className="mt-1 text-navy-700">Free setup, an equipment review and a written dispatch agreement. New-carrier setup desk: {SETUP_DESK_HOURS}. <Link href="/resources/carrier-onboarding-checklist" className="text-accent-800 underline underline-offset-4">Prepare your carrier details.</Link></dd></div>

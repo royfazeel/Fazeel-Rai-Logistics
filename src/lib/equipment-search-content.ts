@@ -1,10 +1,27 @@
 import type { ContentLink, ContentSection } from './dispatch-content';
-import { getDispatchRate, getDispatchRateLabel } from './dispatch-pricing';
+import { getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement } from './dispatch-pricing';
+import type { DispatchEquipment } from './dispatch-pricing';
 import { ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS } from './constants';
 
 const boxTruckExampleBillingBase = 2_000;
 const boxTruckExampleFee = boxTruckExampleBillingBase * getDispatchRate('box-truck') / 100;
 const boxTruckExampleRemainder = boxTruckExampleBillingBase - boxTruckExampleFee;
+
+function feeExampleTable(equipment: DispatchEquipment): NonNullable<ContentSection['table']> {
+  const baseCents = 200_000;
+  const feeCents = Math.round(baseCents * getDispatchRate(equipment) / 100);
+  const dollars = (cents: number) => `$${(cents / 100).toLocaleString('en-US')}`;
+  return {
+    caption: 'Illustrative dispatch fee on a $2,000 agreed commission base',
+    headers: ['Item', 'Amount'],
+    rows: [
+      ['Agreed example commission base', dollars(baseCents)],
+      [`Dispatch fee at ${getDispatchRateLabel(equipment)}`, dollars(feeCents)],
+      ['Revenue after dispatch fee, before operating costs', dollars(baseCents - feeCents)],
+    ],
+  };
+}
+
 
 // Equipment characteristics checked against manufacturer and agency references:
 // https://www.maxonlift.com/products/product-selector?page=1
@@ -29,14 +46,13 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
       },
       {
         id: '26-foot-booking-scenario', title: 'How box truck dispatch works and what it costs',
-        paragraphs: [`Box truck pricing was updated October 30, 2026. Rai Dispatch’s current box truck dispatch fee is ${getDispatchRateLabel('box-truck')} of gross revenue on loads we dispatch.`, 'Start with your truck specifications, empty location, available time and preferred lanes. Your dispatcher searches suitable freight and clarifies dimensions, loading access, appointments, compensation and known empty miles. You review the complete proposal and approve or decline it. After approval, we coordinate the booking, agreed updates and delivery-document follow-ups.', `On a hypothetical $${boxTruckExampleBillingBase.toLocaleString('en-US')} agreed billing base, the ${getDispatchRateLabel('box-truck')} box truck dispatch fee is $${boxTruckExampleFee.toLocaleString('en-US')}. The remaining $${boxTruckExampleRemainder.toLocaleString('en-US')} is before fuel, maintenance, insurance, driver pay and other operating expenses; it is not profit or an earnings forecast. Confirm how fuel surcharge and accessorials are treated in your written billing terms.`],
-        table: { caption: 'Illustrative box truck dispatch fee — not a quoted freight rate', headers: ['Item', 'Amount'], rows: [['Agreed example billing base', `$${boxTruckExampleBillingBase.toLocaleString('en-US')}`], [`Dispatch fee at ${getDispatchRateLabel('box-truck')}`, `$${boxTruckExampleFee.toLocaleString('en-US')}`], ['Remaining before operating expenses', `$${boxTruckExampleRemainder.toLocaleString('en-US')}`]] },
+        paragraphs: [`Pricing last reviewed October 31, 2026. ${getEquipmentFeeStatement('box-truck')}`, 'Start with your truck specifications, empty location, available time and preferred lanes. Your dispatcher searches suitable freight and clarifies dimensions, loading access, appointments, compensation and known empty miles. You review the complete proposal and approve or decline it. After approval, we coordinate the booking, agreed updates and delivery-document follow-ups.', `On a hypothetical $${boxTruckExampleBillingBase.toLocaleString('en-US')} agreed billing base, the ${getDispatchRateLabel('box-truck')} box truck dispatch fee is $${boxTruckExampleFee.toLocaleString('en-US')}. The remaining $${boxTruckExampleRemainder.toLocaleString('en-US')} is before fuel, maintenance, insurance, driver pay and other operating expenses; it is not profit or an earnings forecast. Confirm how fuel surcharge and accessorials are treated in your written billing terms.`],
+        table: feeExampleTable('box-truck'),
       },
     ],
     faqs: [
       { question: 'Does Rai Dispatch specialize in box truck dispatch?', answer: `Yes. Rai Dispatch specializes in box truck dispatch for owner-operators and small fleets, including 26-foot and other straight-truck configurations. The published fee is ${getDispatchRateLabel('box-truck')}, with a dedicated dispatcher and free setup. Equipment fit, lanes and service scope are reviewed before starting.` },
       { question: 'Does Rai Dispatch offer 24/7 box truck dispatch support?', answer: `Yes. Rai Dispatch provides ${ACTIVE_CARRIER_SUPPORT}, including box truck owner-operators and fleets. Your assigned dispatcher works with team backup coverage, and you receive the active-load contact and escalation process during onboarding. New-carrier setup desk hours are ${SETUP_DESK_HOURS}. Support availability does not guarantee loads, routes or revenue.` },
-      { question: 'How much does Rai Dispatch charge for box truck dispatch?', answer: `Rai Dispatch’s published box truck plan is ${getDispatchRateLabel('box-truck')} of gross revenue on loads we dispatch, effective October 30, 2026. Setup is free. We do not publish a standard weekly box truck fee; any fixed-fee alternative requires an individual written quote and agreement. Confirm the billing base and treatment of fuel surcharge, extra stops and other accessorials before starting.` },
       { question: 'Can my box truck accept a load posted for a dry van?', answer: 'Only if the responsible party and carrier confirm that the actual truck meets every shipment requirement. Do not substitute a straight truck merely because the freight seems small enough; loading access, payload, appointments and equipment acceptance still matter.' },
       { question: 'Is liftgate or inside delivery automatically included in a box truck booking?', answer: 'No. Confirm the requested work, equipment capability, unloading responsibility and compensation before approving the load. Tell the dispatcher which delivery tasks your operation accepts.' },
     ],
@@ -159,7 +175,8 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
       },
       {
         id: 'cargo-van-owner-operator-fit', title: 'Dispatch support for a cargo van owner-operator',
-        paragraphs: ['This service starts with an existing carrier operation and a vehicle available for suitable freight. Tell us where the van is based, the distance you are prepared to travel, accepted delivery work and whether overnight trips fit your plans. We review those details before confirming the support we can provide.', 'For an urgent small shipment, distinguish a ready pickup from a requested deadline. The van’s proximity alone does not show that the driver, equipment and receiving arrangements are ready. We coordinate the facts and bring the proposal back to you for approval; dispatch is not a driving job offer, vehicle lease or guaranteed courier route.', `The published cargo van dispatch fee is ${getDispatchRateLabel('cargo-van')}. Sprinter van service has its own equipment classification and published fee, so confirm the applicable category in writing. Review the agreement’s billing base and compare total trip time, empty miles and your own expenses before deciding to start.`],
+        paragraphs: ['This service starts with an existing carrier operation and a vehicle available for suitable freight. Tell us where the van is based, the distance you are prepared to travel, accepted delivery work and whether overnight trips fit your plans. We review those details before confirming the support we can provide.', 'For an urgent small shipment, distinguish a ready pickup from a requested deadline. The van’s proximity alone does not show that the driver, equipment and receiving arrangements are ready. We coordinate the facts and bring the proposal back to you for approval; dispatch is not a driving job offer, vehicle lease or guaranteed courier route.', `${getEquipmentFeeStatement('cargo-van')} The example below assumes a $2,000 agreed commission base; it does not decide whether fuel surcharge, detention or other accessorials belong in that base. Your agreement controls the billing scope.`],
+        table: feeExampleTable('cargo-van'),
       },
     ],
     faqs: [
@@ -167,6 +184,17 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
       { question: 'Do cargo vans and Sprinter vans have the same dispatch fee?', answer: `The published cargo van fee is ${getDispatchRateLabel('cargo-van')} and the Sprinter van fee is ${getDispatchRateLabel('sprinter-van')}. Confirm the equipment classification, service fit and billing base in the written agreement.` },
     ],
     related: [{ label: 'Sprinter van service and pricing', href: '/equipment/sprinter-van' }, { label: 'What a truck dispatcher does', href: '/resources/what-does-a-truck-dispatcher-do' }, { label: 'Dispatch agreement review', href: '/resources/truck-dispatch-service-agreement-checklist' }],
+  },
+  'sprinter-van': {
+    sections: [
+      {
+        id: 'sprinter-fee-example', title: 'A Sprinter van dispatch fee example',
+        paragraphs: [`${getEquipmentFeeStatement('sprinter-van')} On an illustrative $2,000 agreed commission base, the fee is $${2_000 * getDispatchRate('sprinter-van') / 100}. This is a fee calculation, not a load offer or earnings forecast.`, 'The revenue remaining after the dispatch fee is before fuel, insurance, maintenance and other operating costs. Confirm the treatment of fuel surcharge, detention, reimbursements and other accessorials in your written agreement; this example does not establish which items are included.'],
+        table: feeExampleTable('sprinter-van'),
+      },
+    ],
+    faqs: [],
+    related: [{ label: `Cargo van dispatch — ${getDispatchRateLabel('cargo-van')}`, href: '/equipment/cargo-van' }],
   },
   conestoga: {
     sections: [

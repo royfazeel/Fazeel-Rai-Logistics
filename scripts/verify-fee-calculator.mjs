@@ -5,6 +5,7 @@
  * with controlled React state, without a browser, build, network, or submissions.
  * Usage: node scripts/verify-fee-calculator.mjs [--json output/seo-sep28/calculator.json]
  */
+import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -28,7 +29,7 @@ const expectedFees = {
   'dry-van': 5, reefer: 4, flatbed: 5, hotshot: 6,
   'box-truck': 7, 'cargo-van': 12, 'sprinter-van': 5, 'power-only': 5,
   'step-deck': 5, conestoga: 4, 'rgn-lowboy': 5, 'car-hauler': 5,
-  tanker: 5, 'dump-truck': 5, 'curtain-side': 5, other: 5,
+  tanker: 5, 'dump-truck': 5, 'curtain-side': 5,
 };
 // Explicit currency fixtures, not the component's math copied as a test oracle.
 const examples = [
@@ -50,7 +51,7 @@ const controlledReact = {
   useState: initial => {
     const position = stateCalls++;
     if (position > 1) throw new Error('Calculator state shape changed; update the controlled rendering harness.');
-    return [controlledState[position] ?? initial, () => {}];
+    return [controlledState[position] ?? initial, update => { controlledState[position] = typeof update === 'function' ? update(controlledState[position] ?? initial) : update; }];
   },
 };
 const modules = new Map();
@@ -71,6 +72,7 @@ function loadSource(filename) {
   return module.exports;
 }
 const Calculator = loadSource('src/components/FeeCalculator.tsx').default;
+const pricing = loadSource('src/lib/dispatch-pricing.ts');
 const plain = value => value.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&#x27;|&#39;/g, "'").trim();
 function render(equipment, revenue) {
   controlledState = [equipment, revenue]; stateCalls = 0;
@@ -79,10 +81,44 @@ function render(equipment, revenue) {
   return { html, amounts: [...html.matchAll(/<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/g)].map(match => ({ label: plain(match[1]), amount: plain(match[2]) })) };
 }
 const checks = [];
+function check(name, verify) {
+  try { verify(); checks.push({ name, pass: true }); }
+  catch (error) { checks.push({ name, pass: false, message: error.message }); }
+}
+check('The authoritative map preserves all 15 independent published rates', () => {
+  assert.deepEqual(pricing.DISPATCH_RATES, expectedFees);
+  assert.equal(pricing.DISPATCH_RATE_RANGE, '4–12%');
+});
+check('Exact visible fee answer agrees with the controlling specification and homepage FAQ', () => {
+  const expected = 'Dispatch fees are 7% for box trucks, 6% for hotshots, 4% for reefers and Conestoga trailers, 12% for cargo vans, and 5% for dry vans, flatbeds, power only, step decks and Sprinter vans. Fees apply to gross revenue on loads we book. Confirm the applicable equipment category, billing base and service scope in writing.';
+  assert.equal(pricing.DISPATCH_FEES_ANSWER, expected);
+  assert.equal(loadSource('src/lib/constants.ts').FAQS.find(item => item.id === 1).answer, expected);
+});
+const exactStatements = {
+  'box-truck': 'Rai Dispatch charges 7% of gross revenue on loads we book for box trucks. Confirm the billing base and service scope in writing before onboarding.',
+  'cargo-van': 'Rai Dispatch charges 12% of gross revenue on loads we book for cargo vans. The separately listed Sprinter van dispatch service is priced at 5%. Confirm which service category applies to your vehicle before onboarding.',
+  'sprinter-van': 'Rai Dispatch charges 5% of gross revenue on loads we book for Sprinter vans. The separately listed cargo van dispatch service is priced at 12%. Confirm which service category applies to your vehicle before onboarding.',
+};
+for (const [equipment, expected] of Object.entries(exactStatements)) check(`${equipment} exact answer and descriptive Offer retain the right unit`, () => {
+  assert.equal(pricing.getEquipmentFeeStatement(equipment), expected);
+  const offer = pricing.getEquipmentOfferDescription(equipment);
+  assert.ok(offer.startsWith(`${expectedFees[equipment]}% of gross revenue on loads Rai Dispatch books for `));
+  assert.ok(!offer.includes('$') && !offer.includes('USD'));
+});
+for (const equipment of ['other', '', 'not-a-truck', 'BOX-TRUCK', '__proto__', 'constructor']) check(`${equipment || 'blank'} never resolves to a published calculation`, () => {
+  assert.equal(pricing.isDispatchEquipment(equipment), false);
+  assert.equal(pricing.getDispatchRate(equipment), null);
+  assert.equal(pricing.getDispatchRateLabel(equipment), 'Quote required');
+  const { html, amounts } = render(equipment, '2000');
+  assert.equal(amounts.length, 0);
+  assert.ok(html.includes('aria-invalid="true"') && html.includes('role="alert"'));
+  assert.ok(html.includes(equipment === 'other' ? 'written rate confirmation' : 'Choose a listed equipment type'));
+  assert.ok(!html.includes('null%') && !html.includes('NaN') && !html.includes('Infinity'));
+});
 {
   // No controlled override: verify the actual server-rendered starting state.
   const { html, amounts } = render(undefined, undefined);
-  const expected = [['Gross revenue entered', '$2,000.00'], ['Dispatch fee (7%)', '$140.00'], ['Revenue after dispatch fee', '$1,860.00']];
+  const expected = [['Gross revenue entered', '$2,000.00'], ['Dispatch fee (7%)', '$140.00'], ['Revenue after dispatch fee, before operating costs', '$1,860.00']];
   const mismatches = expected.flatMap(([label, amount]) => {
     const received = amounts.find(item => item.label === label)?.amount;
     return received === amount ? [] : [{ label, expected: amount, received: received || 'missing' }];
@@ -97,7 +133,7 @@ for (const [equipment, rate] of Object.entries(expectedFees)) {
   for (const example of examples) {
     const { html, amounts } = render(equipment, example.input);
     const [fee, remaining] = example.rates[rate];
-    const expected = [['Gross revenue entered', example.gross], [`Dispatch fee (${rate}%)`, fee], ['Revenue after dispatch fee', remaining]];
+    const expected = [['Gross revenue entered', example.gross], [`Dispatch fee (${rate}%)`, fee], ['Revenue after dispatch fee, before operating costs', remaining]];
     const mismatches = expected.flatMap(([label, amount]) => {
       const received = amounts.find(item => item.label === label)?.amount;
       return received === amount ? [] : [{ label, expected: amount, received: received || 'missing' }];
@@ -114,6 +150,26 @@ for (const input of invalidInputs) {
   const pass = html.includes('aria-invalid="true"') && html.includes('role="alert"') && amounts.length === 0;
   checks.push({ equipment: 'dry-van', input, invalidInput: true, pass });
 }
+function findElement(node, predicate) {
+  if (!node || typeof node !== 'object') return undefined;
+  if (Array.isArray(node)) return node.map(child => findElement(child, predicate)).find(Boolean);
+  return predicate(node) ? node : findElement(node.props?.children, predicate);
+}
+check('Switching cargo to Sprinter and back updates the visible category, percentage and USD amounts together', () => {
+  controlledState = ['cargo-van', '2000'];
+  for (const [equipment, label, fee, remainder] of [['sprinter-van', 'Sprinter Vans · 5% dispatch rate', '$100.00', '$1,900.00'], ['cargo-van', 'Cargo Vans · 12% dispatch rate', '$240.00', '$1,760.00']]) {
+    stateCalls = 0;
+    const tree = Calculator();
+    const select = findElement(tree, node => node.type === 'select');
+    select.props.onChange({ target: { value: equipment } });
+    const { html, amounts } = render(...controlledState);
+    assert.ok(plain(html).includes(label));
+    assert.equal(amounts[1].amount, fee);
+    assert.equal(amounts[2].amount, remainder);
+    assert.ok(plain(html).includes('Cargo vans are listed at 12% and Sprinter vans at 5%.'));
+    assert.ok(html.includes('href="/equipment/cargo-van"') && html.includes('href="/equipment/sprinter-van"'));
+  }
+});
 const failures = checks.filter(check => !check.pass);
 const report = { checkedAt: new Date().toISOString(), note: 'Actual component and pricing dependencies, rendered with controlled React state. No browser events, hydration, build, network or forms.', expectedFees, checks: checks.length, passed: checks.length - failures.length, failures, cases: checks };
 if (output) { await mkdir(dirname(output), { recursive: true }); await writeFile(output, JSON.stringify(report, null, 2) + '\n'); }

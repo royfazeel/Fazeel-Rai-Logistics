@@ -1,10 +1,11 @@
 'use client';
 
 import { useId, useState } from 'react';
+import Link from 'next/link';
 import { EQUIPMENT_TYPES } from '@/lib/constants';
-import { getDispatchRate } from '@/lib/dispatch-pricing';
+import { getDispatchRate, getDispatchRateLabel, VAN_CATEGORY_NOTICE } from '@/lib/dispatch-pricing';
 import { calculateLoadEconomics, DEFAULT_LOAD_EQUIPMENT, EXAMPLE_LOAD, normalizeEquipmentSelection } from '@/lib/load-economics';
-import type { LoadEquipment, LoadNumberField } from '@/lib/load-economics';
+import type { LoadEconomicsInput, LoadEquipment, LoadNumberField } from '@/lib/load-economics';
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 const number = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
@@ -23,12 +24,14 @@ export default function LoadProfitCalculator({ initialEquipment = DEFAULT_LOAD_E
   const id = useId();
   const [input, setInput] = useState({ ...EXAMPLE_LOAD, equipment: initialEquipment });
   const result = calculateLoadEconomics(input);
-  const equipmentName = EQUIPMENT_TYPES.find(equipment => equipment.id === input.equipment)?.name ?? 'Other truck type';
-  const equipmentSummary = `${equipmentName} · ${getDispatchRate(input.equipment)}% dispatch fee`;
-  const errors: Partial<Record<LoadNumberField, string>> = result.valid ? {} : result.errors;
+  const equipmentName = EQUIPMENT_TYPES.find(equipment => equipment.id === input.equipment)?.name ?? (input.equipment === 'other' ? 'Other truck type' : 'Choose equipment');
+  const rate = getDispatchRate(input.equipment);
+  const equipmentSummary = `${equipmentName} · ${rate === null ? 'Written rate confirmation required' : `${rate}% dispatch fee`}`;
+  const vanSelected = input.equipment === 'cargo-van' || input.equipment === 'sprinter-van';
+  const errors: Partial<Record<keyof LoadEconomicsInput, string>> = result.valid ? {} : result.errors;
   const summary = result.valid
     ? `${equipmentSummary}. ${currency.format(result.remainingCents / 100)} remains after entered costs. Break-even load pay is ${currency.format(result.breakEvenCents / 100)} for those costs only.`
-    : 'Correct the highlighted inputs to calculate this trip.';
+    : errors.equipment ?? 'Correct the highlighted inputs to calculate this trip.';
 
   return (
     <section aria-labelledby={`${id}-heading`} className="rounded-xl border border-surface-300 bg-white shadow-sm">
@@ -41,11 +44,14 @@ export default function LoadProfitCalculator({ initialEquipment = DEFAULT_LOAD_E
         <form onSubmit={event => event.preventDefault()} className="space-y-6 p-6 sm:p-8" aria-label="Load cost inputs">
           <div>
             <label htmlFor={`${id}-equipment`} className="mb-2 block font-semibold text-navy-950">Truck or equipment type</label>
-            <select id={`${id}-equipment`} value={input.equipment} onChange={event => setInput(previous => ({ ...previous, equipment: normalizeEquipmentSelection(event.target.value) }))} className={inputClass} aria-describedby={`${id}-equipment-help`}>
+            <select id={`${id}-equipment`} value={input.equipment} onChange={event => setInput(previous => ({ ...previous, equipment: normalizeEquipmentSelection(event.target.value) }))} className={inputClass} aria-invalid={Boolean(errors.equipment)} aria-describedby={`${id}-equipment-help${errors.equipment ? ` ${id}-equipment-error` : ''}${vanSelected ? ` ${id}-van-note` : ''}`}>
+              <option value="" disabled>Choose equipment</option>
               {EQUIPMENT_TYPES.map(equipment => <option key={equipment.id} value={equipment.id}>{equipment.name} — {getDispatchRate(equipment.id)}%</option>)}
-              <option value="other">Other truck type — {getDispatchRate('other')}%</option>
+              <option value="other">Other truck type — quote required</option>
             </select>
             <p id={`${id}-equipment-help`} className="mt-2 text-sm leading-6 text-surface-700">Uses Rai Dispatch’s published equipment percentage on the load pay entered.</p>
+            {errors.equipment ? <p id={`${id}-equipment-error`} className="mt-2 text-sm font-semibold text-primary-700" role="alert">{errors.equipment}</p> : null}
+            {vanSelected ? <p id={`${id}-van-note`} className="mt-3 rounded-lg border border-surface-300 bg-surface-50 p-4 text-sm leading-6 text-navy-800">{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="underline underline-offset-4">Cargo van dispatch — {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="underline underline-offset-4">Sprinter van dispatch — {getDispatchRateLabel('sprinter-van')}</Link></p> : null}
           </div>
           {fields.map(field => <div key={field.key}>
             <label htmlFor={`${id}-${field.key}`} className="mb-2 block font-semibold text-navy-950">{field.label}</label>
@@ -70,6 +76,7 @@ export default function LoadProfitCalculator({ initialEquipment = DEFAULT_LOAD_E
               <div className="flex flex-wrap items-baseline justify-between gap-2"><dt className="text-white/80">Gross per total mile</dt><dd className="font-semibold tabular-nums">{currency.format(result.grossPerAllMile)}</dd></div>
               <div className="flex flex-wrap items-baseline justify-between gap-2 border-t border-white/20 pt-4"><dt className="text-white/80">Load pay entered</dt><dd className="font-semibold tabular-nums">{currency.format(result.loadPayCents / 100)}</dd></div>
               <div className="flex flex-wrap items-baseline justify-between gap-2"><dt className="text-white/80">Dispatch fee ({result.dispatchRate}%)</dt><dd className="font-semibold tabular-nums">{currency.format(result.dispatchFeeCents / 100)}</dd></div>
+              <div className="flex flex-wrap items-baseline justify-between gap-2"><dt className="text-white/80">Revenue after dispatch fee, before operating costs</dt><dd className="font-semibold tabular-nums">{currency.format((result.loadPayCents - result.dispatchFeeCents) / 100)}</dd></div>
               <div className="flex flex-wrap items-baseline justify-between gap-2"><dt className="text-white/80">Estimated fuel ({number.format(result.gallons)} gal)</dt><dd className="font-semibold tabular-nums">{currency.format(result.fuelCostCents / 100)}</dd></div>
               <div className="flex flex-wrap items-baseline justify-between gap-2"><dt className="text-white/80">Other costs entered</dt><dd className="font-semibold tabular-nums">{currency.format(result.otherCostsCents / 100)}</dd></div>
               <div className="border-t border-white/20 pt-5"><dt className="text-lg font-semibold">Remaining after entered costs</dt><dd className="mt-2 break-words font-display text-4xl font-bold tabular-nums sm:text-5xl">{currency.format(result.remainingCents / 100)}</dd></div>

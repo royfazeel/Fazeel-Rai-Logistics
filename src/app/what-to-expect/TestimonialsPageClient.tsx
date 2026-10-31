@@ -8,7 +8,7 @@ import { track } from '@/lib/track';
 
 export default function TestimonialsPageClient() {
   return <>
-    <section className="bg-navy-950 text-white py-16 sm:py-20"><div className="container-custom"><p className="eyebrow">The carrier experience</p><h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-tight mb-5 max-w-3xl">What to expect from Rai Dispatch</h1><p className="text-white/80 text-lg max-w-2xl">Choosing a dispatcher starts with clear expectations. Here is how we approach communication, load approval, pricing, and paperwork with owner-operators and small fleets.</p></div></section>
+    <section className="bg-navy-950 text-white py-16 sm:py-20"><div className="container-custom"><p className="eyebrow">The carrier experience</p><h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-tight mb-5 max-w-3xl">What to expect from Rai Dispatch</h1><p id="answer-block" className="text-white/80 text-lg max-w-2xl">Choosing a dispatcher starts with clear expectations. Here is how we approach communication, load approval, pricing, and paperwork with owner-operators and small fleets.</p></div></section>
     <section className="section-padding bg-white"><div className="container-custom"><div className="grid md:grid-cols-2 gap-6">{[
       { title: 'Your approval comes first', text: 'Review a load’s rate, route, appointments, and equipment requirements before deciding. Your dispatcher books freight you approve.' },
       { title: 'Understand the fee', text: `Dispatch fees are ${DISPATCH_RATE_RANGE}, based on equipment. Confirm your equipment rate, gross-revenue basis, billing schedule, and cancellation terms in your agreement.` },

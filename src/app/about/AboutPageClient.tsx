@@ -77,10 +77,8 @@ export default function AboutPageClient() {
           <ScrollReveal>
             <div className="max-w-3xl">
               <p className="eyebrow">About us</p>
-              <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">
-                About Rai Dispatch
-              </h1>
-              <p className="text-white/70 text-lg leading-relaxed max-w-2xl mb-8">
+              <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">About Rai Dispatch</h1>
+              <p id="answer-block" className="text-white/70 text-lg leading-relaxed max-w-2xl mb-8">
                 Rai Dispatch is a professional truck dispatch company operating
                 under Rai Technologies LLC. We are dedicated to helping
                 owner-operators and small fleets plan loads with a dedicated dispatcher.
@@ -132,7 +130,7 @@ export default function AboutPageClient() {
           <p className="mt-5 max-w-4xl text-lg leading-8 text-surface-700">Rai Dispatch specializes in dispatching {DISPATCH_SPECIALTY_SUMMARY} for owner-operators and small fleets across the 48 contiguous states. Our work includes load search, rate negotiation, booking coordination, broker communication and paperwork support. The carrier approves each load.</p>
           <p className="mt-5 max-w-4xl text-lg leading-8 text-surface-700">{ACTIVE_CARRIER_SUPPORT}. Your dedicated dispatcher and the support team coordinate through the contact and escalation process agreed during setup. <Link href="/services/dedicated-dispatcher" className="font-semibold text-primary-700 underline underline-offset-4">Meet the dispatch workflow.</Link></p>
           <ul className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{DISPATCH_SPECIALTIES.map(equipment => <li key={equipment.id}><Link prefetch={false} href={`/equipment/${equipment.id}`} className="flex justify-between gap-4 rounded-lg border border-surface-300 bg-white p-4 font-semibold text-navy-900 hover:border-primary-500"><span>{equipment.name} dispatch</span><span className="text-primary-700">{equipment.percentage}</span></Link></li>)}</ul>
-          <p className="mt-5 text-sm leading-7 text-surface-700">Fees apply to gross revenue on loads we dispatch. We confirm the equipment, lanes, billing base and service scope before starting.</p>
+          <p className="mt-5 text-sm leading-7 text-surface-700">Fees apply to gross revenue on loads we book. We confirm the equipment, lanes, billing base and service scope before starting.</p>
         </div>
       </section>
 

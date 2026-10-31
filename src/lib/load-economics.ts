@@ -1,13 +1,13 @@
-import { DISPATCH_RATES, getDispatchRate } from './dispatch-pricing';
+import { getDispatchRate, isDispatchEquipment, OTHER_EQUIPMENT_NOTICE } from './dispatch-pricing';
+import type { DispatchEquipment } from './dispatch-pricing';
 
-export type LoadEquipment = keyof typeof DISPATCH_RATES | 'other';
+export type LoadEquipment = DispatchEquipment | 'other' | '';
 export const DEFAULT_LOAD_EQUIPMENT: LoadEquipment = 'dry-van';
 
 /** Only one recognized equipment query value may select the starting example. */
 export function normalizeEquipmentSelection(value: string | string[] | undefined): LoadEquipment {
-  return typeof value === 'string' && (value === 'other' || Object.prototype.hasOwnProperty.call(DISPATCH_RATES, value))
-    ? value as LoadEquipment
-    : DEFAULT_LOAD_EQUIPMENT;
+  if (value === undefined) return DEFAULT_LOAD_EQUIPMENT;
+  return value === 'other' || isDispatchEquipment(value) ? value : '';
 }
 
 export type LoadEconomicsInput = {
@@ -55,11 +55,13 @@ export type LoadEconomicsResult = {
   remainingPerHour: number | null;
   breakEvenCents: number;
   breakEvenPerAllMile: number;
-} | { valid: false; errors: Partial<Record<LoadNumberField, string>> };
+} | { valid: false; errors: Partial<Record<keyof LoadEconomicsInput, string>> };
 
 /** Calculates only the costs entered; it is not a complete business profit model. */
 export function calculateLoadEconomics(input: LoadEconomicsInput): LoadEconomicsResult {
-  const errors: Partial<Record<LoadNumberField, string>> = {};
+  const errors: Partial<Record<keyof LoadEconomicsInput, string>> = {};
+  const dispatchRate = getDispatchRate(input.equipment);
+  if (dispatchRate === null) errors.equipment = input.equipment === 'other' ? OTHER_EQUIPMENT_NOTICE : 'Choose a listed equipment type before calculating a dispatch fee.';
   const values = {} as Record<LoadNumberField, number>;
   for (const field of Object.keys(rules) as LoadNumberField[]) {
     const rule = rules[field];
@@ -73,9 +75,8 @@ export function calculateLoadEconomics(input: LoadEconomicsInput): LoadEconomics
     else if (value > rule.max) errors[field] = `${rule.label} must be ${rule.max.toLocaleString('en-US')} or less.`;
     else values[field] = value;
   }
-  if (Object.keys(errors).length) return { valid: false, errors };
+  if (dispatchRate === null || Object.keys(errors).length) return { valid: false, errors };
 
-  const dispatchRate = getDispatchRate(input.equipment);
   const loadPayCents = Math.round(values.loadPay * 100);
   const totalMiles = values.loadedMiles + values.emptyMiles;
   const gallons = totalMiles / values.mpg;

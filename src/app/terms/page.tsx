@@ -1,3 +1,4 @@
+import PageBreadcrumbs from '@/components/PageBreadcrumbs';
 import { pageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { BUSINESS } from '@/lib/constants';
@@ -7,21 +8,20 @@ import { DISPATCH_PRICING_SUMMARY } from '@/lib/dispatch-pricing';
  * Date of the latest substantive Terms revision, including the published
  * dispatch fee schedule. Keep the visible date and sitemap revision aligned.
  */
-const TERMS_UPDATED = 'October 30, 2026';
+const TERMS_UPDATED = 'October 31, 2026';
 
 export const metadata = pageMetadata('Terms of Service', 'Rai Dispatch service terms, carrier responsibilities, dispatch fees, load approvals, payment arrangements and cancellation conditions.', "/terms");
 
 export default function TermsPage() {
   return (
     <div className="bg-white">
+      <PageBreadcrumbs label="Terms of Service" path="/terms" />
       {/* Page hero — compact dark band */}
       <section className="bg-navy-950 text-white py-16 sm:py-20">
         <div className="container-custom">
           <div className="max-w-3xl">
             <p className="eyebrow">Legal</p>
-            <h1 className="font-display text-4xl sm:text-5xl font-bold uppercase leading-[1.02] tracking-tight mb-4">
-              Terms of Service
-            </h1>
+            <h1 className="font-display text-4xl sm:text-5xl font-bold uppercase leading-[1.02] tracking-tight mb-4">Terms of Service</h1>
             <p className="text-white/70 text-lg">
               The service agreement and conditions for {BUSINESS.name} dispatch
               services.
@@ -140,7 +140,7 @@ export default function TermsPage() {
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
               {DISPATCH_PRICING_SUMMARY} These percentage-based dispatch fees apply to gross load revenue on
-              loads we dispatch. The equipment rate, fee basis, treatment of fuel
+              loads we book. The equipment rate, fee basis, treatment of fuel
               surcharge and accessorials, and payment schedule are confirmed in your
               individual dispatch agreement before service begins.
             </p>

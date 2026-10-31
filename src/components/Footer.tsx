@@ -31,7 +31,7 @@ const footerLinks = {
     { name: 'About Us', href: '/about' },
     { name: 'Pricing', href: '/pricing' },
     { name: 'Carrier Support', href: '/carriers' },
-    { name: 'Carrier Experience', href: '/testimonials' },
+    { name: 'What to expect', href: '/what-to-expect' },
     { name: 'Service Areas', href: '/service-areas' },
     { name: 'Carrier Resources', href: '/resources' },
     { name: 'Load Cost Calculator', href: '/tools/load-profit-calculator' },
@@ -58,7 +58,7 @@ export default function Footer() {
                 Ready to run better freight?
               </h2>
               <p className="text-surface-400 text-lg">
-                A dedicated dispatcher for every truck. {DISPATCH_RATE_RANGE} of gross on dispatched loads. Free setup.
+                A dedicated dispatcher for every truck. {DISPATCH_RATE_RANGE} of gross on loads we book. Free setup.
               </p>
             </div>
             <a

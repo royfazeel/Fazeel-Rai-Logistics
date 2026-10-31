@@ -1,3 +1,4 @@
+import { PAGE_SEO_OVERRIDES } from '@/lib/page-overrides';
 import type { MetadataRoute } from 'next';
 import { EQUIPMENT_CONTENT, SERVICE_CONTENT, GUIDES } from '@/lib/dispatch-content';
 import { CARRIER_CONTENT } from '@/lib/carrier-content';
@@ -17,7 +18,7 @@ const PAGE_REVISIONS: Record<string, string> = {
   '/tools/load-profit-calculator': '2026-10-31',
   '/editorial-standards': '2026-10-30',
   '/privacy': '2026-10-26', '/terms': '2026-10-30',
-  '/testimonials': '2026-10-30',
+  '/what-to-expect': '2026-10-30',
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(({ slug }) => [`/equipment/${slug}`, '2026-10-30'])),
   ...Object.fromEntries(SERVICE_CONTENT.map(({ slug }) => [`/services/${slug}`, '2026-10-30'])),
   // Each carrier page's published fee range changed with the October 30 schedule.
@@ -40,11 +41,14 @@ const PAGE_REVISIONS: Record<string, string> = {
   '/services/scheduling': '2026-10-30',
   '/services/expedited-dispatch': '2026-10-30',
   '/services/backhaul-dispatch': '2026-10-30',
+  // This release revises the titles, descriptions and headings of these pages.
+  // Fixed review date; a future build must not advance it automatically.
+  ...Object.fromEntries(Object.keys(PAGE_SEO_OVERRIDES).map(path => [path === '/' ? '' : path, '2026-10-31'])),
 };
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     '', '/services', '/equipment', '/pricing', '/contact', '/about', '/faq',
-    '/testimonials', '/privacy', '/terms', '/service-areas', '/resources', '/carriers',
+    '/what-to-expect', '/privacy', '/terms', '/service-areas', '/resources', '/carriers',
     '/resources/trucking-dispatch-glossary', '/tools/load-profit-calculator', '/editorial-standards',
     ...EQUIPMENT_CONTENT.map(({ slug }) => `/equipment/${slug}`),
     ...SERVICE_CONTENT.map(({ slug }) => `/services/${slug}`),

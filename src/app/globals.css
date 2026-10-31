@@ -323,3 +323,9 @@
 
 .photo-hero-title > span { display: inline-block; font-size: .82em; line-height: 1.08; white-space: nowrap; }
 @media (max-width: 639px) { .photo-hero-title > span { font-size: clamp(1.6rem, 8.2vw, 2.05rem); } }
+
+/* Navigation links stay comfortably tappable on narrow screens. */
+@media (max-width: 639px) {
+  header nav a, footer a { min-height: 44px; display: inline-flex; align-items: center; }
+  footer a { overflow-wrap: anywhere; }
+}

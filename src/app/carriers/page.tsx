@@ -36,8 +36,8 @@ export default function CarriersPage() {
         <div className="container-custom">
           <ContentBreadcrumbs dark items={[{ label: 'Carriers', href: '/carriers' }]} />
           <p className="eyebrow">Built around your operation</p>
-          <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch for owner-operators, fleets and new authorities.</h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">A single truck, a growing fleet and a newly active authority face different dispatch decisions. Start with your operation, then review the equipment, lanes, communication and paperwork support that fit.</p>
+          <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch for owner-operators, small fleets and new authorities</h1>
+          <p id="answer-block" className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">A single truck, a growing fleet and a newly active authority face different dispatch decisions. Start with your operation, then review the equipment, lanes, communication and paperwork support that fit.</p>
           <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white">
             {['Dedicated dispatcher', `${DISPATCH_RATE_RANGE} fees by equipment`, 'You approve the loads'].map(item => <li key={item} className="flex items-center gap-2"><Check size={17} className="shrink-0 text-primary-400" aria-hidden="true" />{item}</li>)}
           </ul>
@@ -76,7 +76,7 @@ export default function CarriersPage() {
           </div>
           <div className="space-y-6 rounded-lg border border-surface-300 bg-surface-50 p-7 sm:p-9">
             <div><h3 className="text-2xl">Match the equipment</h3><p className="mt-3 leading-7 text-navy-700">Review the load requirements that apply to dry vans, reefers, flatbeds, box trucks, power only, step decks, hotshot trucks and cargo vans.</p><Link href="/equipment" className="mt-4 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">Compare equipment dispatch <ArrowRight size={17} aria-hidden="true" /></Link></div>
-            <div className="border-t border-surface-300 pt-6"><h3 className="text-2xl">Agree on the service and fee</h3><p className="mt-3 leading-7 text-navy-700">Your dedicated dispatcher supports your operation at equipment-based fees of {DISPATCH_RATE_RANGE} of gross revenue on loads we dispatch. Confirm your exact fee, included support, communication plan and billing terms in writing.</p><Link href="/pricing" className="mt-4 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">Understand dispatch pricing <ArrowRight size={17} aria-hidden="true" /></Link></div>
+            <div className="border-t border-surface-300 pt-6"><h3 className="text-2xl">Agree on the service and fee</h3><p className="mt-3 leading-7 text-navy-700">Your dedicated dispatcher supports your operation at equipment-based fees of {DISPATCH_RATE_RANGE} of gross revenue on loads we book. Confirm your exact fee, included support, communication plan and billing terms in writing.</p><Link href="/pricing" className="mt-4 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">Understand dispatch pricing <ArrowRight size={17} aria-hidden="true" /></Link></div>
           </div>
         </div>
       </section>

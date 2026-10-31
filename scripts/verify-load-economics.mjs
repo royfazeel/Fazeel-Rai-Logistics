@@ -70,7 +70,7 @@ check('Worked example reconciles every entered cost and both rate-per-mile measu
   near(actual.remainingPerHour, 57.5);
 });
 
-const fees = { 'dry-van': 5, reefer: 4, flatbed: 5, hotshot: 6, 'box-truck': 7, 'cargo-van': 12, 'sprinter-van': 5, 'power-only': 5, 'step-deck': 5, conestoga: 4, 'rgn-lowboy': 5, 'car-hauler': 5, tanker: 5, 'dump-truck': 5, 'curtain-side': 5, other: 5 };
+const fees = { 'dry-van': 5, reefer: 4, flatbed: 5, hotshot: 6, 'box-truck': 7, 'cargo-van': 12, 'sprinter-van': 5, 'power-only': 5, 'step-deck': 5, conestoga: 4, 'rgn-lowboy': 5, 'car-hauler': 5, tanker: 5, 'dump-truck': 5, 'curtain-side': 5 };
 const feeExamples = { 4: { fee: 8000, remaining: 117000, breakEven: 78125 }, 5: { fee: 10000, remaining: 115000, breakEven: 78948 }, 6: { fee: 12000, remaining: 113000, breakEven: 79788 }, 7: { fee: 14000, remaining: 111000, breakEven: 80646 }, 12: { fee: 24000, remaining: 101000, breakEven: 85228 } };
 for (const [equipment, rate] of Object.entries(fees)) check(`${equipment} uses its independently expected fee`, () => {
   assert.equal(normalizeEquipmentSelection(equipment), equipment);
@@ -80,13 +80,28 @@ for (const [equipment, rate] of Object.entries(fees)) check(`${equipment} uses i
   assert.equal(actual.remainingCents, feeExamples[rate].remaining);
   assert.equal(actual.breakEvenCents, feeExamples[rate].breakEven);
 });
-for (const value of [undefined, '', 'not-a-truck', 'BOX-TRUCK', ' box-truck ', '__proto__', 'constructor', [], ['box-truck'], ['box-truck', 'dry-van'], ['box-truck', 'box-truck']]) {
-  check(`Missing, unknown or repeated equipment ${JSON.stringify(value)} selects the dry-van default`, () => {
+check('Only an absent equipment parameter uses the clearly labelled dry-van example', () => {
+  assert.equal(normalizeEquipmentSelection(undefined), 'dry-van');
+  assert.equal(result({ equipment: normalizeEquipmentSelection(undefined) }).dispatchFeeCents, 10000);
+});
+for (const value of ['', 'not-a-truck', 'BOX-TRUCK', ' box-truck ', '__proto__', 'constructor', [], ['box-truck'], ['box-truck', 'dry-van'], ['box-truck', 'box-truck']]) {
+  check(`Unknown or repeated equipment ${JSON.stringify(value)} cannot silently calculate a default fee`, () => {
     const equipment = normalizeEquipmentSelection(value);
-    assert.equal(equipment, 'dry-van');
-    assert.equal(result({ equipment }).dispatchFeeCents, 10000);
+    assert.equal(equipment, '');
+    const actual = calculateLoadEconomics({ ...base, equipment });
+    assert.equal(actual.valid, false);
+    assert.ok(actual.errors.equipment.includes('Choose a listed equipment type'));
+    assert.equal('dispatchFeeCents' in actual, false);
   });
 }
+check('Other remains a distinct quote-only selection with no calculated amounts', () => {
+  assert.equal(normalizeEquipmentSelection('other'), 'other');
+  const actual = calculateLoadEconomics({ ...base, equipment: 'other' });
+  assert.equal(actual.valid, false);
+  assert.ok(actual.errors.equipment.includes('written rate confirmation'));
+  assert.equal('dispatchFeeCents' in actual, false);
+  assert.equal('remainingCents' in actual, false);
+});
 check('Both box-truck discovery links select the 7% calculator preset', () => {
   for (const path of ['/equipment/box-truck', '/resources/how-to-find-box-truck-loads']) {
     const link = LEARNING_LINKS[path].find(item => item.href.startsWith('/tools/load-profit-calculator'));
@@ -178,12 +193,40 @@ check('Box-truck SSR initial selection names the equipment and shows the $140 fe
   for (const expected of ['Box Trucks · 7% dispatch fee', '$140.00', '$1,110.00', '$806.46', '$55.50', '<option value="box-truck" selected="">']) assert.ok(html.includes(expected), expected);
   assert.ok(!html.includes('<option value="dry-van" selected="">'));
 });
+for (const [equipment, fee, revenue] of [['box-truck', '$140.00', '$1,860.00'], ['cargo-van', '$240.00', '$1,760.00'], ['sprinter-van', '$100.00', '$1,900.00']]) check(`${equipment} $2,000 example separates the fee from revenue before operating costs`, () => {
+  controlledInput = { ...base, equipment };
+  const html = renderToStaticMarkup(React.createElement(Calculator));
+  assert.ok(html.includes(fee));
+  assert.ok(/Revenue after dispatch fee, before operating costs<\/dt>\s*<dd[^>]*>/.test(html));
+  assert.ok(html.includes(revenue));
+  assert.ok(html.includes('This is not net profit.'));
+});
 function findElement(node, predicate) {
   if (!node || typeof node !== 'object') return undefined;
   if (Array.isArray(node)) return node.map(child => findElement(child, predicate)).find(Boolean);
   if (predicate(node)) return node;
   return findElement(node.props?.children, predicate);
 }
+check('Cargo and Sprinter selection changes update equipment, fee and remainder together', () => {
+  controlledInput = { ...base, equipment: 'cargo-van' };
+  for (const [equipment, name, rate, fee, revenue] of [['sprinter-van', 'Sprinter Vans', 5, '$100.00', '$1,900.00'], ['cargo-van', 'Cargo Vans', 12, '$240.00', '$1,760.00']]) {
+    const select = findElement(Calculator({}), node => node.type === 'select');
+    select.props.onChange({ target: { value: equipment } });
+    const html = renderToStaticMarkup(React.createElement(Calculator));
+    assert.equal(controlledInput.equipment, equipment);
+    assert.ok(html.includes(`${name} · ${rate}% dispatch fee`));
+    assert.ok(html.includes(fee) && html.includes(revenue));
+    assert.ok(html.includes('Cargo vans are listed at 12% and Sprinter vans at 5%.'));
+    assert.ok(html.includes('href="/equipment/cargo-van"') && html.includes('href="/equipment/sprinter-van"'));
+  }
+});
+for (const equipment of ['', 'other', 'not-a-truck']) check(`${equipment || 'Blank'} component selection displays an equipment error without numeric outputs`, () => {
+  controlledInput = { ...base, equipment };
+  const html = renderToStaticMarkup(React.createElement(Calculator));
+  assert.ok(html.includes('load-audit-equipment-error') && html.includes('aria-invalid="true"'));
+  assert.ok(!html.includes('<dd'));
+  assert.ok(!html.includes('NaN') && !html.includes('null%'));
+});
 check('Reset restores example trip inputs while retaining the currently selected truck', () => {
   controlledInput = { ...base, equipment: 'cargo-van', loadPay: '9000', loadedMiles: '50', emptyMiles: '25', totalHours: '', mpg: '14', fuelPrice: '3', otherCosts: '90' };
   const tree = Calculator({ initialEquipment: 'box-truck' });
@@ -212,8 +255,6 @@ check('Optional blank hours hides only the hourly output', () => {
 for (const [name, query, equipment, fee, feeAmount, remainder] of [
   ['box preset', { equipment: 'box-truck' }, 'box-truck', 7, '$140', '$1,110'],
   ['generic default', {}, 'dry-van', 5, '$100', '$1,150'],
-  ['invalid preset', { equipment: 'not-a-truck' }, 'dry-van', 5, '$100', '$1,150'],
-  ['repeated preset', { equipment: ['box-truck', 'dry-van'] }, 'dry-van', 5, '$100', '$1,150'],
 ]) {
   controlledInput = undefined;
   const tree = await calculatorPage.default({ searchParams: Promise.resolve(query) });
@@ -227,6 +268,23 @@ for (const [name, query, equipment, fee, feeAmount, remainder] of [
     assert.ok(exampleHtml.includes(`The ${fee}% dispatch fee is ${feeAmount}.`));
     assert.ok(exampleHtml.includes(`${remainder} remains.`));
     assert.ok(exampleHtml.includes(equipment === 'box-truck' ? 'Equipment: Box Trucks' : 'Equipment: Dry Vans'));
+    assert.equal(calculatorPage.metadata.alternates.canonical, 'https://raidispatch.com/tools/load-profit-calculator');
+  });
+}
+for (const [name, query, equipment] of [
+  ['invalid preset', { equipment: 'not-a-truck' }, ''],
+  ['repeated preset', { equipment: ['box-truck', 'dry-van'] }, ''],
+  ['Other preset', { equipment: 'other' }, 'other'],
+]) {
+  controlledInput = undefined;
+  const tree = await calculatorPage.default({ searchParams: Promise.resolve(query) });
+  check(`Server ${name} preserves the invalid/quote state and has no calculated worked example`, () => {
+    const client = findElement(tree, node => node.type === Calculator);
+    assert.equal(client.props.initialEquipment, equipment);
+    assert.equal(client.key, equipment);
+    assert.equal(findElement(tree, node => node.props?.['aria-labelledby'] === 'worked-example-heading'), undefined);
+    const html = renderToStaticMarkup(client);
+    assert.ok(html.includes('aria-invalid="true"') && !html.includes('<dd'));
     assert.equal(calculatorPage.metadata.alternates.canonical, 'https://raidispatch.com/tools/load-profit-calculator');
   });
 }

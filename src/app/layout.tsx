@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { Barlow_Condensed, Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { ConsentMeasurement } from '@/components/ConsentMeasurement';
 import StickyCallWidgets from '@/components/StickyCallWidgets';
 import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, DISPATCH_SPECIALTIES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
@@ -100,6 +101,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth ${displayFont.variable} ${bodyFont.variable}`}>
       <head>
+        <link rel="alternate" type="text/markdown" href="/llms.txt" title="llms.txt" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -110,6 +112,7 @@ export default function RootLayout({
           <Header />
           <main id="main-content" className="pt-20">{children}</main>
           <Footer />
+          <ConsentMeasurement />
           <StickyCallWidgets />
           {/* No auto-appearing popup: the exit-intent/timed LeadCapturePopup was
               removed at the client's request. The component still exists at

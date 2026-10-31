@@ -23,8 +23,8 @@ export default function ServiceAreasPage() {
         <div className="container-custom">
           <ContentBreadcrumbs dark items={[{ label: 'US service areas', href: '/service-areas' }]} />
           <p className="eyebrow">Nationwide dispatch. Your lane preferences.</p>
-          <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch across<br />the lower 48 states.</h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Rai Dispatch supports owner-operators and small fleets running regional and over-the-road freight across the contiguous United States. Your dedicated dispatcher plans around your truck, your schedule and the lanes you choose.</p>
+          <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch across the lower 48 states</h1>
+          <p id="answer-block" className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Rai Dispatch supports owner-operators and small fleets running regional and over-the-road freight across the contiguous United States. Your dedicated dispatcher plans around your truck, your schedule and the lanes you choose.</p>
           <div className="mt-8 flex flex-wrap gap-4"><Link className="btn-primary" href="/contact">Discuss your lanes <ArrowRight size={18} aria-hidden="true" /></Link><Link className="btn-ghost-light" href="/equipment">Find your equipment type</Link></div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import StaticPhoto from '@/components/StaticPhoto';
 
 import { useEffect, useRef, useState } from 'react';
@@ -26,7 +27,7 @@ import {
   validatePhone,
   validateEmail,
   validateMcNumber,
-  validateRequiredSelect,
+  validateEquipmentSelection,
 } from '@/lib/formValidation';
 
 /* Shared input styling — square-ish corners, neutral border, red focus ring */
@@ -84,7 +85,7 @@ export default function ContactPageClient() {
     phone: validatePhone,
     email: (v) => validateEmail(v, false),
     mcNumber: validateMcNumber,
-    equipment: (v) => validateRequiredSelect(v, 'your equipment type'),
+    equipment: validateEquipmentSelection,
   };
   const inputIds: Record<string, string> = {
     name: 'contact-name',
@@ -211,10 +212,8 @@ export default function ContactPageClient() {
           <ScrollReveal>
             <div className="max-w-2xl">
               <p className="eyebrow">Contact us</p>
-              <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">
-                Let&apos;s talk about your dispatch needs
-              </h1>
-              <p className="text-white/70 text-lg mb-8 max-w-xl">
+              <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">Let&#x27;s talk about your dispatch needs</h1>
+              <p id="answer-block" className="text-white/70 text-lg mb-8 max-w-xl">
                 A call or text is the fastest way to reach a dispatcher.
                 Prefer email? Use the form below or write to us directly.
               </p>
@@ -437,10 +436,7 @@ export default function ContactPageClient() {
                         Message sent
                       </h3>
                       <p className="text-surface-700 mb-6">
-                        We&apos;ve got your details and a dispatcher will get back
-                        to you. The fastest route is still a call —
-                        <br />
-                        reach one directly at{' '}
+                        Thanks. A dispatcher will reply during our setup-desk hours: {SETUP_DESK_HOURS}. {formState.requestCallback ? 'You requested a callback.' : 'We will respond to your inquiry manually.'} You can also call{' '}
                         <a
                           href={BUSINESS.phoneHref}
                           onClick={() => track('call_click', { location: 'contact_form_error' })}
@@ -751,6 +747,8 @@ export default function ContactPageClient() {
                         </div>
                       )}
 
+                      <p className="text-sm leading-6 text-surface-700">We use your details to reply manually to this inquiry or make a requested callback. This form does not sign you up for automated marketing calls or texts. Read our <Link href="/privacy" className="underline">Privacy Policy</Link> and <Link href="/terms" className="underline">Terms of Service</Link>.</p>
+
                       <div className="flex flex-col sm:flex-row gap-3">
                         <button
                           type="submit"
@@ -762,7 +760,7 @@ export default function ContactPageClient() {
                           ) : (
                             <Send className="w-5 h-5" aria-hidden="true" />
                           )}
-                          {isSubmitting ? 'Sending...' : 'Send Message'}
+                          {isSubmitting ? 'Sending...' : formState.requestCallback ? 'Request a setup call' : 'Send setup inquiry'}
                         </button>
                         <a
                           href={BUSINESS.phoneHref}

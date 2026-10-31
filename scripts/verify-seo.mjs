@@ -47,6 +47,12 @@ const approvedFees = [
   { slug: 'curtain-side', label: /curtain[\s-]*sides?/i, rate: 5 },
 ];
 const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 5 };
+const exactFeesAnswer = 'Dispatch fees are 7% for box trucks, 6% for hotshots, 4% for reefers and Conestoga trailers, 12% for cargo vans, and 5% for dry vans, flatbeds, power only, step decks and Sprinter vans. Fees apply to gross revenue on loads we book. Confirm the applicable equipment category, billing base and service scope in writing.';
+const exactEquipmentAnswers = {
+  'box-truck': 'Rai Dispatch charges 7% of gross revenue on loads we book for box trucks. Confirm the billing base and service scope in writing before onboarding.',
+  'cargo-van': 'Rai Dispatch charges 12% of gross revenue on loads we book for cargo vans. The separately listed Sprinter van dispatch service is priced at 5%. Confirm which service category applies to your vehicle before onboarding.',
+  'sprinter-van': 'Rai Dispatch charges 5% of gross revenue on loads we book for Sprinter vans. The separately listed cargo van dispatch service is priced at 12%. Confirm which service category applies to your vehicle before onboarding.',
+};
 const percentages = text => [...text.matchAll(/\b(\d+(?:\.\d+)?)\s*%/g)].map(match => Number(match[1]));
 const hasType = (node, type) => [node?.['@type']].flat().includes(type);
 // The owner's current schedule is 4–12%. Both earlier ranges and a 3% fee
@@ -87,9 +93,17 @@ function schemaNodes(value) {
   return [value, ...Object.values(value).flatMap(schemaNodes)];
 }
 
+function checkEquipmentRates(path, text, rate, slug, check) {
+  const rates = percentages(text);
+  const van = ['cargo-van', 'sprinter-van'].includes(slug);
+  const allowed = van ? [12, 5] : [rate];
+  if (rates[0] !== rate || rates.some(value => !allowed.includes(value))) issue(path, check, `${slug} must lead with its ${rate}% rate; only the explicitly named cargo/Sprinter pair may add the other van rate. Found ${JSON.stringify(rates)}.`);
+  const cargoAssociation = /cargo vans?(?: dispatch costs| service is separately listed at| are listed at| at) 12%/i.test(text);
+  const sprinterAssociation = /Sprinter vans?(?: dispatch costs| service is separately listed at| are listed at| at) 5%/i.test(text);
+  if (van && rates.some(value => value !== rate) && !((cargoAssociation && sprinterAssociation) || text.includes(exactEquipmentAnswers[slug]))) issue(path, check, 'Paired van percentages must explicitly identify the cargo 12% and Sprinter 5% categories.');
+}
 function checkOfferFee(path, offer, rate, label) {
-  const rates = percentages(String(offer.description || ''));
-  if (rates.length !== 1 || rates[0] !== rate) issue(path, 'offer-pricing', `${label} offer must describe exactly ${rate}%; received ${JSON.stringify(offer.description || '')}.`);
+  checkEquipmentRates(path, String(offer.description || ''), rate, label, 'offer-pricing');
   // These offers describe a percentage service fee, not a fixed-dollar price.
   if (schemaNodes(offer).some(node => node.price !== undefined || node.lowPrice !== undefined || node.highPrice !== undefined)) issue(path, 'percentage-as-price', `${label} percentage offer must not be represented as a monetary price.`);
 }
@@ -112,15 +126,14 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
     const article = articleContent || markup;
     if (!activeCarrierSupport.test(plain(articleContent || ''))) issue(path, 'equipment-active-carrier-support', 'Equipment content must explicitly publish 24/7 live dispatch support for active carriers.');
     const hero = article.match(/<header\b[^>]*>([\s\S]*?)<\/header>/i)?.[1];
-    const headlineRates = percentages(hero ? plain(hero) : `${title} ${description}`);
-    if (!headlineRates.includes(equipment.rate) || headlineRates.some(rate => rate !== equipment.rate)) issue(path, 'equipment-pricing', `Primary equipment offer must advertise ${equipment.rate}%; found ${JSON.stringify(headlineRates)}.`);
+    checkEquipmentRates(path, hero ? plain(hero) : `${title} ${description}`, equipment.rate, equipment.slug, 'equipment-pricing');
     if (!percentages(visibleText).includes(equipment.rate)) issue(path, 'visible-equipment-fee', `No visible ${equipment.rate}% fee found.`);
-    const metadataRates = percentages(`${title} ${description}`);
-    if (metadataRates.some(rate => rate !== equipment.rate)) issue(path, 'equipment-metadata-pricing', `Equipment title/description must not advertise a different rate from ${equipment.rate}%; found ${JSON.stringify(metadataRates)}.`);
+    const metadataText = `${title} ${description}`;
+    if (percentages(metadataText).length) checkEquipmentRates(path, metadataText, equipment.rate, equipment.slug, 'equipment-metadata-pricing');
     const matchingServices = nodes.filter(node => hasType(node, 'Service') && (node.url === canonicalFor(path) || node['@id'] === `${canonicalFor(path)}#service`));
     if (!matchingServices.length) issue(path, 'equipment-service-schema', 'No page-specific Service schema found.');
     for (const service of matchingServices) {
-      if (percentages(String(service.description || '')).some(rate => rate !== equipment.rate)) issue(path, 'equipment-schema-pricing', `${equipment.slug} Service description advertises a rate other than ${equipment.rate}%.`);
+      checkEquipmentRates(path, String(service.description || ''), equipment.rate, equipment.slug, 'equipment-schema-pricing');
       // A Service without an Offer is valid; if pricing is published in schema,
       // it must agree with the specific equipment's visible offer.
       for (const offer of [service.offers].flat().filter(Boolean)) {
@@ -136,8 +149,20 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
   }
   if (path !== '/pricing') return;
   checkRenderedCalculator(path, markup);
+  const illustrative = [...markup.matchAll(/<table\b[^>]*>([\s\S]*?)<\/table>/gi)].find(table => /Compare fees on one hypothetical \$2,000 load/.test(plain(table[1])));
+  if (!illustrative) issue(path, 'pricing-worked-examples', 'Missing the three clearly labelled illustrative $2,000 fee examples.');
+  else {
+    if (!plain(illustrative[1]).includes('Revenue after dispatch fee, before operating costs (USD)')) issue(path, 'pricing-example-label', 'The example remainder must state that it is before operating costs and use USD.');
+    const exampleRows = [...illustrative[1].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].filter(row => /<td\b/i.test(row[1]));
+    if (exampleRows.length !== 3) issue(path, 'pricing-example-count', `Expected box/cargo/Sprinter examples; found ${exampleRows.length} rows.`);
+    for (const [slug, rate, fee, revenue] of [['box-truck', 7, '$140.00', '$1,860.00'], ['cargo-van', 12, '$240.00', '$1,760.00'], ['sprinter-van', 5, '$100.00', '$1,900.00']]) {
+      const row = exampleRows.find(row => elements(row[1], 'a').some(link => link.href === `/equipment/${slug}`));
+      const cells = [...(row?.[1] || '').matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)].map(cell => plain(cell[1]));
+      if (JSON.stringify(cells) !== JSON.stringify([`${rate}%`, fee, revenue])) issue(path, 'pricing-example-math', `${slug} $2,000 example must show ${rate}%, ${fee} fee and ${revenue} before operating costs; found ${JSON.stringify(cells)}.`);
+    }
+  }
   const tableRows = [...markup.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].map(match => ({ text: plain(match[1]), links: elements(match[1], 'a').map(link => link.href) }));
-  for (const item of [...approvedFees, otherEquipmentFee]) {
+  for (const item of approvedFees) {
     const exactRows = item.slug ? tableRows.filter(row => row.links.some(href => href && normalizedPath(new URL(href, base).pathname) === `/equipment/${item.slug}`)) : [];
     const matchingRows = exactRows.length ? exactRows : tableRows.filter(row => item.label.test(row.text));
     if (matchingRows.length) {
@@ -154,6 +179,9 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
       if (!matches.some(match => Number(match[1]) === item.rate)) issue(path, 'pricing-equipment-label', `Missing visible ${item.slug || 'other equipment'} → ${item.rate}% association.`);
     }
   }
+  const otherRows = tableRows.filter(row => otherEquipmentFee.label.test(row.text));
+  if (!otherRows.length || otherRows.some(row => !/written confirmation required/i.test(row.text) || percentages(row.text).length)) issue(path, 'other-equipment-confirmation', 'Other equipment must have a written-confirmation table row, not an automatically calculable percentage.');
+  if (!/Other truck types have a published 5% fee, subject to service availability and written rate confirmation\./.test(visibleText)) issue(path, 'other-conditional-published-rate', 'Conditional published 5% must be preserved separately from calculator eligibility.');
   const catalogs = nodes.filter(node => hasType(node, 'OfferCatalog'));
   if (!catalogs.length) { issue(path, 'offer-catalog', 'Pricing page must include its equipment OfferCatalog.'); return; }
   const catalogOffers = catalogs.flatMap(schemaNodes).filter(node => hasType(node, 'Offer'));
@@ -163,8 +191,10 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
     for (const offer of offers) checkOfferFee(path, offer, item.rate, item.slug);
   }
   const otherOffers = catalogOffers.filter(offer => otherEquipmentFee.label.test(`${offer.name || ''} ${offer.itemOffered?.name || ''}`));
-  if (!otherOffers.length) issue(path, 'catalog-other-equipment', `OfferCatalog is missing the ${otherEquipmentFee.rate}% other-equipment category.`);
-  for (const offer of otherOffers) checkOfferFee(path, offer, otherEquipmentFee.rate, 'other equipment');
+  for (const offer of otherOffers) {
+    if (!/written rate confirmation/i.test(offer.description || '')) issue(path, 'catalog-other-equipment', 'An Other Offer must require written rate confirmation.');
+    if (schemaNodes(offer).some(node => node.price !== undefined || node.lowPrice !== undefined || node.highPrice !== undefined)) issue(path, 'catalog-other-price', 'Other equipment cannot have a computed or monetary published quote.');
+  }
 }
 
 // Server-rendered calculator output is audited independently of its source
@@ -174,11 +204,14 @@ function checkRenderedCalculator(path, markup) {
   const calculator = selects.find(match => /<option\b[^>]*value=["']dry-van["']/i.test(match[1]));
   if (!calculator) { issue(path, 'fee-calculator', 'Equipment fee calculator is missing.'); return; }
   const options = [...calculator[1].matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)].map(match => ({ ...attributes(match[1]), text: plain(match[2]), selected: /\bselected(?:\s|=|$)/i.test(match[1]) }));
-  for (const item of [...approvedFees, { slug: 'other', rate: otherEquipmentFee.rate }]) {
+  for (const item of approvedFees) {
     const matches = options.filter(option => option.value === item.slug);
     if (matches.length !== 1 || percentages(matches[0]?.text || '').join(',') !== String(item.rate)) issue(path, 'calculator-option-rate', `Expected one ${item.slug} calculator option at ${item.rate}%.`);
   }
-  if (options.length !== approvedFees.length + 1) issue(path, 'calculator-options', `Expected 16 approved calculator equipment options; found ${options.length}.`);
+  const other = options.filter(option => option.value === 'other');
+  if (other.length !== 1 || percentages(other[0]?.text || '').length || !/quote required/i.test(other[0]?.text || '')) issue(path, 'calculator-other', 'Other must require a quote without presenting a percentage calculation.');
+  const selectable = options.filter(option => option.value);
+  if (selectable.length !== approvedFees.length + 1) issue(path, 'calculator-options', `Expected 15 published types and one quote-only Other choice; found ${selectable.length}.`);
   const selected = options.find(option => option.selected) || options[0];
   if (selected?.value !== 'box-truck') issue(path, 'calculator-default-equipment', `Expected box-truck default; received ${selected?.value}.`);
   const revenueInput = elements(markup, 'input').find(input => /-revenue$/.test(input.id || ''));
@@ -187,11 +220,54 @@ function checkRenderedCalculator(path, markup) {
   const expected = [
     { label: /^Gross revenue entered$/i, amount: '$2,000.00' },
     { label: /^Dispatch fee\s*\(7%\)$/i, amount: '$140.00' },
-    { label: /^Revenue after dispatch fee$/i, amount: '$1,860.00' },
+    { label: /^Revenue after dispatch fee, before operating costs$/i, amount: '$1,860.00' },
   ];
   for (const item of expected) {
     const result = amounts.find(pair => item.label.test(pair.label));
     if (result?.amount !== item.amount) issue(path, 'calculator-default-math', `Expected ${item.label.source}: ${item.amount}; received ${result?.amount || 'missing'}.`);
+  }
+}
+
+function visibleFaqPairs(markup) {
+  const pairs = [];
+  for (const match of markup.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/gi)) {
+    const question = match[1].match(/<summary\b[^>]*>([\s\S]*?)<\/summary>/i)?.[1];
+    const answer = match[1].match(/<\/summary>\s*<p\b[^>]*>([\s\S]*?)<\/p>/i)?.[1];
+    if (question && answer) pairs.push({ question: plain(question), answer: plain(answer) });
+  }
+  for (const section of markup.matchAll(/<section\b([^>]*)>([\s\S]*?)<\/section>/gi)) {
+    if (attributes(section[1]).id !== 'questions') continue;
+    for (const pair of section[2].matchAll(/<h3\b[^>]*>([\s\S]*?)<\/h3>\s*<p\b[^>]*>([\s\S]*?)<\/p>/gi)) pairs.push({ question: plain(pair[1]), answer: plain(pair[2]) });
+  }
+  return pairs;
+}
+
+function checkFaqAndExactAnswers(path, markup, nodes) {
+  const visible = visibleFaqPairs(markup);
+  const schema = nodes.filter(node => hasType(node, 'FAQPage')).flatMap(node => [node.mainEntity].flat().filter(Boolean));
+  if (visible.length !== schema.length) issue(path, 'faq-schema-count', `Found ${visible.length} visible FAQ pairs but ${schema.length} FAQPage questions.`);
+  for (const question of schema) {
+    const answers = [question.acceptedAnswer].flat().filter(Boolean);
+    if (!hasType(question, 'Question') || answers.length !== 1 || !hasType(answers[0], 'Answer')) { issue(path, 'faq-schema-shape', 'Each FAQ question needs one accepted Answer.'); continue; }
+    if (!visible.some(pair => pair.question === plain(String(question.name || '')) && pair.answer === plain(String(answers[0].text || '')))) issue(path, 'faq-schema-visible-match', `JSON-LD question or answer does not exactly match the rendered FAQ: ${question.name || '(missing question)'}.`);
+  }
+  const slug = path.startsWith('/equipment/') ? path.split('/').at(-1) : '';
+  const expected = exactEquipmentAnswers[slug] || (['/', '/pricing'].includes(path) ? exactFeesAnswer : undefined);
+  if (expected && !visible.some(pair => pair.answer === expected)) issue(path, 'p0-exact-faq-answer', 'The controlling equipment fee answer must appear verbatim in a matching visible FAQ.');
+  if (expected && path !== '/') {
+    const answer = [...markup.matchAll(/<p\b([^>]*)>([\s\S]*?)<\/p>/gi)].find(match => attributes(match[1]).id === 'answer-block');
+    if (plain(answer?.[2] || '') !== expected) issue(path, 'p0-exact-lead-answer', 'The visible answer block must exactly match the controlling fee statement.');
+  }
+  return visible.length;
+}
+
+function checkFreeCalculatorSchema(path, nodes) {
+  if (path !== '/tools/load-profit-calculator') return;
+  const applications = nodes.filter(node => hasType(node, 'WebApplication') && node.url === canonicalFor(path));
+  if (applications.length !== 1) issue(path, 'calculator-webapplication', `Expected one canonical WebApplication, found ${applications.length}.`);
+  for (const application of applications) {
+    const offer = application.offers;
+    if (application.isAccessibleForFree !== true || !hasType(offer, 'Offer') || Number(offer.price) !== 0 || offer.price === undefined || offer.priceCurrency !== 'USD') issue(path, 'calculator-free-price', 'WebApplication must describe free tool access with price 0 USD; this is separate from commission percentages.');
   }
 }
 
@@ -288,11 +364,12 @@ await batch(uniquePaths, async path => {
   const descriptionValues = metas.filter(meta => meta.name?.toLowerCase() === 'description').map(meta => meta.content || '');
   const description = descriptionValues[0] || '';
   const canonicals = elements(markup, 'link').filter(link => link.rel?.toLowerCase().split(/\s+/).includes('canonical')).map(link => link.href);
+  const llmsAlternate = elements(markup, 'link').find(link => link.rel === 'alternate' && link.type === 'text/markdown' && new URL(link.href || '/', base).pathname === '/llms.txt');
+  if (!llmsAlternate) issue(path, 'llms-discovery', 'Expected a text/markdown alternate link to /llms.txt.');
   const ogUrls = metas.filter(meta => meta.property?.toLowerCase() === 'og:url').map(meta => meta.content);
   const expected = canonicalFor(path);
   if (h1s.length !== 1 || !h1s[0]) issue(path, 'h1', `Expected one nonempty H1; found ${h1s.length}.`);
   if (titleMatches.length !== 1 || !title) issue(path, 'title', `Expected one nonempty title; found ${titleMatches.length}.`);
-  if (!/Rai Dispatch/i.test(title)) issue(path, 'brand-title', `Title does not include Rai Dispatch: ${title}`);
   if (!/Rai\s*Dispatch/i.test(visibleText)) issue(path, 'brand-content', 'Rai Dispatch brand is absent from page text.');
   if (descriptionValues.length !== 1 || !description) issue(path, 'description', `Expected one nonempty description; found ${descriptionValues.length}.`);
   if (canonicals.length !== 1 || canonicals[0] !== expected) issue(path, 'canonical', `Expected ${expected}; received ${JSON.stringify(canonicals)}.`);
@@ -300,8 +377,8 @@ await batch(uniquePaths, async path => {
   if (/noindex/i.test(response.robots || '') || metas.some(meta => /^(robots|googlebot)$/i.test(meta.name || '') && /noindex/i.test(meta.content || ''))) issue(path, 'indexability', 'Noindex directive present.');
   if (title) { const other = titles.get(title); if (other) issue(path, 'duplicate-title', `Same title as ${other}.`); else titles.set(title, path); }
   if (description) { const other = descriptions.get(description); if (other) issue(path, 'duplicate-description', `Same description as ${other}.`); else descriptions.set(description, path); }
-  if (title.length > 70) warnings.push({ path, check: 'title-length', detail: `${title.length} characters; review search result truncation.` });
-  if (description.length > 170) warnings.push({ path, check: 'description-length', detail: `${description.length} characters; review search result truncation.` });
+  if (title.length > 60) issue(path, 'title-length', `${title.length} characters exceeds the approved 60-character limit.`);
+  if (description.length > 158) issue(path, 'description-length', `${description.length} characters exceeds the approved 158-character limit.`);
   const searchText = [visibleText, title, ...metas.map(meta => meta.content || '')].join(' ');
   const staleRate = searchText.match(obsoletePricing);
   if (staleRate) issue(path, 'obsolete-pricing', `Superseded pricing claim found: ${staleRate[0]}.`);
@@ -324,6 +401,8 @@ await batch(uniquePaths, async path => {
   }
   checkRenderedPricing(path, markup, visibleText, title, description, pageSchemaNodes);
   checkEquipmentPhotos(path, markup, metas, pageSchemaNodes);
+  const faqCount = checkFaqAndExactAnswers(path, markup, pageSchemaNodes);
+  checkFreeCalculatorSchema(path, pageSchemaNodes);
   for (const anchor of elements(markup, 'a')) {
     if (!anchor.href || /^(mailto:|tel:|sms:|whatsapp:|data:)/i.test(anchor.href)) continue;
     try {
@@ -335,7 +414,7 @@ await batch(uniquePaths, async path => {
       internalLinks.push({ from: path, path: normalizedPath(link.pathname), hash: link.hash });
     } catch { issue(path, 'invalid-link', anchor.href); }
   }
-  pages.push({ path, status: response.status, title, description, h1: h1s[0], canonical: canonicals[0], jsonLdBlocks: schemaBlocks.length });
+  pages.push({ path, status: response.status, title, titleLength: title.length, description, descriptionLength: description.length, h1: h1s[0], canonical: canonicals[0], jsonLdBlocks: schemaBlocks.length, visibleFaqPairs: faqCount });
 });
 
 await batch(internalLinks, async link => {
@@ -353,7 +432,45 @@ await batch(internalLinks, async link => {
   }
 });
 
-const report = { approvedPricing: { range: '4–12%', equipment: Object.fromEntries(approvedFees.map(({ slug, rate }) => [slug, rate])), other: otherEquipmentFee.rate }, baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
+const supplemental = [];
+const legacy = await fetchPath('/testimonials');
+const legacyTarget = legacy.location ? new URL(legacy.location, base) : undefined;
+if (legacy.status !== 301 || legacyTarget?.pathname !== '/what-to-expect' || ![base.origin, canonicalOrigin].includes(legacyTarget?.origin)) issue('/testimonials', 'legacy-permanent-redirect', `Expected 301 to /what-to-expect; received ${legacy.status} → ${legacy.location || '(none)'}.`);
+if (uniquePaths.includes('/testimonials') || !uniquePaths.includes('/what-to-expect')) issue('/sitemap.xml', 'renamed-service-commitments', 'The sitemap must list /what-to-expect and omit /testimonials.');
+supplemental.push({ path: '/testimonials', status: legacy.status, location: legacy.location });
+
+const missingPath = '/__rai-seo-audit-missing-page';
+const missing = await fetchPath(missingPath);
+const missingMarkup = pageMarkup(missing.text);
+const missingTitle = plain(missingMarkup.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '');
+if (missing.status !== 404) issue(missingPath, 'not-found-status', `Expected HTTP 404, received ${missing.status}.`);
+if (missingTitle !== 'Page not found | Rai Dispatch') issue(missingPath, 'not-found-title', `Expected the specific 404 title, received ${missingTitle}.`);
+if (!elements(missingMarkup, 'meta').some(meta => meta.name === 'robots' && /\bnoindex\b/i.test(meta.content || ''))) issue(missingPath, 'not-found-noindex', '404 must carry a noindex robots meta tag.');
+if (plain(missingMarkup.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1] || '') !== "That page isn't here") issue(missingPath, 'not-found-h1', 'Expected the approved helpful 404 heading.');
+for (const path of ['/equipment', '/pricing', '/contact', '/resources']) if (!elements(missingMarkup, 'a').some(link => link.href === path)) issue(missingPath, 'not-found-navigation', `404 is missing its ${path} recovery link.`);
+supplemental.push({ path: missingPath, status: missing.status, title: missingTitle });
+
+for (const path of ['/llms.txt', '/llms-full.txt']) {
+  const response = await fetchPath(path);
+  if (response.status !== 200 || !/text\/plain/i.test(response.type)) issue(path, 'llms-response', `Expected 200 text/plain; received ${response.status} ${response.type}.`);
+  if (!response.text.includes(exactFeesAnswer)) issue(path, 'llms-fee-answer', 'The machine-readable overview must repeat the exact controlling fee answer.');
+  if (obsoletePricing.test(response.text)) issue(path, 'llms-obsolete-fee', 'Superseded pricing found in the machine-readable text.');
+  for (const equipment of approvedFees) {
+    const line = response.text.split('\n').find(line => line.startsWith('- ') && line.includes(`(${canonicalFor(`/equipment/${equipment.slug}`)})`) && line.includes(' of gross revenue on loads we book.'));
+    if (!line || percentages(line).join(',') !== String(equipment.rate)) issue(path, 'llms-equipment-fee', `Expected a current ${equipment.slug} source link and ${equipment.rate}% billing-base statement.`);
+  }
+  if (!/Other truck types have a published 5% fee, subject to service availability and written rate confirmation\./.test(response.text)) issue(path, 'llms-other-terms', 'Other equipment must retain conditional terms and written rate confirmation.');
+  const sourceLinks = [...response.text.matchAll(/https:\/\/raidispatch\.com(?:\/[^\s)\]]*)?/g)].map(match => new URL(match[0]));
+  for (const link of sourceLinks) {
+    const pathName = normalizedPath(link.pathname);
+    if (!uniquePaths.includes(pathName) && !['/llms.txt', '/llms-full.txt'].includes(pathName)) issue(path, 'llms-source-url', `Source is not a current canonical sitemap page: ${link.href}`);
+    if (link.search || link.hash) issue(path, 'llms-source-variant', `Use canonical page URLs in the machine-readable source list: ${link.href}`);
+  }
+  if (path === '/llms-full.txt') for (const expected of Object.values(exactEquipmentAnswers)) if (!response.text.includes(expected)) issue(path, 'llms-full-exact-equipment', 'Full text is missing a controlling box/cargo/Sprinter answer.');
+  supplemental.push({ path, status: response.status, type: response.type, canonicalSourceLinks: sourceLinks.length });
+}
+
+const report = { approvedPricing: { range: '4–12%', equipment: Object.fromEntries(approvedFees.map(({ slug, rate }) => [slug, rate])), other: { conditionalPublishedRate: 5, requiresWrittenConfirmation: true, calculable: false } }, baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, supplemental, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
 if (outputPath) { await mkdir(dirname(outputPath), { recursive: true }); await writeFile(outputPath, JSON.stringify(report, null, 2) + '\n'); }
 for (const failure of failures) console.error(`FAIL ${failure.path} [${failure.check}] ${failure.detail}`);
 for (const warning of warnings) console.warn(`WARN ${warning.path} [${warning.check}] ${warning.detail}`);

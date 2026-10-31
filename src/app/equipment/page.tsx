@@ -1,3 +1,4 @@
+import PageBreadcrumbs from '@/components/PageBreadcrumbs';
 import { pageMetadata, SITE_URL } from '@/lib/seo';
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import { EQUIPMENT_TYPES } from '@/lib/constants';
@@ -13,6 +14,7 @@ export default function EquipmentPage() {
       { '@type': 'CollectionPage', '@id': `${SITE_URL}/equipment#page`, url: `${SITE_URL}/equipment`, name: 'Truck dispatch services by equipment type', isPartOf: { '@id': `${SITE_URL}/#website` }, mainEntity: { '@type': 'ItemList', numberOfItems: EQUIPMENT_TYPES.length, itemListElement: EQUIPMENT_TYPES.map((equipment, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'Service', '@id': `${SITE_URL}/equipment/${equipment.id}#service`, name: `${equipment.name} dispatch`, url: `${SITE_URL}/equipment/${equipment.id}` } })) } },
       specialtyOfferCatalog(),
     ] }} />
+    <PageBreadcrumbs label="Equipment types" path="/equipment" />
     <EquipmentPageClient />
   </>;
 }

@@ -1,3 +1,5 @@
+import { isDispatchEquipment } from './dispatch-pricing';
+
 /**
  * Shared form validation for the two lead forms (contact page + quote modal).
  *
@@ -94,4 +96,9 @@ export function validateRequiredSelect(raw: string, what: string): string | null
 
 export function validateOptionalText(raw: string, max: number, what: string): string | null {
   return raw.length > max ? `${what} is too long (${raw.length} of ${max} characters).` : null;
+}
+
+/** Other is a request for manual service/rate confirmation, never an automatic quote. */
+export function validateEquipmentSelection(raw: string): string | null {
+  return raw === 'other' || isDispatchEquipment(raw) ? null : 'Please choose a listed equipment type or Other.';
 }

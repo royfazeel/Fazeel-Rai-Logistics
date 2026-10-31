@@ -15,6 +15,7 @@ const nextConfig = {
       // Next/Vercel also serves the homepage at /index. Consolidate that alias
       // with a permanent redirect instead of leaving another indexable copy.
       { source: '/index', destination: '/', permanent: true },
+      { source: '/testimonials', destination: '/what-to-expect', statusCode: 301 },
     ];
   },
   async headers() {
