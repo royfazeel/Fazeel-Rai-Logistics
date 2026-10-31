@@ -55,7 +55,7 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/equipment/box-truck": {
     title: `Box Truck Dispatch Service — ${getDispatchRateLabel('box-truck')} Fee | Rai Dispatch`,
-    description: `Box truck dispatch costs ${getDispatchRateLabel('box-truck')} of gross revenue on loads we book. See services, requirements and fee examples. You approve every load.`,
+    description: `Box truck dispatch at ${getDispatchRateLabel('box-truck')} of gross revenue on loads we book. No setup, weekly, monthly or other Rai Dispatch fees. Dedicated dispatcher and 24/7 support.`,
     h1: `Box truck dispatch services — ${getDispatchRateLabel('box-truck')} fee`,
   },
   "/equipment/dry-van": {
@@ -135,7 +135,7 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/pricing": {
     title: `Truck Dispatch Fees by Equipment: ${DISPATCH_RATE_RANGE} | Rai Dispatch`,
-    description: `Compare dispatch fees: box truck ${getDispatchRateLabel('box-truck')}, cargo van ${getDispatchRateLabel('cargo-van')}, Sprinter ${getDispatchRateLabel('sprinter-van')}, hotshot ${getDispatchRateLabel('hotshot')}, reefer and Conestoga ${getDispatchRateLabel('reefer')}. Confirm your equipment and billing base.`,
+    description: `Box truck dispatch: ${getDispatchRateLabel('box-truck')} of gross revenue on loads we book. Equipment rates ${DISPATCH_RATE_RANGE}. No setup, fixed weekly/monthly or other Rai Dispatch fees.`,
     h1: "Truck dispatch fees by equipment",
   },
   "/privacy": {
