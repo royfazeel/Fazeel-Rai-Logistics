@@ -362,7 +362,7 @@ export const GUIDES: CarrierGuide[] = [
     metaTitle: 'Detention, Layover & TONU Documentation Guide',
     description: 'Prepare detention, layover, TONU and lumper requests with clear load terms, timestamps, receipts and follow-ups. A practical carrier documentation checklist.',
     eyebrow: 'Carrier guide · Delays and extra work',
-    readTime: '5 minute read', published: '2026-09-27', updated: '2026-09-27',
+    readTime: '5 minute read', published: '2026-09-27', updated: '2026-10-31',
     intro: 'When a load changes, keep the operational update and the compensation request connected. This checklist helps owner-operators and small fleets organize the facts, identify the relevant load terms and follow a request through to a recorded response.',
     highlights: ['Check the written terms', 'Record what happened', 'Track the request and response'],
     sections: [
@@ -407,7 +407,7 @@ export const GUIDES: CarrierGuide[] = [
       { question: 'Does Rai Dispatch guarantee accessorial payment?', answer: 'No. We support the agreed document and communication process. Approval, payment and any dispute depend on the load terms and the relevant parties.' },
     ],
     related: [{ label: 'Rate negotiation support', href: '/services/rate-negotiation' }, { label: 'Dispatch paperwork support', href: '/services/paperwork-support' }, { label: 'Appointment scheduling', href: '/services/scheduling' }, { label: 'Dispatch fee billing questions', href: '/resources/truck-dispatch-fees' }],
-    sources: [{ label: 'Truckstop: accessorial terminology and load documentation', href: 'https://truckstop.com/blog/accessorial-charges/' }, { label: 'CloudTrucks: an example of a provider-specific accessorial process', href: 'https://cloudtrucks.zendesk.com/hc/en-us/articles/13975260832151-CloudTrucks-Accessorial-Policies-for-Drivers' }],
+    sources: [{ label: 'Truckstop: accessorial terminology and load documentation', href: 'https://truckstop.com/blog/accessorial-charges/' }],
   },
   ...ADDITIONAL_GUIDES,
   ...CARRIER_EDUCATION_GUIDES,

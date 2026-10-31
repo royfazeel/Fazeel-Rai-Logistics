@@ -19,7 +19,7 @@ import {
   Users,
 } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
-import { BUSINESS, MEDIA, SERVICES } from '@/lib/constants';
+import { ACTIVE_CARRIER_SUPPORT, BUSINESS, MEDIA, SERVICES, SETUP_DESK_HOURS } from '@/lib/constants';
 import { getDispatchRateLabel } from '@/lib/dispatch-pricing';
 import { track } from '@/lib/track';
 
@@ -77,7 +77,7 @@ const serviceDetails = [
     title: 'Broker & RC Communication',
     subtitle: 'Professional Communication on Your Behalf',
     description:
-      'From the initial rate call to delivery confirmation, we coordinate broker calls, shipment updates and written instructions. Agree who handles urgent issues and after-hours contact before the first load.',
+      `From the initial rate call to delivery confirmation, we coordinate broker calls, shipment updates and written instructions. We provide ${ACTIVE_CARRIER_SUPPORT}. New-carrier setup desk hours are ${SETUP_DESK_HOURS}. Agree your dispatch contact and escalation process before the first load.`,
     benefits: [
       'Rate confirmation handling',
       'Appointment scheduling',
@@ -87,7 +87,7 @@ const serviceDetails = [
     ],
     stats: [
       { value: 'Clear', label: 'Load Terms' },
-      { value: '6', label: 'Days a Week Live' },
+      { value: '24/7', label: 'Active-Carrier Live Support' },
     ],
   },
   {

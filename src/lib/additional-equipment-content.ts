@@ -1,5 +1,5 @@
 import type { DispatchContent } from './dispatch-content';
-import { getDispatchRateLabel } from './dispatch-pricing';
+import { DISPATCH_FEE_POLICY, getDispatchRateLabel } from './dispatch-pricing';
 import { ACTIVE_CARRIER_SUPPORT } from './constants';
 
 export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
@@ -120,9 +120,9 @@ export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
     checklist: ['Machine transport dimensions, weight and attachments', 'Trailer well, deck, axle and capacity details', 'Loading method, operator and site contacts', 'Route approval responsibilities and preferred lanes'],
     faqs: [
       { question: 'Are RGN and lowboy the same equipment?', answer: 'RGN means removable gooseneck, while lowboy describes the low-deck trailer family. Share the exact configuration and specifications rather than assuming that every lowboy has the same loading arrangement.' },
-      { question: 'Does the dispatch fee include permits and escorts?', answer: 'No such services are assumed. Required permits, escorts and related responsibilities must be identified and separately agreed before booking a move.' },
+      { question: 'Does the dispatch fee include permits and escorts?', answer: 'Permit and escort services are not assumed. Identify who arranges and pays for them before booking. Charges from permitting authorities or third-party escort providers are carrier operating costs, not Rai Dispatch fees.' },
       { question: 'Can you review excavator or construction-equipment loads?', answer: 'Yes, as a specialized service review. We need the transport dimensions, weight, attachments, loading method and trailer details before confirming whether the work fits.' },
-      { question: 'How much does RGN dispatch cost?', answer: `The dispatch fee is ${getDispatchRateLabel('rgn-lowboy')} of gross revenue on loads we book. Operating expenses and any separately agreed specialized services are additional.` },
+      { question: 'How much does RGN dispatch cost?', answer: `The dispatch fee is ${getDispatchRateLabel('rgn-lowboy')} of gross revenue on loads we book. ${DISPATCH_FEE_POLICY} Fuel, insurance, permit charges and third-party escort costs are separate carrier operating expenses; they are not additional Rai Dispatch fees.` },
     ],
     related: [{ label: 'Step deck dispatch', href: '/equipment/step-deck' }, { label: 'Flatbed dispatch', href: '/equipment/flatbed' }, { label: 'Route and lane planning', href: '/services/route-strategy' }, { label: 'Dispatch fee guide', href: '/resources/truck-dispatch-fees' }],
   },

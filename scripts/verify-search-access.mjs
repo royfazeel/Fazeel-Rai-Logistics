@@ -42,19 +42,33 @@ function applicableHeader(value, agent) {
   }).join(',');
 }
 
+function matchingEquipmentRates(text, slug, expectedRate, required = true) {
+  const rates = percentages(text);
+  if (!rates.length) return !required;
+  const pairedVans = ['cargo-van', 'sprinter-van'].includes(slug);
+  if (rates[0] !== expectedRate || rates.some(rate => rate !== expectedRate && !(pairedVans && [12, 5].includes(rate)))) return false;
+  if (!pairedVans || rates.every(rate => rate === expectedRate)) return true;
+  // The owner publishes cargo 12% and Sprinter 5% as distinct categories.
+  // A second rate is valid only when both categories are explicitly named;
+  // also reject conflicting labels even if a correct pair appears elsewhere.
+  const namedRates = [...text.matchAll(/\b(cargo|Sprinter) vans?(?: dispatch(?: services?)?| service)?(?: (?:costs|is separately listed at|is priced at|are listed at|at))?\s*[:–—-]?\s*(\d+(?:\.\d+)?)\s*%/gi)]
+    .map(match => [match[1].toLowerCase(), Number(match[2])]);
+  for (const match of text.matchAll(/\b(\d+(?:\.\d+)?)\s*% of gross revenue on loads (?:we book|Rai Dispatch books) for (cargo|Sprinter) vans?\b/gi)) namedRates.push([match[2].toLowerCase(), Number(match[1])]);
+  return ['cargo', 'sprinter'].every(category => namedRates.some(([name]) => name === category))
+    && namedRates.every(([name, rate]) => rate === (name === 'cargo' ? 12 : 5));
+}
+
 function equipmentEvidence(html, markup, path, issues) {
   const slug = path.replace('/equipment/', '');
   const expectedRate = equipmentFees[slug];
   if (expectedRate === undefined) return undefined;
   const article = markup.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1];
   const hero = article?.match(/<header\b[^>]*>([\s\S]*?)<\/header>/i)?.[1];
-  const visibleRates = percentages(hero ? plain(hero) : '');
   if (!hero) issues.push('No server-rendered equipment hero found');
-  if (!visibleRates.length || visibleRates.some(rate => rate !== expectedRate)) issues.push(`Equipment hero must show its ${expectedRate}% fee`);
+  if (!matchingEquipmentRates(hero ? plain(hero) : '', slug, expectedRate)) issues.push(`Equipment hero must lead with its ${expectedRate}% fee; another van rate must identify cargo 12% and Sprinter 5% explicitly`);
   const title = plain(markup.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '');
   const description = elements(markup, 'meta').find(meta => meta.name?.toLowerCase() === 'description')?.content || '';
-  const metadataRates = percentages(`${title} ${description}`);
-  if (metadataRates.some(rate => rate !== expectedRate)) issues.push(`Equipment metadata contains a fee other than ${expectedRate}%`);
+  if (!matchingEquipmentRates(`${title} ${description}`, slug, expectedRate, false)) issues.push(`Equipment metadata has an incorrect or ambiguously assigned fee for ${slug}`);
   const nodes = [];
   for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
     if (attributes(match[1]).type?.toLowerCase() !== 'application/ld+json') continue;
@@ -65,11 +79,11 @@ function equipmentEvidence(html, markup, path, issues) {
   if (!services.length) issues.push('No canonical equipment Service entity found');
   const offerRates = [];
   for (const service of services) {
-    if (percentages(String(service.description || '')).some(rate => rate !== expectedRate)) issues.push(`Equipment Service describes a fee other than ${expectedRate}%`);
+    if (!matchingEquipmentRates(String(service.description || ''), slug, expectedRate, false)) issues.push(`Equipment Service has an incorrect or ambiguously assigned fee for ${slug}`);
     for (const offer of [service.offers].flat().filter(Boolean)) {
       const rates = percentages(String(offer.description || ''));
       offerRates.push(...rates);
-      if (!hasType(offer, 'Offer') || rates.length !== 1 || rates[0] !== expectedRate) issues.push(`Equipment Offer must describe exactly ${expectedRate}%`);
+      if (!hasType(offer, 'Offer') || !matchingEquipmentRates(String(offer.description || ''), slug, expectedRate)) issues.push(`Equipment Offer must lead with ${expectedRate}% and explicitly identify any paired van rate`);
       if (schemaNodes(offer).some(node => node.price !== undefined || node.lowPrice !== undefined || node.highPrice !== undefined)) issues.push('Percentage fee is represented as a monetary Offer price');
     }
   }
