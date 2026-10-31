@@ -87,7 +87,13 @@ function equipmentEvidence(html, markup, path, issues) {
       if (schemaNodes(offer).some(node => node.price !== undefined || node.lowPrice !== undefined || node.highPrice !== undefined)) issues.push('Percentage fee is represented as a monetary Offer price');
     }
   }
-  return { expectedRate, visibleRates, metadataRates, serviceEntities: services.length, offerRates };
+  return {
+    expectedRate,
+    visibleRates: percentages(hero ? plain(hero) : ''),
+    metadataRates: percentages(`${title} ${description}`),
+    serviceEntities: services.length,
+    offerRates,
+  };
 }
 const results = [];
 const response = await fetch(`${base.origin}/robots.txt`, { signal: AbortSignal.timeout(20_000) });
