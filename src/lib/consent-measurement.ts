@@ -62,11 +62,21 @@ function safeParams(params: EventParams) {
   if (typeof params.location === 'string' && locations.has(params.location)) result.location = params.location;
   return result;
 }
+
+/** Retain the referring website only, never credentials, paths, queries or fragments. */
+export function referrerOrigin(value: string): string {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:' ? url.origin : '';
+  } catch { return ''; }
+}
+
 export type MeasurementPort = {
   command: (...args: unknown[]) => void;
   load: (id: string) => void;
   withdraw: (choices: ConsentChoices, reload: boolean) => void;
   page: () => string;
+  referrer: () => string;
 };
 
 /** Small injectable runtime so provider gating and event routing can be tested without network access. */
@@ -75,8 +85,20 @@ export function createMeasurement(config: MeasurementConfig, port: MeasurementPo
   let initialized = false;
   let suspended = false;
   let previousPage = '';
+  let contextPage = '';
+  let currentReferrer = '';
   const configured = new Set<string>();
-  const pageParams = () => ({ page_location: port.page(), page_referrer: '' });
+  const pageParams = () => {
+    const page = port.page();
+    if (page !== contextPage) {
+      // document.referrer does not change during client-side navigation. Once
+      // the route changes, the previous site page is the referrer, not the
+      // external website that originally brought the visitor here.
+      currentReferrer = referrerOrigin(contextPage || port.referrer());
+      contextPage = page;
+    }
+    return { page_location: page, page_referrer: currentReferrer };
+  };
   const pageView = () => {
     if (!choices.analytics || !config.gaId || suspended) return;
     const page = port.page();
@@ -106,7 +128,7 @@ export function createMeasurement(config: MeasurementConfig, port: MeasurementPo
       if (!initialized) port.command('js', new Date());
       for (const id of [choices.analytics ? config.gaId : null, choices.ads ? config.adsId : null]) {
         if (!id || configured.has(id)) continue;
-        port.command('config', id, { send_page_view: false, ...pageParams(), ignore_referrer: true, allow_google_signals: false, allow_ad_personalization_signals: false, allow_enhanced_conversions: false });
+        port.command('config', id, { send_page_view: false, ...pageParams(), ignore_referrer: false, allow_google_signals: false, allow_ad_personalization_signals: false, allow_enhanced_conversions: false });
         configured.add(id);
       }
       if (!initialized) {

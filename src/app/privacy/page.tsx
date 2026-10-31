@@ -12,14 +12,14 @@ import {
 } from 'lucide-react';
 import { BUSINESS } from '@/lib/constants';
 
-// The site-identity clarification does not change the policy's effective terms.
+// Preserve the original policy date; the update date records the current revision.
 const POLICY_EFFECTIVE = 'September 28, 2026';
 const POLICY_UPDATED = 'October 31, 2026';
 
 export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Privacy policy for raidispatch.com, operated by Rai Technologies LLC as Rai Dispatch. Read about contact details, operational logs and SMS communications.', "/privacy");
 
-// Website measurement disclosures reflect removal of Google Ads and GA4 tags.
-// The existing SMS program terms and other policy sections are retained.
+// GA4 is optional and consent-gated. Google Ads measurement remains disabled.
+// Operational SMS terms are separate from website measurement preferences.
 export default function PrivacyPage() {
   return (
     <div className="bg-white">
@@ -130,7 +130,7 @@ export default function PrivacyPage() {
           {/* 3. How We Use Your Information */}
           <Section number="3" title="How We Use Your Information">
             <p>
-              Your information is used only to support dispatching operations,
+              Information you provide in inquiries or dispatch communications is used to support dispatching operations,
               including:
             </p>
             <ul>
@@ -149,87 +149,112 @@ export default function PrivacyPage() {
             </p>
           </Section>
 
-          {/* 4. No Selling or Sharing — emphasized callout (required carrier statement) */}
-          <Section number="4" title="No Selling or Sharing of Personal Data">
+          {/* 4. Contact information and service-provider sharing. */}
+          <Section number="4" title="How We Share Information">
             <div className="not-prose bg-navy-950 rounded-lg p-5 sm:p-6 my-4">
               <div className="flex items-start gap-3">
                 <Lock className="w-6 h-6 text-primary-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                 <div>
                   <h3 className="font-display font-bold text-white text-lg mb-2">
-                    Required Carrier Statement
+                    Contact and SMS information
                   </h3>
                   <p className="!text-white/85 leading-relaxed">
-                    {BUSINESS.parentCompany} does <strong className="!text-white">NOT</strong> sell, share,
-                    trade, or transfer personal information—including phone numbers,
-                    SMS consent data, or customer information—to third parties or
-                    affiliates for marketing, promotional, or advertising purposes.
+                    {BUSINESS.parentCompany} does <strong className="!text-white">NOT</strong> sell,
+                    trade or share your contact details, customer inquiries or SMS
+                    consent information with third parties or affiliates for
+                    marketing, promotional or advertising purposes.
                   </p>
                 </div>
               </div>
             </div>
-            <ul>
-              <li>
-                We will never share your personal information for lead generation or
-                advertising.
-              </li>
-              <li>
-                Information is only shared when necessary to provide dispatching
-                services, respond to your requests, or operate and protect the website.
-              </li>
-            </ul>
             <p>
-              Service providers may process the information needed to host the
-              website, deliver enquiry notifications and support our communications.
-              Removing website measurement tags does not remove the contact
-              information you choose to send us or the processing needed to respond.
+              Service providers may process information needed to deliver dispatching
+              services, respond to your requests, send inquiry notifications and
+              operate or protect the website. If you separately choose optional
+              analytics, Google receives website measurement and technical information
+              as described in Section 5. Your inquiry details are not included in
+              those analytics events.
             </p>
           </Section>
 
-          {/* 5. Current website measurement and hosting practices. */}
+          {/* 5. Optional analytics and necessary website operations. */}
           <Section
             number="5"
-            title="Website Tracking, Cookies &amp; Operational Logs"
+            title="Website Analytics, Cookies &amp; Operational Logs"
             badge={{ icon: Shield, text: 'Website visitors' }}
           >
-            <SubSection letter="A" title="Google Website Measurement Removed">
+            <SubSection letter="A" title="Optional Google Analytics">
               <p>
-                This website does not load Google Ads or Google Analytics 4 (GA4)
-                measurement tags. It does not send page-view, call-click or
-                form-submission events to those services, and it does not set
-                Google advertising or analytics cookies through those tags.
+                We use Google Analytics 4 (GA4) to understand website visits and
+                interactions. Analytics is off until you opt in using Measurement
+                settings. Before that choice, we do not load the Google Analytics
+                tag, set its cookies or send analytics events. You can reject
+                analytics and still use our website, forms and contact links.
               </p>
               <p>
-                Cookies left by an earlier visit may remain in your browser until
-                they expire or are removed. The current website does not use them
-                for Google Ads or GA4 measurement.
+                With your consent, we measure page visits, accepted inquiry forms,
+                quote-form openings and clicks on phone, SMS, WhatsApp and email
+                links. A click does not confirm that a call or message took place;
+                an accepted inquiry is not a completed sale.
+              </p>
+              <p>
+                Google may receive your IP address, browser and device information,
+                page path, referring website origin, cookie identifiers and interaction data. Our event
+                parameters omit URL query strings and fragments and do not include
+                submitted names, phone numbers, email addresses or message text.
+                Referrer information includes only the website origin, not its
+                page path, query string or fragment.
+                We do not enable Google signals or personalized advertising. Google
+                Ads measurement is not loaded on this website.
+              </p>
+              <p>
+                Read{' '}
+                <a href="https://policies.google.com/privacy" className="text-primary-700 font-medium underline hover:text-primary-800">Google&apos;s Privacy Policy</a>
+                {' '}and{' '}
+                <a href="https://policies.google.com/technologies/partner-sites" className="text-primary-700 font-medium underline hover:text-primary-800">how Google uses information from websites that use its services</a>
+                {' '}for Google&apos;s processing practices.
               </p>
             </SubSection>
 
-            <SubSection letter="B" title="Hosting and Security">
+            <SubSection letter="B" title="Your Choice and Withdrawal">
               <p>
-                Our hosting and security providers may maintain operational
-                request and error logs, including the technical information in
-                Section 2, to serve pages, investigate problems and prevent abuse.
-                Removing advertising and analytics tags does not prevent this
-                necessary website operation or make every request anonymous.
+                Measurement settings at the bottom of every page lets you accept,
+                reject or withdraw analytics consent. We save your choice in this
+                browser&apos;s local storage, separately from inquiry information.
+                The preference contains only its version, optional-measurement
+                choices and the time you saved them. Clearing this storage removes
+                the saved choice. On the next page load, analytics stays off until
+                you choose again.
+              </p>
+              <p>
+                Withdrawing consent stops subsequent optional measurement, removes
+                accessible first-party analytics cookies and reloads the page to
+                unload the provider. It does not erase information Google already
+                received. You can also use your browser controls to remove cookies.
+                If your browser prevents saving preferences, we explain the storage
+                error and keep optional measurement off for that page.
               </p>
             </SubSection>
 
-            <SubSection letter="C" title="Contact Forms and External Services">
+            <SubSection letter="C" title="Hosting and Security">
               <p>
-                Our enquiry forms still send the details you enter to our lead
-                delivery service so we can respond. Phone, email, SMS and WhatsApp
-                links still connect you to the service you choose. Services you
-                open outside this website apply their own privacy practices.
-                Our SMS terms remain in Section 7.
+                Our hosting and security providers may maintain operational request
+                and error logs, including the technical information in Section 2,
+                to serve pages, investigate problems and prevent abuse. These
+                necessary website operations continue when you decline analytics;
+                declining analytics does not make every request anonymous.
               </p>
             </SubSection>
 
-            <SubSection letter="D" title="Changes to Website Measurement">
+            <SubSection letter="D" title="Contact Forms and External Services">
               <p>
-                If we introduce website analytics or advertising measurement in
-                the future, we will update this section to describe it before
-                enabling the provider on the site.
+                Our inquiry forms send the details you enter to our lead delivery
+                service so we can respond. Inquiries receive manual replies and
+                requested callbacks; a transactional confirmation email is separate
+                from marketing. Analytics consent does not enroll you in marketing
+                calls or messages. Phone, email, SMS and WhatsApp links connect you
+                to the service you choose, whose own privacy practices apply.
+                Our operational SMS terms remain in Section 7.
               </p>
             </SubSection>
           </Section>

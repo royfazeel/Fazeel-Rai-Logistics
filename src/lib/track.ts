@@ -1,4 +1,4 @@
-import { createMeasurement, MEASUREMENT_CONFIG, type ConsentChoices, type EventParams, type TrackEvent } from './consent-measurement';
+import { createMeasurement, MEASUREMENT_CONFIG, referrerOrigin, type ConsentChoices, type EventParams, type TrackEvent } from './consent-measurement';
 export type { TrackEvent } from './consent-measurement';
 
 type GoogleWindow = Window & { dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void };
@@ -38,8 +38,10 @@ export function getMeasurement() {
       // A reload removes the already-loaded provider and starts with the saved choices.
       if (reload) window.location.reload();
     },
-    // No query strings, hashes, submitted values or external referrers are added to events.
+    // Page URLs omit query strings and hashes. Referrers retain only HTTP(S)
+    // origins, without paths, credentials, query strings or fragments.
     page: () => `${window.location.origin}${window.location.pathname}`,
+    referrer: () => referrerOrigin(document.referrer),
   });
   return measurement;
 }

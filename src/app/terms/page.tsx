@@ -238,10 +238,12 @@ export default function TermsPage() {
               13. Website Tracking &amp; Privacy
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
-              This website does not load Google Ads or Google Analytics 4 (GA4)
-              measurement tags or send website measurement events to those services.
-              Hosting and security providers may still process operational request
-              and error logs to deliver and protect the website.
+              Google Analytics 4 (GA4) is optional and remains off until you opt in
+              using Measurement settings. You may reject analytics or withdraw
+              consent through those settings; contact forms and links work either
+              way. Google Ads measurement is not loaded. Hosting and security
+              providers may process operational request and error logs to deliver
+              and protect the website regardless of your analytics choice.
             </p>
             <p className="text-navy-800 leading-relaxed mb-4">
               Our contact forms and communication channels continue to process the

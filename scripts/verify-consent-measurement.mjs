@@ -15,7 +15,7 @@ function load(filename, context = {}, modules = new Map()) {
   const module = { exports: {} }; modules.set(path, module);
   const code = ts.transpileModule(readFileSync(path, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 } }).outputText;
   const localRequire = id => id.startsWith('.') ? load(resolve(dirname(path), `${id}.ts`), context, modules) : require(id);
-  new Script(`(function(require,module,exports){${code}\n})`, { filename: path }).runInNewContext({ process: { env: {} }, ...context })(localRequire, module, module.exports);
+  new Script(`(function(require,module,exports){${code}\n})`, { filename: path }).runInNewContext({ process: { env: {} }, URL, ...context })(localRequire, module, module.exports);
   return module.exports;
 }
 const lib = load('src/lib/consent-measurement.ts');
@@ -23,10 +23,10 @@ const config = lib.resolveMeasurementConfig('true', 'G-TEST12345', 'AW-123456789
 const checks = [];
 const check = (name, fn) => { fn(); checks.push(name); };
 const plain = value => JSON.parse(JSON.stringify(value));
-const harness = (configuration = config) => {
+const harness = (configuration = config, referrer = 'https://www.google.com/search?q=private+search#fragment') => {
   const commands = [], scripts = [], withdrawals = [];
   let page = 'https://raidispatch.com/equipment/box-truck';
-  const runtime = lib.createMeasurement(configuration, { command: (...args) => commands.push(plain(args)), load: id => scripts.push(id), withdraw: (...args) => withdrawals.push(plain(args)), page: () => page });
+  const runtime = lib.createMeasurement(configuration, { command: (...args) => commands.push(plain(args)), load: id => scripts.push(id), withdraw: (...args) => withdrawals.push(plain(args)), page: () => page, referrer: () => referrer });
   return { runtime, commands, scripts, withdrawals, setPage: value => { page = value; } };
 };
 check('Explicit activation and valid destinations required, including an Ads lead label', () => {
@@ -73,6 +73,43 @@ check('Granular upgrade loads once, page views deduplicate, and contact interact
   h.runtime.track('lead_submit', { source: 'someone@example.com' });
   assert.ok(!h.commands.some(c => c[1] === 'generate_lead' || c[1] === 'conversion'));
 });
+check('HTTP(S) referrer origins survive while paths, queries, fragments, credentials and unsupported schemes do not', () => {
+  for (const [input, expected] of [
+    ['https://www.google.com/search?q=private#query', 'https://www.google.com'],
+    ['https://www.bing.com/search?q=private', 'https://www.bing.com'],
+    ['https://chatgpt.com/c/private-conversation?email=private@example.com#private', 'https://chatgpt.com'],
+    ['https://private:secret@example.com:8443/private?private#private', 'https://example.com:8443'],
+    ['http://example.com/private', 'http://example.com'],
+    ['', ''], ['not a URL', ''], ['/relative/path', ''], ['//example.com/path', ''],
+    ['javascript:alert(1)', ''], ['data:text/plain,private', ''], ['file:///private', ''], ['about:blank', ''],
+  ]) assert.equal(lib.referrerOrigin(input), expected, input);
+});
+check('Initial traffic source uses the sanitized origin and SPA pageviews update referrer without duplicate views', () => {
+  const h = harness();
+  h.runtime.apply({ analytics: true, ads: false });
+  h.runtime.pageView();
+  const initialConfig = h.commands.find(c => c[0] === 'config');
+  assert.equal(initialConfig[2].ignore_referrer, false);
+  assert.equal(initialConfig[2].page_referrer, 'https://www.google.com');
+  let views = h.commands.filter(c => c[1] === 'page_view');
+  assert.equal(views.length, 1);
+  assert.equal(views[0][2].page_referrer, 'https://www.google.com');
+  h.runtime.track('call_click', { location: 'home_hero' });
+  assert.equal(h.commands.at(-1)[2].page_referrer, 'https://www.google.com');
+  h.setPage('https://raidispatch.com/pricing');
+  h.runtime.pageView(); h.runtime.pageView();
+  h.runtime.track('lead_submit', { source: 'contact_page' });
+  views = h.commands.filter(c => c[1] === 'page_view');
+  assert.equal(views.length, 2);
+  assert.equal(views[1][2].page_location, 'https://raidispatch.com/pricing');
+  assert.equal(views[1][2].page_referrer, 'https://raidispatch.com');
+  assert.equal(h.commands.at(-1)[2].page_referrer, 'https://raidispatch.com');
+  h.setPage('https://raidispatch.com/equipment/box-truck'); h.runtime.pageView();
+  assert.equal(h.commands.filter(c => c[1] === 'page_view').length, 3);
+  assert.ok(!JSON.stringify(h.commands).includes('private'));
+  const direct = harness(config, ''); direct.runtime.apply({ analytics: true, ads: false });
+  assert.equal(direct.commands.find(c => c[1] === 'page_view')[2].page_referrer, '');
+});
 check('Withdrawing either category closes the event gate before reload, including pending-load state', () => {
   const h = harness(); h.runtime.apply({ analytics: true, ads: true }); h.runtime.apply({ analytics: false, ads: true });
   assert.deepEqual(h.withdrawals, [[{ analytics: false, ads: true }, true]]);
@@ -87,15 +124,26 @@ check('Preferences reject malformed/old data and serialize only two choices, ver
   assert.deepEqual(Object.keys(saved).sort(), ['ads', 'analytics', 'updatedAt', 'version']);
   assert.deepEqual(Object.keys(lib.consentPreference({ analytics: true, ads: false, message: 'private' })).sort(), ['ads', 'analytics', 'updatedAt', 'version']);
 });
-check('Actual browser adapter stays silent before consent, uses one script, strips query/referrer data and disables GA on withdrawal', () => {
+check('Actual browser adapter stays silent before consent, retains only the referring origin and disables GA on withdrawal', () => {
   const scripts = [], cookies = []; let reloads = 0;
   const window = { location: { origin: 'https://raidispatch.com', pathname: '/contact', hostname: 'raidispatch.com', search: '?email=private@example.com', reload: () => { reloads++; } } };
-  const document = { get cookie() { return '_ga=abc; _ga_TEST12345=def; _gcl_aw=ghi; session=retain'; }, set cookie(value) { cookies.push(value); }, createElement: () => ({}), getElementById: () => scripts[0] || null, head: { appendChild: script => scripts.push(script) } };
+  const document = { referrer: 'https://private:secret@chatgpt.com/c/private-thread?email=private@example.com#private', get cookie() { return '_ga=abc; _ga_TEST12345=def; _gcl_aw=ghi; session=retain'; }, set cookie(value) { cookies.push(value); }, createElement: () => ({}), getElementById: () => scripts[0] || null, head: { appendChild: script => scripts.push(script) } };
   const track = load('src/lib/track.ts', { window, document, process: { env: { NEXT_PUBLIC_MEASUREMENT_ENABLED: 'true', NEXT_PUBLIC_GA_MEASUREMENT_ID: 'G-TEST12345' } } });
   track.track('call_click', { location: 'home_hero' }); assert.equal(scripts.length, 0); assert.equal(window.dataLayer, undefined);
   track.getMeasurement().apply({ analytics: true, ads: false });
   assert.equal(scripts.length, 1); assert.equal(scripts[0].src, 'https://www.googletagmanager.com/gtag/js?id=G-TEST12345');
   assert.ok(!JSON.stringify(window.dataLayer).includes('private@example.com'));
+  const commands = () => window.dataLayer.map(args => Array.from(args));
+  assert.equal(commands().find(c => c[0] === 'config')[2].ignore_referrer, false);
+  assert.equal(commands().find(c => c[1] === 'page_view')[2].page_referrer, 'https://chatgpt.com');
+  assert.equal(commands().find(c => c[1] === 'page_view')[2].page_location, 'https://raidispatch.com/contact');
+  assert.ok(!JSON.stringify(window.dataLayer).includes('private') && !JSON.stringify(window.dataLayer).includes('secret'));
+  window.location.pathname = '/pricing';
+  track.getMeasurement().pageView(); track.getMeasurement().pageView();
+  const views = commands().filter(c => c[1] === 'page_view');
+  assert.equal(views.length, 2);
+  assert.equal(views[1][2].page_location, 'https://raidispatch.com/pricing');
+  assert.equal(views[1][2].page_referrer, 'https://raidispatch.com');
   track.getMeasurement().apply({ analytics: false, ads: false });
   assert.equal(window['ga-disable-G-TEST12345'], true); assert.equal(reloads, 1);
   assert.ok(cookies.some(value => value.startsWith('_ga='))); assert.ok(!cookies.some(value => value.startsWith('session=')));
