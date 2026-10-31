@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import StaticPhoto from '@/components/StaticPhoto';
+import ContactSocialProfiles from '@/components/ContactSocialProfiles';
 
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -21,6 +22,7 @@ import {
 import ScrollReveal from '@/components/ScrollReveal';
 import { ACTIVE_CARRIER_SUPPORT, BUSINESS, MEDIA, EQUIPMENT_TYPES, SETUP_DESK_HOURS } from '@/lib/constants';
 import { track } from '@/lib/track';
+import { isDispatchEquipment } from '@/lib/dispatch-pricing';
 import {
   formatUsPhone,
   validateName,
@@ -77,6 +79,16 @@ export default function ContactPageClient() {
   const [formState, setFormState] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    // Keep the contact page static; only a listed, unambiguous equipment hint
+    // may prefill the form after hydration, without replacing a user selection.
+    const choices = new URLSearchParams(window.location.search).getAll('equipment');
+    const equipment = choices.length === 1 ? choices[0] : '';
+    if (isDispatchEquipment(equipment)) {
+      setFormState(current => current.equipment ? current : { ...current, equipment });
+    }
+  }, []);
 
   // Mirrors the server-side rules in /api/lead so a typo surfaces while the
   // driver is still typing rather than after a failed round trip.
@@ -404,6 +416,7 @@ export default function ContactPageClient() {
                       </div>
                     </div>
                   </div>
+                  <ContactSocialProfiles />
                 </div>
               </ScrollReveal>
             </div>

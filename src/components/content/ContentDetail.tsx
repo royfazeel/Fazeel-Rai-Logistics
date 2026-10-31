@@ -36,7 +36,7 @@ export function ContentBreadcrumbs({ items, dark = false }: { items: ContentLink
   );
 }
 
-export function ContentCTA() {
+export function ContentCTA({ contactHref = '/contact' }: { contactHref?: string }) {
   return (
     <section className="bg-navy-950 py-14 text-white" aria-labelledby="content-cta-title">
       <div className="container-custom flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
@@ -46,7 +46,7 @@ export function ContentCTA() {
           <p className="mt-4 leading-relaxed text-navy-200">Tell us your equipment, current location and preferred lanes. We will review service fit and explain the dispatch fee before you start.</p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
-          <Link href="/contact" className="btn-primary">Request a dispatch review <ArrowRight size={18} aria-hidden="true" /></Link>
+          <Link href={contactHref} className="btn-primary">Request a dispatch review <ArrowRight size={18} aria-hidden="true" /></Link>
           <a href={BUSINESS.phoneHref} className="btn-ghost-light"><Phone size={18} aria-hidden="true" /> {BUSINESS.phone}</a>
         </div>
       </div>
@@ -54,7 +54,7 @@ export function ContentCTA() {
   );
 }
 
-function EquipmentHero({ content, feeLabel, path, heading }: { content: DispatchContent; feeLabel: string; path: string; heading: string }) {
+function EquipmentHero({ content, feeLabel, path, heading, contactHref }: { content: DispatchContent; feeLabel: string; path: string; heading: string; contactHref: string }) {
   return (
     <header className="border-b border-surface-200 bg-surface-50 py-8 sm:py-12">
       <div className="container-custom">
@@ -79,7 +79,7 @@ function EquipmentHero({ content, feeLabel, path, heading }: { content: Dispatch
               {content.highlights.map((highlight) => <li key={highlight} className="flex items-start gap-2"><Check size={17} className="mt-0.5 shrink-0 text-primary-600" aria-hidden="true" />{highlight}</li>)}
             </ul>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link href="/contact" className="btn-primary">Discuss your equipment <ArrowRight size={18} aria-hidden="true" /></Link>
+              <Link href={contactHref} className="btn-primary">Discuss your equipment <ArrowRight size={18} aria-hidden="true" /></Link>
               <Link href="/pricing" className="inline-flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold text-navy-800 underline underline-offset-4 hover:text-primary-700">View pricing details</Link>
             </div>
             <p className="mt-4 max-w-xl text-xs leading-5 text-navy-600">Percentage of gross revenue on loads we book. Confirm the billing base and service scope before starting.</p>
@@ -93,6 +93,7 @@ function EquipmentHero({ content, feeLabel, path, heading }: { content: Dispatch
 export default function ContentDetail({ content, category, guide }: { content: DispatchContent; category: 'equipment' | 'services' | 'resources' | 'carriers'; guide?: CarrierGuide }) {
   const categoryLabel = { equipment: 'Equipment', services: 'Services', resources: 'Carrier resources', carriers: 'Carriers' }[category];
   const path = `/${category}/${content.slug}`;
+  const contactHref = category === 'equipment' ? `/contact?equipment=${encodeURIComponent(content.slug)}#contact-form` : '/contact';
   const url = `${SITE_URL}${path}`;
   const heading = PAGE_SEO_OVERRIDES[path]?.h1 ?? content.title;
   const faqSchema = buildFaqPageSchema(content.faqs, url);
@@ -126,7 +127,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
       {faqSchema && <ContentJsonLd data={faqSchema} />}
 
       <article>
-        {equipmentImage ? <EquipmentHero content={content} feeLabel={feeLabel} path={path} heading={heading} /> : <header className="bg-navy-950 py-10 text-white sm:py-14">
+        {equipmentImage ? <EquipmentHero content={content} feeLabel={feeLabel} path={path} heading={heading} contactHref={contactHref} /> : <header className="bg-navy-950 py-10 text-white sm:py-14">
           <div className="container-custom">
             <ContentBreadcrumbs dark items={[{ label: categoryLabel, href: `/${category}` }, { label: content.title, href: path }]} />
             <div className="grid items-end gap-10 lg:grid-cols-[1fr_320px]">
@@ -144,7 +145,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
                 <p className="text-sm uppercase tracking-[0.15em] text-navy-200">Percentage dispatch plan</p>
                 <p className="mt-2 font-display text-6xl font-bold text-primary-400">{feeLabel}</p>
                 <p className="mt-3 text-sm leading-relaxed text-navy-200">{category === 'equipment' ? 'For this equipment type.' : 'Rate depends on your truck type.'} Dedicated truck dispatcher included. Confirm the billing base and service scope before starting.</p>
-                <Link href="/contact" className="btn-primary mt-6 w-full">Discuss your truck <ArrowRight size={18} aria-hidden="true" /></Link>
+                <Link href={contactHref} className="btn-primary mt-6 w-full">Discuss your truck <ArrowRight size={18} aria-hidden="true" /></Link>
                 <Link href="/pricing" className="mt-4 inline-block text-sm text-navy-200 underline underline-offset-4 hover:text-white">View pricing details</Link>
               </div>}
             </div>
@@ -216,17 +217,17 @@ export default function ContentDetail({ content, category, guide }: { content: D
               <section className="rounded-lg bg-surface-100 p-6">
                 <h2 className="text-2xl">{content.checklistTitle}</h2>
                 <ul className="mt-5 space-y-4">{content.checklist.map((item) => <li key={item} className="flex gap-3 text-sm leading-6 text-navy-700"><Check size={17} className="mt-1 shrink-0 text-primary-600" aria-hidden="true" />{item}</li>)}</ul>
-                <Link href="/contact" className="mt-6 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">Discuss your operation <ArrowRight size={17} aria-hidden="true" /></Link>
+                <Link href={contactHref} className="mt-6 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">Discuss your operation <ArrowRight size={17} aria-hidden="true" /></Link>
               </section>
               <section className="rounded-lg border border-surface-300 p-6">
                 <h2 className="text-xl">Continue exploring</h2>
-                <ul className="mt-4 space-y-4">{related.map((item) => <li key={item.href}><Link href={item.href} className="inline-flex items-center gap-2 text-sm font-medium text-accent-800 hover:underline">{item.label}<ArrowRight className="shrink-0" size={15} aria-hidden="true" /></Link></li>)}</ul>
+                <ul className="mt-4 space-y-4">{related.map((item) => <li key={item.href}><Link href={item.href === '/contact' ? contactHref : item.href} className="inline-flex items-center gap-2 text-sm font-medium text-accent-800 hover:underline">{item.label}<ArrowRight className="shrink-0" size={15} aria-hidden="true" /></Link></li>)}</ul>
               </section>
             </aside>
           </div>
         </div>
       </article>
-      <ContentCTA />
+      <ContentCTA contactHref={contactHref} />
     </>
   );
 }
