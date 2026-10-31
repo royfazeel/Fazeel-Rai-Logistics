@@ -69,6 +69,7 @@ function EquipmentHero({ content, feeLabel, path, heading, contactHref }: { cont
               <span className="rounded-full border border-surface-300 bg-white px-3 py-1.5 text-sm font-medium text-navy-700">Dedicated dispatcher</span>
               {DISPATCH_SPECIALTIES.some(equipment => equipment.id === content.slug) && <span className="rounded-full border border-primary-200 bg-primary-50 px-3 py-1.5 text-sm font-medium text-primary-800">Dispatch specialty</span>}
             </div>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-navy-700">The {feeLabel} fee applies to gross revenue on loads we book. <strong className="font-semibold">No setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees.</strong></p>
           </div>
           <div className="w-full overflow-hidden rounded-xl border border-surface-200 bg-white lg:col-start-2 lg:row-span-2 lg:row-start-1">
             <EquipmentPhoto slug={content.slug} priority sizes="(min-width: 1280px) 600px, (min-width: 1024px) 46vw, (min-width: 768px) 720px, calc(100vw - 40px)" className="w-full h-auto" />
@@ -83,7 +84,7 @@ function EquipmentHero({ content, feeLabel, path, heading, contactHref }: { cont
               <Link href={contactHref} className="btn-primary">Discuss your equipment <ArrowRight size={18} aria-hidden="true" /></Link>
               <Link href="/pricing" className="inline-flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold text-navy-800 underline underline-offset-4 hover:text-primary-700">View pricing details</Link>
             </div>
-            <p className="mt-4 max-w-xl text-xs leading-5 text-navy-600">{getEquipmentFeeStatement(content.slug)} {DISPATCH_FEE_EFFECTIVE_SENTENCE} {NO_FORCED_DISPATCH_SENTENCE} {CARRIER_AUTHORITY_SENTENCE}</p>
+            <p className="mt-4 max-w-xl text-xs leading-5 text-navy-600">{getEquipmentFeeStatement(content.slug)} {DISPATCH_FEE_EFFECTIVE_SENTENCE} {NO_FORCED_DISPATCH_SENTENCE} {CARRIER_AUTHORITY_SENTENCE} Carrier operating expenses are separate from our dispatch fee.</p>
           </div>
         </div>
       </div>

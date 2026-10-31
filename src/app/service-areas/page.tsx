@@ -1,4 +1,5 @@
-import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
+import { DISPATCH_FEE_POLICY, DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
+import { EQUIPMENT_TYPES } from '@/lib/constants';
 import Link from 'next/link';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { ContentBreadcrumbs, ContentCTA, ContentJsonLd } from '@/components/content/ContentDetail';
@@ -33,7 +34,7 @@ export default function ServiceAreasPage() {
         <div className="container-custom">
           <div className="grid gap-8 md:grid-cols-[1fr_320px]">
             <div><p className="eyebrow">Coverage that starts with a conversation</p><h2 id="coverage-heading" className="section-heading">A national service area is not a promise of a load in every ZIP code.</h2><p className="mt-5 max-w-3xl leading-8 text-navy-700">Location, equipment, broker requirements and freight availability determine which opportunities fit. Share your empty location, maximum pickup radius, preferred destinations and home-time goal so we can assess a workable search. Local-only or dedicated routes need a specific availability review.</p></div>
-            <aside className="rounded-lg bg-surface-100 p-7"><p className="font-display text-5xl font-bold text-primary-600">{DISPATCH_RATE_RANGE}</p><p className="mt-3 leading-7 text-navy-700">Equipment-based dispatch fees with a dedicated dispatcher. Confirm the billing base and service scope before you start.</p><Link href="/pricing" className="mt-5 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">View pricing <ArrowRight size={17} aria-hidden="true" /></Link></aside>
+            <aside className="rounded-lg bg-surface-100 p-7"><p className="font-display text-5xl font-bold text-primary-600">{DISPATCH_RATE_RANGE}</p><p className="mt-3 leading-7 text-navy-700">Equipment-based percentages of gross revenue on loads we book, with a dedicated dispatcher. Confirm your equipment category, billing base and service scope before you start.</p><p className="mt-3 text-sm leading-6 text-navy-700">{DISPATCH_FEE_POLICY}</p><Link href="/pricing" className="mt-5 inline-flex items-center gap-2 font-semibold text-primary-700 hover:underline">View pricing <ArrowRight size={17} aria-hidden="true" /></Link></aside>
           </div>
           <nav aria-label="Jump to region" className="mt-10 flex flex-wrap gap-3">{regions.map((region, index) => <a key={region.name} href={`#region-${index}`} className="rounded-full border border-surface-300 px-4 py-2 text-sm text-navy-700 hover:border-primary-600 hover:text-primary-700">{region.name}</a>)}</nav>
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
@@ -55,7 +56,15 @@ export default function ServiceAreasPage() {
             <div><h3 className="text-2xl">Do you serve carriers based in any US state?</h3><p className="mt-3 leading-7 text-navy-700">We can discuss a carrier’s operation wherever its business is based. Our advertised road-freight dispatch coverage is the 48 contiguous states. Alaska, Hawaii and cross-border shipments require a separate service review and are not assumed to be included.</p></div>
             <div><h3 className="text-2xl">Can I request local or regional dispatch near me?</h3><p className="mt-3 leading-7 text-navy-700">Yes. Give us your base location, preferred radius and equipment. We coordinate dispatch remotely and confirm suitable local or regional opportunities for your equipment before you start.</p></div>
             <div><h3 className="text-2xl">Do you guarantee return loads or home time?</h3><p className="mt-3 leading-7 text-navy-700">We use your home-time preferences when planning lanes, but freight availability and operating conditions can change. Return freight is only confirmed when a specific load has been approved and booked.</p></div>
-            <div><h3 className="text-2xl">Which equipment can run these lanes?</h3><p className="mt-3 leading-7 text-navy-700">We review dry van, reefer, flatbed, box truck and power only operations. Step deck, hotshot and cargo van inquiries require a specialized availability review. The actual shipment must fit the equipment, carrier requirements and schedule.</p><Link href="/equipment" className="mt-3 inline-block font-semibold text-accent-800 hover:underline">Review equipment-specific details</Link></div>
+            <div>
+              <h3 className="text-2xl">Which truck types can you dispatch across the lower 48?</h3>
+              <p className="mt-3 leading-7 text-navy-700">Box trucks are a core dispatch specialty. We review all {EQUIPMENT_TYPES.length} published truck and trailer categories below, with a dedicated dispatcher for each truck. Choose your equipment to see its load requirements and current fee. Suitable lanes depend on your actual equipment, carrier eligibility, schedule and available freight.</p>
+              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                {EQUIPMENT_TYPES.map(equipment => <li key={equipment.id}><Link href={`/equipment/${equipment.id}`} className="flex min-h-[48px] items-center justify-between gap-4 rounded-lg border border-surface-300 bg-white px-4 py-3 text-sm font-semibold text-accent-800 hover:border-primary-600 hover:underline"><span>{equipment.name} dispatch</span><span className="shrink-0 text-navy-900">{equipment.percentage}</span></Link></li>)}
+              </ul>
+              <p className="mt-4 text-sm leading-6 text-navy-700">These fees are percentages of gross revenue on loads we book. Cargo van and Sprinter van dispatch are separately listed services; confirm your vehicle category before onboarding. Carrier operating expenses and third-party costs are separate from Rai Dispatch fees.</p>
+              <Link href="/equipment" className="mt-3 inline-block font-semibold text-accent-800 hover:underline">Compare all equipment services</Link>
+            </div>
           </div>
         </div>
       </section>

@@ -1,7 +1,8 @@
 import type { ContentLink } from './dispatch-content';
+import { EQUIPMENT_TYPES } from './constants';
 
 // Contextual routes connect service decisions to the supporting carrier worksheet.
-export const LEARNING_LINKS: Record<string, ContentLink[]> = {
+const CURATED_LEARNING_LINKS: Record<string, ContentLink[]> = {
   '/equipment/box-truck': [{ label: 'Calculate box truck trip costs', href: '/tools/load-profit-calculator?equipment=box-truck' }],
   '/resources/how-to-find-box-truck-loads': [{ label: 'Compare your box truck load costs', href: '/tools/load-profit-calculator?equipment=box-truck' }],
   '/carriers/owner-operators': [{ label: 'Box truck dispatch for owner-operators', href: '/equipment/box-truck' }],
@@ -23,4 +24,21 @@ export const LEARNING_LINKS: Record<string, ContentLink[]> = {
   '/resources/carrier-onboarding-checklist': [{ label: 'Verify the broker before sending documents', href: '/resources/verify-freight-broker-identity' }],
   '/resources/new-authority-broker-approval': [{ label: 'Broker identity verification checklist', href: '/resources/verify-freight-broker-identity' }],
   '/resources/what-does-a-truck-dispatcher-do': [{ label: 'Trucking and dispatch terminology', href: '/resources/trucking-dispatch-glossary' }],
+};
+
+// Keep the service's equipment selected when a carrier starts a fee calculation.
+const equipmentLearningLinks: Record<string, ContentLink[]> = Object.fromEntries(
+  EQUIPMENT_TYPES.map(equipment => {
+    const path = `/equipment/${equipment.id}`;
+    const links = [
+      ...(CURATED_LEARNING_LINKS[path] ?? []),
+      { label: `Load cost calculator for ${equipment.name.toLowerCase()}`, href: `/tools/load-profit-calculator?equipment=${equipment.id}` },
+    ];
+    return [path, links.filter((link, index) => links.findIndex(item => item.href === link.href) === index)];
+  }),
+);
+
+export const LEARNING_LINKS: Record<string, ContentLink[]> = {
+  ...CURATED_LEARNING_LINKS,
+  ...equipmentLearningLinks,
 };
