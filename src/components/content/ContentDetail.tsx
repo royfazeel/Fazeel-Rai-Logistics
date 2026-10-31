@@ -3,7 +3,8 @@ import { ArrowRight, Check, ChevronRight, Phone } from 'lucide-react';
 import { LEARNING_LINKS } from '@/lib/learning-links';
 import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, DISPATCH_SPECIALTIES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
-import { DISPATCH_FEE_POLICY, DISPATCH_RATE_RANGE, getDispatchRateLabel, getEquipmentOfferDescription } from '@/lib/dispatch-pricing';
+import { CARRIER_AUTHORITY_SENTENCE, DISPATCH_FEE_EFFECTIVE_SENTENCE, DISPATCH_FEE_POLICY, DISPATCH_RATE_RANGE, NO_FORCED_DISPATCH_SENTENCE, getDispatchRateLabel, getEquipmentFeeStatement, getEquipmentOfferDescription } from '@/lib/dispatch-pricing';
+import { DOCUMENTS_TO_START, FEE_INCLUSIONS } from '@/lib/fee-terms';
 import { buildFaqPageSchema } from '@/lib/faq-schema';
 import { PAGE_SEO_OVERRIDES } from '@/lib/page-overrides';
 import EquipmentPhoto from '@/components/EquipmentPhoto';
@@ -82,7 +83,7 @@ function EquipmentHero({ content, feeLabel, path, heading, contactHref }: { cont
               <Link href={contactHref} className="btn-primary">Discuss your equipment <ArrowRight size={18} aria-hidden="true" /></Link>
               <Link href="/pricing" className="inline-flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold text-navy-800 underline underline-offset-4 hover:text-primary-700">View pricing details</Link>
             </div>
-            <p className="mt-4 max-w-xl text-xs leading-5 text-navy-600">Percentage of gross revenue on loads we book. Confirm the billing base and service scope before starting.</p>
+            <p className="mt-4 max-w-xl text-xs leading-5 text-navy-600">{getEquipmentFeeStatement(content.slug)} {DISPATCH_FEE_EFFECTIVE_SENTENCE} {NO_FORCED_DISPATCH_SENTENCE} {CARRIER_AUTHORITY_SENTENCE}</p>
           </div>
         </div>
       </div>
@@ -160,6 +161,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
               <summary className="cursor-pointer font-semibold text-navy-900">Explore this {guide ? 'guide' : 'service'}</summary>
               <ul className="mt-4 space-y-3 text-sm leading-6 text-navy-700">
                 {!guide && <li><a href="#service-details" className="hover:text-primary-700 hover:underline">Dispatch service at a glance</a></li>}
+                {category === 'equipment' && <li><a href="#fee-includes" className="hover:text-primary-700 hover:underline">What the dispatch fee includes</a></li>}
                 {content.sections.map((section) => <li key={section.id}><a href={`#${section.id}`} className="hover:text-primary-700 hover:underline">{section.title}</a></li>)}
                 <li><a href="#questions" className="hover:text-primary-700 hover:underline">Common questions</a></li>
               </ul>
@@ -172,12 +174,21 @@ export default function ContentDetail({ content, category, guide }: { content: D
                 <h2 id="service-details-title" className="mb-6 text-3xl text-navy-950">Dispatch service at a glance</h2>
                 <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-2 text-sm leading-6">
                   <div><dt className="font-semibold text-navy-950">Your dispatcher</dt><dd className="mt-1 text-navy-700">A dedicated dispatcher for your truck.{path !== '/services/dedicated-dispatcher' && <> <Link href="/services/dedicated-dispatcher" className="text-accent-800 underline underline-offset-4">See how the team works.</Link></>}</dd></div>
-                  <div><dt className="font-semibold text-navy-950">Dispatch fee</dt><dd className="mt-1 text-navy-700">{feeLabel} of gross revenue on loads we book{category === 'equipment' ? '.' : ', based on equipment.'} {DISPATCH_FEE_POLICY} <Link href="/pricing" className="text-accent-800 underline underline-offset-4">Review the billing terms.</Link></dd></div>
+                  <div><dt className="font-semibold text-navy-950">Dispatch fee</dt><dd className="mt-1 text-navy-700">{feeLabel} of gross revenue on loads we book{category === 'equipment' ? '.' : ', based on equipment.'} {DISPATCH_FEE_POLICY} {DISPATCH_FEE_EFFECTIVE_SENTENCE} <Link href="/pricing" className="text-accent-800 underline underline-offset-4">Review the billing terms.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Service area</dt><dd className="mt-1 text-navy-700">{BUSINESS.serviceArea}. <Link href="/service-areas" className="text-accent-800 underline underline-offset-4">Plan your lanes and coverage.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Load approval</dt><dd className="mt-1 text-navy-700">You review the rate, appointments and requirements, then approve each load before booking.</dd></div>
                   <div><dt className="font-semibold text-navy-950">Getting started</dt><dd className="mt-1 text-navy-700">Free setup, an equipment review and a written dispatch agreement. New-carrier setup desk: {SETUP_DESK_HOURS}. <Link href="/resources/carrier-onboarding-checklist" className="text-accent-800 underline underline-offset-4">Prepare your carrier details.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Active-carrier support</dt><dd className="mt-1 text-navy-700">{ACTIVE_CARRIER_SUPPORT}. Use your agreed dispatch contact and escalation process.</dd></div>
                 </dl>
+              </section>}
+              {category === 'equipment' && <section id="fee-includes" className="mb-12 scroll-mt-28" aria-labelledby="fee-includes-title">
+                <h2 id="fee-includes-title" className="mb-5 text-3xl leading-tight text-navy-950">What the {feeLabel} dispatch fee includes</h2>
+                <p className="mb-4 leading-8 text-navy-700">{getEquipmentFeeStatement(content.slug)} {DISPATCH_FEE_EFFECTIVE_SENTENCE}</p>
+                <ul className="mt-5 space-y-3 border-l-2 border-primary-200 pl-5">
+                  {FEE_INCLUSIONS.map((item) => <li key={item} className="flex gap-3 leading-7 text-navy-700"><Check className="mt-1 shrink-0 text-primary-600" size={18} aria-hidden="true" />{item}</li>)}
+                </ul>
+                <p className="mt-5 leading-8 text-navy-700">{NO_FORCED_DISPATCH_SENTENCE} {CARRIER_AUTHORITY_SENTENCE}</p>
+                <p className="mt-3 leading-8 text-navy-700"><strong className="text-navy-950">Documents to start:</strong> {DOCUMENTS_TO_START}</p>
               </section>}
               {content.sections.map((section) => (
                 <section id={section.id} key={section.id} className="mb-12 scroll-mt-28">
@@ -210,6 +221,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
                 <h2 className="text-xl">On this page</h2>
                 <ul className="mt-4 space-y-3 text-sm leading-6 text-navy-700">
                   {!guide && <li><a href="#service-details" className="hover:text-primary-700 hover:underline">Dispatch service at a glance</a></li>}
+                  {category === 'equipment' && <li><a href="#fee-includes" className="hover:text-primary-700 hover:underline">What the dispatch fee includes</a></li>}
                 {content.sections.map((section) => <li key={section.id}><a href={`#${section.id}`} className="hover:text-primary-700 hover:underline">{section.title}</a></li>)}
                   <li><a href="#questions" className="hover:text-primary-700 hover:underline">Common questions</a></li>
                 </ul>

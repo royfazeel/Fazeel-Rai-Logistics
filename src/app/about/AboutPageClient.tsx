@@ -85,6 +85,11 @@ export default function AboutPageClient() {
                 We specialize in box trucks and provide 24/7 live dispatch support
                 for active carriers across the lower 48 states.
               </p>
+              <p className="text-white/70 leading-relaxed max-w-2xl mb-8 -mt-4">
+                Rai Dispatch (raidispatch.com) is a United States dispatch service for
+                motor carriers. It is not connected with Rai Dispatch Training, a
+                dispatcher-training school in Ontario, Canada, that uses a similar name.
+              </p>
               <a
                 href={BUSINESS.phoneHref}
                 onClick={() => track('call_click', { location: 'about_hero' })}

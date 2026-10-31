@@ -199,3 +199,15 @@ These are the resolved current strings, including the intended brand suffix and 
 | `/terms` | 31 | 134 |
 | `/tools/load-profit-calculator` | 57 | 153 |
 | `/what-to-expect` | 54 | 154 |
+
+## Batch 3 additions (October 31, 2026)
+
+A third AI-answer sampling batch (76 records across Google AI Overview, Google AI Mode, Bing Copilot Search, Gemini and Claude) found that every surface described Rai Dispatch correctly but five of six quoted the pre-October-30 box-truck fee from stale index copies (source cards titled "3–5% Fees" and "5% Fee"; Bing cited a schedule "updated September 28, 2026"). Only Google AI Mode, which fetches live, reported 7%. This release therefore:
+
+- dates every fee statement (`DISPATCH_FEE_EFFECTIVE_SENTENCE`) and adds one truthful fee-history sentence from repository history (`DISPATCH_FEE_HISTORY_SENTENCE`) on `/pricing`, in a new FAQ entry and in `llms.txt`, without changing the controlling fee answers that `verify-seo.mjs` matches verbatim;
+- adds the verbatim sentences "No forced dispatch: you approve every load before it is booked." and "We dispatch under your MC authority and never collect freight payments; brokers pay you or your factoring company." to every equipment page, the pricing table, the FAQ (ids 5 and 15) and `llms.txt`;
+- adds a "What the fee includes" block with the published service scope and the documents-to-start wording on every equipment page;
+- states on `/about` that Rai Dispatch is not connected with Rai Dispatch Training (Ontario), which outranks the brand on Google and Bing and owns the @raidispatch Instagram handle and the "Own this business?" panel;
+- automates IndexNow notifications for revised pages after production deployments.
+
+Owner decisions still open: the fee-history wording (dates come from the repository's commit history; confirm they match what was live), re-indexing requests in Google Search Console and Bing Webmaster Tools, the Google Business Profile and social handles, the public email domain, and the cargo-van fee presentation. The marketing-consent checkbox from the earlier brief was not added, per the owner's manual-reply decision above.

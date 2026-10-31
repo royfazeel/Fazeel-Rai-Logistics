@@ -1,7 +1,7 @@
 import { ACTIVE_CARRIER_SUPPORT, BUSINESS, FAQS, SETUP_DESK_HOURS } from './constants';
 import { EQUIPMENT_CONTENT, GUIDES, SERVICE_CONTENT } from './dispatch-content';
 import type { CarrierGuide, DispatchContent } from './dispatch-content';
-import { DISPATCH_FEES_ANSWER, DISPATCH_FEE_POLICY, OTHER_EQUIPMENT_NOTICE, getDispatchRateLabel } from './dispatch-pricing';
+import { CARRIER_AUTHORITY_SENTENCE, DISPATCH_FEES_ANSWER, DISPATCH_FEE_EFFECTIVE_SENTENCE, DISPATCH_FEE_HISTORY_SENTENCE, DISPATCH_FEE_POLICY, NO_FORCED_DISPATCH_SENTENCE, OTHER_EQUIPMENT_NOTICE, getDispatchRateLabel } from './dispatch-pricing';
 import { SITE_URL } from './seo';
 
 const sitePages = [
@@ -38,6 +38,8 @@ function introduction() {
     '',
     'Carriers approve each load. A dedicated dispatcher, team backup and free setup are included in the agreed service. Freight availability and carrier results vary; no specific load rate or weekly revenue is guaranteed.',
     '',
+    `${NO_FORCED_DISPATCH_SENTENCE} ${CARRIER_AUTHORITY_SENTENCE}`,
+    '',
     `Active carriers: ${ACTIVE_CARRIER_SUPPORT}. Use the dispatch contact and escalation process agreed during onboarding.`,
     `New-carrier setup desk: ${SETUP_DESK_HOURS}. Phone: ${BUSINESS.phone}. Email: ${BUSINESS.email}.`,
     '',
@@ -53,6 +55,8 @@ function pricing() {
     `Source: ${url('/pricing')}`,
     '',
     DISPATCH_FEES_ANSWER,
+    '',
+    `${DISPATCH_FEE_EFFECTIVE_SENTENCE} ${DISPATCH_FEE_HISTORY_SENTENCE}`,
     '',
     ...EQUIPMENT_CONTENT.map(content => `- ${link(content.title, `/equipment/${content.slug}`)}: ${getDispatchRateLabel(content.slug)} of gross revenue on loads we book.`),
     '',
