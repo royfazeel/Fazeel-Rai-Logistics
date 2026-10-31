@@ -63,6 +63,7 @@ const jsonLd = {
       publishingPrinciples: `${SITE_URL}/editorial-standards`,
       name: BUSINESS.name, alternateName: 'Rai Logistics', legalName: BUSINESS.parentCompany,
       url: SITE_URL, logo: `${SITE_URL}/icon-512.png?v=rai-union-v1`,
+      sameAs: BUSINESS.socialProfiles.map(profile => profile.url),
       description: BUSINESS.description, telephone: BUSINESS.phone, email: BUSINESS.email,
       address: { '@type': 'PostalAddress', streetAddress: BUSINESS.address.street, addressLocality: BUSINESS.address.city, addressRegion: BUSINESS.address.state, postalCode: BUSINESS.address.zip, addressCountry: 'US' },
       areaServed: { '@type': 'Place', name: BUSINESS.serviceArea },

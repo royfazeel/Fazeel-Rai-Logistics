@@ -143,6 +143,24 @@ export default function Footer() {
                 </div>
               </div>
             </div>
+            <nav className="mt-6" aria-label="Rai Dispatch social profiles">
+              <h3 className="font-display text-lg font-semibold">Follow Rai Dispatch</h3>
+              <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+                {BUSINESS.socialProfiles.map(profile => (
+                  <li key={profile.url}>
+                    <a
+                      href={profile.url}
+                      target="_blank"
+                      rel="me noopener noreferrer"
+                      className="inline-flex min-h-11 items-center rounded-sm text-sm text-surface-300 underline underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
+                      aria-label={`Rai Dispatch on ${profile.name} (opens in a new tab)`}
+                    >
+                      {profile.name} · {profile.handle}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
 
           {/* Services Column */}

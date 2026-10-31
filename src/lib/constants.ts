@@ -13,6 +13,11 @@ export const BUSINESS = {
   whatsappHref: 'https://wa.me/12133716155?text=Hi%20Rai%20Dispatch%2C%20I%27m%20interested%20in%20dispatch%20services.',
   email: 'sam@railogistics.us',
   emailHref: 'mailto:sam@railogistics.us',
+  socialProfiles: [
+    { name: 'X', handle: '@RaiDispatchUS', url: 'https://x.com/RaiDispatchUS' },
+    { name: 'Instagram', handle: '@raidispatchus', url: 'https://www.instagram.com/raidispatchus/' },
+    { name: 'Facebook', handle: 'Rai Dispatch', url: 'https://www.facebook.com/profile.php?id=61596149968228' },
+  ],
   address: {
     street: '312 W 2nd St, Ste 5083',
     city: 'Casper',
