@@ -2,7 +2,7 @@ import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-export const alt = `Rai Dispatch — We manage the loads. You drive the miles. Truck dispatch fees ${DISPATCH_RATE_RANGE} by equipment.`;
+export const alt = `Rai Dispatch: We manage the loads. You drive the miles. Truck dispatch fees ${DISPATCH_RATE_RANGE} by equipment.`;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 export default async function Image() {

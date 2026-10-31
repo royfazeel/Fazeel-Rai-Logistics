@@ -70,7 +70,7 @@ export function calculateLoadEconomics(input: LoadEconomicsInput): LoadEconomics
     const pattern = new RegExp(`^(?:\\d+|\\d{1,3}(?:,\\d{3})+)(?:\\.\\d{1,${rule.decimals}})?$`);
     const value = Number(raw.replace(/,/g, ''));
     if (!raw) errors[field] = `Enter ${rule.label.toLowerCase()}.`;
-    else if (!pattern.test(raw) || !Number.isFinite(value)) errors[field] = `Use a non-negative number with up to ${rule.decimals} decimal places.`;
+    else if (!pattern.test(raw) || !Number.isFinite(value)) errors[field] = `Use a number zero or greater with up to ${rule.decimals} decimal places.`;
     else if (rule.positive && value <= 0) errors[field] = `${rule.label} must be greater than zero.`;
     else if (value > rule.max) errors[field] = `${rule.label} must be ${rule.max.toLocaleString('en-US')} or less.`;
     else values[field] = value;

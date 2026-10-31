@@ -63,11 +63,11 @@ export default function FeeCalculator() {
               className="min-h-[48px] w-full rounded-lg border border-surface-400 bg-white px-4 py-3 text-navy-950 focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600/30"
             >
               <option value="" disabled>Choose equipment</option>
-              {equipmentOptions.map(option => <option key={option.value} value={option.value}>{option.label} — {getDispatchRateLabel(option.value)}</option>)}
+              {equipmentOptions.map(option => <option key={option.value} value={option.value}>{option.label}: {getDispatchRateLabel(option.value)}</option>)}
             </select>
             <p id={`${id}-equipment-help`} className="mt-2 text-sm leading-6 text-surface-700">Select a published equipment category. Other equipment needs written rate confirmation.</p>
             {equipmentError ? <p id={`${id}-equipment-error`} className="mt-2 text-sm font-medium text-primary-700" role="alert">{equipmentError}</p> : null}
-            {vanSelected ? <p id={`${id}-van-note`} className="mt-3 rounded-lg border border-surface-300 bg-surface-50 p-4 text-sm leading-6 text-navy-800">{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="underline underline-offset-4">Cargo van dispatch — {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="underline underline-offset-4">Sprinter van dispatch — {getDispatchRateLabel('sprinter-van')}</Link></p> : null}
+            {vanSelected ? <p id={`${id}-van-note`} className="mt-3 rounded-lg border border-surface-300 bg-surface-50 p-4 text-sm leading-6 text-navy-800">{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="underline underline-offset-4">Cargo van dispatch: {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="underline underline-offset-4">Sprinter van dispatch: {getDispatchRateLabel('sprinter-van')}</Link></p> : null}
           </div>
           <div>
             <label htmlFor={`${id}-revenue`} className="mb-2 block font-semibold text-navy-950">Agreed revenue billing base on loads we book (USD)</label>

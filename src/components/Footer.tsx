@@ -69,11 +69,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link prefetch={false} href="/" className="inline-flex max-w-full mb-6 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500" aria-label="Rai Dispatch — Home">
+            <Link prefetch={false} href="/" className="inline-flex max-w-full mb-6 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500" aria-label="Rai Dispatch: Home">
               <BrandLogo onDark className="w-[320px] max-w-full" />
             </Link>
             <p className="text-surface-400 mb-6 max-w-sm">
-              Professional truck dispatch services for owner-operators and small fleets. 
+              Professional truck dispatch services for owner operators and small fleets.
               A dedicated dispatcher for your truck, with load search, rate negotiation and paperwork support across the lower 48.
             </p>
             <div className="space-y-3">
@@ -129,7 +129,7 @@ export default function Footer() {
               <div className="flex items-start gap-3 text-surface-300">
                 <Clock className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p>New-carrier setup desk</p>
+                  <p>New carrier setup desk</p>
                   <p className="mt-1 text-sm text-surface-400">{SETUP_DESK_HOURS}</p>
                 </div>
               </div>

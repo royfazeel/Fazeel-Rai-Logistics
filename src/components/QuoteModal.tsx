@@ -299,7 +299,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                     Request sent
                   </h3>
                   <p className="text-surface-600">
-                    Thanks. A dispatcher will reply during our setup-desk hours: {SETUP_DESK_HOURS}. {formState.requestCallback ? 'You requested a callback.' : 'We will respond to your inquiry manually.'} You can also call{' '}
+                    Thanks. A dispatcher will reply during our setup desk hours: {SETUP_DESK_HOURS}. {formState.requestCallback ? 'You requested a callback.' : 'We will respond to your inquiry manually.'} You can also call{' '}
                     <a
                       href={BUSINESS.phoneHref}
                       onClick={() => track('call_click', { location: 'quote_modal_success' })}
@@ -496,7 +496,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
                         <option value="">Select…</option>
                         <option value="new-authority">New authority</option>
                         <option value="switching">Switching dispatchers</option>
-                        <option value="self-dispatch">Self-dispatching now</option>
+                        <option value="self-dispatch">Self dispatching now</option>
                         <option value="exploring">Just exploring</option>
                       </select>
                     </div>

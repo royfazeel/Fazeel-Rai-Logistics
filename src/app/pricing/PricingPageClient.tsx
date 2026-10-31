@@ -20,10 +20,10 @@ const feeExamples = (['box-truck', 'cargo-van', 'sprinter-van'] as const).map(id
 
 const pricingFaqs = [
   { id: 1, question: 'How much does Rai Dispatch charge?', answer: DISPATCH_FEES_ANSWER },
-  { id: 2, question: 'Is there a setup fee or any other Rai Dispatch charge?', answer: 'No. Your equipment-specific percentage dispatch fee is our only charge. There are no setup fees or other Rai Dispatch fees. Confirm your equipment category, billing base and invoice schedule in writing before starting.' },
+  { id: 2, question: 'Is there a setup fee or any other Rai Dispatch charge?', answer: 'No. Your equipment specific percentage dispatch fee is our only charge. There are no setup fees or other Rai Dispatch fees. Confirm your equipment category, billing base and invoice schedule in writing before starting.' },
   { id: 3, question: 'What is the rate for a truck type not listed?', answer: OTHER_EQUIPMENT_NOTICE },
   { id: 4, question: 'Do you offer a fixed weekly or monthly plan?', answer: `No. ${DISPATCH_FEE_POLICY}` },
-  { id: 5, question: 'Do I pay on loads I book myself?', answer: 'The advertised percentage applies to loads we book for you. Confirm how self-booked freight, cancelled loads, detention, layover, and other accessorial payments are treated in your signed agreement.' },
+  { id: 5, question: 'Do I pay on loads I book myself?', answer: 'The advertised percentage applies to loads we book for you. Confirm how self booked freight, cancelled loads, detention, layover, and other accessorial payments are treated in your signed agreement.' },
   { id: 6, question: 'Does a dispatch fee guarantee profit or a certain number of loads?', answer: 'No. Freight rates, available loads, operating costs, and your weekly revenue vary. You decide which loads to accept and remain responsible for evaluating the costs of your trucking operation.' },
   { id: 7, question: 'Is a dedicated truck dispatcher included?', answer: 'Yes. Clients receive a dedicated truck dispatcher for their agreed load search, rate negotiation, booking coordination and broker communication. Active carriers receive 24/7 live dispatch support. Confirm your assigned contact, team coverage and escalation process during onboarding.' },
 ];
@@ -61,7 +61,7 @@ export default function PricingPageClient() {
               <tbody>{feeExamples.map(row => <tr key={row.id} className="border-t border-surface-200"><th scope="row" className="p-4 font-medium"><Link href={`/equipment/${row.id}`} className="underline underline-offset-4">{row.equipment}</Link></th><td className="p-4">{row.rate}%</td><td className="p-4">{dollars.format(row.feeCents / 100)}</td><td className="p-4">{dollars.format(row.remainingCents / 100)}</td></tr>)}</tbody>
             </table>
           </div>
-          <p className="text-surface-700 mb-5">{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="text-primary-700 underline underline-offset-4">Cargo van dispatch — {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="text-primary-700 underline underline-offset-4">Sprinter van dispatch — {getDispatchRateLabel('sprinter-van')}</Link></p>
+          <p className="text-surface-700 mb-5">{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="text-primary-700 underline underline-offset-4">Cargo van dispatch: {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="text-primary-700 underline underline-offset-4">Sprinter van dispatch: {getDispatchRateLabel('sprinter-van')}</Link></p>
           <p className="text-surface-700 mb-5">These are fee calculations, not load offers or earnings forecasts.</p>
           <Link href="/resources/truck-dispatch-fees" className="inline-flex items-center gap-2 text-primary-700 font-semibold py-2">Read the dispatch fee guide<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
         </div>

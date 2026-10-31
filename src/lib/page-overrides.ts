@@ -9,29 +9,29 @@ export type PageSeoOverride = { title: string; description: string; h1: string }
 // docs/seo/implementation-handoff.md; fee-bearing copy uses the approved fee map.
 export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   "/": {
-    title: `Truck Dispatch for Owner-Operators | ${DISPATCH_RATE_RANGE} | Rai Dispatch`,
-    description: `Dedicated truck dispatcher for owner-operators and small fleets, lower 48. Fees ${DISPATCH_RATE_RANGE} by equipment, free setup, no forced dispatch. You approve every load.`,
-    h1: "Truck dispatch services for owner-operators and small fleets",
+    title: `Truck Dispatch for Owner Operators | ${DISPATCH_RATE_RANGE} | Rai Dispatch`,
+    description: `Dedicated truck dispatcher for owner operators and small fleets, lower 48. Fees ${DISPATCH_RATE_RANGE} by equipment, free setup, no forced dispatch. You approve every load.`,
+    h1: "Truck dispatch services for owner operators and small fleets",
   },
   "/about": {
     title: "About Rai Dispatch | US Truck Dispatch Company",
-    description: "Rai Dispatch is a US truck dispatch company operated by Rai Technologies LLC. Learn how our dispatch service works for owner-operators and small fleets.",
+    description: "Rai Dispatch is a US truck dispatch company operated by Rai Technologies LLC. Learn how our dispatch service works for owner operators and small fleets.",
     h1: "About Rai Dispatch",
   },
   "/carriers": {
-    title: "Dispatch for Owner-Operators, Small Fleets & New Authorities",
-    description: `Truck dispatch for owner-operators, small fleets and new authorities. See who we work with, what we need from you, and the ${DISPATCH_RATE_RANGE} equipment-based fee.`,
-    h1: "Truck dispatch for owner-operators, small fleets and new authorities",
+    title: "Dispatch for Owner Operators, Small Fleets & New Authorities",
+    description: `Truck dispatch for owner operators, small fleets and new authorities. See who we work with, what we need from you, and the ${DISPATCH_RATE_RANGE} equipment based fee.`,
+    h1: "Truck dispatch for owner operators, small fleets and new authorities",
   },
   "/carriers/new-authorities": {
     title: "New Authority Truck Dispatch | First Loads & Broker Setup",
-    description: `Dispatch for new MC authorities: broker onboarding review, document checklist, realistic first-load timelines and ${DISPATCH_RATE_RANGE} equipment fees. No guaranteed loads.`,
+    description: `Dispatch for new MC authorities: broker onboarding review, document checklist, first load timelines and ${DISPATCH_RATE_RANGE} equipment fees. No guaranteed loads.`,
     h1: "Truck dispatch support for new authorities",
   },
   "/carriers/owner-operators": {
-    title: `Owner-Operator Dispatch Service | ${DISPATCH_RATE_RANGE} Fees | Rai Dispatch`,
-    description: `Owner-operator truck dispatch with a dedicated dispatcher: load search, rate negotiation, broker calls and paperwork, lower 48. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
-    h1: "Truck dispatch services for owner-operators",
+    title: `Owner Operator Dispatch | ${DISPATCH_RATE_RANGE} Fees | Rai Dispatch`,
+    description: `Owner operator truck dispatch with a dedicated dispatcher: load search, rate negotiation, broker calls and paperwork, lower 48. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
+    h1: "Truck dispatch services for owner operators",
   },
   "/carriers/small-fleets": {
     title: `Small Fleet Dispatch Services | ${DISPATCH_RATE_RANGE} Fees | Rai Dispatch`,
@@ -40,7 +40,7 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/contact": {
     title: "Contact a Truck Dispatcher | Call or Text (213) 371-6155",
-    description: "Discuss your equipment and lanes. Call or text (213) 371-6155 or send the form. New-carrier setup desk: Mon–Sat, 8 AM–6 PM CT.",
+    description: "Discuss your equipment and lanes. Call or text (213) 371-6155 or send the form. New carrier setup desk: Mon to Sat, 8 AM to 6 PM CT.",
     h1: "Let's talk about your dispatch needs",
   },
   "/editorial-standards": {
@@ -54,29 +54,29 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     h1: "Truck dispatch services by equipment type",
   },
   "/equipment/box-truck": {
-    title: `Box Truck Dispatch Service — ${getDispatchRateLabel('box-truck')} Fee | Rai Dispatch`,
+    title: `Box Truck Dispatch Service: ${getDispatchRateLabel('box-truck')} Fee | Rai Dispatch`,
     description: `Box truck dispatch at ${getDispatchRateLabel('box-truck')} of gross revenue on loads we book. No setup, weekly, monthly or other Rai Dispatch fees. Dedicated dispatcher and 24/7 support.`,
-    h1: `Box truck dispatch services — ${getDispatchRateLabel('box-truck')} fee`,
+    h1: `Box truck dispatch services: ${getDispatchRateLabel('box-truck')} fee`,
   },
   "/equipment/dry-van": {
     title: `Dry Van Dispatch Service | ${getDispatchRateLabel('dry-van')} Fee, 48 States | Rai Dispatch`,
     description: `Dry van dispatch at ${getDispatchRateLabel('dry-van')} of gross on loads we book. Dedicated dispatcher, 53 ft load search, rate negotiation and paperwork, lower 48. You approve every load.`,
-    h1: "Dry van dispatch services for owner-operators",
+    h1: "Dry van dispatch services for owner operators",
   },
   "/equipment/reefer": {
     title: `Reefer Dispatch Service | ${getDispatchRateLabel('reefer')} of Gross | Rai Dispatch`,
-    description: `Reefer dispatch at ${getDispatchRateLabel('reefer')} of gross: temperature-instruction review, produce and protein lanes, appointments and rate negotiation. No forced dispatch.`,
-    h1: "Reefer dispatch services for owner-operators",
+    description: `Reefer dispatch at ${getDispatchRateLabel('reefer')} of gross: temperature instruction review, produce and protein lanes, appointments and rate negotiation. No forced dispatch.`,
+    h1: "Reefer dispatch services for owner operators",
   },
   "/equipment/flatbed": {
     title: `Flatbed Dispatch Service | ${getDispatchRateLabel('flatbed')} of Gross | Rai Dispatch`,
-    description: `Flatbed dispatch at ${getDispatchRateLabel('flatbed')} of gross on loads we book. Dimensions, tarping and securement reviewed before you approve open-deck freight. Dedicated dispatcher.`,
-    h1: "Flatbed dispatch services for owner-operators",
+    description: `Flatbed dispatch at ${getDispatchRateLabel('flatbed')} of gross on loads we book. Dimensions, tarping and securement reviewed before you approve open deck freight. Dedicated dispatcher.`,
+    h1: "Flatbed dispatch services for owner operators",
   },
   "/equipment/power-only": {
     title: `Power Only Dispatch Service | ${getDispatchRateLabel('power-only')} of Gross | Rai Dispatch`,
-    description: `Power only dispatch at ${getDispatchRateLabel('power-only')} of gross: drop-and-hook and trailer-pool loads, trailer interchange terms and return planning. No forced dispatch.`,
-    h1: "Power only dispatch services for owner-operators",
+    description: `Power only dispatch at ${getDispatchRateLabel('power-only')} of gross: drop and hook and trailer pool loads, trailer interchange terms and return planning. No forced dispatch.`,
+    h1: "Power only dispatch services for owner operators",
   },
   "/equipment/step-deck": {
     title: `Step Deck Dispatch Service | ${getDispatchRateLabel('step-deck')} Fee | Rai Dispatch`,
@@ -84,23 +84,23 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     h1: "Step deck and drop deck dispatch services",
   },
   "/equipment/hotshot": {
-    title: `Hotshot Dispatch Service (CDL & Non-CDL) | ${getDispatchRateLabel('hotshot')} | Rai Dispatch`,
-    description: `Hotshot dispatch at ${getDispatchRateLabel('hotshot')} of gross for CDL and non-CDL gooseneck operations. Payload, trailer length, partials and extra stops planned before you approve.`,
-    h1: "Hotshot dispatch services for owner-operators",
+    title: `Hotshot Dispatch Service (CDL & Non CDL) | ${getDispatchRateLabel('hotshot')} | Rai Dispatch`,
+    description: `Hotshot dispatch at ${getDispatchRateLabel('hotshot')} of gross for CDL and non CDL gooseneck operations. Payload, trailer length, partials and extra stops planned before you approve.`,
+    h1: "Hotshot dispatch services for owner operators",
   },
   "/equipment/cargo-van": {
-    title: `Cargo Van Dispatch Service — ${getDispatchRateLabel('cargo-van')} Fee | Rai Dispatch`,
+    title: `Cargo Van Dispatch Service: ${getDispatchRateLabel('cargo-van')} Fee | Rai Dispatch`,
     description: `Cargo van dispatch costs ${getDispatchRateLabel('cargo-van')} of gross revenue on loads we book. Sprinter van service is separately listed at ${getDispatchRateLabel('sprinter-van')}. Confirm your vehicle category.`,
-    h1: `Cargo van dispatch services — ${getDispatchRateLabel('cargo-van')} fee`,
+    h1: `Cargo van dispatch services: ${getDispatchRateLabel('cargo-van')} fee`,
   },
   "/equipment/sprinter-van": {
-    title: `Sprinter Van Dispatch Service — ${getDispatchRateLabel('sprinter-van')} Fee | Rai Dispatch`,
+    title: `Sprinter Van Dispatch Service: ${getDispatchRateLabel('sprinter-van')} Fee | Rai Dispatch`,
     description: `Sprinter van dispatch costs ${getDispatchRateLabel('sprinter-van')} of gross revenue on loads we book. Cargo van service is separately listed at ${getDispatchRateLabel('cargo-van')}. Confirm your vehicle category.`,
-    h1: `Sprinter van dispatch services — ${getDispatchRateLabel('sprinter-van')} fee`,
+    h1: `Sprinter van dispatch services: ${getDispatchRateLabel('sprinter-van')} fee`,
   },
   "/equipment/conestoga": {
     title: `Conestoga Trailer Dispatch Service | ${getDispatchRateLabel('conestoga')} Fee | Rai Dispatch`,
-    description: `Conestoga dispatch at ${getDispatchRateLabel('conestoga')} of gross: rolling-tarp clearance, covered loading access and regional or OTR lanes reviewed before you approve a load.`,
+    description: `Conestoga dispatch at ${getDispatchRateLabel('conestoga')} of gross: rolling tarp clearance, covered loading access and regional or OTR lanes reviewed before you approve a load.`,
     h1: "Conestoga trailer dispatch services",
   },
   "/equipment/rgn-lowboy": {
@@ -115,18 +115,18 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/equipment/tanker": {
     title: `Tanker Dispatch Service | ${getDispatchRateLabel('tanker')} Fee | Rai Dispatch`,
-    description: `Tanker and liquid-bulk dispatch at ${getDispatchRateLabel('tanker')} of gross: commodity compatibility, tank specs, wash-out records and loading terms reviewed before booking.`,
+    description: `Tanker and liquid bulk dispatch at ${getDispatchRateLabel('tanker')} of gross: commodity compatibility, tank specs, washout records and loading terms reviewed before booking.`,
     h1: "Tanker dispatch services",
   },
   "/equipment/dump-truck": {
     title: `Dump Truck Dispatch Service | ${getDispatchRateLabel('dump-truck')} Fee | Rai Dispatch`,
-    description: `Dump truck and dump trailer dispatch at ${getDispatchRateLabel('dump-truck')} of gross: aggregate hauling, jobsite schedules, load tickets and haul-cycle costs reviewed first.`,
+    description: `Dump truck and dump trailer dispatch at ${getDispatchRateLabel('dump-truck')} of gross: aggregate hauling, jobsite schedules, load tickets and haul cycle costs reviewed first.`,
     h1: "Dump truck dispatch services",
   },
   "/equipment/curtain-side": {
     title: `Curtain Side Dispatch Service | ${getDispatchRateLabel('curtain-side')} Fee | Rai Dispatch`,
-    description: `Curtain-side trailer dispatch at ${getDispatchRateLabel('curtain-side')} of gross: side-loading freight, trailer clearance, multi-stop planning and paperwork with a dedicated dispatcher.`,
-    h1: "Curtain-side trailer dispatch services",
+    description: `Curtain side trailer dispatch at ${getDispatchRateLabel('curtain-side')} of gross: side loading freight, trailer clearance, multi stop planning and paperwork with a dedicated dispatcher.`,
+    h1: "Curtain side trailer dispatch services",
   },
   "/faq": {
     title: "Truck Dispatch FAQ | Fees, Loads, Documents & Setup",
@@ -146,7 +146,7 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   "/resources": {
     title: "Truck Dispatch Resources: Guides, Checklists & Calculator",
     description: "Carrier guides on dispatch fees, finding loads, rate confirmations, deadhead, new authority approval and more, plus a glossary and a load profit calculator.",
-    h1: "Truck dispatch resources for owner-operators",
+    h1: "Truck dispatch resources for owner operators",
   },
   "/resources/carrier-onboarding-checklist": {
     title: "Dispatch Onboarding Checklist for Carriers | Rai Dispatch",
@@ -155,12 +155,12 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/resources/detention-layover-tonu-documentation": {
     title: "Detention, Layover & TONU: Documentation Guide",
-    description: "How to document detention, layover, TONU and lumper charges: timestamps, rate-con terms, receipts and follow-ups that support accessorial requests.",
+    description: "How to document detention, layover, TONU and lumper charges: timestamps, rate con terms, receipts and follow ups that support accessorial requests.",
     h1: "Detention, layover and TONU: a carrier documentation checklist",
   },
   "/resources/evaluate-freight-rate-per-mile": {
     title: "How to Evaluate a Freight Rate Per Mile | Rai Dispatch",
-    description: "Rate per mile explained for owner-operators: loaded vs total miles, deadhead, dispatch fee and trip time, with a worked example and a pre-booking checklist.",
+    description: "Rate per mile explained for owner operators: loaded vs total miles, deadhead, dispatch fee and trip time, with a worked example and a pre booking checklist.",
     h1: "How to evaluate a freight rate before booking",
   },
   "/resources/flatbed-load-tarping-checklist": {
@@ -174,7 +174,7 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     h1: "Fuel surcharge calculation: a practical guide for carriers",
   },
   "/resources/hotshot-load-planning-checklist": {
-    title: "Hotshot Load Planning Checklist | CDL & Non-CDL",
+    title: "Hotshot Load Planning Checklist | CDL & Non CDL",
     description: "Plan hotshot loads around actual payload, trailer length, cargo dimensions, securement, appointments and total miles before you approve freight.",
     h1: "Hotshot load planning: a checklist before accepting freight",
   },
@@ -200,13 +200,13 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/resources/new-authority-broker-approval": {
     title: "New Authority Broker Approval Checklist | Rai Dispatch",
-    description: "How brokers review a new trucking authority: operating status, insurance, carrier documents and eligibility, with practical follow-up questions.",
+    description: "How brokers review a new trucking authority: operating status, insurance, carrier documents and eligibility, with practical follow up questions.",
     h1: "New authority broker approval: a practical review checklist",
   },
   "/resources/partial-truckload-vs-ltl": {
     title: "Partial Truckload vs LTL: A Carrier Guide | Rai Dispatch",
-    description: "Partial truckload, LTL and exclusive-use freight explained for carriers: usable space, co-loading terms, delivery sequence and trip costs.",
-    h1: "Partial truckload vs. LTL: a carrier's load-planning guide",
+    description: "Partial truckload, LTL and exclusive use freight explained for carriers: usable space, co loading terms, delivery sequence and trip costs.",
+    h1: "Partial truckload vs. LTL: a carrier's load planning guide",
   },
   "/resources/power-only-trailer-interchange-checklist": {
     title: "Power Only Trailer Interchange Checklist | Rai Dispatch",
@@ -220,18 +220,18 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/resources/reduce-deadhead-miles": {
     title: "How to Reduce Deadhead Miles | Rai Dispatch",
-    description: "Cut empty miles with better load planning: pickup distance, reload timing and total trip miles reviewed before booking. A checklist for owner-operators.",
+    description: "Cut empty miles with better load planning: pickup distance, reload timing and total trip miles reviewed before booking. A checklist for owner operators.",
     h1: "How to review and reduce deadhead miles",
   },
   "/resources/reefer-load-temperature-checklist": {
     title: "Reefer Load Temperature Checklist | Rai Dispatch",
-    description: "Prepare a reefer load brief: written temperature instructions, continuous vs cycle mode, pre-cool, appointments and what to do if the set point changes.",
+    description: "Prepare a reefer load brief: written temperature instructions, continuous vs cycle mode, pre cool, appointments and what to do if the set point changes.",
     h1: "Reefer load checklist: temperature instructions before booking",
   },
   "/resources/self-dispatch-vs-dispatch-service": {
-    title: "Self-Dispatch vs Dispatch Service: Cost Comparison",
-    description: "Compare self-dispatching with a paid dispatch service: time, load approval, broker communication and the full fee on a worked example before choosing.",
-    h1: "Self-dispatch or a truck dispatch service?",
+    title: "Self Dispatch vs Dispatch Service: Cost Comparison",
+    description: "Compare self dispatching with a paid dispatch service: time, load approval, broker communication and the full fee on a worked example before choosing.",
+    h1: "Self dispatch or a truck dispatch service?",
   },
   "/resources/truck-dispatch-fees": {
     title: `Truck Dispatch Fees by Equipment (${DISPATCH_RATE_RANGE}) | Rai Dispatch`,
@@ -255,13 +255,13 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/resources/verify-freight-broker-identity": {
     title: "How to Verify a Freight Broker Before Booking",
-    description: "Check broker identity with FMCSA records, bond status, contact details and changed load instructions. A fraud-prevention workflow for owner-operators.",
+    description: "Check broker identity with FMCSA records, bond status, contact details and changed load instructions. A fraud prevention workflow for owner operators.",
     h1: "How to verify a freight broker's identity before booking",
   },
   "/resources/what-does-a-truck-dispatcher-do": {
     title: "What Does a Truck Dispatcher Do? | Rai Dispatch",
-    description: "What a truck dispatcher does from load search to delivery paperwork, which decisions stay with the carrier, what it costs and a worked load-approval example.",
-    h1: "What does a truck dispatcher do for an owner-operator?",
+    description: "What a truck dispatcher does from load search to delivery paperwork, which decisions stay with the carrier, what it costs and a worked load approval example.",
+    h1: "What does a truck dispatcher do for an owner operator?",
   },
   "/service-areas": {
     title: "Nationwide Truck Dispatch | Lower 48 Service Areas",
@@ -270,8 +270,8 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/services": {
     title: "Truck Dispatch Services | Load Booking to Paperwork",
-    description: "Dedicated dispatcher, load booking, rate negotiation, scheduling and paperwork for owner-operators and fleets. 24/7 support for active carriers.",
-    h1: "Truck dispatch services for owner-operators and fleets",
+    description: "Dedicated dispatcher, load booking, rate negotiation, scheduling and paperwork for owner operators and fleets. 24/7 support for active carriers.",
+    h1: "Truck dispatch services for owner operators and fleets",
   },
   "/services/backhaul-dispatch": {
     title: "Backhaul & Return Load Dispatch | Rai Dispatch",
@@ -280,16 +280,16 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/services/broker-communication": {
     title: "Broker Communication Support for Carriers | Rai Dispatch",
-    description: "We handle broker calls, load details, rate-con questions and shipment updates so you can drive. Material changes always come back to you for approval.",
-    h1: "Broker communication for owner-operators",
+    description: "We handle broker calls, load details, rate con questions and shipment updates so you can drive. Material changes always come back to you for approval.",
+    h1: "Broker communication for owner operators",
   },
   "/services/dedicated-dispatcher": {
-    title: "Dedicated Truck Dispatcher | Owner-Operators & Fleets",
+    title: "Dedicated Truck Dispatcher | Owner Operators & Fleets",
     description: `One dedicated dispatcher who knows your truck, lanes and schedule, with team backup and 24/7 live support for active carriers. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
-    h1: "Dedicated truck dispatcher for owner-operators and fleets",
+    h1: "Dedicated truck dispatcher for owner operators and fleets",
   },
   "/services/expedited-dispatch": {
-    title: "Expedited Freight Dispatch | Time-Critical Loads",
+    title: "Expedited Freight Dispatch | Time Critical Loads",
     description: "Expedited dispatch for cargo vans, sprinters, box trucks and hotshots: readiness, transit time and delivery windows confirmed before you approve a load.",
     h1: "Expedited truck dispatch support",
   },
@@ -299,9 +299,9 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     h1: "Truck load search and booking support",
   },
   "/services/otr-dispatch": {
-    title: `OTR & Long-Haul Truck Dispatch | ${DISPATCH_RATE_RANGE} Fees`,
-    description: `OTR dispatch across the lower 48: outbound loads, delivery windows, reloads and home-time planning with a dedicated dispatcher. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
-    h1: "OTR and long-haul truck dispatch services",
+    title: `OTR & Long Haul Truck Dispatch | ${DISPATCH_RATE_RANGE} Fees`,
+    description: `OTR dispatch across the lower 48: outbound loads, delivery windows, reloads and home time planning with a dedicated dispatcher. Fees ${DISPATCH_RATE_RANGE} by equipment.`,
+    h1: "OTR and long haul truck dispatch services",
   },
   "/services/paperwork-support": {
     title: "Rate Con, BOL & POD Paperwork Support | Rai Dispatch",
@@ -320,13 +320,13 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/services/route-strategy": {
     title: "Truck Route & Lane Planning Support | Rai Dispatch",
-    description: "Lane planning around total miles, home time and the next load for regional and OTR owner-operators and small fleets.",
+    description: "Lane planning around total miles, home time and the next load for regional and OTR owner operators and small fleets.",
     h1: "Truck route and freight lane strategy",
   },
   "/services/scheduling": {
     title: "Appointment Scheduling & Check Calls | Rai Dispatch",
-    description: "Pickup and delivery appointment scheduling, shipment updates and delay follow-ups planned around real driver and equipment availability.",
-    h1: "Truck appointment scheduling and follow-ups",
+    description: "Pickup and delivery appointment scheduling, shipment updates and delay follow ups planned around real driver and equipment availability.",
+    h1: "Truck appointment scheduling and follow ups",
   },
   "/terms": {
     title: "Terms of Service | Rai Dispatch",
@@ -334,9 +334,9 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     h1: "Terms of Service",
   },
   "/tools/load-profit-calculator": {
-    title: "Truck Load Profit Calculator | Rate Per Mile & Break-Even",
-    description: "Free load profit calculator for owner-operators: enter pay, deadhead, fuel, dispatch fee and costs to see revenue per total mile and the break-even rate.",
-    h1: "Truck load profit and break-even calculator",
+    title: "Truck Load Profit Calculator | Rate Per Mile & Break Even",
+    description: "Free load profit calculator for owner operators: enter pay, deadhead, fuel, dispatch fee and costs to see revenue per total mile and the break even rate.",
+    h1: "Truck load profit and break even calculator",
   },
   "/what-to-expect": {
     title: "What to Expect from Rai Dispatch | Carrier Commitments",

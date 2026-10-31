@@ -295,7 +295,7 @@ export default function ContactPageClient() {
                       </div>
                       <div>
                         <h3 className="font-display text-lg font-bold text-navy-950 mb-0.5">
-                          New-carrier setup
+                          New carrier setup
                         </h3>
                         <a
                           href={BUSINESS.phoneHref}
@@ -408,7 +408,7 @@ export default function ContactPageClient() {
                       </div>
                       <div>
                         <h3 className="font-display text-lg font-bold text-navy-950 mb-0.5">
-                          New-carrier setup desk hours
+                          New carrier setup desk hours
                         </h3>
                         <p className="text-navy-800">{BUSINESS.hours.days}</p>
                         <p className="text-navy-800">{BUSINESS.hours.time}</p>
@@ -429,7 +429,7 @@ export default function ContactPageClient() {
                     Send us a message
                   </h2>
                   <p className="text-surface-700 mb-8">
-                    Tell us about your operation — or skip the form and call{' '}
+                    Tell us about your operation, or skip the form and call{' '}
                     <a href={BUSINESS.phoneHref} className="text-primary-600 font-semibold"
                     onClick={() => track('call_click', { location: 'contact_form_intro' })}
                     >
@@ -449,7 +449,7 @@ export default function ContactPageClient() {
                         Message sent
                       </h3>
                       <p className="text-surface-700 mb-6">
-                        Thanks. A dispatcher will reply during our setup-desk hours: {SETUP_DESK_HOURS}. {formState.requestCallback ? 'You requested a callback.' : 'We will respond to your inquiry manually.'} You can also call{' '}
+                        Thanks. A dispatcher will reply during our setup desk hours: {SETUP_DESK_HOURS}. {formState.requestCallback ? 'You requested a callback.' : 'We will respond to your inquiry manually.'} You can also call{' '}
                         <a
                           href={BUSINESS.phoneHref}
                           onClick={() => track('call_click', { location: 'contact_form_error' })}
@@ -651,7 +651,7 @@ export default function ContactPageClient() {
                             <option value="">Select…</option>
                             <option value="new-authority">New authority</option>
                             <option value="switching">Switching dispatchers</option>
-                            <option value="self-dispatch">Self-dispatching now</option>
+                            <option value="self-dispatch">Self dispatching now</option>
                             <option value="exploring">Just exploring</option>
                           </select>
                         </div>

@@ -79,9 +79,9 @@ const jsonLd = {
         },
         {
           '@type': 'ContactPoint', '@id': `${SITE_URL}/#carrier-setup-contact`,
-          name: 'New-carrier setup desk', contactType: 'new-carrier setup',
+          name: 'New carrier setup desk', contactType: 'new carrier setup',
           telephone: BUSINESS.phone, email: BUSINESS.email, url: `${SITE_URL}/contact`,
-          description: `New-carrier setup hours: ${SETUP_DESK_HOURS}.`,
+          description: `New carrier setup hours: ${SETUP_DESK_HOURS}.`,
           areaServed: { '@type': 'Place', name: BUSINESS.serviceArea }, availableLanguage: 'en-US',
         },
       ],

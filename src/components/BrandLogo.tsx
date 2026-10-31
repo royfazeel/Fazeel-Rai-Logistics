@@ -13,7 +13,7 @@ export default function BrandLogo({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={`/brand/rai-dispatch-logo-${onDark ? 'dark' : 'light'}.svg`}
-      alt="Rai Dispatch — Truck Dispatch Services"
+      alt="Rai Dispatch: Truck Dispatch Services"
       width={1330}
       height={200}
       className={`h-auto ${className}`}

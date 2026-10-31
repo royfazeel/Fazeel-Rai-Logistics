@@ -112,7 +112,7 @@ export default function Header() {
             prefetch={false}
             href="/"
             className="flex items-center gap-2.5 group flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-md"
-            aria-label="Rai Dispatch — Home"
+            aria-label="Rai Dispatch: Home"
           >
             <BrandLogo
               onDark={overHero}

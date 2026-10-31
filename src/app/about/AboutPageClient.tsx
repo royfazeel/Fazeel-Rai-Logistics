@@ -24,7 +24,7 @@ import { track } from '@/lib/track';
 const values = [
   {
     icon: Heart,
-    title: 'Driver-First Mindset',
+    title: 'Driver First Mindset',
     description:
       'Every decision we make starts with one question: How does this help our drivers succeed? Your success is our success.',
   },
@@ -36,7 +36,7 @@ const values = [
   },
   {
     icon: Target,
-    title: 'Results-Driven',
+    title: 'Results Driven',
     description:
       'We measure our success by your earnings. Our goal is to consistently increase your gross while reducing empty miles.',
   },
@@ -81,14 +81,14 @@ export default function AboutPageClient() {
               <p id="answer-block" className="text-white/70 text-lg leading-relaxed max-w-2xl mb-8">
                 Rai Dispatch is a professional truck dispatch company operating
                 under Rai Technologies LLC. We are dedicated to helping
-                owner-operators and small fleets plan loads with a dedicated dispatcher.
+                owner operators and small fleets plan loads with a dedicated dispatcher.
                 We specialize in box trucks and provide 24/7 live dispatch support
                 for active carriers across the lower 48 states.
               </p>
               <p className="text-white/70 leading-relaxed max-w-2xl mb-8 -mt-4">
                 Rai Dispatch (raidispatch.com) is a United States dispatch service for
                 motor carriers. It is not connected with Rai Dispatch Training, a
-                dispatcher-training school in Ontario, Canada, that uses a similar name.
+                dispatcher training school in Ontario, Canada, that uses a similar name.
               </p>
               <a
                 href={BUSINESS.phoneHref}
@@ -132,7 +132,7 @@ export default function AboutPageClient() {
       <section className="bg-surface-50 py-12 sm:py-16" aria-labelledby="dispatch-specialties-heading">
         <div className="container-custom">
           <h2 id="dispatch-specialties-heading" className="section-heading">Our truck dispatch specialties</h2>
-          <p className="mt-5 max-w-4xl text-lg leading-8 text-surface-700">Rai Dispatch specializes in dispatching {DISPATCH_SPECIALTY_SUMMARY} for owner-operators and small fleets across the 48 contiguous states. Our work includes load search, rate negotiation, booking coordination, broker communication and paperwork support. The carrier approves each load.</p>
+          <p className="mt-5 max-w-4xl text-lg leading-8 text-surface-700">Rai Dispatch specializes in dispatching {DISPATCH_SPECIALTY_SUMMARY} for owner operators and small fleets across the 48 contiguous states. Our work includes load search, rate negotiation, booking coordination, broker communication and paperwork support. The carrier approves each load.</p>
           <p className="mt-5 max-w-4xl text-lg leading-8 text-surface-700">{ACTIVE_CARRIER_SUPPORT}. Your dedicated dispatcher and the support team coordinate through the contact and escalation process agreed during setup. <Link href="/services/dedicated-dispatcher" className="font-semibold text-primary-700 underline underline-offset-4">Meet the dispatch workflow.</Link></p>
           <ul className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{DISPATCH_SPECIALTIES.map(equipment => <li key={equipment.id}><Link prefetch={false} href={`/equipment/${equipment.id}`} className="flex justify-between gap-4 rounded-lg border border-surface-300 bg-white p-4 font-semibold text-navy-900 hover:border-primary-500"><span>{equipment.name} dispatch</span><span className="text-primary-700">{equipment.percentage}</span></Link></li>)}</ul>
           <p className="mt-5 text-sm leading-7 text-surface-700">Fees apply to gross revenue on loads we book. We confirm the equipment, lanes, billing base and service scope before starting.</p>
@@ -170,7 +170,7 @@ export default function AboutPageClient() {
                 />
                 <h2 className="font-display text-3xl font-bold mb-4">Our Mission</h2>
                 <p className="text-white/80 text-lg leading-relaxed">
-                  To provide owner-operators and small fleets with affordable, professional
+                  To provide owner operators and small fleets with affordable, professional
                   dispatch services that maximize their earnings and minimize their stress.
                   We believe every driver deserves a dedicated partner who fights for their
                   success on every load.
@@ -187,8 +187,8 @@ export default function AboutPageClient() {
                   Our Vision
                 </h2>
                 <p className="text-surface-700 text-lg leading-relaxed">
-                  To be the most trusted and driver-focused dispatch service in America.
-                  We envision a future where every owner-operator has access to professional
+                  To be the most trusted and driver focused dispatch service in America.
+                  We envision a future where every owner operator has access to professional
                   dispatch support at an affordable price, with complete transparency
                   and no hidden costs.
                 </p>

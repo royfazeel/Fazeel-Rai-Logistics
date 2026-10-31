@@ -72,7 +72,7 @@ export default function TermsPage() {
                 {BUSINESS.name} provides dispatch services only. We are NOT a motor carrier,
                 NOT a freight broker, NOT a freight forwarder, and NOT a factoring company.
                 We do not buy, resell, or take title to freight, and we operate under YOUR
-                motor carrier authority &mdash; never our own. Carriers using our services
+                motor carrier authority, never our own. Carriers using our services
                 remain solely responsible for:
               </p>
               <ul className="list-disc pl-6 text-navy-800 leading-relaxed space-y-2 mt-4">
@@ -111,7 +111,7 @@ export default function TermsPage() {
               <li>Broker and shipper rate decisions, which are theirs to make, not ours</li>
             </ul>
             <p className="text-navy-800 leading-relaxed mt-4">
-              Our dispatch fee is the equipment-specific percentage of the agreed
+              Our dispatch fee is the equipment specific percentage of the agreed
               gross revenue on loads we book. This percentage fee does not guarantee
               that a load will cover your operating costs or produce a profit.
             </p>
@@ -130,7 +130,7 @@ export default function TermsPage() {
               <li>Provide accurate and current documentation</li>
               <li>Communicate promptly about load status and issues</li>
               <li>Honor load commitments once accepted</li>
-              <li>Pay the equipment-specific percentage dispatch fee on the agreed billing base</li>
+              <li>Pay the equipment specific percentage dispatch fee on the agreed billing base</li>
             </ul>
           </section>
 
@@ -139,7 +139,7 @@ export default function TermsPage() {
               6. Fees and Payment
             </h2>
             <p className="text-navy-800 leading-relaxed mb-4">
-              {DISPATCH_PRICING_SUMMARY} These percentage-based dispatch fees apply to gross load revenue on
+              {DISPATCH_PRICING_SUMMARY} These percentage based dispatch fees apply to gross load revenue on
               loads we book. The equipment rate, fee basis, treatment of fuel
               surcharge and accessorials, and payment schedule are confirmed in your
               individual dispatch agreement before service begins.

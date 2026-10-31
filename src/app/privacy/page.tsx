@@ -85,7 +85,7 @@ export default function PrivacyPage() {
             <p>
               This policy applies to {BUSINESS.name} at{' '}
               <Link href={SITE_URL} className="text-primary-700 font-medium underline hover:text-primary-800">raidispatch.com</Link>
-              {' '}and the dispatch-related communications described below.
+              {' '}and the dispatch related communications described below.
               {' '}{BUSINESS.name} is operated by {BUSINESS.parentCompany}.
             </p>
             <p>
@@ -141,8 +141,8 @@ export default function PrivacyPage() {
               <li>Business administration</li>
             </ul>
             <p>
-              We do not use the contact details you give us&mdash;your name,
-              phone number, or email address&mdash;to run marketing campaigns
+              We do not use the contact details you give us, including your name,
+              phone number, or email address, to run marketing campaigns
               unless you explicitly authorize it. Technical request information
               may also be used to operate the website, diagnose errors and
               protect against abuse, as described in Section 5.
@@ -193,7 +193,7 @@ export default function PrivacyPage() {
               </p>
               <p>
                 With your consent, we measure page visits, accepted inquiry forms,
-                quote-form openings and clicks on phone, SMS, WhatsApp and email
+                quote form openings and clicks on phone, SMS, WhatsApp and email
                 links. A click does not confirm that a call or message took place;
                 an accepted inquiry is not a completed sale.
               </p>
@@ -221,14 +221,14 @@ export default function PrivacyPage() {
                 Measurement settings at the bottom of every page lets you accept,
                 reject or withdraw analytics consent. We save your choice in this
                 browser&apos;s local storage, separately from inquiry information.
-                The preference contains only its version, optional-measurement
+                The preference contains only its version, optional measurement
                 choices and the time you saved them. Clearing this storage removes
                 the saved choice. On the next page load, analytics stays off until
                 you choose again.
               </p>
               <p>
                 Withdrawing consent stops subsequent optional measurement, removes
-                accessible first-party analytics cookies and reloads the page to
+                accessible first party analytics cookies and reloads the page to
                 unload the provider. It does not erase information Google already
                 received. You can also use your browser controls to remove cookies.
                 If your browser prevents saving preferences, we explain the storage
@@ -272,7 +272,7 @@ export default function PrivacyPage() {
           <Section
             number="7"
             title="SMS Terms & Conditions"
-            badge={{ icon: MessageSquare, text: 'Dispatch-related messages' }}
+            badge={{ icon: MessageSquare, text: 'Dispatch messages' }}
           >
             <SubSection letter="A" title="Program Description">
               <p>
@@ -299,7 +299,7 @@ export default function PrivacyPage() {
               </p>
             </SubSection>
 
-            <SubSection letter="D" title="Opt-Out Instructions (Required)">
+            <SubSection letter="D" title="Opt Out Instructions (Required)">
               <p>
                 You may stop receiving messages at any time by replying:
               </p>

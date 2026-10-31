@@ -20,8 +20,8 @@ export const DISPATCH_RATES = {
 
 export type DispatchEquipment = keyof typeof DISPATCH_RATES;
 const publishedRates = Object.values(DISPATCH_RATES);
-export const DISPATCH_RATE_RANGE = `${Math.min(...publishedRates)}–${Math.max(...publishedRates)}%`;
-export const DISPATCH_FEE_POLICY = 'Rai Dispatch uses percentage-only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees.';
+export const DISPATCH_RATE_RANGE = `${Math.min(...publishedRates)} to ${Math.max(...publishedRates)}%`;
+export const DISPATCH_FEE_POLICY = 'Rai Dispatch uses percentage only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees.';
 // The schedule above took effect with the October 30, 2026 release; the dates below come from this repository's history.
 // Search engines and AI assistants still quote copies of the earlier, lower schedule, so every fee statement carries its date.
 export const DISPATCH_FEE_EFFECTIVE_DATE = '2026-10-30';
@@ -55,7 +55,7 @@ const equipmentNouns: Record<DispatchEquipment, string> = {
   'power-only': 'power only', 'step-deck': 'step decks', hotshot: 'hotshots',
   'cargo-van': 'cargo vans', 'sprinter-van': 'Sprinter vans', conestoga: 'Conestoga trailers',
   'rgn-lowboy': 'RGN and lowboy trailers', 'car-hauler': 'car haulers', tanker: 'tankers',
-  'dump-truck': 'dump trucks and trailers', 'curtain-side': 'curtain-side trailers',
+  'dump-truck': 'dump trucks and trailers', 'curtain-side': 'curtain side trailers',
 };
 
 function feeGroup(equipment: DispatchEquipment[]): string {

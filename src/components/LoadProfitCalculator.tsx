@@ -30,7 +30,7 @@ export default function LoadProfitCalculator({ initialEquipment = DEFAULT_LOAD_E
   const vanSelected = input.equipment === 'cargo-van' || input.equipment === 'sprinter-van';
   const errors: Partial<Record<keyof LoadEconomicsInput, string>> = result.valid ? {} : result.errors;
   const summary = result.valid
-    ? `${equipmentSummary}. ${currency.format(result.remainingCents / 100)} remains after entered costs. Break-even load pay is ${currency.format(result.breakEvenCents / 100)} for those costs only.`
+    ? `${equipmentSummary}. ${currency.format(result.remainingCents / 100)} remains after entered costs. Break even load pay is ${currency.format(result.breakEvenCents / 100)} for those costs only.`
     : errors.equipment ?? 'Correct the highlighted inputs to calculate this trip.';
 
   return (
@@ -46,12 +46,12 @@ export default function LoadProfitCalculator({ initialEquipment = DEFAULT_LOAD_E
             <label htmlFor={`${id}-equipment`} className="mb-2 block font-semibold text-navy-950">Truck or equipment type</label>
             <select id={`${id}-equipment`} value={input.equipment} onChange={event => setInput(previous => ({ ...previous, equipment: normalizeEquipmentSelection(event.target.value) }))} className={inputClass} aria-invalid={Boolean(errors.equipment)} aria-describedby={`${id}-equipment-help${errors.equipment ? ` ${id}-equipment-error` : ''}${vanSelected ? ` ${id}-van-note` : ''}`}>
               <option value="" disabled>Choose equipment</option>
-              {EQUIPMENT_TYPES.map(equipment => <option key={equipment.id} value={equipment.id}>{equipment.name} — {getDispatchRate(equipment.id)}%</option>)}
-              <option value="other">Other truck type — quote required</option>
+              {EQUIPMENT_TYPES.map(equipment => <option key={equipment.id} value={equipment.id}>{equipment.name}: {getDispatchRate(equipment.id)}%</option>)}
+              <option value="other">Other truck type: quote required</option>
             </select>
             <p id={`${id}-equipment-help`} className="mt-2 text-sm leading-6 text-surface-700">Uses Rai Dispatch’s published equipment percentage on the load pay entered.</p>
             {errors.equipment ? <p id={`${id}-equipment-error`} className="mt-2 text-sm font-semibold text-primary-700" role="alert">{errors.equipment}</p> : null}
-            {vanSelected ? <p id={`${id}-van-note`} className="mt-3 rounded-lg border border-surface-300 bg-surface-50 p-4 text-sm leading-6 text-navy-800">{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="underline underline-offset-4">Cargo van dispatch — {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="underline underline-offset-4">Sprinter van dispatch — {getDispatchRateLabel('sprinter-van')}</Link></p> : null}
+            {vanSelected ? <p id={`${id}-van-note`} className="mt-3 rounded-lg border border-surface-300 bg-surface-50 p-4 text-sm leading-6 text-navy-800">{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="underline underline-offset-4">Cargo van dispatch: {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="underline underline-offset-4">Sprinter van dispatch: {getDispatchRateLabel('sprinter-van')}</Link></p> : null}
           </div>
           {fields.map(field => <div key={field.key}>
             <label htmlFor={`${id}-${field.key}`} className="mb-2 block font-semibold text-navy-950">{field.label}</label>
@@ -82,12 +82,12 @@ export default function LoadProfitCalculator({ initialEquipment = DEFAULT_LOAD_E
               <div className="border-t border-white/20 pt-5"><dt className="text-lg font-semibold">Remaining after entered costs</dt><dd className="mt-2 break-words font-display text-4xl font-bold tabular-nums sm:text-5xl">{currency.format(result.remainingCents / 100)}</dd></div>
               <div className="flex flex-wrap items-baseline justify-between gap-2"><dt className="text-white/80">Remaining per total mile</dt><dd className="font-semibold tabular-nums">{currency.format(result.remainingPerAllMile)}</dd></div>
               {result.remainingPerHour !== null ? <div className="flex flex-wrap items-baseline justify-between gap-2"><dt className="text-white/80">Remaining per trip hour</dt><dd className="font-semibold tabular-nums">{currency.format(result.remainingPerHour)}</dd></div> : null}
-              <div className="border-t border-white/20 pt-5"><dt className="font-semibold">Break-even load pay for entered costs</dt><dd className="mt-2 font-display text-3xl font-bold tabular-nums">{currency.format(result.breakEvenCents / 100)}<span className="mt-1 block font-sans text-sm font-normal text-white/80">{currency.format(result.breakEvenPerAllMile)} per total trip mile</span></dd></div>
+              <div className="border-t border-white/20 pt-5"><dt className="font-semibold">Break even load pay for entered costs</dt><dd className="mt-2 font-display text-3xl font-bold tabular-nums">{currency.format(result.breakEvenCents / 100)}<span className="mt-1 block font-sans text-sm font-normal text-white/80">{currency.format(result.breakEvenPerAllMile)} per total trip mile</span></dd></div>
             </dl>
             {result.remainingCents < 0 ? <p className="mt-6 rounded-lg border border-primary-400 bg-primary-950 p-4 text-sm leading-6">The load pay does not cover the dispatch fee, fuel and other costs entered. Review the offered pay, empty miles and cost assumptions before deciding.</p> : null}
           </> : <p className="py-5 text-lg leading-7">{summary} No estimate is shown while an input is invalid.</p>}
-          <p className="mt-6 text-sm leading-7 text-white/85"><strong>This is not net profit.</strong> Insurance, truck payments, maintenance, driver pay, factoring, taxes and other expenses are excluded unless you include them in other trip costs. Percentage-based costs beyond dispatch need a separate calculation. Break-even covers only the costs entered, with the same dispatch percentage.</p>
-          <p className="mt-4 text-sm leading-7 text-white/85">All entered load pay is treated as fee-bearing. If your dispatch agreement excludes some charges or uses a different revenue base, calculate that fee separately; this estimate does not model the difference.</p>
+          <p className="mt-6 text-sm leading-7 text-white/85"><strong>This is not net profit.</strong> Insurance, truck payments, maintenance, driver pay, factoring, taxes and other expenses are excluded unless you include them in other trip costs. Percentage based costs beyond dispatch need a separate calculation. Break even covers only the costs entered, with the same dispatch percentage.</p>
+          <p className="mt-4 text-sm leading-7 text-white/85">All entered load pay is treated as fee bearing. If your dispatch agreement excludes some charges or uses a different revenue base, calculate that fee separately; this estimate does not model the difference.</p>
         </div>
       </div>
     </section>

@@ -45,7 +45,7 @@ export default function TruckingDispatchGlossaryPage() {
             <p className="eyebrow">The carrier’s desk · Reference</p>
             <h1 className="max-w-4xl text-4xl leading-tight sm:text-6xl">Truck dispatch and freight glossary</h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-navy-200">Understand the terms used when searching, approving and completing a load. These {DISPATCH_TERMS.length} definitions explain what to check, not just what an abbreviation stands for.</p>
-            <p className="mt-4 max-w-3xl leading-7 text-navy-200">This reference is for owner-operators and carrier teams reviewing dispatch services. It is not a dispatcher training course or a listing of driving jobs.</p>
+            <p className="mt-4 max-w-3xl leading-7 text-navy-200">This reference is for owner operators and carrier teams reviewing dispatch services. It is not a dispatcher training course or a listing of driving jobs.</p>
             <p className="mt-5 text-sm text-navy-300">By {BUSINESS.name} · Reviewed <time dateTime={GLOSSARY_REVIEWED}>October 30, 2026</time></p>
           </div>
         </header>
@@ -59,7 +59,7 @@ export default function TruckingDispatchGlossaryPage() {
           </nav>
 
           <nav id="term-index" aria-labelledby="term-index-title" className="mb-14 scroll-mt-28">
-            <h2 id="term-index-title" className="text-3xl">Find a term: A–Z</h2>
+            <h2 id="term-index-title" className="text-3xl">Find a term: A to Z</h2>
             <p className="mb-6 mt-3 max-w-3xl leading-7 text-navy-700">Choose a term below, or use your browser’s Find command to search this page. Every definition is visible on the page.</p>
             <ul className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {sortedTerms.map(term => <li key={term.id}><a href={`#${term.id}`} className="text-sm leading-6 text-primary-700 underline underline-offset-4 hover:text-primary-800">{term.name}</a></li>)}
@@ -85,7 +85,7 @@ export default function TruckingDispatchGlossaryPage() {
                   </dd>
                 </div>)}
               </dl>
-              <a href="#term-index" className="mt-6 inline-block text-sm font-semibold text-primary-700 underline underline-offset-4 hover:text-primary-800">Back to A–Z</a>
+              <a href="#term-index" className="mt-6 inline-block text-sm font-semibold text-primary-700 underline underline-offset-4 hover:text-primary-800">Back to A to Z</a>
             </section>)}
           </div>
 

@@ -58,11 +58,11 @@ const serviceDetails = [
     title: 'Load Booking',
     subtitle: 'Quality Freight, Matched to Your Truck',
     description:
-      'We review available load-board and broker freight against your equipment, lane preferences, authority, and insurance requirements. You approve the load before booking.',
+      'We review available load board and broker freight against your equipment, lane preferences, authority, and insurance requirements. You approve the load before booking.',
     benefits: [
-      'Load-board and broker freight search',
+      'Load board and broker freight search',
       'Broker eligibility checks',
-      'Equipment-specific load matching',
+      'Equipment specific load matching',
       'Lane preference consideration',
       'Pickup deadhead review',
     ],
@@ -77,7 +77,7 @@ const serviceDetails = [
     title: 'Broker & RC Communication',
     subtitle: 'Professional Communication on Your Behalf',
     description:
-      `From the initial rate call to delivery confirmation, we coordinate broker calls, shipment updates and written instructions. We provide ${ACTIVE_CARRIER_SUPPORT}. New-carrier setup desk hours are ${SETUP_DESK_HOURS}. Agree your dispatch contact and escalation process before the first load.`,
+      `From the initial rate call to delivery confirmation, we coordinate broker calls, shipment updates and written instructions. We provide ${ACTIVE_CARRIER_SUPPORT}. New carrier setup desk hours are ${SETUP_DESK_HOURS}. Agree your dispatch contact and escalation process before the first load.`,
     benefits: [
       'Rate confirmation handling',
       'Appointment scheduling',
@@ -87,7 +87,7 @@ const serviceDetails = [
     ],
     stats: [
       { value: 'Clear', label: 'Load Terms' },
-      { value: '24/7', label: 'Active-Carrier Live Support' },
+      { value: '24/7', label: 'Active Carrier Live Support' },
     ],
   },
   {
@@ -131,7 +131,7 @@ const serviceDetails = [
   {
     id: 'scheduling',
     icon: 'Calendar',
-    title: 'Scheduling & Follow-ups',
+    title: 'Scheduling & Follow ups',
     subtitle: 'Keep Pickup and Delivery Details Organized',
     description:
       'We help coordinate pickup and delivery appointments, clarify facility instructions and communicate schedule changes. Current truck status and driver availability guide the next booking.',
@@ -140,7 +140,7 @@ const serviceDetails = [
       'Appointment confirmation calls',
       'Detention time tracking',
       'Proactive delay communication',
-      'Next-load planning',
+      'Next load planning',
     ],
     stats: [
       { value: 'Load', label: 'Appointment Tracking' },
@@ -170,7 +170,7 @@ export default function ServicesPageClient() {
         <div className="container-custom relative z-10">
           <div className="max-w-3xl">
             <p className="eyebrow">Our services</p>
-            <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">Truck dispatch services for owner-operators and fleets</h1>
+            <h1 className="font-display font-bold uppercase text-4xl sm:text-5xl leading-[1.02] tracking-tight mb-5">Truck dispatch services for owner operators and fleets</h1>
             <p id="answer-block" className="text-white/70 text-lg max-w-2xl mb-8">
               Get help finding freight, negotiating rates, booking approved loads,
               scheduling appointments and organizing paperwork. Choose support for
@@ -252,10 +252,10 @@ export default function ServicesPageClient() {
           <div className="grid gap-5 md:grid-cols-3">
             {[
               { slug: 'regional-dispatch', title: 'Regional dispatch', description: 'Plan around your home base, preferred states, pickup radius and weekly schedule.' },
-              { slug: 'otr-dispatch', title: 'OTR and long-haul dispatch', description: 'Review outbound trips, delivery windows, reload options and time away from home.' },
+              { slug: 'otr-dispatch', title: 'OTR and long haul dispatch', description: 'Review outbound trips, delivery windows, reload options and time away from home.' },
               { slug: 'dedicated-dispatcher', title: 'Dedicated dispatcher support', description: 'Agree on your dispatch contact, load approval, status updates and communication hours.' },
-              { slug: 'expedited-dispatch', title: 'Expedited freight dispatch', description: 'Coordinate time-sensitive freight around actual equipment, pickup readiness and achievable appointments.' },
-              { slug: 'backhaul-dispatch', title: 'Backhaul and reload dispatch', description: 'Review return-load options, destination freight and empty miles before committing to the next trip.' },
+              { slug: 'expedited-dispatch', title: 'Expedited freight dispatch', description: 'Coordinate time sensitive freight around actual equipment, pickup readiness and achievable appointments.' },
+              { slug: 'backhaul-dispatch', title: 'Backhaul and reload dispatch', description: 'Review return load options, destination freight and empty miles before committing to the next trip.' },
             ].map(plan => (
               <Link key={plan.slug} href={`/services/${plan.slug}`} className="rounded-lg border border-navy-600 bg-navy-900 p-7 hover:border-primary-400">
                 <h3 className="font-display text-2xl font-bold">{plan.title}</h3>
@@ -370,7 +370,7 @@ export default function ServicesPageClient() {
           </div>
           <div className="overflow-x-auto rounded-lg border border-surface-300">
             <table className="w-full min-w-[520px] text-left text-sm sm:text-base">
-              <caption className="sr-only">Equipment-specific dispatch checks and published percentage fees</caption>
+              <caption className="sr-only">Equipment specific dispatch checks and published percentage fees</caption>
               <thead className="bg-navy-950 text-white"><tr><th scope="col" className="p-4 sm:p-5">Equipment dispatch</th><th scope="col" className="p-4 sm:p-5">Confirm before booking</th><th scope="col" className="p-4 sm:p-5">Fee</th></tr></thead>
               <tbody className="divide-y divide-surface-200">
                 {[
@@ -379,7 +379,7 @@ export default function ServicesPageClient() {
                   { slug: 'flatbed', title: 'Flatbed', check: 'Cargo dimensions, tarping and loading or securement requirements.' },
                   { slug: 'box-truck', title: 'Box / straight truck', check: 'Usable space, payload, dock access, liftgate and unloading responsibility.' },
                   { slug: 'cargo-van', title: 'Cargo van', check: 'Door openings, usable cargo space, payload and delivery access.' },
-                  { slug: 'conestoga', title: 'Conestoga trailer', check: 'Rolling-tarp clearance, loading access and weather-protection requirements.' },
+                  { slug: 'conestoga', title: 'Conestoga trailer', check: 'Rolling tarp clearance, loading access and weather protection requirements.' },
                   { slug: 'sprinter-van', title: 'Sprinter van', check: 'Door opening, usable cargo dimensions and actual available payload.' },
                   { slug: 'step-deck', title: 'Step deck', check: 'Deck configuration, cargo height, loading method and equipment fit.' },
                   { slug: 'hotshot', title: 'Hotshot', check: 'Truck and trailer specifications, payload and required loading access.' },
@@ -388,7 +388,7 @@ export default function ServicesPageClient() {
               </tbody>
             </table>
           </div>
-          <p className="mt-5 max-w-3xl text-sm leading-7 text-surface-700">Fees are a percentage of gross revenue on loads we book. Specialized equipment and local-only work require a service availability review. <Link prefetch={false} href="/pricing" className="font-semibold text-primary-700 underline underline-offset-4">Review the fee and billing terms</Link> or <Link prefetch={false} href="/equipment" className="font-semibold text-primary-700 underline underline-offset-4">explore every equipment type</Link>.</p>
+          <p className="mt-5 max-w-3xl text-sm leading-7 text-surface-700">Fees are a percentage of gross revenue on loads we book. Specialized equipment and local only work require a service availability review. <Link prefetch={false} href="/pricing" className="font-semibold text-primary-700 underline underline-offset-4">Review the fee and billing terms</Link> or <Link prefetch={false} href="/equipment" className="font-semibold text-primary-700 underline underline-offset-4">explore every equipment type</Link>.</p>
         </div>
       </section>
 
@@ -415,7 +415,7 @@ export default function ServicesPageClient() {
                 title: 'Service scope',
                 href: '/resources/how-to-choose-a-truck-dispatcher',
                 description:
-                  'Confirm which broker calls, scheduling tasks and document follow-ups are included, and what the carrier must provide.',
+                  'Confirm which broker calls, scheduling tasks and document follow ups are included, and what the carrier must provide.',
               },
               {
                 icon: Clock,

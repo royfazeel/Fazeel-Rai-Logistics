@@ -24,7 +24,7 @@ export default function HomePage() {
     '@graph': [
       {
         '@type': 'WebPage', '@id': `${SITE_URL}/#webpage`, url: SITE_URL,
-        name: 'Rai Dispatch — Truck Dispatch Services USA', inLanguage: 'en-US',
+        name: 'Rai Dispatch: Truck Dispatch Services USA', inLanguage: 'en-US',
         isPartOf: { '@id': `${SITE_URL}/#website` },
         mainEntity: { '@id': `${SITE_URL}/#dispatch-service` },
         primaryImageOfPage: `${SITE_URL}${HOME_HERO_IMAGE}`,

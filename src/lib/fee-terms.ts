@@ -3,7 +3,7 @@ import { ACTIVE_CARRIER_SUPPORT, FAQS } from './constants';
 /** The published service scope behind every percentage fee. Keep in step with the pricing table and llms.txt. */
 export const FEE_INCLUSIONS = [
   'A dedicated truck dispatcher for your truck',
-  'Load search and carrier-approved booking',
+  'Load search and carrier approved booking',
   'Freight rate negotiation with brokers',
   'Broker communication from pickup to delivery',
   'Lane and route planning',

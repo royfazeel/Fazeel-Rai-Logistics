@@ -70,7 +70,7 @@ export default function FAQPageClient() {
         <div className="container-custom">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-navy-900 font-medium">
-              Need an answer right now? Pick up the phone — we answer fast.
+              Need an answer right now? Pick up the phone. We answer fast.
             </p>
             <a
               href={BUSINESS.phoneHref}
@@ -123,7 +123,7 @@ export default function FAQPageClient() {
                 Ask a dispatcher, not a search bar
               </h2>
               <p className="text-surface-700 text-lg mb-8">
-                Call us and we&apos;ll walk you through anything — plans,
+                Call us and we&apos;ll walk you through anything: plans,
                 paperwork, lanes, rates. No obligations.
               </p>
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">

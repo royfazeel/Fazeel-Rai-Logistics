@@ -11,7 +11,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/dry-van-480-v1.webp 480w, /images/equipment/dry-van-768-v1.webp 768w, /images/equipment/dry-van-1200-v1.webp 1200w, /images/equipment/dry-van-1536-v1.webp 1536w"
   },
   "reefer": {
-    "alt": "Red semi tractor with a white refrigerated trailer and front-mounted refrigeration unit",
+    "alt": "Red semi tractor with a white refrigerated trailer and front mounted refrigeration unit",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/reefer-1200-v1.webp",
@@ -20,7 +20,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/reefer-480-v1.webp 480w, /images/equipment/reefer-768-v1.webp 768w, /images/equipment/reefer-1200-v1.webp 1200w, /images/equipment/reefer-1536-v1.webp 1536w"
   },
   "flatbed": {
-    "alt": "Red semi tractor with an empty single-level flatbed trailer",
+    "alt": "Red semi tractor with an empty single level flatbed trailer",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/flatbed-1200-v1.webp",
@@ -38,7 +38,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/box-truck-480-v1.webp 480w, /images/equipment/box-truck-768-v1.webp 768w, /images/equipment/box-truck-1200-v1.webp 1200w, /images/equipment/box-truck-1536-v1.webp 1536w"
   },
   "power-only": {
-    "alt": "Red sleeper-cab semi tractor with an exposed fifth wheel and no trailer attached",
+    "alt": "Red sleeper cab semi tractor with an exposed fifth wheel and no trailer attached",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/power-only-1200-v1.webp",
@@ -56,7 +56,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/step-deck-480-v1.webp 480w, /images/equipment/step-deck-768-v1.webp 768w, /images/equipment/step-deck-1200-v1.webp 1200w, /images/equipment/step-deck-1536-v1.webp 1536w"
   },
   "hotshot": {
-    "alt": "Red heavy-duty pickup towing a gooseneck flatbed hotshot trailer",
+    "alt": "Red heavy duty pickup towing a gooseneck flatbed hotshot trailer",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/hotshot-1200-v1.webp",
@@ -65,7 +65,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/hotshot-480-v1.webp 480w, /images/equipment/hotshot-768-v1.webp 768w, /images/equipment/hotshot-1200-v1.webp 1200w, /images/equipment/hotshot-1536-v1.webp 1536w"
   },
   "cargo-van": {
-    "alt": "Red standard-roof cargo van with enclosed side panels at a loading warehouse",
+    "alt": "Red standard roof cargo van with enclosed side panels at a loading warehouse",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/cargo-van-1200-v1.webp",
@@ -74,7 +74,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/cargo-van-480-v1.webp 480w, /images/equipment/cargo-van-768-v1.webp 768w, /images/equipment/cargo-van-1200-v1.webp 1200w, /images/equipment/cargo-van-1536-v1.webp 1536w"
   },
   "sprinter-van": {
-    "alt": "Red high-roof long-wheelbase Sprinter-style cargo van at a freight facility",
+    "alt": "Red high roof long wheelbase Sprinter style cargo van at a freight facility",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/sprinter-van-1200-v1.webp",
@@ -83,7 +83,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/sprinter-van-480-v1.webp 480w, /images/equipment/sprinter-van-768-v1.webp 768w, /images/equipment/sprinter-van-1200-v1.webp 1200w, /images/equipment/sprinter-van-1536-v1.webp 1536w"
   },
   "conestoga": {
-    "alt": "Red semi tractor with a rolling-tarp Conestoga flatbed trailer",
+    "alt": "Red semi tractor with a rolling tarp Conestoga flatbed trailer",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/conestoga-1200-v1.webp",
@@ -92,7 +92,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/conestoga-480-v1.webp 480w, /images/equipment/conestoga-768-v1.webp 768w, /images/equipment/conestoga-1200-v1.webp 1200w, /images/equipment/conestoga-1536-v1.webp 1536w"
   },
   "rgn-lowboy": {
-    "alt": "Red heavy-haul tractor with a detachable-gooseneck lowboy trailer and low center deck",
+    "alt": "Red heavy haul tractor with a detachable gooseneck lowboy trailer and low center deck",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/rgn-lowboy-1200-v1.webp",
@@ -101,7 +101,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/rgn-lowboy-480-v1.webp 480w, /images/equipment/rgn-lowboy-768-v1.webp 768w, /images/equipment/rgn-lowboy-1200-v1.webp 1200w, /images/equipment/rgn-lowboy-1536-v1.webp 1536w"
   },
   "car-hauler": {
-    "alt": "Red semi tractor with an open two-level car-hauler trailer carrying passenger vehicles",
+    "alt": "Red semi tractor with an open two level car hauler trailer carrying passenger vehicles",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/car-hauler-1200-v1.webp",
@@ -110,7 +110,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/car-hauler-480-v1.webp 480w, /images/equipment/car-hauler-768-v1.webp 768w, /images/equipment/car-hauler-1200-v1.webp 1200w, /images/equipment/car-hauler-1536-v1.webp 1536w"
   },
   "tanker": {
-    "alt": "Red semi tractor with a cylindrical stainless-steel tanker trailer",
+    "alt": "Red semi tractor with a cylindrical stainless steel tanker trailer",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/tanker-1200-v1.webp",
@@ -119,7 +119,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/tanker-480-v1.webp 480w, /images/equipment/tanker-768-v1.webp 768w, /images/equipment/tanker-1200-v1.webp 1200w, /images/equipment/tanker-1536-v1.webp 1536w"
   },
   "dump-truck": {
-    "alt": "Red four-axle dump truck with its open-top steel body lowered at an aggregate yard",
+    "alt": "Red four axle dump truck with its open top steel body lowered at an aggregate yard",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/dump-truck-1200-v1.webp",
@@ -128,7 +128,7 @@ export const EQUIPMENT_IMAGES: Record<string, EquipmentImage> = {
     "webpSrcSet": "/images/equipment/dump-truck-480-v1.webp 480w, /images/equipment/dump-truck-768-v1.webp 768w, /images/equipment/dump-truck-1200-v1.webp 1200w, /images/equipment/dump-truck-1536-v1.webp 1536w"
   },
   "curtain-side": {
-    "alt": "Red semi tractor with a curtain-side trailer showing its fixed roof and sliding side curtain",
+    "alt": "Red semi tractor with a curtain side trailer showing its fixed roof and sliding side curtain",
     "width": 1200,
     "height": 800,
     "src": "/images/equipment/curtain-side-1200-v1.webp",

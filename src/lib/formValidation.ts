@@ -39,10 +39,10 @@ export function formatUsPhone(raw: string): string {
 export function validatePhone(raw: string): string | null {
   const d = phoneDigits(raw);
   if (d.length === 0) return 'Please give us a phone number we can reach you on.';
-  if (d.length < 10) return `That is only ${d.length} digit${d.length === 1 ? '' : 's'} — a US number needs 10.`;
+  if (d.length < 10) return `That is only ${d.length} digit${d.length === 1 ? '' : 's'}. A US number needs 10.`;
   // NANP: area code and exchange code cannot begin with 0 or 1.
   if (/^[01]/.test(d)) return 'Area code cannot start with 0 or 1.';
-  if (/^\d{3}[01]/.test(d)) return 'That does not look like a real US number — check the middle three digits.';
+  if (/^\d{3}[01]/.test(d)) return 'That does not look like a real US number. Check the middle three digits.';
   if (/^(\d)\1{9}$/.test(d)) return 'Please enter a real phone number.';
   return null;
 }
@@ -57,7 +57,7 @@ export function validateEmail(raw: string, required = false): string | null {
   // domain, no spaces or characters that break mail headers.
   if (!/^[^\s@,;:<>()[\]\\]+@[^\s@.,;:<>()[\]\\]+(\.[^\s@.,;:<>()[\]\\]+)+$/.test(v)) {
     return v.includes('@')
-      ? 'That email address looks incomplete — check the part after the @.'
+      ? 'That email address looks incomplete. Check the part after the @.'
       : 'An email address needs an @ sign.';
   }
   return null;

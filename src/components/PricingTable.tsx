@@ -70,7 +70,7 @@ export default function PricingTable() {
         </tbody>
       </table>
       <div className="px-6 py-5 border-t border-surface-200 space-y-3 text-sm leading-relaxed text-surface-700">
-        <p>{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="font-semibold text-primary-700 underline underline-offset-4">Cargo van dispatch — {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="font-semibold text-primary-700 underline underline-offset-4">Sprinter van dispatch — {getDispatchRateLabel('sprinter-van')}</Link></p>
+        <p>{VAN_CATEGORY_NOTICE} <Link href="/equipment/cargo-van" className="font-semibold text-primary-700 underline underline-offset-4">Cargo van dispatch: {getDispatchRateLabel('cargo-van')}</Link> · <Link href="/equipment/sprinter-van" className="font-semibold text-primary-700 underline underline-offset-4">Sprinter van dispatch: {getDispatchRateLabel('sprinter-van')}</Link></p>
         <p>Percentages apply to gross revenue on loads we book. Confirm the billing base and scope in your agreement.</p>
         <p>{OTHER_EQUIPMENT_NOTICE}</p>
       </div>

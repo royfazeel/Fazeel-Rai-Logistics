@@ -112,12 +112,12 @@ export default function HomePage() {
               className="font-display text-sm sm:text-base font-semibold uppercase tracking-[0.22em] text-white/70 mb-5 lg:mb-7 flex items-center gap-3"
             >
               <span className="inline-block w-10 h-[3px] bg-primary-500" aria-hidden="true" />
-              Owner-operators &amp; fleets · 48 contiguous states
+              Owner operators &amp; fleets · 48 contiguous states
             </p>
 
             <h1
               className="photo-hero-title font-display font-bold uppercase text-white leading-[0.95] tracking-tight mb-6 lg:mb-7"
-            >Truck dispatch services for owner-operators and small fleets</h1>
+            >Truck dispatch services for owner operators and small fleets</h1>
 
             <HeroPhoto />
 
@@ -306,7 +306,7 @@ export default function HomePage() {
                 Specialized dispatch for nine truck and trailer types.
               </h2>
               <p className="text-white/70 text-lg">
-                Box trucks lead our nine dispatch specialties below. Each service pairs a dedicated dispatcher with equipment-specific load search, rate negotiation and booking support across the lower 48. You approve each load; published fees are {DISPATCH_RATE_RANGE} by equipment.
+                Box trucks lead our nine dispatch specialties below. Each service pairs a dedicated dispatcher with equipment specific load search, rate negotiation and booking support across the lower 48. You approve each load; published fees are {DISPATCH_RATE_RANGE} by equipment.
               </p>
               <Link prefetch={false} href="/equipment" className="mt-5 inline-flex items-center gap-2 py-2 font-semibold text-white underline underline-offset-4 hover:text-primary-300">View all {EQUIPMENT_TYPES.length} equipment types<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             </div>
@@ -395,7 +395,7 @@ export default function HomePage() {
           <div>
             <p className="eyebrow">Nationwide freight dispatch</p>
             <h2 className="section-heading mb-5">Your lanes. Your schedule. All 48 contiguous states.</h2>
-            <p className="text-surface-700 text-lg leading-relaxed mb-5">From regional runs to coast-to-coast trucking, we build a load search around your home base, equipment, and time at home. We help compare reload options, empty miles, delivery appointments, and total trip costs before you commit.</p>
+            <p className="text-surface-700 text-lg leading-relaxed mb-5">From regional runs to coast to coast trucking, we build a load search around your home base, equipment, and time at home. We help compare reload options, empty miles, delivery appointments, and total trip costs before you commit.</p>
             <div className="flex flex-col items-start gap-2">
               <Link prefetch={false} href="/service-areas" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Explore nationwide dispatch coverage<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
               <Link prefetch={false} href="/carriers" className="inline-flex gap-2 items-center font-semibold text-primary-700 py-2">Find dispatch support for your operation<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
@@ -403,9 +403,9 @@ export default function HomePage() {
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
-              { title: 'Owner-operator dispatch', href: '/carriers/owner-operators', description: 'A dedicated dispatch contact while you stay in control of load acceptance and your own authority.' },
+              { title: 'Owner operator dispatch', href: '/carriers/owner-operators', description: 'A dedicated dispatch contact while you stay in control of load acceptance and your own authority.' },
               { title: 'Small fleet dispatch', href: '/carriers/small-fleets', description: 'Coordinate truck availability, driver preferences, and paperwork across your equipment.' },
-              { title: 'Regional truck dispatch', href: '/services/regional-dispatch', description: 'Set your pickup radius, preferred states and home-time target before planning the next load.' },
+              { title: 'Regional truck dispatch', href: '/services/regional-dispatch', description: 'Set your pickup radius, preferred states and home time target before planning the next load.' },
               { title: 'New authority dispatch', href: '/carriers/new-authorities', description: 'Review insurance, authority age, and broker eligibility before setting expectations for available loads.' },
             ].map(item => <Link prefetch={false} href={item.href} key={item.title} className="card p-6 hover:border-primary-300"><h3 className="font-display text-2xl font-bold text-navy-950 mb-3">{item.title}</h3><p className="text-surface-700 leading-relaxed">{item.description}</p><span className="mt-5 inline-flex items-center gap-2 font-semibold text-primary-700">Review service fit<ArrowRight className="w-4 h-4" aria-hidden="true" /></span></Link>)}
           </div>
@@ -534,7 +534,7 @@ export default function HomePage() {
             <div className="max-w-2xl mb-12">
               <p className="eyebrow">Straight talk</p>
               <h2 className="section-heading mb-4">
-                What Rai Dispatch is — and what it isn&apos;t
+                What Rai Dispatch is and what it isn&apos;t
               </h2>
               <p className="text-surface-700 text-lg">
                 Know who handles each part of the load and what remains
@@ -637,7 +637,7 @@ export default function HomePage() {
                 icon: DollarSign,
                 title: 'Affordable rates',
                 description:
-                  `Equipment-based dispatch fees of ${DISPATCH_RATE_RANGE} of gross revenue on loads we book, confirmed before you start.`,
+                  `Equipment based dispatch fees of ${DISPATCH_RATE_RANGE} of gross revenue on loads we book, confirmed before you start.`,
               },
               {
                 icon: Users,
@@ -665,7 +665,7 @@ export default function HomePage() {
               },
               {
                 icon: Clock,
-                title: 'Driver-first approach',
+                title: 'Driver first approach',
                 description:
                   'Your success is our success. We fight for your best interests on every load.',
               },
@@ -767,7 +767,7 @@ export default function HomePage() {
               your dedicated dispatcher, documents, and the {DISPATCH_RATE_RANGE} fee
               for your equipment.
             </p>
-            <p className="mb-7 text-sm leading-6 text-white/75">New-carrier setup desk: {SETUP_DESK_HOURS}. Active carriers use their agreed dispatch contact.</p>
+            <p className="mb-7 text-sm leading-6 text-white/75">New carrier setup desk: {SETUP_DESK_HOURS}. Active carriers use their agreed dispatch contact.</p>
 
             <div className="flex flex-col gap-3 max-w-md mx-auto mb-8">
               <a

@@ -297,7 +297,7 @@ export default function LeadCapturePopup() {
                   Need Loads for Your Truck?
                 </h2>
                 <p className="text-white/70 text-sm">
-                  Talk to a dispatch manager — no setup fees, no long contracts.
+                  Talk to a dispatch manager: no setup fees, no long contracts.
                 </p>
               </div>
             </div>

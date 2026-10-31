@@ -90,7 +90,7 @@ const FIELD_LABELS: Record<TextField | 'message' | 'requestCallback', string> = 
 const SOURCE_LABELS: Record<LeadSource, string> = {
   contact_page: 'Contact page form',
   quote_modal: 'Quote modal',
-  exit_intent_popup: 'Exit-intent popup',
+  exit_intent_popup: 'Exit intent popup',
 };
 
 /**
@@ -103,7 +103,7 @@ const SOURCE_LABELS: Record<LeadSource, string> = {
 const STATUS_LABELS: Record<string, string> = {
   'new-authority': 'New authority',
   switching: 'Switching dispatchers',
-  'self-dispatch': 'Self-dispatching now',
+  'self-dispatch': 'Self dispatching now',
   exploring: 'Just exploring',
 };
 
@@ -341,7 +341,7 @@ function buildEmailSubject(lead: Lead): string {
 function buildEmailText(lead: Lead): string {
   const phone = (lead.raw.phone as string) || '';
   const lines = [
-    `New ${lead.sourceLabel.toLowerCase()} submission — ${BUSINESS.name}`,
+    `New ${lead.sourceLabel.toLowerCase()} submission: ${BUSINESS.name}`,
     '',
     `CALL BACK: ${phone}   ${telHref(phone)}`,
     '',
@@ -474,11 +474,11 @@ function buildAutoReplyText(lead: Lead): string {
     summary,
     '',
     `The fastest way to speak to a dispatcher is to call ${BUSINESS.phone}. You can text or WhatsApp the same number.`,
-    `New-carrier setup desk: ${BUSINESS.hours.days}, ${BUSINESS.hours.time}.`,
+    `New carrier setup desk: ${BUSINESS.hours.days}, ${BUSINESS.hours.time}.`,
     '',
     'If anything above is wrong, just reply to this email and we will correct it.',
     '',
-    `— ${BUSINESS.name}`,
+    `${BUSINESS.name}`,
     BUSINESS.address.full,
     `${BUSINESS.phone} · ${ownerInbox()}`,
     '',
@@ -520,7 +520,7 @@ function buildAutoReplyHtml(lead: Lead): string {
     )}" style="color:#C8232C;font-weight:700;text-decoration:none;">${escapeHtml(
       BUSINESS.phone
     )}</a>. You can text or WhatsApp the same number.</p>`,
-    `<p style="margin:0 0 14px;">New-carrier setup desk: ${escapeHtml(BUSINESS.hours.days)}, ${escapeHtml(
+    `<p style="margin:0 0 14px;">New carrier setup desk: ${escapeHtml(BUSINESS.hours.days)}, ${escapeHtml(
       BUSINESS.hours.time
     )}.</p>`,
     `<p style="margin:0 0 18px;">If anything above is wrong, just reply to this email and we will correct it.</p>`,
@@ -587,7 +587,7 @@ async function sendAutoReply(lead: Lead): Promise<boolean> {
       from: senderAddress(),
       to: [to],
       reply_to: ownerInbox(),
-      subject: `We received your request — ${BUSINESS.name}`,
+      subject: `We received your request: ${BUSINESS.name}`,
       text: buildAutoReplyText(lead),
       html: buildAutoReplyHtml(lead),
       headers: {
@@ -710,10 +710,10 @@ export async function POST(req: Request) {
     return fail(400, 'missing_phone', 'Please give us a phone number we can reach you on.');
   }
   if (!isPlausibleUsPhone(values.phone)) {
-    return fail(400, 'invalid_phone', 'That phone number does not look right — please check it.');
+    return fail(400, 'invalid_phone', 'That phone number does not look right. Please check it.');
   }
   if (values.email && !isPlausibleEmail(values.email)) {
-    return fail(400, 'invalid_email', 'That email address does not look right — please check it.');
+    return fail(400, 'invalid_email', 'That email address does not look right. Please check it.');
   }
 
   const equipmentError = validateEquipmentSelection(values.equipment);
@@ -761,7 +761,7 @@ export async function POST(req: Request) {
       fields.push({
         key: 'requestCallback',
         label: FIELD_LABELS.requestCallback,
-        value: 'Yes — prefers a call over email',
+        value: 'Yes, prefers a call over email',
       });
     }
   }

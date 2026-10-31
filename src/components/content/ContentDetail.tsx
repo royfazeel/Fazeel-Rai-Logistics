@@ -76,7 +76,7 @@ function EquipmentHero({ content, feeLabel, path, heading, contactHref }: { cont
           </div>
           <div className="lg:col-start-1 lg:row-start-2">
             <p id="answer-block" className="max-w-2xl text-base leading-relaxed text-navy-700 sm:text-lg">{content.intro}</p>
-            {(content.slug === 'cargo-van' || content.slug === 'sprinter-van') && <p className="mt-3 text-sm leading-6 text-navy-700">Separately listed services: <Link href="/equipment/cargo-van" className="font-semibold text-accent-800 underline underline-offset-4">Cargo van dispatch — {getDispatchRateLabel('cargo-van')}</Link>{' · '}<Link href="/equipment/sprinter-van" className="font-semibold text-accent-800 underline underline-offset-4">Sprinter van dispatch — {getDispatchRateLabel('sprinter-van')}</Link>.</p>}
+            {(content.slug === 'cargo-van' || content.slug === 'sprinter-van') && <p className="mt-3 text-sm leading-6 text-navy-700">Separately listed services: <Link href="/equipment/cargo-van" className="font-semibold text-accent-800 underline underline-offset-4">Cargo van dispatch: {getDispatchRateLabel('cargo-van')}</Link>{' · '}<Link href="/equipment/sprinter-van" className="font-semibold text-accent-800 underline underline-offset-4">Sprinter van dispatch: {getDispatchRateLabel('sprinter-van')}</Link>.</p>}
             <ul className="mt-5 space-y-2.5 text-sm text-navy-800">
               {content.highlights.map((highlight) => <li key={highlight} className="flex items-start gap-2"><Check size={17} className="mt-0.5 shrink-0 text-primary-600" aria-hidden="true" />{highlight}</li>)}
             </ul>
@@ -178,8 +178,8 @@ export default function ContentDetail({ content, category, guide }: { content: D
                   <div><dt className="font-semibold text-navy-950">Dispatch fee</dt><dd className="mt-1 text-navy-700">{feeLabel} of gross revenue on loads we book{category === 'equipment' ? '.' : ', based on equipment.'} {DISPATCH_FEE_POLICY} {DISPATCH_FEE_EFFECTIVE_SENTENCE} <Link href="/pricing" className="text-accent-800 underline underline-offset-4">Review the billing terms.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Service area</dt><dd className="mt-1 text-navy-700">{BUSINESS.serviceArea}. <Link href="/service-areas" className="text-accent-800 underline underline-offset-4">Plan your lanes and coverage.</Link></dd></div>
                   <div><dt className="font-semibold text-navy-950">Load approval</dt><dd className="mt-1 text-navy-700">You review the rate, appointments and requirements, then approve each load before booking.</dd></div>
-                  <div><dt className="font-semibold text-navy-950">Getting started</dt><dd className="mt-1 text-navy-700">Free setup, an equipment review and a written dispatch agreement. New-carrier setup desk: {SETUP_DESK_HOURS}. <Link href="/resources/carrier-onboarding-checklist" className="text-accent-800 underline underline-offset-4">Prepare your carrier details.</Link></dd></div>
-                  <div><dt className="font-semibold text-navy-950">Active-carrier support</dt><dd className="mt-1 text-navy-700">{ACTIVE_CARRIER_SUPPORT}. Use your agreed dispatch contact and escalation process.</dd></div>
+                  <div><dt className="font-semibold text-navy-950">Getting started</dt><dd className="mt-1 text-navy-700">Free setup, an equipment review and a written dispatch agreement. New carrier setup desk: {SETUP_DESK_HOURS}. <Link href="/resources/carrier-onboarding-checklist" className="text-accent-800 underline underline-offset-4">Prepare your carrier details.</Link></dd></div>
+                  <div><dt className="font-semibold text-navy-950">Active carrier support</dt><dd className="mt-1 text-navy-700">{ACTIVE_CARRIER_SUPPORT}. Use your agreed dispatch contact and escalation process.</dd></div>
                 </dl>
               </section>}
               {category === 'equipment' && <section id="fee-includes" className="mb-12 scroll-mt-28" aria-labelledby="fee-includes-title">
@@ -214,7 +214,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
                   {content.faqs.map((faq) => <div key={faq.question}><h3 className="mb-2 text-xl text-navy-950">{faq.question}</h3><p className="leading-7 text-navy-700">{faq.answer}</p></div>)}
                 </div>
               </section>
-              {guide?.sources && <section className="mt-10 border-t border-surface-300 pt-6" aria-labelledby="sources-title"><h2 id="sources-title" className="text-2xl">References</h2><ul className="mt-3 space-y-2">{guide.sources.map((source) => <li key={source.href}><a href={source.href} className="text-accent-800 underline underline-offset-4 hover:text-accent-950">{source.label}</a></li>)}</ul><p className="mt-3 text-sm leading-6 text-navy-600">Check the current source for entity-specific information. This guide explains dispatch preparation and is not a substitute for professional advice on your operation.</p></section>}
+              {guide?.sources && <section className="mt-10 border-t border-surface-300 pt-6" aria-labelledby="sources-title"><h2 id="sources-title" className="text-2xl">References</h2><ul className="mt-3 space-y-2">{guide.sources.map((source) => <li key={source.href}><a href={source.href} className="text-accent-800 underline underline-offset-4 hover:text-accent-950">{source.label}</a></li>)}</ul><p className="mt-3 text-sm leading-6 text-navy-600">Check the current source for entity specific information. This guide explains dispatch preparation and is not a substitute for professional advice on your operation.</p></section>}
             </div>
 
             <aside className="space-y-6 lg:sticky lg:top-28">
