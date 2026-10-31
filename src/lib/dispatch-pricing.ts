@@ -52,10 +52,10 @@ const equipmentNouns: Record<DispatchEquipment, string> = {
 function feeGroup(equipment: DispatchEquipment[]): string {
   const groups = new Map<number, string[]>();
   equipment.forEach(key => groups.set(DISPATCH_RATES[key], [...(groups.get(DISPATCH_RATES[key]) ?? []), equipmentNouns[key]]));
-  return [...groups].map(([rate, names]) => `${rate}% for ${names.length < 2 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`}`).join(' and ');
+  return [...groups].map(([rate, names]) => `${rate}% for ${names.length < 2 ? names[0] : `${names.slice(0, -1).join(', ')}${names.length > 2 ? ',' : ''} and ${names[names.length - 1]}`}`).join(' and ');
 }
 
-export const DISPATCH_FEES_ANSWER = `Dispatch fees are ${getDispatchRateLabel('box-truck')} for box trucks, ${getDispatchRateLabel('hotshot')} for hotshots, ${feeGroup(['reefer', 'conestoga'])}, ${getDispatchRateLabel('cargo-van')} for cargo vans, and ${feeGroup(['dry-van', 'flatbed', 'power-only', 'step-deck', 'sprinter-van'])}. Fees apply to gross revenue on loads we book. ${DISPATCH_FEE_POLICY} Confirm the applicable equipment category, billing base and service scope in writing.`;
+export const DISPATCH_FEES_ANSWER = `Dispatch fees are ${getDispatchRateLabel('box-truck')} for box trucks, ${getDispatchRateLabel('hotshot')} for hotshots, ${feeGroup(['reefer', 'conestoga'])}, ${getDispatchRateLabel('cargo-van')} for cargo vans, and ${feeGroup(['dry-van', 'flatbed', 'power-only', 'step-deck', 'sprinter-van', 'rgn-lowboy', 'car-hauler', 'tanker', 'dump-truck', 'curtain-side'])}. Fees apply to gross revenue on loads we book. ${DISPATCH_FEE_POLICY} Confirm the applicable equipment category, billing base and service scope in writing.`;
 // Existing callers share the same answer instead of carrying a second rate summary.
 export const DISPATCH_PRICING_SUMMARY = DISPATCH_FEES_ANSWER;
 export const VAN_CATEGORY_NOTICE = `Cargo vans are listed at ${getDispatchRateLabel('cargo-van')} and Sprinter vans at ${getDispatchRateLabel('sprinter-van')}. Confirm which service category applies to your vehicle before onboarding.`;

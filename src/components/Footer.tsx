@@ -1,7 +1,7 @@
 import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import Link from 'next/link';
 import { Phone, Mail, MapPin, ArrowRight, MessageCircle, Clock } from 'lucide-react';
-import { ACTIVE_CARRIER_SUPPORT, BUSINESS, SETUP_DESK_HOURS } from '@/lib/constants';
+import { ACTIVE_CARRIER_SUPPORT, BUSINESS, EQUIPMENT_TYPES, SETUP_DESK_HOURS } from '@/lib/constants';
 import BrandLogo from './BrandLogo';
 
 const footerLinks = {
@@ -15,16 +15,7 @@ const footerLinks = {
     { name: 'Load Scheduling', href: '/services/scheduling' },
   ],
   equipment: [
-    { name: 'Box Trucks', href: '/equipment/box-truck' },
-    { name: 'Dry Vans', href: '/equipment/dry-van' },
-    { name: 'Reefers', href: '/equipment/reefer' },
-    { name: 'Flatbeds', href: '/equipment/flatbed' },
-    { name: 'Power Only', href: '/equipment/power-only' },
-    { name: 'Step Deck', href: '/equipment/step-deck' },
-    { name: 'Hotshot', href: '/equipment/hotshot' },
-    { name: 'Cargo Vans', href: '/equipment/cargo-van' },
-    { name: 'Sprinter Vans', href: '/equipment/sprinter-van' },
-    { name: 'Conestoga Trailers', href: '/equipment/conestoga' },
+    ...EQUIPMENT_TYPES.map(equipment => ({ name: equipment.name, href: `/equipment/${equipment.id}` })),
     { name: 'All Equipment Types', href: '/equipment' },
   ],
   company: [

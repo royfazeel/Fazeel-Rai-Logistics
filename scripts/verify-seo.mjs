@@ -47,7 +47,7 @@ const approvedFees = [
   { slug: 'curtain-side', label: /curtain[\s-]*sides?/i, rate: 5 },
 ];
 const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 5 };
-const exactFeesAnswer = 'Dispatch fees are 7% for box trucks, 6% for hotshots, 4% for reefers and Conestoga trailers, 12% for cargo vans, and 5% for dry vans, flatbeds, power only, step decks and Sprinter vans. Fees apply to gross revenue on loads we book. Rai Dispatch uses percentage-only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees. Confirm the applicable equipment category, billing base and service scope in writing.';
+const exactFeesAnswer = 'Dispatch fees are 7% for box trucks, 6% for hotshots, 4% for reefers and Conestoga trailers, 12% for cargo vans, and 5% for dry vans, flatbeds, power only, step decks, Sprinter vans, RGN and lowboy trailers, car haulers, tankers, dump trucks and trailers, and curtain-side trailers. Fees apply to gross revenue on loads we book. Rai Dispatch uses percentage-only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees. Confirm the applicable equipment category, billing base and service scope in writing.';
 const exactEquipmentAnswers = {
   'box-truck': 'Rai Dispatch charges 7% of gross revenue on loads we book for box trucks. Confirm the billing base and service scope in writing before onboarding.',
   'cargo-van': 'Rai Dispatch charges 12% of gross revenue on loads we book for cargo vans. The separately listed Sprinter van dispatch service is priced at 5%. Confirm which service category applies to your vehicle before onboarding.',

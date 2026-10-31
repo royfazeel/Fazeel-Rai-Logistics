@@ -235,7 +235,7 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/resources/truck-dispatch-fees": {
     title: `Truck Dispatch Fees by Equipment (${DISPATCH_RATE_RANGE}) | Rai Dispatch`,
-    description: "How much truck dispatchers charge: percentage vs flat fees, what the base includes, and Rai Dispatch fees by equipment with worked $2,000-load examples.",
+    description: `Truck dispatch fees by equipment: box trucks ${getDispatchRateLabel('box-truck')}, cargo vans ${getDispatchRateLabel('cargo-van')} and Sprinter vans ${getDispatchRateLabel('sprinter-van')}. No setup, fixed weekly/monthly or other Rai Dispatch fees.`,
     h1: "Truck dispatch fees by equipment",
   },
   "/resources/truck-dispatch-service-agreement-checklist": {

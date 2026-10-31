@@ -1,6 +1,6 @@
 'use client';
 
-import { OTHER_EQUIPMENT_NOTICE, DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
+import { OTHER_EQUIPMENT_NOTICE, DISPATCH_RATE_RANGE, DISPATCH_FEE_POLICY, VAN_CATEGORY_NOTICE } from '@/lib/dispatch-pricing';
 import EquipmentPhoto from '@/components/EquipmentPhoto';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle, Phone } from 'lucide-react';
@@ -28,6 +28,10 @@ export default function EquipmentPageClient() {
     <section id="equipment-options" className="section-padding scroll-mt-20 bg-white">
       <div className="container-custom">
         <div className="max-w-3xl mb-10"><p className="eyebrow">Choose your truck or trailer</p><h2 className="section-heading mb-4">The right load starts with the right fit.</h2><p className="text-surface-700 text-lg">Equipment dimensions, payload, insurance, operating authority, and driver availability all matter. Explore what we review and how we plan freight for each type.</p></div>
+        <div className="mb-8 rounded-lg border border-surface-200 bg-surface-50 p-5 text-sm leading-7 text-surface-700">
+          <p>Rates below apply to gross revenue on loads we book. {DISPATCH_FEE_POLICY}</p>
+          <p className="mt-3">{VAN_CATEGORY_NOTICE} <Link href="/pricing" className="font-semibold text-primary-700 underline underline-offset-4 hover:text-primary-800">View full pricing and billing details.</Link></p>
+        </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {EQUIPMENT_TYPES.map(equipment => {
             return <article key={equipment.id} id={equipment.id} className="card overflow-hidden flex flex-col scroll-mt-24">

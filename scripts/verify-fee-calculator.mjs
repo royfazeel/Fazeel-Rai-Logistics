@@ -90,7 +90,7 @@ check('The authoritative map preserves all 15 independent published rates', () =
   assert.equal(pricing.DISPATCH_RATE_RANGE, '4–12%');
 });
 check('Exact visible fee answer agrees with the controlling specification and homepage FAQ', () => {
-  const expected = 'Dispatch fees are 7% for box trucks, 6% for hotshots, 4% for reefers and Conestoga trailers, 12% for cargo vans, and 5% for dry vans, flatbeds, power only, step decks and Sprinter vans. Fees apply to gross revenue on loads we book. Rai Dispatch uses percentage-only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees. Confirm the applicable equipment category, billing base and service scope in writing.';
+  const expected = 'Dispatch fees are 7% for box trucks, 6% for hotshots, 4% for reefers and Conestoga trailers, 12% for cargo vans, and 5% for dry vans, flatbeds, power only, step decks, Sprinter vans, RGN and lowboy trailers, car haulers, tankers, dump trucks and trailers, and curtain-side trailers. Fees apply to gross revenue on loads we book. Rai Dispatch uses percentage-only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees. Confirm the applicable equipment category, billing base and service scope in writing.';
   assert.equal(pricing.DISPATCH_FEES_ANSWER, expected);
   assert.equal(loadSource('src/lib/constants.ts').FAQS.find(item => item.id === 1).answer, expected);
 });

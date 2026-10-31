@@ -17,7 +17,7 @@ const PAGE_REVISIONS: Record<string, string> = {
   '/resources/trucking-dispatch-glossary': '2026-10-30',
   '/tools/load-profit-calculator': '2026-10-31',
   '/editorial-standards': '2026-10-30',
-  '/privacy': '2026-10-26', '/terms': '2026-10-30',
+  '/privacy': '2026-10-26', '/terms': '2026-10-31',
   '/what-to-expect': '2026-10-30',
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(({ slug }) => [`/equipment/${slug}`, '2026-10-30'])),
   ...Object.fromEntries(SERVICE_CONTENT.map(({ slug }) => [`/services/${slug}`, '2026-10-30'])),
