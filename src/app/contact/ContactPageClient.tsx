@@ -390,12 +390,15 @@ export default function ContactPageClient() {
                       </div>
                       <div>
                         <h3 className="font-display text-lg font-bold text-navy-950 mb-0.5">
-                          Address
+                          Registered business address
                         </h3>
                         <p className="text-navy-800">{BUSINESS.address.street}</p>
                         <p className="text-navy-800">
                           {BUSINESS.address.city}, {BUSINESS.address.state}{' '}
                           {BUSINESS.address.zip}
+                        </p>
+                        <p className="text-sm text-surface-600 mt-1">
+                          Mailing address only. Dispatch support is provided remotely.
                         </p>
                       </div>
                     </div>

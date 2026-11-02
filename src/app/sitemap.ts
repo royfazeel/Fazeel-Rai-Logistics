@@ -9,7 +9,7 @@ import { EQUIPMENT_IMAGES } from '@/lib/equipment-images';
 const CONTENT_UPDATED = '2026-09-24';
 const PAGE_REVISIONS: Record<string, string> = {
   '/services': '2026-10-30',
-  '/pricing': '2026-10-31', '/contact': '2026-10-30',
+  '/pricing': '2026-10-31',
   '/faq': '2026-10-30',
   '/carriers': '2026-10-30', '/service-areas': '2026-10-30',
   '/resources': '2026-10-30',
@@ -43,8 +43,8 @@ const PAGE_REVISIONS: Record<string, string> = {
   // This release revises the titles, descriptions and headings of these pages.
   // Fixed review date; a future build must not advance it automatically.
   ...Object.fromEntries(Object.keys(PAGE_SEO_OVERRIDES).map(path => [path === '/' ? '' : path, '2026-10-31'])),
-  // About now lists all 15 supported equipment types and their approved fees.
-  '/about': '2026-11-01',
+  // November 2: owner clarified that the registered address is for mail only.
+  '/about': '2026-11-02', '/contact': '2026-11-02',
   // November 2: full equipment catalog, distinct introductions and aligned service metadata.
   '': '2026-11-02', '/equipment': '2026-11-02',
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(content => [`/equipment/${content.slug}`, '2026-11-02'])),

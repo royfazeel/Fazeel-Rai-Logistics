@@ -151,8 +151,8 @@ export default function AboutPageClient() {
                 Nationwide dispatch, run like a small shop
               </h2>
               <p className="text-surface-700 text-lg">
-                Based in Casper, Wyoming, we provide nationwide dispatch
-                services with a focus on transparency, affordability, and
+                We provide nationwide dispatch services remotely, with a
+                focus on transparency, affordability, and
                 driver success. Our team of experienced dispatchers understands
                 the trucking industry and fights for the best rates on every
                 load.
@@ -335,8 +335,9 @@ export default function AboutPageClient() {
                     <MapPin className="w-5 h-5 text-primary-600" aria-hidden="true" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-navy-900 mb-1">Headquarters</h3>
+                    <h3 className="font-semibold text-navy-900 mb-1">Registered business address</h3>
                     <p className="text-surface-700">{BUSINESS.address.full}</p>
+                    <p className="text-sm text-surface-600 mt-1">Mailing address only. Dispatch support is provided remotely.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
