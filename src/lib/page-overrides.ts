@@ -10,7 +10,7 @@ export type PageSeoOverride = { title: string; description: string; h1: string }
 export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   "/": {
     title: `Truck Dispatch for Owner Operators | ${DISPATCH_RATE_RANGE} | Rai Dispatch`,
-    description: `Dedicated truck dispatcher for owner operators and small fleets, lower 48. Fees ${DISPATCH_RATE_RANGE} by equipment, free setup, no forced dispatch. You approve every load.`,
+    description: `Truck dispatch services for owner operators and fleets, lower 48. Dedicated dispatcher, load search and ${DISPATCH_RATE_RANGE} fees. No other Rai Dispatch fees.`,
     h1: "Truck dispatch services for owner operators and small fleets",
   },
   "/about": {

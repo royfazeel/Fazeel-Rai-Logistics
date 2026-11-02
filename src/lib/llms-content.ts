@@ -3,6 +3,7 @@ import { EQUIPMENT_CONTENT, GUIDES, SERVICE_CONTENT } from './dispatch-content';
 import type { CarrierGuide, DispatchContent } from './dispatch-content';
 import { CARRIER_AUTHORITY_SENTENCE, DISPATCH_FEES_ANSWER, DISPATCH_FEE_EFFECTIVE_SENTENCE, DISPATCH_FEE_HISTORY_SENTENCE, DISPATCH_FEE_POLICY, NO_FORCED_DISPATCH_SENTENCE, OTHER_EQUIPMENT_NOTICE, getDispatchRateLabel } from './dispatch-pricing';
 import { SITE_URL } from './seo';
+import { CARRIER_CONTENT } from './carrier-content';
 
 const sitePages = [
   ['/', 'Rai Dispatch'],
@@ -87,7 +88,7 @@ function sourceIndex() {
   ];
 }
 
-function contentText(category: 'equipment' | 'services' | 'resources', content: DispatchContent, guide?: CarrierGuide) {
+function contentText(category: 'equipment' | 'services' | 'resources' | 'carriers', content: DispatchContent, guide?: CarrierGuide) {
   const lines = [
     `## ${content.title}`,
     '',
@@ -96,6 +97,7 @@ function contentText(category: 'equipment' | 'services' | 'resources', content: 
     content.intro,
     '',
   ];
+  if (content.serviceSummary) lines.push(content.serviceSummary, '');
   if (guide) lines.push(`Published: ${guide.published}. Updated: ${guide.updated ?? guide.published}. Publisher: ${BUSINESS.name}.`, '');
   if (content.availability) lines.push(content.availability, '');
   if (!guide) lines.push('Freight availability and carrier results vary; no specific load rate or weekly revenue is guaranteed.', '');
@@ -134,6 +136,7 @@ export function getLlmsFull() {
     ...FAQS.flatMap(faq => [`### ${faq.question}`, '', faq.answer, '']),
     ...EQUIPMENT_CONTENT.flatMap(content => contentText('equipment', content)),
     ...SERVICE_CONTENT.flatMap(content => contentText('services', content)),
+    ...CARRIER_CONTENT.flatMap(content => contentText('carriers', content)),
     ...GUIDES.flatMap(guide => contentText('resources', guide, guide)),
     ...sourceIndex(),
   ].join('\n');

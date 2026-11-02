@@ -25,6 +25,7 @@ export type DispatchContent = {
   description: string;
   eyebrow: string;
   intro: string;
+  serviceSummary?: string;
   highlights: string[];
   sections: ContentSection[];
   checklistTitle: string;
@@ -101,7 +102,7 @@ const BASE_EQUIPMENT_CONTENT: DispatchContent[] = [
     slug: 'box-truck', title: 'Box truck dispatch services', metaTitle: `Box Truck Dispatch Services | ${getDispatchRateLabel('box-truck')} Fee`,
     description: `Box truck dispatch with a dedicated dispatcher across the lower 48. ${getDispatchRateLabel('box-truck')} fee, free setup and ${ACTIVE_CARRIER_SUPPORT}.`,
     eyebrow: 'Straight trucks. Specific load requirements.',
-    intro: `Rai Dispatch specializes in box truck and straight truck dispatch for owner operators and small fleets across the 48 contiguous states. Your dedicated dispatcher reviews equipment fit, searches suitable freight and coordinates carrier approved bookings at a clear ${getDispatchRateLabel('box-truck')} dispatch fee.`,
+    intro: 'Rai Dispatch provides box truck dispatch for owner operators and small fleets running 26 foot box trucks and other straight trucks across the lower 48. Your dedicated dispatcher checks payload and loading access, searches suitable freight, negotiates rates and coordinates bookings you approve.',
     highlights: ['Box dimensions and payload reviewed', 'Liftgate and delivery needs clarified', 'Regional and OTR options assessed'],
     sections: [
       { id: 'dimensions', title: 'A truck length is only the starting point', paragraphs: ['Two trucks described as 26 foot box trucks may have different payloads, interior heights, door openings and dock compatibility. Those differences determine whether the freight can be loaded and delivered. We collect your actual measurements instead of assuming a listing will fit.', 'Tell us whether the truck has a liftgate, pallet jack, dock height access and any loading restrictions. Driver assist, inside delivery and residential delivery are separate work requirements that need explicit approval.'] },
@@ -183,7 +184,7 @@ const BASE_EQUIPMENT_CONTENT: DispatchContent[] = [
     slug: 'cargo-van', title: 'Cargo van dispatch services', metaTitle: `Cargo Van Dispatch Services | ${getDispatchRateLabel('cargo-van')} Fee`,
     description: `Cargo van dispatch at a ${getDispatchRateLabel('cargo-van')} fee with a dedicated dispatcher. Review small freight dimensions, payload, loading access and lanes before confirming service fit.`,
     eyebrow: 'Compact equipment. Exact fit freight.',
-    intro: 'Cargo vans need freight that fits their door openings, interior space and payload. Rai Dispatch reviews the vehicle and your operating plan before confirming whether dispatch support is available.',
+    intro: 'Rai Dispatch provides cargo van dispatch for owner operators and small fleets. Your dedicated dispatcher searches freight around usable cargo space, door openings, payload, loading access and your operating radius, with each load subject to your approval.',
     availability: 'Cargo van service is subject to equipment, location, lane and service capability review. Courier contracts, dedicated routes and expedited loads are not guaranteed.',
     highlights: ['Door and interior dimensions reviewed', 'Payload and loading access checked', 'Service fit assessed before onboarding'],
     sections: [
@@ -225,8 +226,9 @@ export const EQUIPMENT_CONTENT: DispatchContent[] = BASE_EQUIPMENT_CONTENT.map(c
       : undefined;
   return {
     ...content,
-    // One map-derived sentence is shared by the lead answer and matching FAQ.
+    // Keep the approved fee answer exact and preserve useful equipment context beside it.
     intro: feeQuestion ? getEquipmentFeeStatement(content.slug) : content.intro,
+    serviceSummary: feeQuestion ? content.intro : undefined,
     sections: [...content.sections, ...(enhancement?.sections ?? [])],
     faqs: feeQuestion ? [{ question: feeQuestion, answer: getEquipmentFeeStatement(content.slug) }, ...faqs.filter(faq => faq.question !== feeQuestion)] : faqs,
     related: companion ? [companion, ...related.filter(link => link.href !== companion.href)] : related,

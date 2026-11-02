@@ -2,7 +2,7 @@ import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import HomePageClient from './HomePageClient';
 import { HOME_HERO_IMAGE, pageMetadata, SITE_URL } from '@/lib/seo';
 import { BUSINESS, SERVICES } from '@/lib/constants';
-import { specialtyOfferCatalog } from '@/lib/equipment-schema';
+import { equipmentOfferCatalog } from '@/lib/equipment-schema';
 import { HERO_IMAGES } from '@/lib/hero-images';
 
 export const metadata = pageMetadata(`Truck Dispatch Services USA | ${DISPATCH_RATE_RANGE} Fees`, `Dedicated truck dispatch across the lower 48. Box truck specialists, 24/7 live support for active carriers, free setup and ${DISPATCH_RATE_RANGE} fees by equipment.`, '/');
@@ -16,7 +16,7 @@ export default function HomePage() {
     areaServed: { '@type': 'Place', name: '48 contiguous United States' },
     hasOfferCatalog: {
       '@type': 'OfferCatalog', name: 'Truck dispatch support',
-      itemListElement: [specialtyOfferCatalog(), ...SERVICES.map(item => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', '@id': `${SITE_URL}/services/${item.id}#service`, name: item.title, url: `${SITE_URL}/services/${item.id}` } }))],
+      itemListElement: [equipmentOfferCatalog(), ...SERVICES.map(item => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', '@id': `${SITE_URL}/services/${item.id}#service`, name: item.title, url: `${SITE_URL}/services/${item.id}` } }))],
     },
   };
   const jsonLd = {

@@ -34,7 +34,6 @@ import {
   SETUP_DESK_HOURS,
   MEDIA,
   EQUIPMENT_TYPES,
-  DISPATCH_SPECIALTIES,
   SERVICES,
   HOW_IT_WORKS,
   STATS,
@@ -301,19 +300,19 @@ export default function HomePage() {
         <div className="container-custom">
           <ScrollReveal>
             <div className="max-w-2xl mb-12 sm:mb-16">
-              <p className="eyebrow">Our dispatch specialties</p>
+              <p className="eyebrow">Truck dispatch by equipment</p>
               <h2 className="font-display text-3xl sm:text-4xl md:text-[2.75rem] font-bold leading-[1.08] mb-4">
-                Specialized dispatch for nine truck and trailer types.
+                Dispatch for {EQUIPMENT_TYPES.length} truck and trailer types.
               </h2>
               <p className="text-white/70 text-lg">
-                Box trucks lead our nine dispatch specialties below. Each service pairs a dedicated dispatcher with equipment specific load search, rate negotiation and booking support across the lower 48. You approve each load; published fees are {DISPATCH_RATE_RANGE} by equipment.
+                Choose your truck or trailer below to review equipment requirements and the published dispatch fee. Each service includes a dedicated dispatcher, equipment specific load search, rate negotiation and booking support across the lower 48. You approve each load; published fees are {DISPATCH_RATE_RANGE} by equipment.
               </p>
               <Link prefetch={false} href="/equipment" className="mt-5 inline-flex items-center gap-2 py-2 font-semibold text-white underline underline-offset-4 hover:text-primary-300">View all {EQUIPMENT_TYPES.length} equipment types<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {DISPATCH_SPECIALTIES.map((equipment, idx) => {
+            {EQUIPMENT_TYPES.map((equipment, idx) => {
               return (
                 <ScrollReveal key={equipment.id} delay={idx * 0.06}>
                   <div className="group h-full overflow-hidden bg-navy-900 border border-white/10 hover:border-primary-500/60 rounded-lg transition-colors">

@@ -8,8 +8,7 @@ import { EQUIPMENT_IMAGES } from '@/lib/equipment-images';
 // Dates reflect the actual content revision; do not change merely on a rebuild.
 const CONTENT_UPDATED = '2026-09-24';
 const PAGE_REVISIONS: Record<string, string> = {
-  '': '2026-10-31',
-  '/services': '2026-10-30', '/equipment': '2026-10-30',
+  '/services': '2026-10-30',
   '/pricing': '2026-10-31', '/contact': '2026-10-30',
   '/faq': '2026-10-30',
   '/carriers': '2026-10-30', '/service-areas': '2026-10-30',
@@ -46,6 +45,11 @@ const PAGE_REVISIONS: Record<string, string> = {
   ...Object.fromEntries(Object.keys(PAGE_SEO_OVERRIDES).map(path => [path === '/' ? '' : path, '2026-10-31'])),
   // About now lists all 15 supported equipment types and their approved fees.
   '/about': '2026-11-01',
+  // November 2: full equipment catalog, distinct introductions and aligned service metadata.
+  '': '2026-11-02', '/equipment': '2026-11-02',
+  ...Object.fromEntries(EQUIPMENT_CONTENT.map(content => [`/equipment/${content.slug}`, '2026-11-02'])),
+  ...Object.fromEntries(SERVICE_CONTENT.map(content => [`/services/${content.slug}`, '2026-11-02'])),
+  ...Object.fromEntries(CARRIER_CONTENT.map(content => [`/carriers/${content.slug}`, '2026-11-02'])),
 };
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [

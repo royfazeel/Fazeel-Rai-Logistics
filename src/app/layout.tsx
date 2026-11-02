@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ConsentMeasurement } from '@/components/ConsentMeasurement';
 import StickyCallWidgets from '@/components/StickyCallWidgets';
-import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, DISPATCH_SPECIALTIES } from '@/lib/constants';
+import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, EQUIPMENT_TYPES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
 import './globals.css';
 
@@ -67,8 +67,8 @@ const jsonLd = {
       description: BUSINESS.description, telephone: BUSINESS.phone, email: BUSINESS.email,
       address: { '@type': 'PostalAddress', streetAddress: BUSINESS.address.street, addressLocality: BUSINESS.address.city, addressRegion: BUSINESS.address.state, postalCode: BUSINESS.address.zip, addressCountry: 'US' },
       areaServed: { '@type': 'Place', name: BUSINESS.serviceArea },
-      knowsAbout: DISPATCH_SPECIALTIES.map(equipment => `${equipment.name} dispatch`),
-      hasOfferCatalog: { '@id': `${SITE_URL}/equipment#dispatch-specialties` },
+      knowsAbout: EQUIPMENT_TYPES.map(equipment => `${equipment.name} dispatch`),
+      hasOfferCatalog: { '@id': `${SITE_URL}/equipment#dispatch-equipment` },
       contactPoint: [
         {
           '@type': 'ContactPoint', '@id': `${SITE_URL}/#active-carrier-support`,

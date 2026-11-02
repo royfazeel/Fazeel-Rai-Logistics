@@ -76,6 +76,7 @@ function EquipmentHero({ content, feeLabel, path, heading, contactHref }: { cont
           </div>
           <div className="lg:col-start-1 lg:row-start-2">
             <p id="answer-block" className="max-w-2xl text-base leading-relaxed text-navy-700 sm:text-lg">{content.intro}</p>
+            {content.serviceSummary && <p className="mt-4 max-w-2xl text-base leading-relaxed text-navy-700">{content.serviceSummary}</p>}
             {(content.slug === 'cargo-van' || content.slug === 'sprinter-van') && <p className="mt-3 text-sm leading-6 text-navy-700">Separately listed services: <Link href="/equipment/cargo-van" className="font-semibold text-accent-800 underline underline-offset-4">Cargo van dispatch: {getDispatchRateLabel('cargo-van')}</Link>{' · '}<Link href="/equipment/sprinter-van" className="font-semibold text-accent-800 underline underline-offset-4">Sprinter van dispatch: {getDispatchRateLabel('sprinter-van')}</Link>.</p>}
             <ul className="mt-5 space-y-2.5 text-sm text-navy-800">
               {content.highlights.map((highlight) => <li key={highlight} className="flex items-start gap-2"><Check size={17} className="mt-0.5 shrink-0 text-primary-600" aria-hidden="true" />{highlight}</li>)}
@@ -98,6 +99,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
   const contactHref = category === 'equipment' ? `/contact?equipment=${encodeURIComponent(content.slug)}#contact-form` : '/contact';
   const url = `${SITE_URL}${path}`;
   const heading = PAGE_SEO_OVERRIDES[path]?.h1 ?? content.title;
+  const description = PAGE_SEO_OVERRIDES[path]?.description ?? content.description;
   const faqSchema = buildFaqPageSchema(content.faqs, url);
   const related = [...(category === 'equipment' ? [{ label: 'Your dedicated truck dispatcher', href: '/services/dedicated-dispatcher' }] : []), ...(LEARNING_LINKS[path] ?? []), ...content.related].filter((item, index, items) => items.findIndex(link => link.href === item.href) === index);
   const feeLabel = category === 'equipment' ? getDispatchRateLabel(content.slug) : DISPATCH_RATE_RANGE;
@@ -116,7 +118,7 @@ export default function ContentDetail({ content, category, guide }: { content: D
         ...(guide.sources?.length ? { citation: guide.sources.map(source => source.href) } : {}),
       } : {
         '@context': 'https://schema.org', '@type': 'Service', '@id': `${url}#service`,
-        name: content.title, serviceType: content.title, description: content.availability ? `${content.description} ${content.availability}` : content.description,
+        name: heading, serviceType: content.title, description: content.availability ? `${description} ${content.availability}` : description,
         url, provider: { '@id': `${SITE_URL}/#organization` },
         mainEntityOfPage: { '@type': 'WebPage', '@id': url, isPartOf: { '@id': `${SITE_URL}/#website` }, inLanguage: 'en-US' },
         ...(equipmentImage ? { image: { '@type': 'ImageObject', url: `${SITE_URL}${equipmentImage.src}`, width: equipmentImage.width, height: equipmentImage.height, caption: equipmentImage.alt } } : {}),

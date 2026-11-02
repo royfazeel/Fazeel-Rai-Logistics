@@ -7,6 +7,15 @@ import { ArrowRight, CheckCircle, Phone } from 'lucide-react';
 import { BUSINESS, EQUIPMENT_TYPES, DISPATCH_SPECIALTY_SUMMARY } from '@/lib/constants';
 import { track } from '@/lib/track';
 
+const dispatchFitGroups = [
+  { title: 'Box truck and van freight', equipment: ['box-truck', 'cargo-van', 'sprinter-van'], detail: 'For straight trucks and vans, compare door openings, usable payload, pallet dimensions and loading access. Tell us whether you accept liftgate work, driver assistance or overnight trips.' },
+  { title: 'Enclosed and covered trailer freight', equipment: ['dry-van', 'conestoga', 'curtain-side'], detail: 'Choose the actual trailer you operate. Rear loading, side access and a rolling tarp system create different freight requirements; these trailer categories are not interchangeable.' },
+  { title: 'Refrigerated freight', equipment: ['reefer'], detail: 'Refrigerated truck dispatch starts with written temperature instructions, trailer condition, loading appointments and delivery windows. Share the commodities and temperature ranges your operation can accept.' },
+  { title: 'Open deck and machinery freight', equipment: ['flatbed', 'step-deck', 'hotshot', 'rgn-lowboy'], detail: 'Review usable deck space, weight distribution, loading method and securement. Oversize or overweight moves require a separate review of route and permit responsibilities before booking.' },
+  { title: 'Tractor without an owned trailer', equipment: ['power-only'], detail: 'Power only dispatch depends on the supplied trailer, pickup and return terms, compatibility and insurance requirements. A drop and hook proposal still needs a complete equipment review.' },
+  { title: 'Vehicles, liquids and bulk materials', equipment: ['car-hauler', 'tanker', 'dump-truck'], detail: 'Auto transport, liquid bulk and dump hauling each have distinct handling requirements. Share your equipment specifications, commodity restrictions and operating area so we can review service fit.' },
+];
+
 export default function EquipmentPageClient() {
   return <>
     <section className="bg-navy-950 text-white py-12 sm:py-16">
@@ -22,6 +31,22 @@ export default function EquipmentPageClient() {
         <div className="w-full max-w-xl justify-self-center overflow-hidden rounded-xl border border-white/15 bg-white">
           <EquipmentPhoto slug="box-truck" priority sizes="(min-width: 1024px) 540px, (min-width: 640px) 576px, calc(100vw - 40px)" className="w-full h-auto" />
           <p className="border-t border-surface-200 px-5 py-4 text-sm font-medium text-navy-700">Load planning starts with your equipment, capacity and lanes.</p>
+        </div>
+      </div>
+    </section>
+    <section className="border-b border-surface-200 bg-surface-50 py-12" aria-labelledby="dispatch-fit-heading">
+      <div className="container-custom">
+        <h2 id="dispatch-fit-heading" className="section-heading mb-4">Match dispatch support to the freight you haul</h2>
+        <p className="max-w-3xl text-surface-700 leading-7 mb-8">Start with your truck or trailer and the work you accept. These checks help an owner operator or fleet explain the operation before a dispatcher searches for loads. Shipment availability and carrier eligibility are reviewed separately.</p>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {dispatchFitGroups.map(group => <article key={group.title} className="rounded-lg border border-surface-200 bg-white p-6">
+            <h3 className="text-xl text-navy-950">{group.title}</h3>
+            <p className="mt-3 text-sm leading-6 text-surface-700">{group.detail}</p>
+            <ul className="mt-4 space-y-2">{group.equipment.map(id => {
+              const equipment = EQUIPMENT_TYPES.find(item => item.id === id)!;
+              return <li key={id}><Link href={`/equipment/${id}`} className="inline-block py-1 text-sm font-semibold text-primary-700 underline underline-offset-4">Dispatch for {equipment.name.toLowerCase()}</Link></li>;
+            })}</ul>
+          </article>)}
         </div>
       </div>
     </section>
