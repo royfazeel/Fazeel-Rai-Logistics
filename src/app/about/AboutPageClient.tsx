@@ -374,6 +374,32 @@ export default function AboutPageClient() {
         </div>
       </section>
 
+      <section className="py-10 bg-white border-t border-surface-200" aria-labelledby="company-profiles-heading">
+        <div className="container-custom">
+          <h2 id="company-profiles-heading" className="font-display text-2xl font-bold text-navy-950">
+            Find Rai Dispatch online
+          </h2>
+          <p className="mt-3 max-w-3xl text-surface-700 leading-relaxed">
+            Read our company profiles on Brownbook and ensun, or follow our social profiles for dispatch updates.
+          </p>
+          <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+            {[...BUSINESS.businessProfiles, ...BUSINESS.socialProfiles].map(profile => (
+              <li key={profile.url}>
+                <a
+                  href={profile.url}
+                  target="_blank"
+                  rel="me noopener noreferrer"
+                  className="inline-flex min-h-11 items-center rounded-sm font-semibold text-primary-700 underline underline-offset-4 hover:text-primary-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                  aria-label={`Rai Dispatch on ${profile.name} (opens in a new tab)`}
+                >
+                  {profile.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* ============================================================
           DISCLAIMER — plain and honest.
           ============================================================ */}

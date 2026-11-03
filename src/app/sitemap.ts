@@ -44,7 +44,7 @@ const PAGE_REVISIONS: Record<string, string> = {
   // Fixed review date; a future build must not advance it automatically.
   ...Object.fromEntries(Object.keys(PAGE_SEO_OVERRIDES).map(path => [path === '/' ? '' : path, '2026-10-31'])),
   // November 2: owner clarified that the registered address is for mail only.
-  '/about': '2026-11-02', '/contact': '2026-11-02',
+  '/about': '2026-11-03', '/contact': '2026-11-02',
   // November 2: full equipment catalog, distinct introductions and aligned service metadata.
   '': '2026-11-02', '/equipment': '2026-11-02',
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(content => [`/equipment/${content.slug}`, '2026-11-02'])),
