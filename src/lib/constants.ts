@@ -18,6 +18,10 @@ export const BUSINESS = {
     { name: 'Instagram', handle: '@raidispatchus', url: 'https://www.instagram.com/raidispatchus/' },
     { name: 'Facebook', handle: 'Rai Dispatch', url: 'https://www.facebook.com/profile.php?id=61596149968228' },
   ],
+  businessProfiles: [
+    { name: 'Brownbook', url: 'https://www.brownbook.net/business/56063285/rai-dispatch' },
+    { name: 'ensun', url: 'https://ensun.io/company/rai-dispatch-6ae8e8fff1a88c1fbea9616c-managed' },
+  ],
   address: {
     street: '312 W 2nd St, Ste 5083',
     city: 'Casper',
