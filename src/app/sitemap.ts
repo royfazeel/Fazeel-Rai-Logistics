@@ -12,7 +12,6 @@ const PAGE_REVISIONS: Record<string, string> = {
   '/pricing': '2026-10-31',
   '/faq': '2026-10-30',
   '/carriers': '2026-10-30', '/service-areas': '2026-10-30',
-  '/resources': '2026-10-30',
   '/resources/trucking-dispatch-glossary': '2026-10-30',
   '/tools/load-profit-calculator': '2026-10-31',
   '/editorial-standards': '2026-10-30',
@@ -31,7 +30,6 @@ const PAGE_REVISIONS: Record<string, string> = {
   '/services/paperwork-support': '2026-10-30',
   '/services/rate-negotiation': '2026-10-30',
   '/services/route-strategy': '2026-10-30',
-  '/equipment/box-truck': '2026-10-31',
   '/services/load-booking': '2026-10-30',
   '/services/regional-dispatch': '2026-10-30',
   '/services/otr-dispatch': '2026-10-30',
@@ -53,6 +51,11 @@ const PAGE_REVISIONS: Record<string, string> = {
   // the privacy and terms pages were rewritten. Keep these after the spreads
   // above, which would otherwise overwrite the dates.
   '/privacy': '2026-11-19', '/terms': '2026-11-19',
+  // November 19: dry van load guide published and listed on the resources hub.
+  // The dry van and box truck pages were revised, and seven more equipment
+  // pages gained a plain fee question.
+  '/resources/how-to-find-dry-van-loads': '2026-11-19', '/resources': '2026-11-19',
+  ...Object.fromEntries(['dry-van', 'box-truck', 'reefer', 'flatbed', 'power-only', 'step-deck', 'hotshot', 'conestoga', 'dump-truck'].map(slug => [`/equipment/${slug}`, '2026-11-19'])),
 };
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [

@@ -130,6 +130,8 @@ Primary references checked for this implementation: [Google basic/advanced conse
 
 ## Measured metadata lengths
 
+> **November 19, 2026 update.** The map now has 68 entries. The owner approved adding the natural variant “straight truck” to the Section 0 box truck title, description and H1, because “straight truck dispatch” was that page’s largest visible Search Console query. The fee wording and the exact fee answer are unchanged. A dry van load guide was added at `/resources/how-to-find-dry-van-loads`. Both rows below show the new measured lengths; the 60 and 158 character limits still hold for every entry.
+
 These are the resolved current strings, including the intended brand suffix and punctuation; supplied parenthetical counts are not used.
 
 | Canonical path | Title characters | Description characters |
@@ -143,7 +145,7 @@ These are the resolved current strings, including the intended brand suffix and 
 | `/contact` | 56 | 126 |
 | `/editorial-standards` | 48 | 138 |
 | `/equipment` | 59 | 154 |
-| `/equipment/box-truck` | 50 | 131 |
+| `/equipment/box-truck` | 58 | 155 |
 | `/equipment/dry-van` | 59 | 156 |
 | `/equipment/reefer` | 52 | 145 |
 | `/equipment/flatbed` | 53 | 153 |
@@ -170,6 +172,7 @@ These are the resolved current strings, including the intended brand suffix and 
 | `/resources/hotshot-load-planning-checklist` | 47 | 144 |
 | `/resources/how-to-choose-a-truck-dispatcher` | 52 | 146 |
 | `/resources/how-to-find-box-truck-loads` | 53 | 143 |
+| `/resources/how-to-find-dry-van-loads` | 59 | 155 |
 | `/resources/load-board-vs-dispatch-service` | 50 | 145 |
 | `/resources/local-vs-regional-vs-otr-trucking` | 48 | 155 |
 | `/resources/new-authority-broker-approval` | 54 | 144 |

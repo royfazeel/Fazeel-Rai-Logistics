@@ -62,7 +62,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
       { question: 'Can I keep customers or loads I already book myself?', answer: 'Discuss existing customer commitments during onboarding so the search fits your availability. Confirm in the agreement how self booked freight and dispatch fees are handled.' },
     ],
     related: [
-      { label: 'Equipment specific dispatch options', href: '/equipment' },
+      { label: 'Equipment specific dispatch options', href: '/equipment' }, { label: 'Dry van dispatch for owner operators', href: '/equipment/dry-van' },
       { label: 'Evaluate freight rate per mile', href: '/resources/evaluate-freight-rate-per-mile' },
       { label: 'Route and lane planning support', href: '/services/route-strategy' },
       { label: 'Dispatch fees and pricing', href: '/pricing' },
@@ -138,7 +138,7 @@ export const CARRIER_CONTENT: DispatchContent[] = [
       { question: 'Are fleet dispatch fees charged to every load we haul?', answer: 'The advertised percentage applies to loads we book. Confirm the included trucks, billing base and treatment of independently booked freight in the signed agreement.' },
     ],
     related: [
-      { label: 'Compare equipment dispatch requirements', href: '/equipment' },
+      { label: 'Compare equipment dispatch requirements', href: '/equipment' }, { label: 'Dry van dispatch for fleet trucks', href: '/equipment/dry-van' }, { label: 'Box truck dispatch for small fleets', href: '/equipment/box-truck' },
       { label: 'Broker communication support', href: '/services/broker-communication' },
       { label: 'Appointment scheduling and follow ups', href: '/services/scheduling' },
       { label: 'Understand dispatch fee calculations', href: '/resources/truck-dispatch-fees' },
@@ -207,10 +207,10 @@ export const CARRIER_CONTENT: DispatchContent[] = [
     ],
     related: [
       { label: 'Complete carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' },
-      { label: 'Equipment requirements by truck type', href: '/equipment' },
+      { label: 'Equipment requirements by truck type', href: '/equipment' }, { label: 'Dry van dispatch and trailer review', href: '/equipment/dry-van' },
       { label: 'How load booking works', href: '/services/load-booking' },
       { label: 'Choose a dispatch service', href: '/resources/how-to-choose-a-truck-dispatcher' },
-      { label: 'Review fees and pricing', href: '/pricing' },
+      { label: 'Review fees and pricing', href: '/pricing' }, { label: 'Box truck load search worksheet', href: '/resources/how-to-find-box-truck-loads' },
     ],
   },
 ];

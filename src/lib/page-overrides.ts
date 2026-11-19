@@ -54,9 +54,11 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     h1: "Truck dispatch services by equipment type",
   },
   "/equipment/box-truck": {
-    title: `Box Truck Dispatch Service: ${getDispatchRateLabel('box-truck')} Fee | Rai Dispatch`,
-    description: `Box truck dispatch at ${getDispatchRateLabel('box-truck')} of gross revenue on loads we book. No setup, weekly, monthly or other Rai Dispatch fees. Dedicated dispatcher and 24/7 support.`,
-    h1: `Box truck dispatch services: ${getDispatchRateLabel('box-truck')} fee`,
+    // November 19: “straight truck dispatch” is this page’s largest visible Search
+    // Console query, so the natural variant now appears beside “box truck”.
+    title: `Box Truck & Straight Truck Dispatch: ${getDispatchRateLabel('box-truck')} Fee | Rai Dispatch`,
+    description: `Box truck and straight truck dispatch at ${getDispatchRateLabel('box-truck')} of gross on loads we book. No setup, monthly or other Rai Dispatch fees. Dedicated dispatcher and 24/7 support.`,
+    h1: `Box truck and straight truck dispatch services: ${getDispatchRateLabel('box-truck')} fee`,
   },
   "/equipment/dry-van": {
     title: `Dry Van Dispatch Service | ${getDispatchRateLabel('dry-van')} Fee, 48 States | Rai Dispatch`,
@@ -187,6 +189,11 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     title: "How to Find Box Truck Loads (26 ft & Straight Trucks)",
     description: "Where box truck loads come from: load boards, brokers and direct carrier programs, plus how to evaluate payload, loading access and trip costs.",
     h1: "How to find box truck loads that fit your operation",
+  },
+  "/resources/how-to-find-dry-van-loads": {
+    title: "How to Find Dry Van Loads: Load Boards, Brokers & Screening",
+    description: "Where dry van loads come from: load boards, brokers and direct shippers, plus how to screen weight, appointments and securement and compare whole trip pay.",
+    h1: "How to find dry van loads that fit your trailer and lanes",
   },
   "/resources/load-board-vs-dispatch-service": {
     title: "Load Board vs Dispatch Service: Which Do You Need?",

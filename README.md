@@ -8,7 +8,7 @@ For lead delivery and the current website-measurement status, read [SETUP.md](SE
 
 ## What the site includes
 
-- **67 indexable page URLs**: 14 core/hub and editorial pages, 15 equipment pages, 11 service pages, three carrier audience pages, 22 guides, a 40-term glossary and an interactive load cost calculator.
+- **68 indexable page URLs**: 14 core/hub and editorial pages, 15 equipment pages, 11 service pages, three carrier audience pages, 23 guides, a 40-term glossary and an interactive load cost calculator.
 - Equipment coverage for dry van, reefer, flatbed, box truck, power only, step deck, hotshot, cargo van, Sprinter van, Conestoga, RGN/lowboy, car hauler, tanker, dump truck and curtain-side operations.
 - Separate content for owner-operators, small fleets, new authorities, regional and OTR operations, and dedicated dispatcher support. Practical guides cover fees, onboarding, choosing a dispatcher, freight rates, self-dispatch, broker roles and empty-mile planning.
 - Page-specific titles, descriptions, canonical URLs, Open Graph metadata, JSON-LD, sitemap, and robots rules.

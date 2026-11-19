@@ -24,7 +24,7 @@ export const ADDITIONAL_SERVICES: DispatchContent[] = [
       { question: 'Do you provide local truck dispatch near my location?', answer: 'Share your location, radius and equipment. We coordinate remotely and review whether the available service and freight fit local or regional work in your area.' },
       { question: 'Can I change my preferred region?', answer: 'Yes. Update your preferences and available dates before the next search. Existing bookings and their agreed obligations still need to be handled appropriately.' },
     ],
-    related: [{ label: 'Compare local, regional and OTR plans', href: '/resources/local-vs-regional-vs-otr-trucking' }, { label: 'Nationwide service areas', href: '/service-areas' }, { label: 'OTR dispatch', href: '/services/otr-dispatch' }, { label: 'Box truck dispatch', href: '/equipment/box-truck' }, { label: 'Dispatch pricing', href: '/pricing' }],
+    related: [{ label: 'Compare local, regional and OTR plans', href: '/resources/local-vs-regional-vs-otr-trucking' }, { label: 'Nationwide service areas', href: '/service-areas' }, { label: 'OTR dispatch', href: '/services/otr-dispatch' }, { label: 'Box truck dispatch', href: '/equipment/box-truck' }, { label: 'Dry van dispatch for regional lanes', href: '/equipment/dry-van' }, { label: 'Dispatch pricing', href: '/pricing' }],
   },
   {
     slug: 'otr-dispatch', title: 'OTR and long haul truck dispatch services',
@@ -281,6 +281,10 @@ export const ADDITIONAL_SERVICES: DispatchContent[] = [
       {
         "label": "Route and lane strategy",
         "href": "/services/route-strategy"
+      },
+      {
+        "label": "Dry van dispatch and reload planning",
+        "href": "/equipment/dry-van"
       }
     ]
   },
@@ -386,7 +390,7 @@ export const ADDITIONAL_GUIDES: CarrierGuide[] = [
       { question: 'Are local delivery routes guaranteed with box truck dispatch?', answer: 'No. Share the service area, schedule and delivery work you accept for a fit review. A recurring route or dedicated contract needs its own confirmed terms.' },
       { question: 'What does Rai Dispatch charge for box truck dispatch?', answer: `The published box truck dispatch fee is ${getDispatchRateLabel('box-truck')} of the agreed revenue base on loads we book, with a dedicated dispatcher and free setup. Review the billing base and service scope before starting.` },
     ],
-    related: [{ label: 'Box truck and straight truck dispatch', href: '/equipment/box-truck' }, { label: 'Dedicated dispatcher for your box truck', href: '/services/dedicated-dispatcher' }, { label: 'New authority broker approval', href: '/resources/new-authority-broker-approval' }, { label: 'Load boards and dispatch services', href: '/resources/load-board-vs-dispatch-service' }, { label: 'Local, regional or OTR comparison', href: '/resources/local-vs-regional-vs-otr-trucking' }, { label: 'Box truck dispatch pricing', href: '/pricing' }],
+    related: [{ label: 'Box truck and straight truck dispatch', href: '/equipment/box-truck' }, { label: 'Dedicated dispatcher for your box truck', href: '/services/dedicated-dispatcher' }, { label: 'New authority broker approval', href: '/resources/new-authority-broker-approval' }, { label: 'Load boards and dispatch services', href: '/resources/load-board-vs-dispatch-service' }, { label: 'How to find dry van loads', href: '/resources/how-to-find-dry-van-loads' }, { label: 'Local, regional or OTR comparison', href: '/resources/local-vs-regional-vs-otr-trucking' }, { label: 'Box truck dispatch pricing', href: '/pricing' }],
     sources: [{ label: 'DAT: box truck load board information', href: 'https://www.dat.com/solutions/box-truck-load-board' }, { label: 'DAT: 26 foot box truck load search', href: 'https://www.dat.com/solutions/26ft-box-truck-loads' }],
   },
   {
@@ -433,7 +437,7 @@ export const ADDITIONAL_GUIDES: CarrierGuide[] = [
       { question: 'Is OTR always more profitable than local work?', answer: 'No. Compare confirmed revenue with total miles, time committed, fees and your own operating expenses. A larger gross amount can come with more costs and time away.' },
       { question: 'Do I need a dispatcher with an office near my truck?', answer: 'Remote dispatch can support the agreed search and communication work. Evaluate equipment knowledge, availability, communication and service scope. Rai Dispatch’s nationwide coverage does not imply a local office in every area.' },
     ],
-    related: [{ label: 'Regional dispatch services', href: '/services/regional-dispatch' }, { label: 'OTR and long haul dispatch', href: '/services/otr-dispatch' }, { label: 'Backhaul and return load support', href: '/services/backhaul-dispatch' }, { label: 'Compare freight rates per mile', href: '/resources/evaluate-freight-rate-per-mile' }, { label: 'Nationwide service coverage', href: '/service-areas' }],
+    related: [{ label: 'Regional dispatch services', href: '/services/regional-dispatch' }, { label: 'OTR and long haul dispatch', href: '/services/otr-dispatch' }, { label: 'Backhaul and return load support', href: '/services/backhaul-dispatch' }, { label: 'Compare freight rates per mile', href: '/resources/evaluate-freight-rate-per-mile' }, { label: 'Nationwide service coverage', href: '/service-areas' }, { label: 'Dry van dispatch for regional and OTR lanes', href: '/equipment/dry-van' }, { label: 'Box truck dispatch for local and regional work', href: '/equipment/box-truck' }],
   },
   {
     "slug": "load-board-vs-dispatch-service",
@@ -551,6 +555,14 @@ export const ADDITIONAL_GUIDES: CarrierGuide[] = [
       {
         "label": "Load search and booking",
         "href": "/services/load-booking"
+      },
+      {
+        "label": "How to find dry van loads",
+        "href": "/resources/how-to-find-dry-van-loads"
+      },
+      {
+        "label": "How to find box truck loads",
+        "href": "/resources/how-to-find-box-truck-loads"
       },
       {
         "label": "Dedicated dispatcher",
@@ -677,6 +689,10 @@ export const ADDITIONAL_GUIDES: CarrierGuide[] = [
       {
         "label": "Dispatch support for new authorities",
         "href": "/carriers/new-authorities"
+      },
+      {
+        "label": "Box truck dispatch for new authorities",
+        "href": "/equipment/box-truck"
       },
       {
         "label": "Carrier onboarding checklist",
@@ -825,6 +841,10 @@ export const ADDITIONAL_GUIDES: CarrierGuide[] = [
       {
         "label": "Paperwork support",
         "href": "/services/paperwork-support"
+      },
+      {
+        "label": "Dry van load search and screening guide",
+        "href": "/resources/how-to-find-dry-van-loads"
       }
     ],
     "sources": [
@@ -951,6 +971,10 @@ export const ADDITIONAL_GUIDES: CarrierGuide[] = [
         "href": "/equipment/box-truck"
       },
       {
+        "label": "Dry van dispatch",
+        "href": "/equipment/dry-van"
+      },
+      {
         "label": "Step deck dispatch",
         "href": "/equipment/step-deck"
       }
@@ -982,7 +1006,7 @@ export const ADDITIONAL_GUIDES: CarrierGuide[] = [
       { question: 'Do I lose control when I hire a dispatcher?', answer: 'The approval process should keep the carrier’s responsibilities clear. With Rai Dispatch, you approve or decline loads and retain control of your operation.' },
       { question: 'Can I keep finding some of my own loads?', answer: 'Discuss that arrangement before signing. Agree which loads the service handles, how availability is shared and when fees apply so the truck does not receive conflicting bookings.' },
     ],
-    related: [{ label: 'Owner operator support', href: '/carriers/owner-operators' }, { label: 'Dispatch fees explained', href: '/resources/truck-dispatch-fees' }, { label: 'Load boards and dispatch support', href: '/resources/load-board-vs-dispatch-service' }, { label: 'Dedicated dispatcher workflow', href: '/services/dedicated-dispatcher' }],
+    related: [{ label: 'Owner operator support', href: '/carriers/owner-operators' }, { label: 'Dispatch fees explained', href: '/resources/truck-dispatch-fees' }, { label: 'Load boards and dispatch support', href: '/resources/load-board-vs-dispatch-service' }, { label: 'Dedicated dispatcher workflow', href: '/services/dedicated-dispatcher' }, { label: 'Find and screen dry van loads yourself', href: '/resources/how-to-find-dry-van-loads' }],
   },
   {
     slug: 'truck-dispatcher-vs-freight-broker', title: 'Truck dispatcher vs. freight broker: questions for carriers',
@@ -1029,6 +1053,6 @@ export const ADDITIONAL_GUIDES: CarrierGuide[] = [
       { question: 'Is the closest load always the best option?', answer: 'No. Appointment timing, compensation, handling requirements, destination and the following day can matter as much as pickup distance.' },
       { question: 'Should I count the empty drive home?', answer: 'Include it when evaluating the complete trip or week, using a consistent method. Separating homeward miles from pickup deadhead can help explain why the total changed.' },
     ],
-    related: [{ label: 'Route and lane strategy', href: '/services/route-strategy' }, { label: 'Backhaul and reload support', href: '/services/backhaul-dispatch' }, { label: 'Regional dispatch', href: '/services/regional-dispatch' }, { label: 'OTR dispatch', href: '/services/otr-dispatch' }, { label: 'Rate per mile calculation', href: '/resources/evaluate-freight-rate-per-mile' }],
+    related: [{ label: 'Route and lane strategy', href: '/services/route-strategy' }, { label: 'Backhaul and reload support', href: '/services/backhaul-dispatch' }, { label: 'Regional dispatch', href: '/services/regional-dispatch' }, { label: 'OTR dispatch', href: '/services/otr-dispatch' }, { label: 'Rate per mile calculation', href: '/resources/evaluate-freight-rate-per-mile' }, { label: 'Dry van dispatch and reload planning', href: '/equipment/dry-van' }],
   },
 ];

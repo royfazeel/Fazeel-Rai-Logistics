@@ -40,7 +40,7 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
   'box-truck': {
     sections: [
       {
-        id: 'straight-truck-service-fit', title: 'Specialized box truck dispatch for owner operators and fleets',
+        id: 'straight-truck-service-fit', title: 'Box truck and straight truck dispatch for owner operators and fleets',
         paragraphs: [`Rai Dispatch specializes in box truck dispatch for owner operators and small fleets across the lower 48 states. Our ${getDispatchRateLabel('box-truck')} dispatch service includes a dedicated dispatcher, free setup, load search, rate negotiation, booking coordination, broker communication, appointment follow ups and paperwork support within the agreed scope. You approve each load.`, 'We review 26 foot box trucks and other straight truck configurations using actual dimensions, available payload and delivery capabilities. Dock freight, liftgate delivery and inside delivery need different arrangements. For liftgate work, share the gate’s rated capability and usable platform, pallet jack availability and the work your driver accepts. We confirm shipment and facility requirements before presenting a booking for your decision.'],
         table: { caption: 'Choose the box truck work you are prepared to accept', headers: ['Delivery arrangement', 'Details to confirm'], rows: [['Dock to dock', 'Dock access, truck compatibility and who loads and unloads'], ['Liftgate delivery', 'Handling unit fit, gate capability and unloading responsibility'], ['Inside or multiple stop delivery', 'Driver tasks, access, stop sequence and agreed compensation']] },
       },
@@ -53,6 +53,8 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
     faqs: [
       { question: 'Does Rai Dispatch specialize in box truck dispatch?', answer: `Yes. Rai Dispatch specializes in box truck dispatch for owner operators and small fleets, including 26 foot and other straight truck configurations. The published fee is ${getDispatchRateLabel('box-truck')}, with a dedicated dispatcher and free setup. Equipment fit, lanes and service scope are reviewed before starting.` },
       { question: 'Does Rai Dispatch offer 24/7 box truck dispatch support?', answer: `Yes. Rai Dispatch provides ${ACTIVE_CARRIER_SUPPORT}, including box truck owner operators and fleets. Your assigned dispatcher works with team backup coverage, and you receive the active load contact and escalation process during onboarding. New carrier setup desk hours are ${SETUP_DESK_HOURS}. Support availability does not guarantee loads, routes or revenue.` },
+      { question: 'How do you find box truck loads for my truck?', answer: 'We search load boards and broker networks using your actual box dimensions, payload, liftgate and delivery capabilities, empty location and preferred area, then check each option before proposing it. You approve every load. Freight availability varies, so no route or load count is guaranteed.' },
+      { question: 'Is straight truck dispatch the same as box truck dispatch?', answer: `In freight listings the two terms usually describe the same equipment: a truck with an enclosed cargo box on the same chassis as the cab. “Straight truck” is the broader term, so tell us the body type, dimensions and payload. Rai Dispatch reviews enclosed straight trucks under the box truck category at the published ${getDispatchRateLabel('box-truck')} fee.` },
       { question: 'Can my box truck accept a load posted for a dry van?', answer: 'Only if the responsible party and carrier confirm that the actual truck meets every shipment requirement. Do not substitute a straight truck merely because the freight seems small enough; loading access, payload, appointments and equipment acceptance still matter.' },
       { question: 'Is liftgate or inside delivery automatically included in a box truck booking?', answer: 'No. Confirm the requested work, equipment capability, unloading responsibility and compensation before approving the load. Tell the dispatcher which delivery tasks your operation accepts.' },
     ],
@@ -66,15 +68,20 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
         table: { caption: 'Different questions within a dry van booking', headers: ['Term or request', 'Question for the load review'], rows: [['Full truckload / exclusive use', 'What space and equipment are reserved for this shipment?'], ['Live loading or unloading', 'What appointment and handling time should the carrier plan?'], ['Drop and hook', 'What trailer exchange, access and return terms apply?']] },
       },
       {
+        id: 'dry-van-load-search', title: 'How we search for dry van loads',
+        paragraphs: ['Your dispatcher searches load boards and broker networks for full truckload van freight that matches the trailer profile, empty location and lanes you provide. We check each posting for weight, pallet count, appointment type and equipment requirements before it reaches you, so a proposal arrives as a complete decision instead of a headline rate.', 'Postings and broker offers change through the day, and no search can promise freight in a particular lane or week. If you also find loads yourself, tell the desk so one truck calendar is kept. Our dry van load search guide sets out the same screening questions for checking a posting on your own.'],
+      },
+      {
         id: 'dry-van-next-pickup', title: 'Plan the next pickup from the actual trailer release',
         paragraphs: ['A dry van delivery appointment is not the same as a confirmed empty time. When you are considering the next load, include unloading, paperwork, trailer preparation and the drive to pickup. We can review possible reloads while you are under a shipment, but your latest status determines whether a proposed sequence is workable.', 'For example, an attractive reload near the receiver may still conflict with an uncertain live unload finish. We seek a realistic pickup window and keep the carrier’s decision tied to that timing. If the release changes, tell the desk before another booking is confirmed.', `Dry van dispatch is ${getDispatchRateLabel('dry-van')} under the published equipment schedule. The agreed support includes freight search, rate discussion, booking coordination and follow ups. Review the total trip rate guide when comparing offers, and confirm how the billing base treats fuel surcharge and other separately stated items.`],
       },
     ],
     faqs: [
+      { question: 'How do you find dry van loads for my truck?', answer: 'We search load boards and broker networks using your trailer profile, empty location, available time and preferred lanes, then screen each option before proposing it. You approve every load. Freight availability varies, so no lane or load count is guaranteed.' },
       { question: 'Does a full truckload have to fill all the space in my dry van?', answer: 'No. A shipment can reserve the trailer or require exclusive use without filling it. Check the written terms before considering any additional freight.' },
       { question: 'Can I request live load work and decline trailer drop arrangements?', answer: 'Yes. Tell us which arrangements your operation accepts. We use those preferences in the search, while the availability of suitable freight determines which loads can be proposed.' },
     ],
-    related: [{ label: 'Full truckload and partial load booking', href: '/services/load-booking' }, { label: 'Fuel surcharge calculation guide', href: '/resources/fuel-surcharge-calculation-for-carriers' }],
+    related: [{ label: 'Full truckload and partial load booking', href: '/services/load-booking' }, { label: 'Reduce deadhead between loads', href: '/resources/reduce-deadhead-miles' }, { label: 'Fuel surcharge calculation guide', href: '/resources/fuel-surcharge-calculation-for-carriers' }],
   },
   reefer: {
     sections: [

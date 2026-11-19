@@ -118,3 +118,41 @@ The box-truck page and its ChatGPT citation URL both serve the approved 7% fee. 
 The existing dispatcher-selection guide now includes a practical box-truck comparison worksheet covering specifications, delivery tasks, approval information, billing base and backup support. Reciprocal links connect that buying decision to the commercial box-truck page. A concise, dated pricing answer reinforces the current offer without adding duplicate keyword pages or unsupported superiority claims.
 
 Live Vercel evidence showed verified OAI-SearchBot requests receiving 2xx/3xx responses over the inspected 12-hour window. This confirms crawler access for those requests, not ranking or coverage of every URL. The renewed ChatGPT UI test failed to load twice, so a corrected ChatGPT answer could not be confirmed. Keep indexing submissions and rankings separate: IndexNow receipt is not an indexing result, and Google requests remain subject to quota and the existing scheduled retry.
+
+## November 19 dry van and box truck follow-up
+
+The owner asked for dry van and box truck search visibility to be prioritised, with the other equipment types kept in view.
+
+### Search Console baseline before the change
+
+Google web search, three months to November 17, 2026. Whole site: **40 clicks, 2,140 impressions, average position 20.7**; the last 28 days contributed 30 clicks and 1,650 impressions. The Links report showed **0 external links**.
+
+| Landing page | Clicks | Impressions | Average position | Visible queries |
+| --- | ---: | ---: | ---: | --- |
+| `/equipment/box-truck` | 0 | 141 | 6.4 | straight truck dispatch (37 impressions, position 7.2); dispatch for box trucks (5, 12.0); box truck dispatch (1, 28.0) |
+| `/equipment/dry-van` | 0 | 47 | 19.6 | dry van dispatch (17, 35.3); dry van dispatch service (5, 35.6) |
+
+Average position is an aggregate over few impressions and is not a fixed ranking. These are observations to compare against later, not evidence of any effect from this release.
+
+### What changed
+
+| Change | Reason and boundary |
+| --- | --- |
+| New guide `/resources/how-to-find-dry-van-loads` | Dry van was the only priority equipment type without a supporting guide. It covers the carrier’s search and screening task; the commercial offer stays on `/equipment/dry-van`. It addresses backlog items 40 and, in summary form only, 104. |
+| Dry van page: load search section, load search question, plain fee question, link to the deadhead guide | Backlog item 8. Uses the published fee statement and the existing description of the load search; no new capacity, lane or revenue claim. |
+| Box truck title, description, H1 and one heading now include “straight truck”; two new questions | The page’s largest visible query was “straight truck dispatch” while the title did not use those words. “Straight truck” stays a variant on the same canonical page, as the October 30 note requires. The exact 7% fee answer is unchanged. |
+| Plain fee question on reefer, flatbed, power only, step deck, hotshot, Conestoga and dump truck pages | Those pages did not answer the cost question directly. The answer is the shared fee statement from `dispatch-pricing.ts`. |
+| Contextual “Continue exploring” links | Dry van page: in-content links from 10 pages to 25. Box truck page: 16 to 22. Each added link sits on a related service, carrier or guide page with a descriptive label. No sitewide blocks, hidden text or synonym pages. |
+
+### Sources checked for the guide on November 19, 2026
+
+Interstate weight limits: 23 CFR 658.17 and FHWA’s Bridge Formula Weights. Securement and inspection duties: 49 CFR 393.106 and 392.9 and FMCSA’s cargo securement page. Load board examples: DAT’s and Truckstop’s own product pages. The guide summarises these rules to support questions before booking; it is not a securement procedure or legal advice, and the carrier and driver decide for the actual shipment. It needs the owner’s editorial review before publication, as the backlog’s publication gate requires.
+
+### What this does not address
+
+Google reported no external links to the domain. On-page work cannot substitute for that; earning relevant links and citations is a separate owner task. No market rate data, comparison pages (backlog 47 and 53) or state pages were added.
+
+### Measuring it
+
+Compare complete 28-day windows for the two pages after Google has recrawled them: impressions, clicks and the visible queries above, plus whether the new guide gains impressions for dry van load searches. Check that the box truck page keeps its visibility for box truck queries after the title change, and revert the title if it does not.
+

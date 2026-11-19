@@ -42,7 +42,7 @@ export const ADDITIONAL_EQUIPMENT_CONTENT: DispatchContent[] = [
       { question: 'Does Sprinter dispatch include medical courier or airport work?', answer: 'Those shipments require a separate review of handling, access, insurance and carrier qualifications. Tell us the exact work you want to pursue so availability can be assessed.' },
       { question: 'How much is the Sprinter van dispatch fee?', answer: `The fee is ${getDispatchRateLabel('sprinter-van')} of gross revenue on loads we book. Confirm the billing base and service terms in your agreement; operating expenses remain separate.` },
     ],
-    related: [{ label: 'General cargo van dispatch', href: '/equipment/cargo-van' }, { label: 'Owner operator dispatch', href: '/carriers/owner-operators' }, { label: 'Reduce deadhead miles', href: '/resources/reduce-deadhead-miles' }, { label: 'Dispatch fee calculator', href: '/pricing#fee-calculator' }],
+    related: [{ label: 'General cargo van dispatch', href: '/equipment/cargo-van' }, { label: 'Owner operator dispatch', href: '/carriers/owner-operators' }, { label: 'Reduce deadhead miles', href: '/resources/reduce-deadhead-miles' }, { label: 'Dispatch fee calculator', href: '/pricing#fee-calculator' }, { label: 'Box truck dispatch for larger freight', href: '/equipment/box-truck' }],
   },
   {
     slug: 'conestoga',
