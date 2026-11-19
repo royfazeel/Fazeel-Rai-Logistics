@@ -54,9 +54,11 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     h1: "Truck dispatch services by equipment type",
   },
   "/equipment/box-truck": {
-    title: `Box Truck Dispatch Service: ${getDispatchRateLabel('box-truck')} Fee | Rai Dispatch`,
-    description: `Box truck dispatch at ${getDispatchRateLabel('box-truck')} of gross revenue on loads we book. No setup, weekly, monthly or other Rai Dispatch fees. Dedicated dispatcher and 24/7 support.`,
-    h1: `Box truck dispatch services: ${getDispatchRateLabel('box-truck')} fee`,
+    // November 19: “straight truck dispatch” is this page’s largest visible Search
+    // Console query, so the natural variant now appears beside “box truck”.
+    title: `Box Truck & Straight Truck Dispatch: ${getDispatchRateLabel('box-truck')} Fee | Rai Dispatch`,
+    description: `Box truck and straight truck dispatch at ${getDispatchRateLabel('box-truck')} of gross on loads we book. No setup, monthly or other Rai Dispatch fees. Dedicated dispatcher and 24/7 support.`,
+    h1: `Box truck and straight truck dispatch services: ${getDispatchRateLabel('box-truck')} fee`,
   },
   "/equipment/dry-van": {
     title: `Dry Van Dispatch Service | ${getDispatchRateLabel('dry-van')} Fee, 48 States | Rai Dispatch`,
@@ -65,7 +67,7 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/equipment/reefer": {
     title: `Reefer Dispatch Service | ${getDispatchRateLabel('reefer')} of Gross | Rai Dispatch`,
-    description: `Reefer dispatch at ${getDispatchRateLabel('reefer')} of gross: temperature instruction review, produce and protein lanes, appointments and rate negotiation. No forced dispatch.`,
+    description: `Reefer dispatch at ${getDispatchRateLabel('reefer')} of gross with a dedicated dispatcher: temperature instructions, produce and protein lanes, appointments and rate negotiation.`,
     h1: "Reefer dispatch services for owner operators",
   },
   "/equipment/flatbed": {
@@ -75,32 +77,32 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/equipment/power-only": {
     title: `Power Only Dispatch Service | ${getDispatchRateLabel('power-only')} of Gross | Rai Dispatch`,
-    description: `Power only dispatch at ${getDispatchRateLabel('power-only')} of gross: drop and hook and trailer pool loads, trailer interchange terms and return planning. No forced dispatch.`,
+    description: `Power only dispatch at ${getDispatchRateLabel('power-only')} of gross with a dedicated dispatcher: drop and hook and trailer pool loads, interchange terms and return planning.`,
     h1: "Power only dispatch services for owner operators",
   },
   "/equipment/step-deck": {
     title: `Step Deck Dispatch Service | ${getDispatchRateLabel('step-deck')} Fee | Rai Dispatch`,
-    description: `Step deck and drop deck dispatch at ${getDispatchRateLabel('step-deck')} of gross. Deck dimensions, legal heights and loading needs reviewed before you approve a load. Lower 48 coverage.`,
+    description: `Step deck and drop deck dispatch at ${getDispatchRateLabel('step-deck')} of gross with a dedicated dispatcher. Deck dimensions, legal heights and loading needs reviewed before you approve.`,
     h1: "Step deck and drop deck dispatch services",
   },
   "/equipment/hotshot": {
     title: `Hotshot Dispatch Service (CDL & Non CDL) | ${getDispatchRateLabel('hotshot')} | Rai Dispatch`,
-    description: `Hotshot dispatch at ${getDispatchRateLabel('hotshot')} of gross for CDL and non CDL gooseneck operations. Payload, trailer length, partials and extra stops planned before you approve.`,
+    description: `Hotshot dispatch at ${getDispatchRateLabel('hotshot')} of gross with a dedicated dispatcher, CDL and non CDL. Payload, trailer length, partials and extra stops planned before you approve.`,
     h1: "Hotshot dispatch services for owner operators",
   },
   "/equipment/cargo-van": {
     title: `Cargo Van Dispatch Service: ${getDispatchRateLabel('cargo-van')} Fee | Rai Dispatch`,
-    description: `Cargo van dispatch costs ${getDispatchRateLabel('cargo-van')} of gross revenue on loads we book. Sprinter van service is separately listed at ${getDispatchRateLabel('sprinter-van')}. Confirm your vehicle category.`,
+    description: `Cargo van dispatch costs ${getDispatchRateLabel('cargo-van')} of gross on loads we book, dedicated dispatcher included. Sprinter van service is separately listed at ${getDispatchRateLabel('sprinter-van')}. Confirm your category.`,
     h1: `Cargo van dispatch services: ${getDispatchRateLabel('cargo-van')} fee`,
   },
   "/equipment/sprinter-van": {
     title: `Sprinter Van Dispatch Service: ${getDispatchRateLabel('sprinter-van')} Fee | Rai Dispatch`,
-    description: `Sprinter van dispatch costs ${getDispatchRateLabel('sprinter-van')} of gross revenue on loads we book. Cargo van service is separately listed at ${getDispatchRateLabel('cargo-van')}. Confirm your vehicle category.`,
+    description: `Sprinter van dispatch costs ${getDispatchRateLabel('sprinter-van')} of gross on loads we book, dedicated dispatcher included. Cargo van service is separately listed at ${getDispatchRateLabel('cargo-van')}. Confirm your category.`,
     h1: `Sprinter van dispatch services: ${getDispatchRateLabel('sprinter-van')} fee`,
   },
   "/equipment/conestoga": {
     title: `Conestoga Trailer Dispatch Service | ${getDispatchRateLabel('conestoga')} Fee | Rai Dispatch`,
-    description: `Conestoga dispatch at ${getDispatchRateLabel('conestoga')} of gross: rolling tarp clearance, covered loading access and regional or OTR lanes reviewed before you approve a load.`,
+    description: `Conestoga dispatch at ${getDispatchRateLabel('conestoga')} of gross with a dedicated dispatcher: rolling tarp clearance, covered loading access and regional or OTR lanes reviewed first.`,
     h1: "Conestoga trailer dispatch services",
   },
   "/equipment/rgn-lowboy": {
@@ -115,12 +117,12 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
   },
   "/equipment/tanker": {
     title: `Tanker Dispatch Service | ${getDispatchRateLabel('tanker')} Fee | Rai Dispatch`,
-    description: `Tanker and liquid bulk dispatch at ${getDispatchRateLabel('tanker')} of gross: commodity compatibility, tank specs, washout records and loading terms reviewed before booking.`,
+    description: `Tanker and liquid bulk dispatch at ${getDispatchRateLabel('tanker')} of gross with a dedicated dispatcher: commodity compatibility, tank specs, washout records and loading terms.`,
     h1: "Tanker dispatch services",
   },
   "/equipment/dump-truck": {
     title: `Dump Truck Dispatch Service | ${getDispatchRateLabel('dump-truck')} Fee | Rai Dispatch`,
-    description: `Dump truck and dump trailer dispatch at ${getDispatchRateLabel('dump-truck')} of gross: aggregate hauling, jobsite schedules, load tickets and haul cycle costs reviewed first.`,
+    description: `Dump truck and dump trailer dispatch at ${getDispatchRateLabel('dump-truck')} of gross with a dedicated dispatcher: aggregate hauling, jobsite schedules, load tickets and haul cycles.`,
     h1: "Dump truck dispatch services",
   },
   "/equipment/curtain-side": {
@@ -187,6 +189,11 @@ export const PAGE_SEO_OVERRIDES: Record<string, PageSeoOverride> = {
     title: "How to Find Box Truck Loads (26 ft & Straight Trucks)",
     description: "Where box truck loads come from: load boards, brokers and direct carrier programs, plus how to evaluate payload, loading access and trip costs.",
     h1: "How to find box truck loads that fit your operation",
+  },
+  "/resources/how-to-find-dry-van-loads": {
+    title: "How to Find Dry Van Loads: Load Boards, Brokers & Screening",
+    description: "Where dry van loads come from: load boards, brokers and direct shippers, plus how to screen weight, appointments and securement and compare whole trip pay.",
+    h1: "How to find dry van loads that fit your trailer and lanes",
   },
   "/resources/load-board-vs-dispatch-service": {
     title: "Load Board vs Dispatch Service: Which Do You Need?",

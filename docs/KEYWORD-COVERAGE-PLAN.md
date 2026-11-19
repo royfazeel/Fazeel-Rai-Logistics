@@ -35,16 +35,16 @@ The starting site had 54 sitemap URLs: 13 main pages, 15 equipment pages, 11 ser
 | `/carriers/owner-operators` | owner-operator dispatch, independent truck dispatcher, dispatch for one truck | Explain the working relationship and the carrier's load decisions. |
 | `/carriers/small-fleets` | small fleet dispatch, dispatch for multiple trucks | Explain availability, truck assignment, contacts and coordinated schedules. |
 | `/carriers/new-authorities` | new authority dispatch, new MC dispatch service | Explain the service-fit review; link to onboarding and broker-approval guides for documents and eligibility. |
-| `/equipment/box-truck` | box truck dispatch, straight truck dispatch, 26-foot box truck dispatcher | Explain the 7% offer, payload, doors, liftgate and regional/OTR fit. Link to `/resources/how-to-find-box-truck-loads` for the carrier's search and screening workflow. |
-| `/equipment/dry-van` | dry van dispatch, 53-foot dry van dispatcher, FTL dispatch | Explain the 5% offer, trailer fit, appointments and regional/OTR planning. Link to `/resources/reduce-deadhead-miles` for complete-trip evaluation. |
-| `/equipment/reefer` | reefer dispatch, refrigerated truck dispatcher, refrigerated freight dispatch | Explain the 4% offer and temperature-instruction, washout and appointment coordination. Link to `/resources/reefer-load-temperature-checklist` for the detailed preparation workflow. |
-| `/equipment/flatbed` | flatbed dispatch, open-deck dispatch, flatbed load support | Explain the 5% offer, loading access, cargo dimensions and tarping work. Link to `/resources/flatbed-load-tarping-checklist`; keep specialized trailer configurations on their equipment pages. |
-| `/equipment/power-only` | power only dispatch, tractor-only dispatch, power only drop-and-hook loads | Explain the 5% offer, trailer arrangement, return obligations and total-trip cost. Drop-and-hook is conditional, not universal. Link to `/resources/power-only-trailer-interchange-checklist`. |
-| `/equipment/step-deck` | step deck dispatch, drop deck dispatcher, step deck load support | Explain the 5% offer, upper/lower deck fit, loading method and service review. Lower deck height does not establish permit-free transport. Link to the flatbed preparation guide and relevant equipment alternatives. |
-| `/equipment/hotshot` | hotshot dispatch, hot shot dispatcher, hotshot partial-load support | Explain the 6% offer, complete truck-and-trailer capacity, partial compatibility and operating scope. Link to `/resources/hotshot-load-planning-checklist`. |
-| `/equipment/cargo-van` | cargo van dispatch, small-freight dispatch, expedited cargo van support | Explain the 12% offer using actual door openings, payload, handling requirements and service availability. Link to trip-economics guidance; do not imply a guaranteed courier route or expedited load. |
-| `/equipment/conestoga` | Conestoga dispatch, rolling-tarp trailer dispatch, covered flatbed freight support | Explain the 4% offer, covered clearance, loading access and cargo protection. Distinguish the rolling cover from securement and temperature control; link to flatbed preparation and equipment alternatives. |
-| `/equipment/sprinter-van` | Sprinter van dispatchers, Sprinter freight dispatch | Retain its separate 5% category and vehicle-specific fit information. Cross-link clearly with cargo van service so overlapping vehicle terminology does not imply the same fee. Other supported equipment remains discoverable through `/equipment`. |
+| `/equipment/box-truck` | box truck dispatch, straight truck dispatch, 26-foot box truck dispatcher | Explain the 6% offer, payload, doors, liftgate and regional/OTR fit. Link to `/resources/how-to-find-box-truck-loads` for the carrier's search and screening workflow. |
+| `/equipment/dry-van` | dry van dispatch, 53-foot dry van dispatcher, FTL dispatch | Explain the 4% offer, trailer fit, appointments and regional/OTR planning. Link to `/resources/reduce-deadhead-miles` for complete-trip evaluation. |
+| `/equipment/reefer` | reefer dispatch, refrigerated truck dispatcher, refrigerated freight dispatch | Explain the 3% offer and temperature-instruction, washout and appointment coordination. Link to `/resources/reefer-load-temperature-checklist` for the detailed preparation workflow. |
+| `/equipment/flatbed` | flatbed dispatch, open-deck dispatch, flatbed load support | Explain the 4% offer, loading access, cargo dimensions and tarping work. Link to `/resources/flatbed-load-tarping-checklist`; keep specialized trailer configurations on their equipment pages. |
+| `/equipment/power-only` | power only dispatch, tractor-only dispatch, power only drop-and-hook loads | Explain the 4% offer, trailer arrangement, return obligations and total-trip cost. Drop-and-hook is conditional, not universal. Link to `/resources/power-only-trailer-interchange-checklist`. |
+| `/equipment/step-deck` | step deck dispatch, drop deck dispatcher, step deck load support | Explain the 4% offer, upper/lower deck fit, loading method and service review. Lower deck height does not establish permit-free transport. Link to the flatbed preparation guide and relevant equipment alternatives. |
+| `/equipment/hotshot` | hotshot dispatch, hot shot dispatcher, hotshot partial-load support | Explain the 5% offer, complete truck-and-trailer capacity, partial compatibility and operating scope. Link to `/resources/hotshot-load-planning-checklist`. |
+| `/equipment/cargo-van` | cargo van dispatch, small-freight dispatch, expedited cargo van support | Explain the 11% offer using actual door openings, payload, handling requirements and service availability. Link to trip-economics guidance; do not imply a guaranteed courier route or expedited load. |
+| `/equipment/conestoga` | Conestoga dispatch, rolling-tarp trailer dispatch, covered flatbed freight support | Explain the 3% offer, covered clearance, loading access and cargo protection. Distinguish the rolling cover from securement and temperature control; link to flatbed preparation and equipment alternatives. |
+| `/equipment/sprinter-van` | Sprinter van dispatchers, Sprinter freight dispatch | Retain its separate 4% category and vehicle-specific fit information. Cross-link clearly with cargo van service so overlapping vehicle terminology does not imply the same fee. Other supported equipment remains discoverable through `/equipment`. |
 | `/pricing` | truck dispatch pricing, dispatch percentage, dispatch fee calculator | Show Rai's current offer and calculator. The fee guide explains billing bases and comparisons. |
 | `/resources/truck-dispatch-fees` | how much does a truck dispatcher cost, how dispatch fees work | Teach calculation, scope and invoice questions without duplicating the pricing page's sales purpose. |
 | `/services/regional-dispatch`, `/services/otr-dispatch` | regional dispatch, OTR dispatch, long-haul dispatcher | Explain the respective service workflows and planning information. |
@@ -71,7 +71,7 @@ The subsequent **October 30 equipment and pricing revision** focuses on the nine
 
 ## Business facts and editorial limits
 
-- The current fee schedule approved **October 30, 2026** is **box truck 7%, dry van 5%, reefer 4%, flatbed 5%, power only 5%, step deck 5%, hotshot 6%, cargo van 12%, and Conestoga 4%**. Sprinter vans and other equipment remain **5%**, for a **4–12%** range. `src/lib/dispatch-pricing.ts` is the source for these rates. Confirm equipment classification, billing base and service scope in the agreement; do not group cargo/Sprinter or dry van/reefer as sharing a fee.
+- The current fee schedule, approved **November 19, 2026**, lowers every published fee by one percentage point: **box truck 6%, dry van 4%, reefer 3%, flatbed 4%, power only 4%, step deck 4%, hotshot 5%, cargo van 11%, and Conestoga 3%**. Sprinter vans and other equipment are **4%**, for a **3–11%** range. The October 30 schedule (4–12%) is superseded. `src/lib/dispatch-pricing.ts` is the source for these rates. Confirm equipment classification, billing base and service scope in the agreement; do not group cargo/Sprinter or dry van/reefer as sharing a fee.
 - Coverage is the **48 contiguous United States**. Active carriers receive 24/7 live dispatch support. New-carrier setup desk hours are Monday–Saturday, 8 AM–6 PM Central Time. Contact email remains `sam@railogistics.us`.
 - Equipment and freight require a service-fit review. A published equipment category is not a promise of every commodity, permit service, broker acceptance, dedicated lane or load availability.
 - Keep new-authority, revenue, rate and scheduling claims conditional on actual requirements. Do not invent testimonials, local offices, case-study results, provider affiliations or platform access.
@@ -118,3 +118,71 @@ The box-truck page and its ChatGPT citation URL both serve the approved 7% fee. 
 The existing dispatcher-selection guide now includes a practical box-truck comparison worksheet covering specifications, delivery tasks, approval information, billing base and backup support. Reciprocal links connect that buying decision to the commercial box-truck page. A concise, dated pricing answer reinforces the current offer without adding duplicate keyword pages or unsupported superiority claims.
 
 Live Vercel evidence showed verified OAI-SearchBot requests receiving 2xx/3xx responses over the inspected 12-hour window. This confirms crawler access for those requests, not ranking or coverage of every URL. The renewed ChatGPT UI test failed to load twice, so a corrected ChatGPT answer could not be confirmed. Keep indexing submissions and rankings separate: IndexNow receipt is not an indexing result, and Google requests remain subject to quota and the existing scheduled retry.
+
+## November 19 dry van and box truck follow-up
+
+The owner asked for dry van and box truck search visibility to be prioritised, with the other equipment types kept in view.
+
+### Search Console baseline before the change
+
+Google web search, three months to November 17, 2026. Whole site: **40 clicks, 2,140 impressions, average position 20.7**; the last 28 days contributed 30 clicks and 1,650 impressions. The Links report showed **0 external links**.
+
+| Landing page | Clicks | Impressions | Average position | Visible queries |
+| --- | ---: | ---: | ---: | --- |
+| `/equipment/box-truck` | 0 | 141 | 6.4 | straight truck dispatch (37 impressions, position 7.2); dispatch for box trucks (5, 12.0); box truck dispatch (1, 28.0) |
+| `/equipment/dry-van` | 0 | 47 | 19.6 | dry van dispatch (17, 35.3); dry van dispatch service (5, 35.6) |
+
+Average position is an aggregate over few impressions and is not a fixed ranking. These are observations to compare against later, not evidence of any effect from this release.
+
+### What changed
+
+| Change | Reason and boundary |
+| --- | --- |
+| New guide `/resources/how-to-find-dry-van-loads` | Dry van was the only priority equipment type without a supporting guide. It covers the carrier’s search and screening task; the commercial offer stays on `/equipment/dry-van`. It addresses backlog items 40 and, in summary form only, 104. |
+| Dry van page: load search section, load search question, plain fee question, link to the deadhead guide | Backlog item 8. Uses the published fee statement and the existing description of the load search; no new capacity, lane or revenue claim. |
+| Box truck title, description, H1 and one heading now include “straight truck”; two new questions | The page’s largest visible query was “straight truck dispatch” while the title did not use those words. “Straight truck” stays a variant on the same canonical page, as the October 30 note requires. The exact fee answer was unchanged by that edit (the fee itself became 6% in the same release; see below). |
+| Plain fee question on reefer, flatbed, power only, step deck, hotshot, Conestoga and dump truck pages | Those pages did not answer the cost question directly. The answer is the shared fee statement from `dispatch-pricing.ts`. |
+| Contextual “Continue exploring” links | Dry van page: in-content links from 10 pages to 25. Box truck page: 16 to 22. Each added link sits on a related service, carrier or guide page with a descriptive label. No sitewide blocks, hidden text or synonym pages. |
+
+### Sources checked for the guide on November 19, 2026
+
+Interstate weight limits: 23 CFR 658.17 and FHWA’s Bridge Formula Weights. Securement and inspection duties: 49 CFR 393.106 and 392.9 and FMCSA’s cargo securement page. Load board examples: DAT’s and Truckstop’s own product pages. The guide summarises these rules to support questions before booking; it is not a securement procedure or legal advice, and the carrier and driver decide for the actual shipment. It needs the owner’s editorial review before publication, as the backlog’s publication gate requires.
+
+### What this does not address
+
+Google reported no external links to the domain. On-page work cannot substitute for that; earning relevant links and citations is a separate owner task. No market rate data, comparison pages (backlog 47 and 53) or state pages were added.
+
+### Measuring it
+
+Compare complete 28-day windows for the two pages after Google has recrawled them: impressions, clicks and the visible queries above, plus whether the new guide gains impressions for dry van load searches. Check that the box truck page keeps its visibility for box truck queries after the title change, and revert the title if it does not.
+
+## November 19 fee reduction
+
+The owner instructed that every truck type be priced one percentage point lower, with a dedicated dispatcher included for every truck. The reduction took effect and was published on November 19, 2026.
+
+| Equipment | October 30 schedule | November 19 schedule |
+| --- | ---: | ---: |
+| Box truck | 7% | 6% |
+| Hotshot | 6% | 5% |
+| Cargo van | 12% | 11% |
+| Reefer, Conestoga | 4% | 3% |
+| Dry van, flatbed, power only, step deck, Sprinter van, RGN/lowboy, car hauler, tanker, dump truck, curtain side, other equipment | 5% | 4% |
+
+The published range is now **3 to 11%**.
+
+### What changed on the site
+
+- `src/lib/dispatch-pricing.ts` holds the new map, the November 19 effective date and a history sentence that records the September 28, October 30 and November 19 changes. Every title, description, heading, table, calculator, FAQ, structured data offer and `llms.txt` line reads from that map.
+- A short dated statement of the reduction appears on the home page pricing section, the pricing table and as a question on the fee guide. It states the change and its date; it makes no comparison with other companies and no “lowest price” claim.
+- Nine equipment descriptions that did not mention the dedicated dispatcher now do, so all 15 equipment pages say so in the search snippet.
+- The home page resource cards now include the dry van load guide next to the box truck load guide.
+- Sitemap dates: 59 pages print a fee or the fee range in their own content and carry November 19. Contact, privacy, editorial standards and six guides state no fee and keep their dates. The 17 guides that quote a fee show November 19 as their updated date.
+
+### Acceptance values
+
+The independent acceptance values in `scripts/verify-seo.mjs`, `verify-search-access.mjs`, `verify-fee-calculator.mjs` and `verify-load-economics.mjs` were updated to the new schedule because the owner authorised the price change. The stale price detector now rejects the 4 to 12% range and the withdrawn 7% and 12% fees, and accepts 3%.
+
+### What to watch
+
+Search engines and AI assistants will keep quoting the October 30 percentages until they recrawl. Request indexing for the pricing page and the main equipment pages, and compare the Search Console baseline above after complete 28 day windows.
+

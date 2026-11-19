@@ -1,6 +1,6 @@
 # Rai Dispatch
 
-Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. The current fee schedule, approved October 30, 2026, is **box truck 7%, dry van 5%, reefer 4%, flatbed 5%, power only 5%, step deck 5%, hotshot 6%, cargo van 12%, and Conestoga 4%**. Sprinter vans and other equipment remain **5%**; the published range is **4–12%**. The billing base, equipment classification, service availability, and terms must be confirmed in the written agreement. The website's supported-equipment scope still applies; a fee category does not establish that every specialized operation is available. This schedule records the approved revision, not deployment or test evidence for it.
+Truck dispatch website for owner-operators and fleets across the 48 contiguous United States. The current fee schedule, approved by the owner on November 19, 2026, lowers every published fee by one percentage point: **box truck 6%, dry van 4%, reefer 3%, flatbed 4%, power only 4%, step deck 4%, hotshot 5%, cargo van 11%, and Conestoga 3%**. Sprinter vans and other equipment are **4%**; the published range is **3–11%**. A dedicated dispatcher is included for every truck type. The billing base, equipment classification, service availability, and terms must be confirmed in the written agreement. The website's supported-equipment scope still applies; a fee category does not establish that every specialized operation is available. This schedule records the approved revision, not deployment or test evidence for it.
 
 The source is configured for **https://raidispatch.com**. The existing GitHub repository is [royfazeel/Fazeel-Rai-Logistics](https://github.com/royfazeel/Fazeel-Rai-Logistics), connected to the existing Vercel project **fazeel-rai-logistics**. Repository and project names can retain the old brand without affecting the public website.
 
@@ -8,7 +8,7 @@ For lead delivery and the current website-measurement status, read [SETUP.md](SE
 
 ## What the site includes
 
-- **67 indexable page URLs**: 14 core/hub and editorial pages, 15 equipment pages, 11 service pages, three carrier audience pages, 22 guides, a 40-term glossary and an interactive load cost calculator.
+- **68 indexable page URLs**: 14 core/hub and editorial pages, 15 equipment pages, 11 service pages, three carrier audience pages, 23 guides, a 40-term glossary and an interactive load cost calculator.
 - Equipment coverage for dry van, reefer, flatbed, box truck, power only, step deck, hotshot, cargo van, Sprinter van, Conestoga, RGN/lowboy, car hauler, tanker, dump truck and curtain-side operations.
 - Separate content for owner-operators, small fleets, new authorities, regional and OTR operations, and dedicated dispatcher support. Practical guides cover fees, onboarding, choosing a dispatcher, freight rates, self-dispatch, broker roles and empty-mile planning.
 - Page-specific titles, descriptions, canonical URLs, Open Graph metadata, JSON-LD, sitemap, and robots rules.
@@ -131,8 +131,8 @@ The local test sink proves the application workflow in isolation. Confirm live d
 
 As of **November 19, 2026**, the website uses **Vercel Web Analytics**. It is cookieless, so visitors are not shown a consent prompt: the earlier automatic consent dialog and the "Measurement settings" control are removed. Google Analytics 4 (GA4), Google Ads and the shared Google tag are not loaded. This does not change the underlying Google accounts or delete their historical data.
 
-- **One dashboard step is required.** Web Analytics must be enabled for the existing **fazeel-rai-logistics** Vercel project (project → **Analytics** → **Enable**), followed by a production deployment. Until then the script request to `/_vercel/insights/script.js` returns 404 and nothing is recorded; the site itself is unaffected.
-- `SiteAnalytics` is mounted once in `src/app/layout.tsx` and renders nothing. The analytics script is served from the site's own host.
+- **Web Analytics must stay enabled** for the existing **fazeel-rai-logistics** Vercel project (project → **Analytics**). On November 19, 2026 the live site was serving the analytics script and sending page views, which requires that setting; the dashboard itself was not checked. If it is disabled, the site keeps working but nothing is recorded.
+- `SiteAnalytics` is mounted once in `src/app/layout.tsx` and renders nothing. On Vercel the script and its endpoints are served from a per-project path on the site's own host (for example `/<id>/script.js` and `/<id>/view`), not from a third-party domain. `/_vercel/insights/script.js` is the package's fallback path outside a Vercel build, so a local `next start` requests that path and gets a 404.
 - Page views are reported without query strings or fragments. `src/lib/track.ts` sends only the code-owned events `call_click`, `sms_click`, `whatsapp_click`, `email_click`, `quote_modal_open` and `lead_submit`, each with an allow-listed `location` or `source` label and no form data. `lead_submit` is sent only after the lead API accepts a submission. Custom events are a plan-dependent Vercel feature; confirm they appear for this project's plan before relying on them.
 - The site does not call the script's visitor-identification or cookie opt-in features. Do not add them without revisiting `/privacy`, `/terms` and the consent question.
 - Browsers that used the earlier GA4 setup have their saved consent choice and accessible `_ga*` cookies removed on the next visit.

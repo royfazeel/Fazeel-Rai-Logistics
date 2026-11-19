@@ -7,7 +7,7 @@ import PricingTable from '@/components/PricingTable';
 import FeeCalculator from '@/components/FeeCalculator';
 import StaticPhoto from '@/components/StaticPhoto';
 import { BUSINESS, EQUIPMENT_TYPES, MEDIA } from '@/lib/constants';
-import { DISPATCH_FEES_ANSWER, DISPATCH_FEE_POLICY, getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement, OTHER_EQUIPMENT_NOTICE, VAN_CATEGORY_NOTICE } from '@/lib/dispatch-pricing';
+import { DISPATCH_FEES_ANSWER, DISPATCH_FEE_EFFECTIVE_DATE, DISPATCH_FEE_EFFECTIVE_LABEL, DISPATCH_FEE_POLICY, getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement, OTHER_EQUIPMENT_NOTICE, VAN_CATEGORY_NOTICE } from '@/lib/dispatch-pricing';
 import { track } from '@/lib/track';
 
 const exampleBaseCents = 200_000;
@@ -25,7 +25,7 @@ const pricingFaqs = [
   { id: 4, question: 'Do you offer a fixed weekly or monthly plan?', answer: `No. ${DISPATCH_FEE_POLICY}` },
   { id: 5, question: 'Do I pay on loads I book myself?', answer: 'The advertised percentage applies to loads we book for you. Confirm how self booked freight, cancelled loads, detention, layover, and other accessorial payments are treated in your signed agreement.' },
   { id: 6, question: 'Does a dispatch fee guarantee profit or a certain number of loads?', answer: 'No. Freight rates, available loads, operating costs, and your weekly revenue vary. You decide which loads to accept and remain responsible for evaluating the costs of your trucking operation.' },
-  { id: 7, question: 'Is a dedicated truck dispatcher included?', answer: 'Yes. Clients receive a dedicated truck dispatcher for their agreed load search, rate negotiation, booking coordination and broker communication. Active carriers receive 24/7 live dispatch support. Confirm your assigned contact, team coverage and escalation process during onboarding.' },
+  { id: 7, question: 'Is a dedicated truck dispatcher included?', answer: 'Yes. Every truck type includes a dedicated truck dispatcher at its published percentage, with no separate charge. Your dispatcher handles the agreed load search, rate negotiation, booking coordination and broker communication. Active carriers receive 24/7 live dispatch support. Confirm your assigned contact, team coverage and escalation process during onboarding.' },
 ];
 
 export default function PricingPageClient() {
@@ -42,7 +42,7 @@ export default function PricingPageClient() {
           <h3 id="box-truck-pricing-heading" className="text-2xl text-navy-950"><Link href="/equipment/box-truck" className="underline decoration-primary-300 underline-offset-4 hover:text-primary-700">Box truck dispatch</Link>: {getDispatchRateLabel('box-truck')} fee</h3>
           <p className="mt-3 max-w-3xl leading-7 text-surface-700">{getEquipmentFeeStatement('box-truck')}</p>
           <p className="mt-2 max-w-3xl text-sm leading-7 text-surface-700">{DISPATCH_FEE_POLICY}</p>
-          <p className="mt-2 max-w-3xl text-sm leading-7 text-surface-700">Last reviewed <time dateTime="2026-10-31">October 31, 2026</time>.</p>
+          <p className="mt-2 max-w-3xl text-sm leading-7 text-surface-700">Last reviewed <time dateTime={DISPATCH_FEE_EFFECTIVE_DATE}>{DISPATCH_FEE_EFFECTIVE_LABEL}</time>.</p>
         </div>
         <PricingTable />
       </div>

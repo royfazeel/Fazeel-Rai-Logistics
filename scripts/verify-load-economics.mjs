@@ -58,20 +58,20 @@ check('Worked example reconciles every entered cost and both rate-per-mile measu
   assert.equal(actual.loadPayCents, 200000);
   assert.equal(actual.totalMiles, 900);
   assert.equal(actual.gallons, 150);
-  assert.equal(actual.dispatchFeeCents, 10000);
+  assert.equal(actual.dispatchFeeCents, 8000);
   assert.equal(actual.fuelCostCents, 60000);
   assert.equal(actual.otherCostsCents, 15000);
-  assert.equal(actual.remainingCents, 115000);
-  assert.equal(actual.breakEvenCents, 78948);
+  assert.equal(actual.remainingCents, 117000);
+  assert.equal(actual.breakEvenCents, 78125);
   near(actual.grossPerLoadedMile, 2.5);
   near(actual.grossPerAllMile, 2.2222222222222223);
-  near(actual.remainingPerAllMile, 1.2777777777777777);
+  near(actual.remainingPerAllMile, 1.3);
   near(actual.emptyMilesPercent, 11.11111111111111);
-  near(actual.remainingPerHour, 57.5);
+  near(actual.remainingPerHour, 58.5);
 });
 
-const fees = { 'dry-van': 5, reefer: 4, flatbed: 5, hotshot: 6, 'box-truck': 7, 'cargo-van': 12, 'sprinter-van': 5, 'power-only': 5, 'step-deck': 5, conestoga: 4, 'rgn-lowboy': 5, 'car-hauler': 5, tanker: 5, 'dump-truck': 5, 'curtain-side': 5 };
-const feeExamples = { 4: { fee: 8000, remaining: 117000, breakEven: 78125 }, 5: { fee: 10000, remaining: 115000, breakEven: 78948 }, 6: { fee: 12000, remaining: 113000, breakEven: 79788 }, 7: { fee: 14000, remaining: 111000, breakEven: 80646 }, 12: { fee: 24000, remaining: 101000, breakEven: 85228 } };
+const fees = { 'dry-van': 4, reefer: 3, flatbed: 4, hotshot: 5, 'box-truck': 6, 'cargo-van': 11, 'sprinter-van': 4, 'power-only': 4, 'step-deck': 4, conestoga: 3, 'rgn-lowboy': 4, 'car-hauler': 4, tanker: 4, 'dump-truck': 4, 'curtain-side': 4 };
+const feeExamples = { 3: { fee: 6000, remaining: 119000, breakEven: 77320 }, 4: { fee: 8000, remaining: 117000, breakEven: 78125 }, 5: { fee: 10000, remaining: 115000, breakEven: 78948 }, 6: { fee: 12000, remaining: 113000, breakEven: 79788 }, 11: { fee: 22000, remaining: 103000, breakEven: 84270 } };
 for (const [equipment, rate] of Object.entries(fees)) check(`${equipment} uses its independently expected fee`, () => {
   assert.equal(normalizeEquipmentSelection(equipment), equipment);
   const actual = result({ equipment });
@@ -82,7 +82,7 @@ for (const [equipment, rate] of Object.entries(fees)) check(`${equipment} uses i
 });
 check('Only an absent equipment parameter uses the clearly labelled dry-van example', () => {
   assert.equal(normalizeEquipmentSelection(undefined), 'dry-van');
-  assert.equal(result({ equipment: normalizeEquipmentSelection(undefined) }).dispatchFeeCents, 10000);
+  assert.equal(result({ equipment: normalizeEquipmentSelection(undefined) }).dispatchFeeCents, 8000);
 });
 for (const value of ['', 'not-a-truck', 'BOX-TRUCK', ' box-truck ', '__proto__', 'constructor', [], ['box-truck'], ['box-truck', 'dry-van'], ['box-truck', 'box-truck']]) {
   check(`Unknown or repeated equipment ${JSON.stringify(value)} cannot silently calculate a default fee`, () => {
@@ -102,23 +102,23 @@ check('Other remains a distinct quote-only selection with no calculated amounts'
   assert.equal('dispatchFeeCents' in actual, false);
   assert.equal('remainingCents' in actual, false);
 });
-check('Both box-truck discovery links select the 7% calculator preset', () => {
+check('Both box-truck discovery links select the 6% calculator preset', () => {
   for (const path of ['/equipment/box-truck', '/resources/how-to-find-box-truck-loads']) {
     const link = LEARNING_LINKS[path].find(item => item.href.startsWith('/tools/load-profit-calculator'));
     assert.equal(link?.href, '/tools/load-profit-calculator?equipment=box-truck');
     const equipment = normalizeEquipmentSelection(new URL(link.href, 'https://raidispatch.com').searchParams.get('equipment'));
-    assert.equal(result({ equipment }).dispatchFeeCents, 14000);
+    assert.equal(result({ equipment }).dispatchFeeCents, 12000);
   }
 });
 check('Zero load pay produces a loss, not an invalid division', () => {
   const actual = result({ loadPay: '0' });
   assert.equal(actual.remainingCents, -75000);
   assert.equal(actual.grossPerAllMile, 0);
-  assert.equal(actual.breakEvenCents, 78948);
+  assert.equal(actual.breakEvenCents, 78125);
 });
 check('A trip with no entered costs has zero break-even', () => {
   const actual = result({ fuelPrice: '0', otherCosts: '0', totalHours: '' });
-  assert.equal(actual.remainingCents, 190000);
+  assert.equal(actual.remainingCents, 192000);
   assert.equal(actual.breakEvenCents, 0);
   assert.equal(actual.remainingPerHour, null);
 });
@@ -126,19 +126,20 @@ check('Deadhead increases fuel cost and reduces remaining revenue', () => {
   const actual = result({ emptyMiles: '0' });
   assert.equal(actual.totalMiles, 800);
   assert.equal(actual.fuelCostCents, 53333);
-  assert.equal(actual.remainingCents, 121667);
-  assert.equal(actual.breakEvenCents, 71930);
+  assert.equal(actual.remainingCents, 123667);
+  assert.equal(actual.breakEvenCents, 71181);
   assert.equal(actual.grossPerLoadedMile, actual.grossPerAllMile);
 });
 check('Cent arithmetic and three-decimal pump prices reconcile', () => {
   const actual = result({ loadPay: '19.99', loadedMiles: '1', emptyMiles: '0', mpg: '4', fuelPrice: '3.999', otherCosts: '0', totalHours: '' });
-  assert.equal(actual.dispatchFeeCents, 100);
+  assert.equal(actual.dispatchFeeCents, 80);
   assert.equal(actual.fuelCostCents, 100);
-  assert.equal(actual.remainingCents, 1799);
-  assert.equal(actual.breakEvenCents, 106);
+  assert.equal(actual.remainingCents, 1819);
+  assert.equal(actual.breakEvenCents, 105);
 });
 check('Half-cent fuel and fee values round consistently', () => {
-  const actual = result({ equipment: 'dry-van', loadPay: '0.10', loadedMiles: '1', emptyMiles: '0', mpg: '2', fuelPrice: '0.05', otherCosts: '0' });
+  // Hotshot is the 5% type: 5% of $0.10 is exactly half a cent.
+  const actual = result({ equipment: 'hotshot', loadPay: '0.10', loadedMiles: '1', emptyMiles: '0', mpg: '2', fuelPrice: '0.05', otherCosts: '0' });
   assert.equal(actual.dispatchFeeCents, 1);
   assert.equal(actual.fuelCostCents, 3);
   assert.equal(actual.remainingCents, 6);
@@ -153,12 +154,12 @@ check('Quoted break-even covers entered costs after the rounded dispatch fee', (
 });
 check('Hours affect the hourly comparison without inventing driver wages', () => {
   const actual = result({ totalHours: '40' });
-  assert.equal(actual.remainingPerHour, 28.75);
-  assert.equal(actual.remainingCents, 115000);
+  assert.equal(actual.remainingPerHour, 29.25);
+  assert.equal(actual.remainingCents, 117000);
 });
 check('Comma-separated amounts and surrounding spaces are accepted', () => {
   const actual = result({ loadPay: ' 2,000.00 ', loadedMiles: ' 800 ', totalHours: ' ' });
-  assert.equal(actual.remainingCents, 115000);
+  assert.equal(actual.remainingCents, 117000);
   assert.equal(actual.remainingPerHour, null);
 });
 const invalid = [
@@ -184,16 +185,16 @@ check('All supported numeric extremes remain finite', () => {
 check('Default SSR contains the worked estimate and explicit profit limitation', () => {
   controlledInput = undefined;
   const html = renderToStaticMarkup(React.createElement(Calculator));
-  for (const expected of ['Dry Vans · 5% dispatch fee', '$1,150.00', '$789.48', '$600.00', '$100.00', '$2.22', '$57.50', 'This is not net profit.', 'aria-live="polite"', 'for="load-audit-mpg"']) assert.ok(html.includes(expected), expected);
+  for (const expected of ['Dry Vans · 4% dispatch fee', '$1,170.00', '$781.25', '$600.00', '$80.00', '$2.22', '$58.50', 'This is not net profit.', 'aria-live="polite"', 'for="load-audit-mpg"']) assert.ok(html.includes(expected), expected);
   assert.ok(!html.includes('aria-invalid="true"'));
 });
-check('Box-truck SSR initial selection names the equipment and shows the $140 fee', () => {
+check('Box-truck SSR initial selection names the equipment and shows the $120 fee', () => {
   controlledInput = undefined;
   const html = renderToStaticMarkup(React.createElement(Calculator, { initialEquipment: 'box-truck' }));
-  for (const expected of ['Box Trucks · 7% dispatch fee', '$140.00', '$1,110.00', '$806.46', '$55.50', '<option value="box-truck" selected="">']) assert.ok(html.includes(expected), expected);
+  for (const expected of ['Box Trucks · 6% dispatch fee', '$120.00', '$1,130.00', '$797.88', '$56.50', '<option value="box-truck" selected="">']) assert.ok(html.includes(expected), expected);
   assert.ok(!html.includes('<option value="dry-van" selected="">'));
 });
-for (const [equipment, fee, revenue] of [['box-truck', '$140.00', '$1,860.00'], ['cargo-van', '$240.00', '$1,760.00'], ['sprinter-van', '$100.00', '$1,900.00']]) check(`${equipment} $2,000 example separates the fee from revenue before operating costs`, () => {
+for (const [equipment, fee, revenue] of [['box-truck', '$120.00', '$1,880.00'], ['cargo-van', '$220.00', '$1,780.00'], ['sprinter-van', '$80.00', '$1,920.00']]) check(`${equipment} $2,000 example separates the fee from revenue before operating costs`, () => {
   controlledInput = { ...base, equipment };
   const html = renderToStaticMarkup(React.createElement(Calculator));
   assert.ok(html.includes(fee));
@@ -209,14 +210,14 @@ function findElement(node, predicate) {
 }
 check('Cargo and Sprinter selection changes update equipment, fee and remainder together', () => {
   controlledInput = { ...base, equipment: 'cargo-van' };
-  for (const [equipment, name, rate, fee, revenue] of [['sprinter-van', 'Sprinter Vans', 5, '$100.00', '$1,900.00'], ['cargo-van', 'Cargo Vans', 12, '$240.00', '$1,760.00']]) {
+  for (const [equipment, name, rate, fee, revenue] of [['sprinter-van', 'Sprinter Vans', 4, '$80.00', '$1,920.00'], ['cargo-van', 'Cargo Vans', 11, '$220.00', '$1,780.00']]) {
     const select = findElement(Calculator({}), node => node.type === 'select');
     select.props.onChange({ target: { value: equipment } });
     const html = renderToStaticMarkup(React.createElement(Calculator));
     assert.equal(controlledInput.equipment, equipment);
     assert.ok(html.includes(`${name} · ${rate}% dispatch fee`));
     assert.ok(html.includes(fee) && html.includes(revenue));
-    assert.ok(html.includes('Cargo vans are listed at 12% and Sprinter vans at 5%.'));
+    assert.ok(html.includes('Cargo vans are listed at 11% and Sprinter vans at 4%.'));
     assert.ok(html.includes('href="/equipment/cargo-van"') && html.includes('href="/equipment/sprinter-van"'));
   }
 });
@@ -234,7 +235,7 @@ check('Reset restores example trip inputs while retaining the currently selected
   assert.ok(reset, 'Reset button exists');
   reset.props.onClick();
   assert.deepEqual(controlledInput, { ...base, equipment: 'cargo-van', fuelPrice: '4.00' });
-  assert.equal(calculateLoadEconomics(controlledInput).dispatchFeeCents, 24000);
+  assert.equal(calculateLoadEconomics(controlledInput).dispatchFeeCents, 22000);
 });
 check('Invalid component input is labelled and hides calculated amounts', () => {
   controlledInput = { ...base, mpg: '0' };
@@ -249,12 +250,12 @@ check('Optional blank hours hides only the hourly output', () => {
   controlledInput = { ...base, totalHours: '' };
   const html = renderToStaticMarkup(React.createElement(Calculator));
   assert.ok(!html.includes('Remaining per trip hour'));
-  assert.ok(html.includes('$1,150.00'));
+  assert.ok(html.includes('$1,170.00'));
 });
 
 for (const [name, query, equipment, fee, feeAmount, remainder] of [
-  ['box preset', { equipment: 'box-truck' }, 'box-truck', 7, '$140', '$1,110'],
-  ['generic default', {}, 'dry-van', 5, '$100', '$1,150'],
+  ['box preset', { equipment: 'box-truck' }, 'box-truck', 6, '$120', '$1,130'],
+  ['generic default', {}, 'dry-van', 4, '$80', '$1,170'],
 ]) {
   controlledInput = undefined;
   const tree = await calculatorPage.default({ searchParams: Promise.resolve(query) });

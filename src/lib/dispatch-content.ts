@@ -1,4 +1,4 @@
-import { OTHER_EQUIPMENT_NOTICE, DISPATCH_FEE_POLICY, DISPATCH_RATE_RANGE, DISPATCH_PRICING_SUMMARY, getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement } from './dispatch-pricing';
+import { OTHER_EQUIPMENT_NOTICE, DISPATCH_FEE_EFFECTIVE_DATE, DISPATCH_FEE_EFFECTIVE_LABEL, DISPATCH_FEE_POLICY, DISPATCH_FEE_REDUCTION_SENTENCE, DISPATCH_RATE_RANGE, DISPATCH_PRICING_SUMMARY, getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement } from './dispatch-pricing';
 import { ADDITIONAL_GUIDES, ADDITIONAL_SERVICES } from './expanded-content';
 import { CARRIER_EDUCATION_GUIDES } from './carrier-education';
 import { ADDITIONAL_EQUIPMENT_CONTENT } from './additional-equipment-content';
@@ -116,7 +116,7 @@ const BASE_EQUIPMENT_CONTENT: DispatchContent[] = [
       { question: 'Can a box truck with new authority get dispatch help?', answer: 'You can request an onboarding review. Some brokers or loads have authority age and insurance requirements that limit availability, so acceptance and load timing cannot be guaranteed.' },
       { question: 'Do you guarantee local or dedicated delivery routes?', answer: 'No. Share your preferred area and schedule, and we will assess whether the available service and freight fit. A dedicated route must be separately confirmed in writing.' },
     ],
-    related: [{ label: 'How to find suitable box truck loads', href: '/resources/how-to-find-box-truck-loads' }, { label: 'Compare box truck dispatch services', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Cargo van dispatch review', href: '/equipment/cargo-van' }, { label: 'View dispatch pricing', href: '/pricing' }],
+    related: [{ label: 'How to find suitable box truck loads', href: '/resources/how-to-find-box-truck-loads' }, { label: 'Compare box truck dispatch services', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Cargo van dispatch review', href: '/equipment/cargo-van' }, { label: 'Dry van dispatch for 53 foot trailers', href: '/equipment/dry-van' }, { label: 'View dispatch pricing', href: '/pricing' }],
   },
   {
     slug: 'power-only', title: 'Power only dispatch services', metaTitle: `Power Only Dispatch Services | ${getDispatchRateLabel('power-only')} Fee`,
@@ -136,7 +136,7 @@ const BASE_EQUIPMENT_CONTENT: DispatchContent[] = [
       { question: 'Do you provide trailers?', answer: 'Rai Dispatch provides dispatch support. Any trailer is supplied under the specific broker, shipper or trailer provider arrangement; availability and terms must be confirmed for the load.' },
       { question: 'Can you guarantee approval with a freight platform?', answer: 'No. The platform or broker controls its own onboarding requirements. We can review your operating preferences and existing approvals without promising access.' },
     ],
-    related: [{ label: 'Broker communication', href: '/services/broker-communication' }, { label: 'Load booking process', href: '/services/load-booking' }, { label: 'Dispatch fees explained', href: '/resources/truck-dispatch-fees' }],
+    related: [{ label: 'Broker communication', href: '/services/broker-communication' }, { label: 'Load booking process', href: '/services/load-booking' }, { label: 'Dispatch fees explained', href: '/resources/truck-dispatch-fees' }, { label: 'Dry van dispatch with your own trailer', href: '/equipment/dry-van' }],
   },
   {
     slug: 'step-deck', title: 'Step deck and drop deck dispatch services', metaTitle: `Step Deck & Drop Deck Dispatch | ${getDispatchRateLabel('step-deck')} Fee`,
@@ -210,12 +210,27 @@ const PRIORITY_FEE_QUESTIONS: Record<string, string> = {
   'sprinter-van': 'How much is the Sprinter van dispatch fee?',
 };
 
+// Equipment pages that did not yet answer the plain cost question. The answer is
+// always the shared fee statement, so it cannot drift from the published schedule.
+const STANDARD_FEE_QUESTIONS: Record<string, string> = {
+  'dry-van': 'How much does Rai Dispatch charge for dry van dispatch?',
+  reefer: 'How much does Rai Dispatch charge for reefer dispatch?',
+  flatbed: 'How much does Rai Dispatch charge for flatbed dispatch?',
+  'power-only': 'How much does Rai Dispatch charge for power only dispatch?',
+  'step-deck': 'How much does Rai Dispatch charge for step deck dispatch?',
+  hotshot: 'How much does Rai Dispatch charge for hotshot dispatch?',
+  conestoga: 'How much does Rai Dispatch charge for Conestoga dispatch?',
+  'dump-truck': 'How much does Rai Dispatch charge for dump truck dispatch?',
+};
+
 export const EQUIPMENT_CONTENT: DispatchContent[] = BASE_EQUIPMENT_CONTENT.map(content => {
   const enhancement = EQUIPMENT_SEARCH_ENHANCEMENTS[content.slug];
   const feeQuestion = PRIORITY_FEE_QUESTIONS[content.slug];
+  const standardFeeQuestion = STANDARD_FEE_QUESTIONS[content.slug];
   const feePolicyQuestion = 'Does Rai Dispatch charge any fees besides the equipment percentage?';
   const faqs = [
-    ...[...content.faqs, ...(enhancement?.faqs ?? [])].filter(faq => faq.question !== feePolicyQuestion),
+    ...(standardFeeQuestion ? [{ question: standardFeeQuestion, answer: getEquipmentFeeStatement(content.slug) }] : []),
+    ...[...content.faqs, ...(enhancement?.faqs ?? [])].filter(faq => faq.question !== feePolicyQuestion && faq.question !== standardFeeQuestion),
     { question: feePolicyQuestion, answer: DISPATCH_FEE_POLICY },
   ];
   const related = [...content.related, ...(enhancement?.related ?? [])];
@@ -275,7 +290,7 @@ export const SERVICE_CONTENT: DispatchContent[] = [
       { question: 'Can you help find partial loads as well as full truckloads?', answer: 'We can review suitable partial load opportunities within the agreed dispatch scope. Equipment, cargo compatibility, broker terms and the combined schedule must fit, and you approve each booking. This is carrier dispatch support, not a shipper facing less than truckload (LTL) shipping network.' },
       { question: 'Do you work under my authority?', answer: 'Dispatch support is provided for your carrier operation under the written agreement. You retain your carrier authority, equipment and responsibility for accepting and operating the load.' },
     ],
-    related: [{ label: 'How truck dispatch works', href: '/resources/what-does-a-truck-dispatcher-do' }, { label: 'Equipment we review', href: '/equipment' }, { label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Broker communication', href: '/services/broker-communication' }],
+    related: [{ label: 'How truck dispatch works', href: '/resources/what-does-a-truck-dispatcher-do' }, { label: 'Equipment we review', href: '/equipment' }, { label: 'Dry van dispatch for full truckload freight', href: '/equipment/dry-van' }, { label: 'Box truck and straight truck dispatch', href: '/equipment/box-truck' }, { label: 'Carrier onboarding checklist', href: '/resources/carrier-onboarding-checklist' }, { label: 'Broker communication', href: '/services/broker-communication' }],
   },
   {
     slug: 'broker-communication', title: 'Broker communication for owner operators', metaTitle: 'Broker Communication & Dispatch Support',
@@ -351,13 +366,13 @@ export const SERVICE_CONTENT: DispatchContent[] = [
       { question: 'Do you provide around the clock dispatch coverage?', answer: `Yes. Rai Dispatch provides ${ACTIVE_CARRIER_SUPPORT}. The new carrier setup desk operates ${SETUP_DESK_HOURS}. Confirm your dispatch contact and escalation process during onboarding.` },
       { question: 'Will detention automatically be paid after a delay?', answer: 'No. Free time, notification requirements, evidence and payment terms vary by load. Clarify them in writing before pickup and document the delay.' },
     ],
-    related: [{ label: 'Reefer dispatch', href: '/equipment/reefer' }, { label: 'Detention and delay documentation', href: '/resources/detention-layover-tonu-documentation' }, { label: 'Route and lane strategy', href: '/services/route-strategy' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
+    related: [{ label: 'Reefer dispatch', href: '/equipment/reefer' }, { label: 'Dry van dispatch and appointment follow ups', href: '/equipment/dry-van' }, { label: 'Detention and delay documentation', href: '/resources/detention-layover-tonu-documentation' }, { label: 'Route and lane strategy', href: '/services/route-strategy' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
   },
 ];
 
 export type CarrierGuide = DispatchContent & { readTime: string; published: string; updated?: string; sources?: ContentLink[] };
 
-export const GUIDES: CarrierGuide[] = [
+const GUIDE_ENTRIES: CarrierGuide[] = [
   {
     slug: 'detention-layover-tonu-documentation',
     title: 'Detention, layover and TONU: a carrier documentation checklist',
@@ -408,7 +423,7 @@ export const GUIDES: CarrierGuide[] = [
       { question: 'Does a cancelled load always qualify for TONU?', answer: 'No automatic payment is promised. Keep the cancellation details and review the applicable conditions with the responsible contact before submitting a request.' },
       { question: 'Does Rai Dispatch guarantee accessorial payment?', answer: 'No. We support the agreed document and communication process. Approval, payment and any dispute depend on the load terms and the relevant parties.' },
     ],
-    related: [{ label: 'Rate negotiation support', href: '/services/rate-negotiation' }, { label: 'Dispatch paperwork support', href: '/services/paperwork-support' }, { label: 'Appointment scheduling', href: '/services/scheduling' }, { label: 'Dispatch fee billing questions', href: '/resources/truck-dispatch-fees' }],
+    related: [{ label: 'Rate negotiation support', href: '/services/rate-negotiation' }, { label: 'Dispatch paperwork support', href: '/services/paperwork-support' }, { label: 'Appointment scheduling', href: '/services/scheduling' }, { label: 'Dispatch fee billing questions', href: '/resources/truck-dispatch-fees' }, { label: 'Screen dry van loads before booking', href: '/resources/how-to-find-dry-van-loads' }],
     sources: [{ label: 'Truckstop: accessorial terminology and load documentation', href: 'https://truckstop.com/blog/accessorial-charges/' }],
   },
   ...ADDITIONAL_GUIDES,
@@ -433,7 +448,7 @@ export const GUIDES: CarrierGuide[] = [
       { question: 'Is revenue after dispatch fees my profit?', answer: 'No. Fuel, maintenance, insurance, equipment costs, driver compensation and other operating expenses still need to be accounted for.' },
       { question: 'What rate per mile should every truck accept?', answer: 'There is no universal number. Your equipment, costs, lane, schedule and alternatives determine whether a specific load is workable.' },
     ],
-    related: [{ label: 'Rate negotiation support', href: '/services/rate-negotiation' }, { label: 'Dispatch fees explained', href: '/resources/truck-dispatch-fees' }, { label: 'Lane planning', href: '/services/route-strategy' }],
+    related: [{ label: 'Rate negotiation support', href: '/services/rate-negotiation' }, { label: 'Dispatch fees explained', href: '/resources/truck-dispatch-fees' }, { label: 'Lane planning', href: '/services/route-strategy' }, { label: 'Dry van dispatch service and fee', href: '/equipment/dry-van' }],
   },
   {
     slug: 'truck-dispatch-fees', title: 'Truck dispatch fees by equipment', metaTitle: `Truck Dispatch Fees by Equipment | ${DISPATCH_RATE_RANGE}`,
@@ -453,12 +468,13 @@ export const GUIDES: CarrierGuide[] = [
     checklist: ['What is my exact percentage and billing base?', 'How are accessorials and cancelled loads handled?', 'What is included, and what is outside the service?', 'When do I pay, and how do I end the agreement?'],
     faqs: [
       { question: 'What percentage does Rai Dispatch charge for each equipment type?', answer: `${DISPATCH_PRICING_SUMMARY} The agreement confirms the equipment classification and billing base.` },
+      { question: 'Did Rai Dispatch lower its dispatch fees?', answer: `Yes. ${DISPATCH_FEE_REDUCTION_SENTENCE} The current schedule is ${DISPATCH_RATE_RANGE} by equipment. Copies of this page dated before ${DISPATCH_FEE_EFFECTIVE_LABEL} show percentages that no longer apply.` },
       { question: 'Does Rai Dispatch charge setup fees, fixed weekly or monthly fees, or any other fees?', answer: DISPATCH_FEE_POLICY },
       { question: 'Is a dedicated dispatcher included?', answer: `Yes. Rai Dispatch provides a dedicated dispatcher for each truck, with free setup and ${ACTIVE_CARRIER_SUPPORT}. Your dispatcher learns its equipment, lanes and schedule. Confirm your direct contact details and backup process during onboarding. The new carrier setup desk operates ${SETUP_DESK_HOURS}.` },
       { question: 'Does the fee include fuel, insurance or factoring?', answer: 'No. The percentage fee pays for the agreed dispatch service. Fuel, insurance, factoring and other carrier operating expenses are separate third party costs, not additional Rai Dispatch fees.' },
       { question: 'Should I choose a dispatcher only by the percentage?', answer: 'No. Compare the billing base, service scope, communication, contract terms and fit for your equipment alongside the fee.' },
     ],
-    related: [{ label: 'Rai Dispatch pricing', href: '/pricing' }, { label: 'Detention and accessorial documentation', href: '/resources/detention-layover-tonu-documentation' }, { label: 'How to choose a dispatcher', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Evaluate a freight rate', href: '/resources/evaluate-freight-rate-per-mile' }],
+    related: [{ label: 'Rai Dispatch pricing', href: '/pricing' }, { label: 'Box truck dispatch fee and service', href: '/equipment/box-truck' }, { label: 'Dry van dispatch fee and service', href: '/equipment/dry-van' }, { label: 'Detention and accessorial documentation', href: '/resources/detention-layover-tonu-documentation' }, { label: 'How to choose a dispatcher', href: '/resources/how-to-choose-a-truck-dispatcher' }, { label: 'Evaluate a freight rate', href: '/resources/evaluate-freight-rate-per-mile' }],
   },
   {
     slug: 'how-to-choose-a-truck-dispatcher', title: 'How to choose a truck dispatcher', metaTitle: 'How to Choose a Truck Dispatch Service',
@@ -507,3 +523,19 @@ export const GUIDES: CarrierGuide[] = [
     related: [{ label: 'What happens after dispatch onboarding', href: '/resources/what-does-a-truck-dispatcher-do' }, { label: 'Request a carrier review', href: '/contact' }, { label: 'Equipment dispatch options', href: '/equipment' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
   },
 ];
+
+// These guides quote a Rai Dispatch fee or the published fee range in their own text, so their
+// revision date follows the fee schedule. The other guides state no fee and keep their own dates.
+export const GUIDES_QUOTING_FEES: ReadonlySet<string> = new Set([
+  'what-does-a-truck-dispatcher-do', 'how-to-find-box-truck-loads', 'how-to-find-dry-van-loads',
+  'local-vs-regional-vs-otr-trucking', 'load-board-vs-dispatch-service', 'self-dispatch-vs-dispatch-service',
+  'truck-dispatcher-vs-freight-broker', 'truck-dispatch-service-agreement-checklist',
+  'fuel-surcharge-calculation-for-carriers', 'reefer-load-temperature-checklist', 'flatbed-load-tarping-checklist',
+  'power-only-trailer-interchange-checklist', 'hotshot-load-planning-checklist', 'evaluate-freight-rate-per-mile',
+  'truck-dispatch-fees', 'how-to-choose-a-truck-dispatcher', 'carrier-onboarding-checklist',
+]);
+export const GUIDES: CarrierGuide[] = GUIDE_ENTRIES.map(guide => (
+  GUIDES_QUOTING_FEES.has(guide.slug) && (guide.updated ?? guide.published) < DISPATCH_FEE_EFFECTIVE_DATE
+    ? { ...guide, updated: DISPATCH_FEE_EFFECTIVE_DATE }
+    : guide
+));

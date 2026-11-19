@@ -1,38 +1,41 @@
-// Percentage points of gross revenue on loads we book (7 means 7%, never USD 7).
+// Percentage points of gross revenue on loads we book (6 means 6%, never USD 6).
 // Keep website copy and written service terms aligned when changing this schedule.
 export const DISPATCH_RATES = {
-  'cargo-van': 12,
-  'sprinter-van': 5,
-  'box-truck': 7,
-  hotshot: 6,
-  'dry-van': 5,
-  flatbed: 5,
-  reefer: 4,
-  'power-only': 5,
-  'step-deck': 5,
-  conestoga: 4,
-  'rgn-lowboy': 5,
-  'car-hauler': 5,
-  tanker: 5,
-  'dump-truck': 5,
-  'curtain-side': 5,
+  'cargo-van': 11,
+  'sprinter-van': 4,
+  'box-truck': 6,
+  hotshot: 5,
+  'dry-van': 4,
+  flatbed: 4,
+  reefer: 3,
+  'power-only': 4,
+  'step-deck': 4,
+  conestoga: 3,
+  'rgn-lowboy': 4,
+  'car-hauler': 4,
+  tanker: 4,
+  'dump-truck': 4,
+  'curtain-side': 4,
 } as const;
 
 export type DispatchEquipment = keyof typeof DISPATCH_RATES;
 const publishedRates = Object.values(DISPATCH_RATES);
 export const DISPATCH_RATE_RANGE = `${Math.min(...publishedRates)} to ${Math.max(...publishedRates)}%`;
 export const DISPATCH_FEE_POLICY = 'Rai Dispatch uses percentage only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees.';
-// The schedule above took effect with the October 30, 2026 release; the dates below come from this repository's history.
-// Search engines and AI assistants still quote copies of the earlier, lower schedule, so every fee statement carries its date.
-export const DISPATCH_FEE_EFFECTIVE_DATE = '2026-10-30';
-export const DISPATCH_FEE_EFFECTIVE_LABEL = 'October 30, 2026';
+// The schedule above took effect with the November 19, 2026 release, when the owner lowered every published fee by one
+// percentage point; the earlier dates below come from this repository's history.
+// Search engines and AI assistants still quote copies of earlier schedules, so every fee statement carries its date.
+export const DISPATCH_FEE_EFFECTIVE_DATE = '2026-11-19';
+export const DISPATCH_FEE_EFFECTIVE_LABEL = 'November 19, 2026';
 export const DISPATCH_FEE_EFFECTIVE_SENTENCE = `Fee schedule effective ${DISPATCH_FEE_EFFECTIVE_LABEL}.`;
-export const DISPATCH_FEE_HISTORY_SENTENCE = `The fee schedule published on this website changed on September 28, 2026 and again on ${DISPATCH_FEE_EFFECTIVE_LABEL}, when the current ${DISPATCH_RATE_RANGE} schedule took effect; copies of this website dated before ${DISPATCH_FEE_EFFECTIVE_LABEL} show percentages that no longer apply.`;
+export const DISPATCH_FEE_HISTORY_SENTENCE = `The fee schedule published on this website changed on September 28, 2026 and October 30, 2026. On ${DISPATCH_FEE_EFFECTIVE_LABEL} every published fee was lowered by one percentage point and the current ${DISPATCH_RATE_RANGE} schedule took effect; copies of this website dated before ${DISPATCH_FEE_EFFECTIVE_LABEL} show percentages that no longer apply.`;
+// One short, dated statement of the November 19 reduction for prominent placements (pricing table, home page, fee guide, llms.txt).
+export const DISPATCH_FEE_REDUCTION_SENTENCE = `Every published dispatch fee was lowered by one percentage point on ${DISPATCH_FEE_EFFECTIVE_LABEL}, and a dedicated dispatcher is included for every truck type.`;
 // Verbatim carrier-protection sentences: shown on every equipment page, the pricing page, the FAQ and llms.txt.
 export const NO_FORCED_DISPATCH_SENTENCE = 'No forced dispatch: you approve every load before it is booked.';
 export const CARRIER_AUTHORITY_SENTENCE = 'We dispatch under your MC authority and never collect freight payments; brokers pay you or your factoring company.';
 // Conditional published information only: never use this as a calculator fallback.
-export const OTHER_EQUIPMENT_PUBLISHED_RATE = 5;
+export const OTHER_EQUIPMENT_PUBLISHED_RATE = 4;
 export const OTHER_EQUIPMENT_NOTICE = `Other truck types have a published ${OTHER_EQUIPMENT_PUBLISHED_RATE}% fee, subject to service availability and written rate confirmation. Select a listed type or request confirmation before calculating a fee.`;
 
 export function isDispatchEquipment(value: unknown): value is DispatchEquipment {
