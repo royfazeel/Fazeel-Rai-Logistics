@@ -11,6 +11,7 @@ export function ConsentMeasurement() {
   const pathname = usePathname();
   const dialog = useRef<HTMLDialogElement>(null);
   const [ready, setReady] = useState(false);
+  const [showBanner, setShowBanner] = useState(false);
   const [open, setOpen] = useState(false);
   const [choices, setChoices] = useState<ConsentChoices>(DENIED_CHOICES);
   const [error, setError] = useState('');
@@ -20,14 +21,16 @@ export function ConsentMeasurement() {
     let saved = null;
     try { saved = parseConsentPreference(localStorage.getItem(CONSENT_STORAGE_KEY)); } catch { /* Denied until a choice can be stored. */ }
     setChoices(saved || DENIED_CHOICES);
-    setOpen(!saved);
+    setShowBanner(!saved);
     setReady(true);
     getMeasurement()?.apply(saved || DENIED_CHOICES);
     const onStorage = (event: StorageEvent) => {
       if (event.key !== CONSENT_STORAGE_KEY && event.key !== null) return;
       const next = parseConsentPreference(event.newValue);
       setChoices(next || DENIED_CHOICES);
-      setOpen(!next);
+      setShowBanner(!next);
+      setOpen(false);
+      setError('');
       getMeasurement()?.apply(next || DENIED_CHOICES);
     };
     window.addEventListener('storage', onStorage);
@@ -43,6 +46,12 @@ export function ConsentMeasurement() {
 
   if (!MEASUREMENT_CONFIG.enabled || !ready) return null;
 
+  const openSettings = () => {
+    try { setChoices(parseConsentPreference(localStorage.getItem(CONSENT_STORAGE_KEY)) || DENIED_CHOICES); } catch { setChoices(DENIED_CHOICES); }
+    setError('');
+    setOpen(true);
+  };
+
   const save = (next: ConsentChoices) => {
     const allowed = { analytics: next.analytics && Boolean(MEASUREMENT_CONFIG.gaId), ads: next.ads && Boolean(MEASUREMENT_CONFIG.adsId) };
     try { localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(consentPreference(allowed))); }
@@ -55,6 +64,7 @@ export function ConsentMeasurement() {
     }
     setChoices(allowed);
     setError('');
+    setShowBanner(false);
     setOpen(false);
     getMeasurement()?.apply(allowed);
   };
@@ -65,17 +75,30 @@ export function ConsentMeasurement() {
       ? 'Choose whether Google Analytics may measure website use. Analytics is off until you choose.'
       : 'Choose whether Google Ads may measure advertising results. Advertising measurement is off until you choose.';
   const acceptLabel = providerCount === 2 ? 'Accept all' : MEASUREMENT_CONFIG.gaId ? 'Accept analytics' : 'Accept advertising measurement';
+  const bannerText = providerCount === 2
+    ? 'Allow Google Analytics and Google Ads cookies to measure visits and ad results?'
+    : MEASUREMENT_CONFIG.gaId
+      ? 'Allow Google Analytics cookies to measure visits and contact clicks?'
+      : 'Allow Google Ads cookies to measure advertising results?';
   const button = 'min-h-[44px] rounded-lg border border-slate-400 px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-700';
   return <>
     <div className="bg-navy-950 px-4 pb-24 pt-3 text-center lg:pb-5">
-      <button type="button" className="min-h-[44px] px-4 text-sm text-white underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white" onClick={() => {
-        try { setChoices(parseConsentPreference(localStorage.getItem(CONSENT_STORAGE_KEY)) || DENIED_CHOICES); } catch { setChoices(DENIED_CHOICES); }
-        setError('');
-        setOpen(true);
-      }}>Measurement settings</button>
+      <button type="button" aria-haspopup="dialog" onClick={openSettings} className="min-h-[44px] px-4 text-sm text-white underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">Measurement settings</button>
     </div>
+    {showBanner && <aside aria-label="Optional website measurement" className="fixed inset-x-2 bottom-[calc(3.75rem+env(safe-area-inset-bottom,0px))] z-30 rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 shadow-lg md:inset-x-auto md:bottom-6 md:left-6 md:max-w-sm">
+      <p className="text-sm leading-snug">{bannerText}</p>
+      {error && !open && <p role="alert" className="mt-2 text-sm text-red-800">{error}</p>}
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        <button type="button" className={button} onClick={() => save(DENIED_CHOICES)}>Reject</button>
+        <button type="button" className={button} onClick={() => save({ analytics: true, ads: true })}>Accept</button>
+        <button type="button" aria-haspopup="dialog" className="min-h-[44px] px-2 text-sm font-semibold text-primary-700 underline underline-offset-4" onClick={openSettings}>Settings</button>
+      </div>
+    </aside>}
     <dialog ref={dialog} aria-labelledby="measurement-title" aria-describedby="measurement-description" onCancel={() => setOpen(false)} onClose={() => setOpen(false)} className="w-[calc(100%-2rem)] max-w-lg max-h-[85dvh] overflow-y-auto rounded-xl bg-white p-5 text-slate-900 shadow-2xl backdrop:bg-navy-950/70 sm:p-7">
-      <h2 id="measurement-title" className="text-xl font-bold">Optional website measurement</h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="measurement-title" className="text-xl font-bold">Optional website measurement</h2>
+        <button type="button" onClick={() => setOpen(false)} className="min-h-[44px] px-2 text-sm font-semibold underline">Close</button>
+      </div>
       <p id="measurement-description" className="mt-3 text-sm leading-relaxed">{intro} Contact forms and links work either way.</p>
       <div className="my-5 space-y-4">
         {MEASUREMENT_CONFIG.gaId && <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-300 p-3"><input type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-primary-700" checked={choices.analytics} onChange={event => setChoices({ ...choices, analytics: event.target.checked })} /><span><strong className="block text-sm">Analytics</strong><span className="mt-1 block text-sm leading-relaxed">Google Analytics cookies measure visits, accepted inquiry forms and contact link clicks. Clicks do not confirm a call or message took place.</span></span></label>}
