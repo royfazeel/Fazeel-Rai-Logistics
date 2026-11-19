@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { Barlow_Condensed, Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { ConsentMeasurement } from '@/components/ConsentMeasurement';
+import { SiteAnalytics } from '@/components/SiteAnalytics';
 import StickyCallWidgets from '@/components/StickyCallWidgets';
 import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, EQUIPMENT_TYPES } from '@/lib/constants';
 import { SITE_URL } from '@/lib/seo';
@@ -113,8 +113,10 @@ export default function RootLayout({
           <Header />
           <main id="main-content" className="pt-20">{children}</main>
           <Footer />
-          <ConsentMeasurement />
           <StickyCallWidgets />
+          {/* Cookieless Vercel Web Analytics. It renders nothing and needs no
+              consent prompt; the earlier Google Analytics dialog is removed. */}
+          <SiteAnalytics />
           {/* No auto-appearing popup: the exit-intent/timed LeadCapturePopup was
               removed at the client's request. The component still exists at
               src/components/LeadCapturePopup.tsx — re-add <LeadCapturePopup /> here

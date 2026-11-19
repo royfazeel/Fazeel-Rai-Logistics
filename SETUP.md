@@ -5,8 +5,10 @@ For the domain migration and recorded launch checks, also see
 [the SEO audit and migration record](docs/SEO-AUDIT-AND-MIGRATION.md).
 
 Configure and verify **lead delivery** so enquiries reach the intended inbox or
-webhook. Google Ads and Google Analytics 4 (GA4) website measurement were removed
-on **September 28, 2026**; no advertising or analytics tag setup is required.
+webhook. Website visits are counted with cookieless **Vercel Web Analytics**
+(section 2), so visitors never see a cookie popup. Google Ads and Google
+Analytics 4 (GA4) are not loaded; no advertising or analytics tag setup is
+required.
 
 Every setting below is pasted into the same place (Vercel), and every one of
 them needs the same last step: **redeploy**. That step is where almost
@@ -139,23 +141,40 @@ Slack message, use `summary` on its own and you are done.
 
 ---
 
-## 2. Website measurement is disabled
+## 2. Website analytics (no cookie popup)
 
-The shared Google tag has been removed. The website does not load Google Ads or
-Google Analytics 4 (GA4) measurement tags or send page-view, call-click or form
-conversion events to those services. Both Ads website conversion measurement
-and GA4 website measurement stop. The underlying Google accounts and their
-historical reports are not deleted by this website change.
+The website counts visits with **Vercel Web Analytics**. It does not use
+cookies, so visitors are not asked to accept or reject anything. The earlier
+Google Analytics popup and the "Measurement settings" link are gone, and no
+Google Ads or Google Analytics 4 (GA4) tag is loaded. The underlying Google
+accounts and their historical reports are not deleted by this website change.
 
-Legacy public analytics/advertising environment variables are ignored and no
-longer belong in the setup checklist. Do not add tag IDs or conversion labels
-when configuring lead delivery.
+It needs one switch in Vercel, once:
+
+1. Go to **vercel.com** and open the **fazeel-rai-logistics** project.
+2. Click **Analytics** in the top row.
+3. Click **Enable** for Web Analytics.
+4. **Redeploy** (section 3). Analytics starts with the next deployment.
+
+Then open the live website in a normal browser, click around, and return to the
+**Analytics** tab. You should see page visits. If the tab stays empty, the
+switch is off or you have not redeployed. Ad blockers can also hide your own
+visits.
+
+What is counted: page visits, clicks on phone, SMS, WhatsApp and email links,
+openings of the quote form, and inquiry forms the website accepted. No names,
+phone numbers, email addresses or message text are sent. Click and form counts
+depend on the Vercel plan; page visits do not.
+
+These old settings are no longer used and can be deleted from Vercel:
+`NEXT_PUBLIC_MEASUREMENT_ENABLED`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`,
+`NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL`.
 
 Hosting and security providers may still maintain operational request/error
 logs. The contact form, quote form, lead notifications, optional acknowledgement
-emails and direct contact links continue to work independently of measurement.
+emails and direct contact links continue to work independently of analytics.
 See the privacy and terms pages for the current disclosures, dated
-**September 28, 2026**.
+**November 19, 2026**.
 
 ---
 

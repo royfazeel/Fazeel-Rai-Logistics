@@ -214,7 +214,7 @@ export default function QuoteModal({ isOpen, onClose, returnFocusTo }: QuoteModa
 
       if (res.ok && data?.ok === true) {
         // Record the UI event only after the API accepts the lead.
-        // The measurement adapter is currently disabled.
+        // No form details are sent with it, only the form's name.
         track('lead_submit', { source: 'quote_modal' });
         if (!mounted.current) return;
         setIsSubmitted(true);

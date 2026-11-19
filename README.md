@@ -102,8 +102,8 @@ Environment changes require a new deployment. Public `NEXT_PUBLIC_*` values are 
 | `src/app/sitemap.ts`, `robots.ts`, `opengraph-image.tsx` | Discovery directives and branded sharing image |
 | `src/components/` | Navigation, footer, pricing presentation, native FAQ disclosure, lead forms, and contact actions |
 | `src/app/api/lead/route.ts` | Lead validation, delivery, acknowledgement, and configuration self-check |
-| `src/lib/track.ts` | Typed no-op retained for existing call sites; sends no measurement events |
-| `scripts/` | Read-only SEO crawl and isolated lead API verification |
+| `src/lib/track.ts`, `src/components/SiteAnalytics.tsx` | Cookieless Vercel Web Analytics: allow-listed contact/lead events, page addresses without query strings, no consent prompt |
+| `scripts/` | Read-only SEO crawl, isolated lead API verification and analytics checks |
 | `public/video/` | Locally hosted hero/CTA posters and video files |
 
 When changing a fee, update the shared pricing helper and review visible equipment, pricing, FAQ, agreement, metadata, and schema copy. Update the crawler's independent acceptance rates only when the owner authorizes a price change. Add a page only when it provides distinct, useful information. New content needs a stable slug, page-specific metadata, contextual links, and sitemap coverage. Do not add invented reviews, unsupported income promises, or duplicate city pages.
@@ -129,9 +129,22 @@ The local test sink proves the application workflow in isolation. Confirm live d
 
 ## Website measurement
 
-As of **September 28, 2026**, the shared Google tag is removed. The website does not load Google Ads or Google Analytics 4 (GA4) measurement tags or send page-view, call-click or accepted-form events to them. Both Ads website conversions and GA4 website measurement stop; this does not change the underlying Google accounts or delete their historical data.
+As of **November 19, 2026**, the website uses **Vercel Web Analytics**. It is cookieless, so visitors are not shown a consent prompt: the earlier automatic consent dialog and the "Measurement settings" control are removed. Google Analytics 4 (GA4), Google Ads and the shared Google tag are not loaded. This does not change the underlying Google accounts or delete their historical data.
 
-Legacy public analytics/advertising environment variables no longer enable tracking and are not part of deployment setup. Hosting and security providers may still retain operational request/error logs. Contact forms, lead delivery, optional carrier acknowledgements and direct contact links remain separate and unchanged. The current disclosures are in `/privacy` and `/terms`, dated September 28, 2026.
+- **One dashboard step is required.** Web Analytics must be enabled for the existing **fazeel-rai-logistics** Vercel project (project → **Analytics** → **Enable**), followed by a production deployment. Until then the script request to `/_vercel/insights/script.js` returns 404 and nothing is recorded; the site itself is unaffected.
+- `SiteAnalytics` is mounted once in `src/app/layout.tsx` and renders nothing. The analytics script is served from the site's own host.
+- Page views are reported without query strings or fragments. `src/lib/track.ts` sends only the code-owned events `call_click`, `sms_click`, `whatsapp_click`, `email_click`, `quote_modal_open` and `lead_submit`, each with an allow-listed `location` or `source` label and no form data. `lead_submit` is sent only after the lead API accepts a submission. Custom events are a plan-dependent Vercel feature; confirm they appear for this project's plan before relying on them.
+- The site does not call the script's visitor-identification or cookie opt-in features. Do not add them without revisiting `/privacy`, `/terms` and the consent question.
+- Browsers that used the earlier GA4 setup have their saved consent choice and accessible `_ga*` cookies removed on the next visit.
+- The variables `NEXT_PUBLIC_MEASUREMENT_ENABLED`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID` and `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL` are no longer read and can be deleted from the Vercel project.
+
+```sh
+node scripts/verify-analytics.mjs
+```
+
+This checks the event allow-list, page-address handling, the removal of earlier Google cookies and the absence of Google tag code, using stand-in provider and browser objects. It does not verify the dashboard setting, live delivery or plan-dependent reporting.
+
+Hosting and security providers may still retain operational request/error logs. Contact forms, lead delivery, optional carrier acknowledgements and direct contact links remain separate and unchanged. The current disclosures are in `/privacy` and `/terms`, dated November 19, 2026.
 
 ## Contact and license
 
