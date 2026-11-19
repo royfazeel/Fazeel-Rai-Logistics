@@ -16,7 +16,6 @@ const PAGE_REVISIONS: Record<string, string> = {
   '/resources/trucking-dispatch-glossary': '2026-10-30',
   '/tools/load-profit-calculator': '2026-10-31',
   '/editorial-standards': '2026-10-30',
-  '/privacy': '2026-11-19', '/terms': '2026-11-19',
   '/what-to-expect': '2026-10-30',
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(({ slug }) => [`/equipment/${slug}`, '2026-10-30'])),
   ...Object.fromEntries(SERVICE_CONTENT.map(({ slug }) => [`/services/${slug}`, '2026-10-30'])),
@@ -50,6 +49,10 @@ const PAGE_REVISIONS: Record<string, string> = {
   ...Object.fromEntries(EQUIPMENT_CONTENT.map(content => [`/equipment/${content.slug}`, '2026-11-02'])),
   ...Object.fromEntries(SERVICE_CONTENT.map(content => [`/services/${content.slug}`, '2026-11-02'])),
   ...Object.fromEntries(CARRIER_CONTENT.map(content => [`/carriers/${content.slug}`, '2026-11-02'])),
+  // November 19: cookieless analytics replaced consent-gated Google Analytics;
+  // the privacy and terms pages were rewritten. Keep these after the spreads
+  // above, which would otherwise overwrite the dates.
+  '/privacy': '2026-11-19', '/terms': '2026-11-19',
 };
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
