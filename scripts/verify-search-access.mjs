@@ -10,8 +10,8 @@ const profiles = ['Googlebot', 'bingbot', 'OAI-SearchBot', 'ChatGPT-User', 'Clau
 // Independent acceptance values from the owner's nine confirmed specialties.
 // Do not import site pricing: the audit should detect a consistently wrong fee.
 const equipmentFees = {
-  'box-truck': 7, 'dry-van': 5, reefer: 4, flatbed: 5, 'power-only': 5,
-  'step-deck': 5, hotshot: 6, 'cargo-van': 12, conestoga: 4,
+  'box-truck': 6, 'dry-van': 4, reefer: 3, flatbed: 4, 'power-only': 4,
+  'step-deck': 4, hotshot: 5, 'cargo-van': 11, conestoga: 3,
 };
 const paths = ['/', '/resources/trucking-dispatch-glossary', '/tools/load-profit-calculator', ...Object.keys(equipmentFees).map(slug => `/equipment/${slug}`)];
 const canonicalOrigin = 'https://raidispatch.com';
@@ -46,16 +46,16 @@ function matchingEquipmentRates(text, slug, expectedRate, required = true) {
   const rates = percentages(text);
   if (!rates.length) return !required;
   const pairedVans = ['cargo-van', 'sprinter-van'].includes(slug);
-  if (rates[0] !== expectedRate || rates.some(rate => rate !== expectedRate && !(pairedVans && [12, 5].includes(rate)))) return false;
+  if (rates[0] !== expectedRate || rates.some(rate => rate !== expectedRate && !(pairedVans && [11, 4].includes(rate)))) return false;
   if (!pairedVans || rates.every(rate => rate === expectedRate)) return true;
-  // The owner publishes cargo 12% and Sprinter 5% as distinct categories.
+  // The owner publishes cargo 11% and Sprinter 4% as distinct categories.
   // A second rate is valid only when both categories are explicitly named;
   // also reject conflicting labels even if a correct pair appears elsewhere.
   const namedRates = [...text.matchAll(/\b(cargo|Sprinter) vans?(?: dispatch(?: services?)?| service)?(?: (?:costs|is separately listed at|is priced at|are listed at|at))?\s*[:–—-]?\s*(\d+(?:\.\d+)?)\s*%/gi)]
     .map(match => [match[1].toLowerCase(), Number(match[2])]);
   for (const match of text.matchAll(/\b(\d+(?:\.\d+)?)\s*% of gross revenue on loads (?:we book|Rai Dispatch books) for (cargo|Sprinter) vans?\b/gi)) namedRates.push([match[2].toLowerCase(), Number(match[1])]);
   return ['cargo', 'sprinter'].every(category => namedRates.some(([name]) => name === category))
-    && namedRates.every(([name, rate]) => rate === (name === 'cargo' ? 12 : 5));
+    && namedRates.every(([name, rate]) => rate === (name === 'cargo' ? 11 : 4));
 }
 
 function equipmentEvidence(html, markup, path, issues) {
@@ -65,7 +65,7 @@ function equipmentEvidence(html, markup, path, issues) {
   const article = markup.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1];
   const hero = article?.match(/<header\b[^>]*>([\s\S]*?)<\/header>/i)?.[1];
   if (!hero) issues.push('No server-rendered equipment hero found');
-  if (!matchingEquipmentRates(hero ? plain(hero) : '', slug, expectedRate)) issues.push(`Equipment hero must lead with its ${expectedRate}% fee; another van rate must identify cargo 12% and Sprinter 5% explicitly`);
+  if (!matchingEquipmentRates(hero ? plain(hero) : '', slug, expectedRate)) issues.push(`Equipment hero must lead with its ${expectedRate}% fee; another van rate must identify cargo 11% and Sprinter 4% explicitly`);
   const title = plain(markup.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '');
   const description = elements(markup, 'meta').find(meta => meta.name?.toLowerCase() === 'description')?.content || '';
   if (!matchingEquipmentRates(`${title} ${description}`, slug, expectedRate, false)) issues.push(`Equipment metadata has an incorrect or ambiguously assigned fee for ${slug}`);

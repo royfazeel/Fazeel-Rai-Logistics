@@ -26,21 +26,21 @@ if (jsonIndex >= 0 && (!output || output.startsWith('--'))) throw new Error('--j
 // Deliberately independent of src/lib/dispatch-pricing.ts. An incorrect published
 // helper must fail even if the calculator consistently uses that wrong helper.
 const expectedFees = {
-  'dry-van': 5, reefer: 4, flatbed: 5, hotshot: 6,
-  'box-truck': 7, 'cargo-van': 12, 'sprinter-van': 5, 'power-only': 5,
-  'step-deck': 5, conestoga: 4, 'rgn-lowboy': 5, 'car-hauler': 5,
-  tanker: 5, 'dump-truck': 5, 'curtain-side': 5,
+  'dry-van': 4, reefer: 3, flatbed: 4, hotshot: 5,
+  'box-truck': 6, 'cargo-van': 11, 'sprinter-van': 4, 'power-only': 4,
+  'step-deck': 4, conestoga: 3, 'rgn-lowboy': 4, 'car-hauler': 4,
+  tanker: 4, 'dump-truck': 4, 'curtain-side': 4,
 };
 // Explicit currency fixtures, not the component's math copied as a test oracle.
 const examples = [
-  { input: '2000', gross: '$2,000.00', rates: { 4: ['$80.00', '$1,920.00'], 5: ['$100.00', '$1,900.00'], 6: ['$120.00', '$1,880.00'], 7: ['$140.00', '$1,860.00'], 12: ['$240.00', '$1,760.00'] } },
-  { input: '5000', gross: '$5,000.00', rates: { 4: ['$200.00', '$4,800.00'], 5: ['$250.00', '$4,750.00'], 6: ['$300.00', '$4,700.00'], 7: ['$350.00', '$4,650.00'], 12: ['$600.00', '$4,400.00'] } },
-  { input: '5,000.50', gross: '$5,000.50', rates: { 4: ['$200.02', '$4,800.48'], 5: ['$250.03', '$4,750.47'], 6: ['$300.03', '$4,700.47'], 7: ['$350.04', '$4,650.46'], 12: ['$600.06', '$4,400.44'] } },
-  { input: '19.99', gross: '$19.99', rates: { 4: ['$0.80', '$19.19'], 5: ['$1.00', '$18.99'], 6: ['$1.20', '$18.79'], 7: ['$1.40', '$18.59'], 12: ['$2.40', '$17.59'] } },
-  { input: '0.10', gross: '$0.10', rates: { 4: ['$0.00', '$0.10'], 5: ['$0.01', '$0.09'], 6: ['$0.01', '$0.09'], 7: ['$0.01', '$0.09'], 12: ['$0.01', '$0.09'] } },
-  { input: '0.01', gross: '$0.01', rates: { 4: ['$0.00', '$0.01'], 5: ['$0.00', '$0.01'], 6: ['$0.00', '$0.01'], 7: ['$0.00', '$0.01'], 12: ['$0.00', '$0.01'] } },
-  { input: '0', gross: '$0.00', rates: { 4: ['$0.00', '$0.00'], 5: ['$0.00', '$0.00'], 6: ['$0.00', '$0.00'], 7: ['$0.00', '$0.00'], 12: ['$0.00', '$0.00'] } },
-  { input: '1,000,000,000', gross: '$1,000,000,000.00', rates: { 4: ['$40,000,000.00', '$960,000,000.00'], 5: ['$50,000,000.00', '$950,000,000.00'], 6: ['$60,000,000.00', '$940,000,000.00'], 7: ['$70,000,000.00', '$930,000,000.00'], 12: ['$120,000,000.00', '$880,000,000.00'] } },
+  { input: '2000', gross: '$2,000.00', rates: { 3: ['$60.00', '$1,940.00'], 4: ['$80.00', '$1,920.00'], 5: ['$100.00', '$1,900.00'], 6: ['$120.00', '$1,880.00'], 11: ['$220.00', '$1,780.00'] } },
+  { input: '5000', gross: '$5,000.00', rates: { 3: ['$150.00', '$4,850.00'], 4: ['$200.00', '$4,800.00'], 5: ['$250.00', '$4,750.00'], 6: ['$300.00', '$4,700.00'], 11: ['$550.00', '$4,450.00'] } },
+  { input: '5,000.50', gross: '$5,000.50', rates: { 3: ['$150.02', '$4,850.48'], 4: ['$200.02', '$4,800.48'], 5: ['$250.03', '$4,750.47'], 6: ['$300.03', '$4,700.47'], 11: ['$550.06', '$4,450.44'] } },
+  { input: '19.99', gross: '$19.99', rates: { 3: ['$0.60', '$19.39'], 4: ['$0.80', '$19.19'], 5: ['$1.00', '$18.99'], 6: ['$1.20', '$18.79'], 11: ['$2.20', '$17.79'] } },
+  { input: '0.10', gross: '$0.10', rates: { 3: ['$0.00', '$0.10'], 4: ['$0.00', '$0.10'], 5: ['$0.01', '$0.09'], 6: ['$0.01', '$0.09'], 11: ['$0.01', '$0.09'] } },
+  { input: '0.01', gross: '$0.01', rates: { 3: ['$0.00', '$0.01'], 4: ['$0.00', '$0.01'], 5: ['$0.00', '$0.01'], 6: ['$0.00', '$0.01'], 11: ['$0.00', '$0.01'] } },
+  { input: '0', gross: '$0.00', rates: { 3: ['$0.00', '$0.00'], 4: ['$0.00', '$0.00'], 5: ['$0.00', '$0.00'], 6: ['$0.00', '$0.00'], 11: ['$0.00', '$0.00'] } },
+  { input: '1,000,000,000', gross: '$1,000,000,000.00', rates: { 3: ['$30,000,000.00', '$970,000,000.00'], 4: ['$40,000,000.00', '$960,000,000.00'], 5: ['$50,000,000.00', '$950,000,000.00'], 6: ['$60,000,000.00', '$940,000,000.00'], 11: ['$110,000,000.00', '$890,000,000.00'] } },
 ];
 const invalidInputs = ['', ' ', '-1', '5,00', '1e3', 'NaN', 'Infinity', '5000.001', '1,000,000,000.01'];
 let controlledState;
@@ -87,17 +87,17 @@ function check(name, verify) {
 }
 check('The authoritative map preserves all 15 independent published rates', () => {
   assert.deepEqual(pricing.DISPATCH_RATES, expectedFees);
-  assert.equal(pricing.DISPATCH_RATE_RANGE, '4 to 12%');
+  assert.equal(pricing.DISPATCH_RATE_RANGE, '3 to 11%');
 });
 check('Exact visible fee answer agrees with the controlling specification and homepage FAQ', () => {
-  const expected = 'Dispatch fees are 7% for box trucks, 6% for hotshots, 4% for reefers and Conestoga trailers, 12% for cargo vans, and 5% for dry vans, flatbeds, power only, step decks, Sprinter vans, RGN and lowboy trailers, car haulers, tankers, dump trucks and trailers, and curtain side trailers. Fees apply to gross revenue on loads we book. Rai Dispatch uses percentage only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees. Confirm the applicable equipment category, billing base and service scope in writing.';
+  const expected = 'Dispatch fees are 6% for box trucks, 5% for hotshots, 3% for reefers and Conestoga trailers, 11% for cargo vans, and 4% for dry vans, flatbeds, power only, step decks, Sprinter vans, RGN and lowboy trailers, car haulers, tankers, dump trucks and trailers, and curtain side trailers. Fees apply to gross revenue on loads we book. Rai Dispatch uses percentage only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees. Confirm the applicable equipment category, billing base and service scope in writing.';
   assert.equal(pricing.DISPATCH_FEES_ANSWER, expected);
   assert.equal(loadSource('src/lib/constants.ts').FAQS.find(item => item.id === 1).answer, expected);
 });
 const exactStatements = {
-  'box-truck': 'Rai Dispatch charges 7% of gross revenue on loads we book for box trucks. Confirm the billing base and service scope in writing before onboarding.',
-  'cargo-van': 'Rai Dispatch charges 12% of gross revenue on loads we book for cargo vans. The separately listed Sprinter van dispatch service is priced at 5%. Confirm which service category applies to your vehicle before onboarding.',
-  'sprinter-van': 'Rai Dispatch charges 5% of gross revenue on loads we book for Sprinter vans. The separately listed cargo van dispatch service is priced at 12%. Confirm which service category applies to your vehicle before onboarding.',
+  'box-truck': 'Rai Dispatch charges 6% of gross revenue on loads we book for box trucks. Confirm the billing base and service scope in writing before onboarding.',
+  'cargo-van': 'Rai Dispatch charges 11% of gross revenue on loads we book for cargo vans. The separately listed Sprinter van dispatch service is priced at 4%. Confirm which service category applies to your vehicle before onboarding.',
+  'sprinter-van': 'Rai Dispatch charges 4% of gross revenue on loads we book for Sprinter vans. The separately listed cargo van dispatch service is priced at 11%. Confirm which service category applies to your vehicle before onboarding.',
 };
 for (const [equipment, expected] of Object.entries(exactStatements)) check(`${equipment} exact answer and descriptive Offer retain the right unit`, () => {
   assert.equal(pricing.getEquipmentFeeStatement(equipment), expected);
@@ -118,12 +118,12 @@ for (const equipment of ['other', '', 'not-a-truck', 'BOX-TRUCK', '__proto__', '
 {
   // No controlled override: verify the actual server-rendered starting state.
   const { html, amounts } = render(undefined, undefined);
-  const expected = [['Gross revenue entered', '$2,000.00'], ['Dispatch fee (7%)', '$140.00'], ['Revenue after dispatch fee, before operating costs', '$1,860.00']];
+  const expected = [['Gross revenue entered', '$2,000.00'], ['Dispatch fee (6%)', '$120.00'], ['Revenue after dispatch fee, before operating costs', '$1,880.00']];
   const mismatches = expected.flatMap(([label, amount]) => {
     const received = amounts.find(item => item.label === label)?.amount;
     return received === amount ? [] : [{ label, expected: amount, received: received || 'missing' }];
   });
-  for (const text of ['one hypothetical $2,000 box truck load', 'one load or a group of loads', 'For Box Trucks, 7% of the entered $2,000.00 billing base is a $140.00 dispatch fee.']) {
+  for (const text of ['one hypothetical $2,000 box truck load', 'one load or a group of loads', 'For Box Trucks, 6% of the entered $2,000.00 billing base is a $120.00 dispatch fee.']) {
     if (!plain(html).includes(text)) mismatches.push({ label: 'default example context', expected: text, received: 'missing' });
   }
   if (!/<option\b[^>]*value="box-truck"[^>]*selected=""/.test(html)) mismatches.push({ label: 'default equipment', expected: 'box-truck selected', received: 'missing' });
@@ -139,7 +139,7 @@ for (const [equipment, rate] of Object.entries(expectedFees)) {
       return received === amount ? [] : [{ label, expected: amount, received: received || 'missing' }];
     });
     if (!html.includes('aria-invalid="false"')) mismatches.push({ label: 'validation', expected: 'valid', received: 'invalid' });
-    if (!html.includes('4 to 12%')) mismatches.push({ label: 'published range', expected: '4 to 12%', received: 'missing or outdated' });
+    if (!html.includes('3 to 11%')) mismatches.push({ label: 'published range', expected: '3 to 11%', received: 'missing or outdated' });
     const calculation = `${rate}% of the entered ${example.gross} billing base is a ${fee} dispatch fee.`;
     if (!plain(html).includes(calculation)) mismatches.push({ label: 'percentage calculation context', expected: calculation, received: 'missing' });
     checks.push({ equipment, rate, input: example.input, pass: !mismatches.length, mismatches });
@@ -157,7 +157,7 @@ function findElement(node, predicate) {
 }
 check('Switching cargo to Sprinter and back updates the visible category, percentage and USD amounts together', () => {
   controlledState = ['cargo-van', '2000'];
-  for (const [equipment, label, fee, remainder] of [['sprinter-van', 'Sprinter Vans · 5% dispatch rate', '$100.00', '$1,900.00'], ['cargo-van', 'Cargo Vans · 12% dispatch rate', '$240.00', '$1,760.00']]) {
+  for (const [equipment, label, fee, remainder] of [['sprinter-van', 'Sprinter Vans · 4% dispatch rate', '$80.00', '$1,920.00'], ['cargo-van', 'Cargo Vans · 11% dispatch rate', '$220.00', '$1,780.00']]) {
     stateCalls = 0;
     const tree = Calculator();
     const select = findElement(tree, node => node.type === 'select');
@@ -166,7 +166,7 @@ check('Switching cargo to Sprinter and back updates the visible category, percen
     assert.ok(plain(html).includes(label));
     assert.equal(amounts[1].amount, fee);
     assert.equal(amounts[2].amount, remainder);
-    assert.ok(plain(html).includes('Cargo vans are listed at 12% and Sprinter vans at 5%.'));
+    assert.ok(plain(html).includes('Cargo vans are listed at 11% and Sprinter vans at 4%.'));
     assert.ok(html.includes('href="/equipment/cargo-van"') && html.includes('href="/equipment/sprinter-van"'));
   }
 });

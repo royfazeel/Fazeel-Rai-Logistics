@@ -1,5 +1,5 @@
 import type { ContentLink, ContentSection } from './dispatch-content';
-import { getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement } from './dispatch-pricing';
+import { DISPATCH_FEE_EFFECTIVE_LABEL, getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement } from './dispatch-pricing';
 import type { DispatchEquipment } from './dispatch-pricing';
 import { ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS } from './constants';
 
@@ -46,7 +46,7 @@ export const EQUIPMENT_SEARCH_ENHANCEMENTS: Record<string, {
       },
       {
         id: '26-foot-booking-scenario', title: 'How box truck dispatch works and what it costs',
-        paragraphs: [`Pricing last reviewed October 31, 2026. ${getEquipmentFeeStatement('box-truck')}`, 'Start with your truck specifications, empty location, available time and preferred lanes. Your dispatcher searches suitable freight and clarifies dimensions, loading access, appointments, compensation and known empty miles. You review the complete proposal and approve or decline it. After approval, we coordinate the booking, agreed updates and delivery document follow ups.', `On a hypothetical $${boxTruckExampleBillingBase.toLocaleString('en-US')} agreed billing base, the ${getDispatchRateLabel('box-truck')} box truck dispatch fee is $${boxTruckExampleFee.toLocaleString('en-US')}. The remaining $${boxTruckExampleRemainder.toLocaleString('en-US')} is before fuel, maintenance, insurance, driver pay and other operating expenses; it is not profit or an earnings forecast. Confirm how fuel surcharge and accessorials are treated in your written billing terms.`],
+        paragraphs: [`Pricing last reviewed ${DISPATCH_FEE_EFFECTIVE_LABEL}. ${getEquipmentFeeStatement('box-truck')}`, 'Start with your truck specifications, empty location, available time and preferred lanes. Your dispatcher searches suitable freight and clarifies dimensions, loading access, appointments, compensation and known empty miles. You review the complete proposal and approve or decline it. After approval, we coordinate the booking, agreed updates and delivery document follow ups.', `On a hypothetical $${boxTruckExampleBillingBase.toLocaleString('en-US')} agreed billing base, the ${getDispatchRateLabel('box-truck')} box truck dispatch fee is $${boxTruckExampleFee.toLocaleString('en-US')}. The remaining $${boxTruckExampleRemainder.toLocaleString('en-US')} is before fuel, maintenance, insurance, driver pay and other operating expenses; it is not profit or an earnings forecast. Confirm how fuel surcharge and accessorials are treated in your written billing terms.`],
         table: feeExampleTable('box-truck'),
       },
     ],

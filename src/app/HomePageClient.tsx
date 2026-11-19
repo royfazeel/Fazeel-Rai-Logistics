@@ -1,6 +1,6 @@
 'use client';
 
-import { DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
+import { DISPATCH_FEE_REDUCTION_SENTENCE, DISPATCH_RATE_RANGE } from '@/lib/dispatch-pricing';
 import { useCallback, useState } from 'react';
 import Link from 'next/link';
 import HeroPhoto from '@/components/HeroPhoto';
@@ -593,8 +593,8 @@ export default function HomePage() {
               </h2>
               <p className="text-surface-700 text-lg">
                 Keep your dispatch costs clear from the first conversation.
-                Confirm your percentage, included services, and billing terms
-                in writing before the first load.
+                {DISPATCH_FEE_REDUCTION_SENTENCE} Confirm your percentage, included
+                services, and billing terms in writing before the first load.
               </p>
             </div>
           </ScrollReveal>
@@ -696,12 +696,13 @@ export default function HomePage() {
             {[
               { title: 'How dispatch fees work', href: 'truck-dispatch-fees', text: 'Review equipment percentages, billing terms and included dispatch support.' },
               { title: 'Choose a truck dispatcher', href: 'how-to-choose-a-truck-dispatcher', text: 'Ask about load approval, communication, service scope, and cancellation.' },
-              { title: 'Get ready for onboarding', href: 'carrier-onboarding-checklist', text: 'Prepare authority, insurance, equipment details, and your lane preferences.' },
+              { title: 'Find and screen dry van loads', href: 'how-to-find-dry-van-loads', text: 'See where 53 foot van freight is posted, what to ask before booking, and how to compare whole trip pay.' },
               { title: 'Find and compare box truck loads', href: 'how-to-find-box-truck-loads', text: 'Check equipment fit, prepare your availability brief, and compare two offers using the worked example.' },
             ].map(item => <Link prefetch={false} key={item.href} href={`/resources/${item.href}`} className="card p-6 hover:border-primary-300"><h3 className="font-display text-2xl font-bold text-navy-950 mb-3">{item.title}</h3><p className="text-surface-700 mb-5">{item.text}</p><span className="inline-flex items-center gap-2 font-semibold text-primary-700">Read the guide<ArrowRight className="w-4 h-4" aria-hidden="true" /></span></Link>)}
           </div>
           <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
             <Link prefetch={false} href="/resources" className="inline-flex items-center gap-2 py-2 font-semibold text-primary-700">All carrier resources<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
+            <Link prefetch={false} href="/resources/carrier-onboarding-checklist" className="inline-flex items-center gap-2 py-2 font-semibold text-primary-700">Onboarding checklist<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             <Link prefetch={false} href="/tools/load-profit-calculator" className="inline-flex items-center gap-2 py-2 font-semibold text-primary-700">Calculate a load’s costs<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
             <Link prefetch={false} href="/resources/trucking-dispatch-glossary" className="inline-flex items-center gap-2 py-2 font-semibold text-primary-700">Trucking glossary<ArrowRight className="w-4 h-4" aria-hidden="true" /></Link>
           </div>

@@ -1,6 +1,7 @@
 import { PAGE_SEO_OVERRIDES } from '@/lib/page-overrides';
 import type { MetadataRoute } from 'next';
-import { EQUIPMENT_CONTENT, SERVICE_CONTENT, GUIDES } from '@/lib/dispatch-content';
+import { EQUIPMENT_CONTENT, SERVICE_CONTENT, GUIDES, GUIDES_QUOTING_FEES } from '@/lib/dispatch-content';
+import { DISPATCH_FEE_EFFECTIVE_DATE } from '@/lib/dispatch-pricing';
 import { CARRIER_CONTENT } from '@/lib/carrier-content';
 import { HOME_HERO_IMAGE, SITE_URL } from '@/lib/seo';
 import { EQUIPMENT_IMAGES } from '@/lib/equipment-images';
@@ -55,7 +56,19 @@ const PAGE_REVISIONS: Record<string, string> = {
   // The dry van and box truck pages were revised, and seven more equipment
   // pages gained a plain fee question.
   '/resources/how-to-find-dry-van-loads': '2026-11-19', '/resources': '2026-11-19',
-  ...Object.fromEntries(['dry-van', 'box-truck', 'reefer', 'flatbed', 'power-only', 'step-deck', 'hotshot', 'conestoga', 'dump-truck'].map(slug => [`/equipment/${slug}`, '2026-11-19'])),
+  // November 19: every published dispatch fee was lowered by one percentage point.
+  // Each page below prints a fee or the fee range in its own content, which was
+  // confirmed by comparing the rendered text of every page before and after the
+  // change. Pages that state no fee (contact, privacy, editorial standards and
+  // six guides) keep their earlier dates.
+  ...Object.fromEntries([
+    '', '/services', '/equipment', '/pricing', '/about', '/faq', '/what-to-expect', '/service-areas', '/carriers',
+    '/resources/trucking-dispatch-glossary', '/tools/load-profit-calculator',
+    ...EQUIPMENT_CONTENT.map(({ slug }) => `/equipment/${slug}`),
+    ...SERVICE_CONTENT.map(({ slug }) => `/services/${slug}`),
+    ...CARRIER_CONTENT.map(({ slug }) => `/carriers/${slug}`),
+    ...GUIDES.filter(({ slug }) => GUIDES_QUOTING_FEES.has(slug)).map(({ slug }) => `/resources/${slug}`),
+  ].map(path => [path, DISPATCH_FEE_EFFECTIVE_DATE])),
 };
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [

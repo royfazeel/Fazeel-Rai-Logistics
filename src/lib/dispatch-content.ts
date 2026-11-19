@@ -1,4 +1,4 @@
-import { OTHER_EQUIPMENT_NOTICE, DISPATCH_FEE_POLICY, DISPATCH_RATE_RANGE, DISPATCH_PRICING_SUMMARY, getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement } from './dispatch-pricing';
+import { OTHER_EQUIPMENT_NOTICE, DISPATCH_FEE_EFFECTIVE_DATE, DISPATCH_FEE_EFFECTIVE_LABEL, DISPATCH_FEE_POLICY, DISPATCH_FEE_REDUCTION_SENTENCE, DISPATCH_RATE_RANGE, DISPATCH_PRICING_SUMMARY, getDispatchRate, getDispatchRateLabel, getEquipmentFeeStatement } from './dispatch-pricing';
 import { ADDITIONAL_GUIDES, ADDITIONAL_SERVICES } from './expanded-content';
 import { CARRIER_EDUCATION_GUIDES } from './carrier-education';
 import { ADDITIONAL_EQUIPMENT_CONTENT } from './additional-equipment-content';
@@ -372,7 +372,7 @@ export const SERVICE_CONTENT: DispatchContent[] = [
 
 export type CarrierGuide = DispatchContent & { readTime: string; published: string; updated?: string; sources?: ContentLink[] };
 
-export const GUIDES: CarrierGuide[] = [
+const GUIDE_ENTRIES: CarrierGuide[] = [
   {
     slug: 'detention-layover-tonu-documentation',
     title: 'Detention, layover and TONU: a carrier documentation checklist',
@@ -468,6 +468,7 @@ export const GUIDES: CarrierGuide[] = [
     checklist: ['What is my exact percentage and billing base?', 'How are accessorials and cancelled loads handled?', 'What is included, and what is outside the service?', 'When do I pay, and how do I end the agreement?'],
     faqs: [
       { question: 'What percentage does Rai Dispatch charge for each equipment type?', answer: `${DISPATCH_PRICING_SUMMARY} The agreement confirms the equipment classification and billing base.` },
+      { question: 'Did Rai Dispatch lower its dispatch fees?', answer: `Yes. ${DISPATCH_FEE_REDUCTION_SENTENCE} The current schedule is ${DISPATCH_RATE_RANGE} by equipment. Copies of this page dated before ${DISPATCH_FEE_EFFECTIVE_LABEL} show percentages that no longer apply.` },
       { question: 'Does Rai Dispatch charge setup fees, fixed weekly or monthly fees, or any other fees?', answer: DISPATCH_FEE_POLICY },
       { question: 'Is a dedicated dispatcher included?', answer: `Yes. Rai Dispatch provides a dedicated dispatcher for each truck, with free setup and ${ACTIVE_CARRIER_SUPPORT}. Your dispatcher learns its equipment, lanes and schedule. Confirm your direct contact details and backup process during onboarding. The new carrier setup desk operates ${SETUP_DESK_HOURS}.` },
       { question: 'Does the fee include fuel, insurance or factoring?', answer: 'No. The percentage fee pays for the agreed dispatch service. Fuel, insurance, factoring and other carrier operating expenses are separate third party costs, not additional Rai Dispatch fees.' },
@@ -522,3 +523,19 @@ export const GUIDES: CarrierGuide[] = [
     related: [{ label: 'What happens after dispatch onboarding', href: '/resources/what-does-a-truck-dispatcher-do' }, { label: 'Request a carrier review', href: '/contact' }, { label: 'Equipment dispatch options', href: '/equipment' }, { label: 'Paperwork support', href: '/services/paperwork-support' }],
   },
 ];
+
+// These guides quote a Rai Dispatch fee or the published fee range in their own text, so their
+// revision date follows the fee schedule. The other guides state no fee and keep their own dates.
+export const GUIDES_QUOTING_FEES: ReadonlySet<string> = new Set([
+  'what-does-a-truck-dispatcher-do', 'how-to-find-box-truck-loads', 'how-to-find-dry-van-loads',
+  'local-vs-regional-vs-otr-trucking', 'load-board-vs-dispatch-service', 'self-dispatch-vs-dispatch-service',
+  'truck-dispatcher-vs-freight-broker', 'truck-dispatch-service-agreement-checklist',
+  'fuel-surcharge-calculation-for-carriers', 'reefer-load-temperature-checklist', 'flatbed-load-tarping-checklist',
+  'power-only-trailer-interchange-checklist', 'hotshot-load-planning-checklist', 'evaluate-freight-rate-per-mile',
+  'truck-dispatch-fees', 'how-to-choose-a-truck-dispatcher', 'carrier-onboarding-checklist',
+]);
+export const GUIDES: CarrierGuide[] = GUIDE_ENTRIES.map(guide => (
+  GUIDES_QUOTING_FEES.has(guide.slug) && (guide.updated ?? guide.published) < DISPATCH_FEE_EFFECTIVE_DATE
+    ? { ...guide, updated: DISPATCH_FEE_EFFECTIVE_DATE }
+    : guide
+));

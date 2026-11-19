@@ -4,7 +4,7 @@ This records decisions against the supplied implementation brief, with **Section
 
 ## Verified facts and scope
 
-- The owner-approved percentage schedule is box truck 7%, dry van 5%, reefer 4%, flatbed 5%, power only 5%, step deck 5%, hotshot 6%, cargo van 12%, Sprinter van 5%, Conestoga 4%, RGN/lowboy 5%, car hauler 5%, tanker 5%, dump truck 5% and curtain side 5%. The published Other category is 5% subject to availability, but unknown calculator keys must not silently receive it. Other needs confirmation, not an automatic estimate.
+- The owner-approved percentage schedule, effective November 19, 2026 (one percentage point below the October 30 schedule), is box truck 6%, dry van 4%, reefer 3%, flatbed 4%, power only 4%, step deck 4%, hotshot 5%, cargo van 11%, Sprinter van 4%, Conestoga 3%, RGN/lowboy 4%, car hauler 4%, tanker 4%, dump truck 4% and curtain side 4%. Dated observations below that mention 7% or other earlier figures describe the schedule in force on their dates. The published Other category is 4% subject to availability, but unknown calculator keys must not silently receive it. Other needs confirmation, not an automatic estimate.
 - Cargo and Sprinter are separate published service categories by truck type. No additional wheelbase, roof, payload, brand or service-level threshold has been supplied. Both prices must remain adjacent with a request to confirm the applicable category; an operational rationale must not be invented.
 - The owner confirmed manual inquiry replies and requested callbacks only. This work does not opt a lead into automated marketing. The existing transactional courtesy confirmation email remains separate from marketing, as do operational SMS instructions for active carriers. Remove unsupported “10DLC compliant” labels and blanket website-form phone consent; retain active-carrier STOP/HELP instructions pending operational verification. Do not add the old marketing-consent paragraph, promise a five-year retention period or describe new tracking that does not exist.
 - The latest explicit brief authorizes separate consent-gated GA4 and Google Ads measurement, superseding the old disabled-analytics source comment. The owner subsequently authorized setting up the accounts/IDs. GA4 account/stream setup and public IDs are now verified; the production build environment is prepared for GA4-only activation. The activation release is not yet deployed. The explicit enable flag and verified ID are required, and each visitor must separately opt in. Ads IDs remain blank. Do not claim live Google delivery from account creation, environment configuration or passing local tests.
@@ -18,7 +18,7 @@ This records decisions against the supplied implementation brief, with **Section
 | Requirement | Decision and integration status | Required evidence before claiming complete |
 |---|---|---|
 | One fee map; preserve approved rates | Use `dispatch-pricing.ts` for percentage points. Metadata now imports the range/rate helpers. Core pricing integration is handled with the release. | Independent fixtures for all 15 rates; Other/invalid selection tests; no incorrect fallback in forms, schema or calculators. |
-| Exact box/cargo/Sprinter and pricing copy | Section 0 wording takes precedence over Sections 6, 8 and 14. Preserve cargo 12% versus Sprinter 5%; no unsupported effective date. | Raw and rendered HTML, visible FAQ, table and Offer descriptions agree; reciprocal van-category links work. |
+| Exact box/cargo/Sprinter and pricing copy | Section 0 wording takes precedence over Sections 6, 8 and 14. Preserve the separate cargo and Sprinter categories (11% and 4% from November 19, 2026; 12% and 5% before); no unsupported effective date. | Raw and rendered HTML, visible FAQ, table and Offer descriptions agree; reciprocal van-category links work. |
 | Metadata overrides | New map contains 67 final title/description/H1 entries. P0 overrides are applied; `/what-to-expect` replaces `/testimonials`. | The SEO helper uses absolute titles with no second suffix; each live H1 consumes its override; current values meet 60/158 limits. |
 | Fee math and labeling | $2,000 gives box $140/$1,860, cargo $240/$1,760 and Sprinter $100/$1,900. Remainder is revenue before operating costs. | Decimal-safe currency calculations, explicit valid selection, selected rate/label agreement, switching and validation checks. |
 | Schema truthfulness | Preserve Service/Offer/BreadcrumbList and the stable Organization identifier. Commission percentages belong in descriptive text, not USD price fields. | Parsed JSON-LD matches visible content; free calculator may retain genuine 0 USD software price. |
@@ -134,34 +134,36 @@ Primary references checked for this implementation: [Google basic/advanced conse
 
 These are the resolved current strings, including the intended brand suffix and punctuation; supplied parenthetical counts are not used.
 
+The table was measured again from the rendered pages on November 19, 2026, after the fee reduction and after nine equipment descriptions were reworded to name the dedicated dispatcher. All 68 titles are at most 60 characters and all descriptions at most 158.
+
 | Canonical path | Title characters | Description characters |
 |---|---:|---:|
-| `/` | 57 | 155 |
+| `/` | 60 | 146 |
 | `/about` | 46 | 152 |
-| `/carriers` | 60 | 149 |
-| `/carriers/new-authorities` | 57 | 156 |
-| `/carriers/owner-operators` | 59 | 152 |
-| `/carriers/small-fleets` | 57 | 134 |
-| `/contact` | 56 | 126 |
+| `/carriers` | 60 | 152 |
+| `/carriers/new-authorities` | 57 | 149 |
+| `/carriers/owner-operators` | 54 | 155 |
+| `/carriers/small-fleets` | 60 | 137 |
+| `/contact` | 56 | 132 |
 | `/editorial-standards` | 48 | 138 |
-| `/equipment` | 59 | 154 |
+| `/equipment` | 59 | 157 |
 | `/equipment/box-truck` | 58 | 155 |
-| `/equipment/dry-van` | 59 | 156 |
-| `/equipment/reefer` | 52 | 145 |
-| `/equipment/flatbed` | 53 | 153 |
-| `/equipment/power-only` | 56 | 140 |
-| `/equipment/step-deck` | 50 | 152 |
-| `/equipment/hotshot` | 60 | 151 |
-| `/equipment/cargo-van` | 51 | 143 |
-| `/equipment/sprinter-van` | 53 | 143 |
-| `/equipment/conestoga` | 58 | 143 |
-| `/equipment/rgn-lowboy` | 53 | 157 |
 | `/equipment/car-hauler` | 51 | 143 |
-| `/equipment/tanker` | 47 | 144 |
-| `/equipment/dump-truck` | 51 | 140 |
+| `/equipment/cargo-van` | 50 | 158 |
+| `/equipment/conestoga` | 58 | 151 |
 | `/equipment/curtain-side` | 53 | 149 |
+| `/equipment/dry-van` | 59 | 156 |
+| `/equipment/dump-truck` | 51 | 148 |
+| `/equipment/flatbed` | 53 | 153 |
+| `/equipment/hotshot` | 60 | 155 |
+| `/equipment/power-only` | 56 | 140 |
+| `/equipment/reefer` | 52 | 147 |
+| `/equipment/rgn-lowboy` | 53 | 157 |
+| `/equipment/sprinter-van` | 52 | 158 |
+| `/equipment/step-deck` | 50 | 154 |
+| `/equipment/tanker` | 47 | 147 |
 | `/faq` | 51 | 146 |
-| `/pricing` | 54 | 142 |
+| `/pricing` | 57 | 142 |
 | `/privacy` | 29 | 149 |
 | `/resources` | 57 | 156 |
 | `/resources/carrier-onboarding-checklist` | 57 | 150 |
@@ -182,7 +184,7 @@ These are the resolved current strings, including the intended brand suffix and 
 | `/resources/reduce-deadhead-miles` | 43 | 152 |
 | `/resources/reefer-load-temperature-checklist` | 48 | 152 |
 | `/resources/self-dispatch-vs-dispatch-service` | 50 | 150 |
-| `/resources/truck-dispatch-fees` | 55 | 152 |
+| `/resources/truck-dispatch-fees` | 58 | 144 |
 | `/resources/truck-dispatch-service-agreement-checklist` | 49 | 154 |
 | `/resources/truck-dispatcher-vs-freight-broker` | 48 | 158 |
 | `/resources/trucking-dispatch-glossary` | 52 | 157 |
@@ -192,13 +194,13 @@ These are the resolved current strings, including the intended brand suffix and 
 | `/services` | 51 | 144 |
 | `/services/backhaul-dispatch` | 46 | 144 |
 | `/services/broker-communication` | 56 | 150 |
-| `/services/dedicated-dispatcher` | 53 | 151 |
+| `/services/dedicated-dispatcher` | 53 | 154 |
 | `/services/expedited-dispatch` | 48 | 152 |
 | `/services/load-booking` | 41 | 133 |
-| `/services/otr-dispatch` | 43 | 152 |
+| `/services/otr-dispatch` | 46 | 155 |
 | `/services/paperwork-support` | 52 | 148 |
 | `/services/rate-negotiation` | 52 | 152 |
-| `/services/regional-dispatch` | 45 | 150 |
+| `/services/regional-dispatch` | 48 | 153 |
 | `/services/route-strategy` | 50 | 116 |
 | `/services/scheduling` | 51 | 136 |
 | `/terms` | 31 | 134 |

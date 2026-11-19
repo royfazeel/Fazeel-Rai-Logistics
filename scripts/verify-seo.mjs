@@ -30,36 +30,38 @@ const checkedLinks = new Set();
 // instruction. Do not import the site's pricing helper: this crawl must catch a
 // wrong value that has propagated consistently through the rendered website.
 const approvedFees = [
-  { slug: 'cargo-van', label: /cargo\s*vans?/i, rate: 12 },
-  { slug: 'sprinter-van', label: /sprinter\s*vans?/i, rate: 5 },
-  { slug: 'box-truck', label: /box\s*trucks?/i, rate: 7 },
-  { slug: 'hotshot', label: /hot\s*shot(?:\s*trucks?)?/i, rate: 6 },
-  { slug: 'dry-van', label: /dry\s*vans?/i, rate: 5 },
-  { slug: 'flatbed', label: /flatbeds?/i, rate: 5 },
-  { slug: 'reefer', label: /reefers?/i, rate: 4 },
-  { slug: 'power-only', label: /power[\s-]*only/i, rate: 5 },
-  { slug: 'step-deck', label: /step[\s-]*decks?/i, rate: 5 },
-  { slug: 'conestoga', label: /conestogas?/i, rate: 4 },
-  { slug: 'rgn-lowboy', label: /\brgn\b|low[\s-]*boys?/i, rate: 5 },
-  { slug: 'car-hauler', label: /car[\s-]*haulers?/i, rate: 5 },
-  { slug: 'tanker', label: /tankers?/i, rate: 5 },
-  { slug: 'dump-truck', label: /dump\s*trucks?/i, rate: 5 },
-  { slug: 'curtain-side', label: /curtain[\s-]*sides?/i, rate: 5 },
+  { slug: 'cargo-van', label: /cargo\s*vans?/i, rate: 11 },
+  { slug: 'sprinter-van', label: /sprinter\s*vans?/i, rate: 4 },
+  { slug: 'box-truck', label: /box\s*trucks?/i, rate: 6 },
+  { slug: 'hotshot', label: /hot\s*shot(?:\s*trucks?)?/i, rate: 5 },
+  { slug: 'dry-van', label: /dry\s*vans?/i, rate: 4 },
+  { slug: 'flatbed', label: /flatbeds?/i, rate: 4 },
+  { slug: 'reefer', label: /reefers?/i, rate: 3 },
+  { slug: 'power-only', label: /power[\s-]*only/i, rate: 4 },
+  { slug: 'step-deck', label: /step[\s-]*decks?/i, rate: 4 },
+  { slug: 'conestoga', label: /conestogas?/i, rate: 3 },
+  { slug: 'rgn-lowboy', label: /\brgn\b|low[\s-]*boys?/i, rate: 4 },
+  { slug: 'car-hauler', label: /car[\s-]*haulers?/i, rate: 4 },
+  { slug: 'tanker', label: /tankers?/i, rate: 4 },
+  { slug: 'dump-truck', label: /dump\s*trucks?/i, rate: 4 },
+  { slug: 'curtain-side', label: /curtain[\s-]*sides?/i, rate: 4 },
 ];
-const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 5 };
-const exactFeesAnswer = 'Dispatch fees are 7% for box trucks, 6% for hotshots, 4% for reefers and Conestoga trailers, 12% for cargo vans, and 5% for dry vans, flatbeds, power only, step decks, Sprinter vans, RGN and lowboy trailers, car haulers, tankers, dump trucks and trailers, and curtain side trailers. Fees apply to gross revenue on loads we book. Rai Dispatch uses percentage only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees. Confirm the applicable equipment category, billing base and service scope in writing.';
+const otherEquipmentFee = { label: /(?:all\s+)?other\s+(?:truck\s+types|trucks|equipment)/i, rate: 4 };
+const exactFeesAnswer = 'Dispatch fees are 6% for box trucks, 5% for hotshots, 3% for reefers and Conestoga trailers, 11% for cargo vans, and 4% for dry vans, flatbeds, power only, step decks, Sprinter vans, RGN and lowboy trailers, car haulers, tankers, dump trucks and trailers, and curtain side trailers. Fees apply to gross revenue on loads we book. Rai Dispatch uses percentage only pricing for every truck type. There are no setup fees, fixed weekly or monthly charges, or other Rai Dispatch fees. Confirm the applicable equipment category, billing base and service scope in writing.';
 const exactEquipmentAnswers = {
-  'box-truck': 'Rai Dispatch charges 7% of gross revenue on loads we book for box trucks. Confirm the billing base and service scope in writing before onboarding.',
-  'cargo-van': 'Rai Dispatch charges 12% of gross revenue on loads we book for cargo vans. The separately listed Sprinter van dispatch service is priced at 5%. Confirm which service category applies to your vehicle before onboarding.',
-  'sprinter-van': 'Rai Dispatch charges 5% of gross revenue on loads we book for Sprinter vans. The separately listed cargo van dispatch service is priced at 12%. Confirm which service category applies to your vehicle before onboarding.',
+  'box-truck': 'Rai Dispatch charges 6% of gross revenue on loads we book for box trucks. Confirm the billing base and service scope in writing before onboarding.',
+  'cargo-van': 'Rai Dispatch charges 11% of gross revenue on loads we book for cargo vans. The separately listed Sprinter van dispatch service is priced at 4%. Confirm which service category applies to your vehicle before onboarding.',
+  'sprinter-van': 'Rai Dispatch charges 4% of gross revenue on loads we book for Sprinter vans. The separately listed cargo van dispatch service is priced at 11%. Confirm which service category applies to your vehicle before onboarding.',
 };
 const percentages = text => [...text.matchAll(/\b(\d+(?:\.\d+)?)\s*%/g)].map(match => Number(match[1]));
 const hasType = (node, type) => [node?.['@type']].flat().includes(type);
-// The owner's current schedule is 4–12%. Both earlier ranges and a 3% fee
-// are stale; 6%, 7% and 12% are now valid equipment rates. Numeric boundaries
-// prevent decimal percentages such as 11.3% from being mistaken for 3%.
-const obsoletePricing = /(?<![\d.])(?:3\s*%?\s*(?:[–—-]|to)\s*5|5\s*%?\s*(?:[–—-]|to)\s*8)\s*%|(?<![\d.])3(?:\.0+)?\s*%|\bsame\s+(?:maximum\s+)?percentage\s+(?:across|for)\s+(?:all|our)/i;
-const approvedRange = /\b4\s*%?\s*(?:[–—-]|to)\s*12\s*%/i;
+// The owner's current schedule is 3–11%, effective November 19, 2026, when every
+// published fee was lowered by one percentage point. The earlier ranges
+// (including 4–12%) and the withdrawn 7% and 12% fees are stale; 3%, 4%, 5%, 6%
+// and 11% are the valid equipment rates. Numeric boundaries prevent decimal
+// percentages such as 11.7% from being mistaken for 7%.
+const obsoletePricing = /(?<![\d.])(?:3\s*%?\s*(?:[–—-]|to)\s*5|5\s*%?\s*(?:[–—-]|to)\s*8|4\s*%?\s*(?:[–—-]|to)\s*12)\s*%|(?<![\d.])(?:7|12)(?:\.0+)?\s*%|\bsame\s+(?:maximum\s+)?percentage\s+(?:across|for)\s+(?:all|our)/i;
+const approvedRange = /\b3\s*%?\s*(?:[–—-]|to)\s*11\s*%/i;
 const activeCarrierSupport = /\b24\s*\/\s*7\s+live\s+dispatch\s+support\s+for\s+active\s+carriers\b/i;
 
 const issue = (path, check, detail) => failures.push({ path, check, detail });
@@ -96,11 +98,11 @@ function schemaNodes(value) {
 function checkEquipmentRates(path, text, rate, slug, check) {
   const rates = percentages(text);
   const van = ['cargo-van', 'sprinter-van'].includes(slug);
-  const allowed = van ? [12, 5] : [rate];
+  const allowed = van ? [11, 4] : [rate];
   if (rates[0] !== rate || rates.some(value => !allowed.includes(value))) issue(path, check, `${slug} must lead with its ${rate}% rate; only the explicitly named cargo/Sprinter pair may add the other van rate. Found ${JSON.stringify(rates)}.`);
-  const cargoAssociation = /cargo vans?(?: dispatch costs| service is separately listed at| are listed at| at) 12%/i.test(text);
-  const sprinterAssociation = /Sprinter vans?(?: dispatch costs| service is separately listed at| are listed at| at) 5%/i.test(text);
-  if (van && rates.some(value => value !== rate) && !((cargoAssociation && sprinterAssociation) || text.includes(exactEquipmentAnswers[slug]))) issue(path, check, 'Paired van percentages must explicitly identify the cargo 12% and Sprinter 5% categories.');
+  const cargoAssociation = /cargo vans?(?: dispatch costs| service is separately listed at| are listed at| at) 11%/i.test(text);
+  const sprinterAssociation = /Sprinter vans?(?: dispatch costs| service is separately listed at| are listed at| at) 4%/i.test(text);
+  if (van && rates.some(value => value !== rate) && !((cargoAssociation && sprinterAssociation) || text.includes(exactEquipmentAnswers[slug]))) issue(path, check, 'Paired van percentages must explicitly identify the cargo 11% and Sprinter 4% categories.');
 }
 function checkOfferFee(path, offer, rate, label) {
   checkEquipmentRates(path, String(offer.description || ''), rate, label, 'offer-pricing');
@@ -143,8 +145,8 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
     }
   }
   if (path === '/' || path === '/pricing') {
-    if (!approvedRange.test(visibleText)) issue(path, 'published-range', 'Expected the approved 4 to 12% fee range in visible text.');
-    if (!approvedRange.test(`${title} ${description}`)) issue(path, 'metadata-range', 'Expected the approved 4 to 12% fee range in title or description.');
+    if (!approvedRange.test(visibleText)) issue(path, 'published-range', 'Expected the approved 3 to 11% fee range in visible text.');
+    if (!approvedRange.test(`${title} ${description}`)) issue(path, 'metadata-range', 'Expected the approved 3 to 11% fee range in title or description.');
     if (!/free\s+(?:setup|onboarding)|no\s+(?:setup|onboarding)\s+fees?/i.test(visibleText)) issue(path, 'free-setup', 'Free setup or no setup fee must remain visible.');
   }
   if (path !== '/pricing') return;
@@ -155,7 +157,7 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
     if (!plain(illustrative[1]).includes('Revenue after dispatch fee, before operating costs (USD)')) issue(path, 'pricing-example-label', 'The example remainder must state that it is before operating costs and use USD.');
     const exampleRows = [...illustrative[1].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].filter(row => /<td\b/i.test(row[1]));
     if (exampleRows.length !== 3) issue(path, 'pricing-example-count', `Expected box/cargo/Sprinter examples; found ${exampleRows.length} rows.`);
-    for (const [slug, rate, fee, revenue] of [['box-truck', 7, '$140.00', '$1,860.00'], ['cargo-van', 12, '$240.00', '$1,760.00'], ['sprinter-van', 5, '$100.00', '$1,900.00']]) {
+    for (const [slug, rate, fee, revenue] of [['box-truck', 6, '$120.00', '$1,880.00'], ['cargo-van', 11, '$220.00', '$1,780.00'], ['sprinter-van', 4, '$80.00', '$1,920.00']]) {
       const row = exampleRows.find(row => elements(row[1], 'a').some(link => link.href === `/equipment/${slug}`));
       const cells = [...(row?.[1] || '').matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)].map(cell => plain(cell[1]));
       if (JSON.stringify(cells) !== JSON.stringify([`${rate}%`, fee, revenue])) issue(path, 'pricing-example-math', `${slug} $2,000 example must show ${rate}%, ${fee} fee and ${revenue} before operating costs; found ${JSON.stringify(cells)}.`);
@@ -181,7 +183,7 @@ function checkRenderedPricing(path, markup, visibleText, title, description, nod
   }
   const otherRows = tableRows.filter(row => otherEquipmentFee.label.test(row.text));
   if (!otherRows.length || otherRows.some(row => !/written confirmation required/i.test(row.text) || percentages(row.text).length)) issue(path, 'other-equipment-confirmation', 'Other equipment must have a written-confirmation table row, not an automatically calculable percentage.');
-  if (!/Other truck types have a published 5% fee, subject to service availability and written rate confirmation\./.test(visibleText)) issue(path, 'other-conditional-published-rate', 'Conditional published 5% must be preserved separately from calculator eligibility.');
+  if (!/Other truck types have a published 4% fee, subject to service availability and written rate confirmation\./.test(visibleText)) issue(path, 'other-conditional-published-rate', 'Conditional published 4% must be preserved separately from calculator eligibility.');
   const catalogs = nodes.filter(node => hasType(node, 'OfferCatalog'));
   if (!catalogs.length) { issue(path, 'offer-catalog', 'Pricing page must include its equipment OfferCatalog.'); return; }
   const catalogOffers = catalogs.flatMap(schemaNodes).filter(node => hasType(node, 'Offer'));
@@ -219,8 +221,8 @@ function checkRenderedCalculator(path, markup) {
   const amounts = [...markup.matchAll(/<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/gi)].map(match => ({ label: plain(match[1]), amount: plain(match[2]) }));
   const expected = [
     { label: /^Gross revenue entered$/i, amount: '$2,000.00' },
-    { label: /^Dispatch fee\s*\(7%\)$/i, amount: '$140.00' },
-    { label: /^Revenue after dispatch fee, before operating costs$/i, amount: '$1,860.00' },
+    { label: /^Dispatch fee\s*\(6%\)$/i, amount: '$120.00' },
+    { label: /^Revenue after dispatch fee, before operating costs$/i, amount: '$1,880.00' },
   ];
   for (const item of expected) {
     const result = amounts.find(pair => item.label.test(pair.label));
@@ -459,7 +461,7 @@ for (const path of ['/llms.txt', '/llms-full.txt']) {
     const line = response.text.split('\n').find(line => line.startsWith('- ') && line.includes(`(${canonicalFor(`/equipment/${equipment.slug}`)})`) && line.includes(' of gross revenue on loads we book.'));
     if (!line || percentages(line).join(',') !== String(equipment.rate)) issue(path, 'llms-equipment-fee', `Expected a current ${equipment.slug} source link and ${equipment.rate}% billing-base statement.`);
   }
-  if (!/Other truck types have a published 5% fee, subject to service availability and written rate confirmation\./.test(response.text)) issue(path, 'llms-other-terms', 'Other equipment must retain conditional terms and written rate confirmation.');
+  if (!/Other truck types have a published 4% fee, subject to service availability and written rate confirmation\./.test(response.text)) issue(path, 'llms-other-terms', 'Other equipment must retain conditional terms and written rate confirmation.');
   const sourceLinks = [...response.text.matchAll(/https:\/\/raidispatch\.com(?:\/[^\s)\]]*)?/g)].map(match => new URL(match[0]));
   for (const link of sourceLinks) {
     const pathName = normalizedPath(link.pathname);
@@ -470,7 +472,7 @@ for (const path of ['/llms.txt', '/llms-full.txt']) {
   supplemental.push({ path, status: response.status, type: response.type, canonicalSourceLinks: sourceLinks.length });
 }
 
-const report = { approvedPricing: { range: '4 to 12%', equipment: Object.fromEntries(approvedFees.map(({ slug, rate }) => [slug, rate])), other: { conditionalPublishedRate: 5, requiresWrittenConfirmation: true, calculable: false } }, baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, supplemental, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
+const report = { approvedPricing: { range: '3 to 11%', effective: '2026-11-19', equipment: Object.fromEntries(approvedFees.map(({ slug, rate }) => [slug, rate])), other: { conditionalPublishedRate: 4, requiresWrittenConfirmation: true, calculable: false } }, baseUrl: base.origin, canonicalOrigin, checkedAt: new Date().toISOString(), pageCount: pages.length, sitemapUrlCount: locations.length, internalTargetsChecked: checkedLinks.size, supplemental, failures, warnings, pages: pages.sort((a, b) => a.path.localeCompare(b.path)) };
 if (outputPath) { await mkdir(dirname(outputPath), { recursive: true }); await writeFile(outputPath, JSON.stringify(report, null, 2) + '\n'); }
 for (const failure of failures) console.error(`FAIL ${failure.path} [${failure.check}] ${failure.detail}`);
 for (const warning of warnings) console.warn(`WARN ${warning.path} [${warning.check}] ${warning.detail}`);
