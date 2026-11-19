@@ -14,12 +14,13 @@ import { BUSINESS } from '@/lib/constants';
 
 // Preserve the original policy date; the update date records the current revision.
 const POLICY_EFFECTIVE = 'September 28, 2026';
-const POLICY_UPDATED = 'October 31, 2026';
+const POLICY_UPDATED = 'November 19, 2026';
 
 export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Privacy policy for raidispatch.com, operated by Rai Technologies LLC as Rai Dispatch. Read about contact details, operational logs and SMS communications.', "/privacy");
 
-// GA4 is optional and consent-gated. Google Ads measurement remains disabled.
-// Operational SMS terms are separate from website measurement preferences.
+// Website analytics is cookieless (Vercel Web Analytics); Google Analytics and
+// Google Ads measurement are not loaded, so there is no consent prompt.
+// Operational SMS terms are separate from website analytics.
 export default function PrivacyPage() {
   return (
     <div className="bg-white">
@@ -170,69 +171,64 @@ export default function PrivacyPage() {
             <p>
               Service providers may process information needed to deliver dispatching
               services, respond to your requests, send inquiry notifications and
-              operate or protect the website. If you separately choose optional
-              analytics, Google receives website measurement and technical information
-              as described in Section 5. Your inquiry details are not included in
-              those analytics events.
+              operate or protect the website. Our hosting provider also supplies
+              the cookieless website analytics described in Section 5. Your
+              inquiry details are not included in those analytics events.
             </p>
           </Section>
 
-          {/* 5. Optional analytics and necessary website operations. */}
+          {/* 5. Cookieless analytics and necessary website operations. */}
           <Section
             number="5"
             title="Website Analytics, Cookies &amp; Operational Logs"
             badge={{ icon: Shield, text: 'Website visitors' }}
           >
-            <SubSection letter="A" title="Optional Google Analytics">
+            <SubSection letter="A" title="Cookieless Website Analytics">
               <p>
-                We use Google Analytics 4 (GA4) to understand website visits and
-                interactions. Analytics is off until you opt in using Measurement
-                settings. Before that choice, we do not load the Google Analytics
-                tag, set its cookies or send analytics events. You can reject
-                analytics and still use our website, forms and contact links.
+                We use Vercel Web Analytics, a service from our hosting provider
+                Vercel Inc., to understand website visits and interactions in
+                aggregate. It does not use cookies, and we do not store an
+                analytics identifier in your browser. Google Analytics and Google
+                Ads measurement are not loaded on this website.
               </p>
               <p>
-                With your consent, we measure page visits, accepted inquiry forms,
-                quote form openings and clicks on phone, SMS, WhatsApp and email
-                links. A click does not confirm that a call or message took place;
-                an accepted inquiry is not a completed sale.
+                We measure page visits, accepted inquiry forms, quote form
+                openings and clicks on phone, SMS, WhatsApp and email links. A
+                click does not confirm that a call or message took place; an
+                accepted inquiry is not a completed sale.
               </p>
               <p>
-                Google may receive your IP address, browser and device information,
-                page path, referring website origin, cookie identifiers and interaction data. Our event
-                parameters omit URL query strings and fragments and do not include
-                submitted names, phone numbers, email addresses or message text.
-                Referrer information includes only the website origin, not its
-                page path, query string or fragment.
-                We do not enable Google signals or personalized advertising. Google
-                Ads measurement is not loaded on this website.
+                The analytics service receives the page address without its query
+                string or fragment, the referring page address when your browser
+                provides one, and technical request details such as browser,
+                operating system, device type and approximate location such as
+                country. Our events do not include submitted names, phone
+                numbers, email addresses or message text. We do not use this
+                information for advertising or to follow you across other
+                websites.
               </p>
               <p>
                 Read{' '}
-                <a href="https://policies.google.com/privacy" className="text-primary-700 font-medium underline hover:text-primary-800">Google&apos;s Privacy Policy</a>
-                {' '}and{' '}
-                <a href="https://policies.google.com/technologies/partner-sites" className="text-primary-700 font-medium underline hover:text-primary-800">how Google uses information from websites that use its services</a>
-                {' '}for Google&apos;s processing practices.
+                <a href="https://vercel.com/docs/analytics/privacy-policy" className="text-primary-700 font-medium underline hover:text-primary-800">Vercel&apos;s Web Analytics privacy and compliance information</a>
+                {' '}for Vercel&apos;s processing practices.
               </p>
             </SubSection>
 
-            <SubSection letter="B" title="Your Choice and Withdrawal">
+            <SubSection letter="B" title="No Analytics Cookies or Consent Prompt">
               <p>
-                Measurement settings at the bottom of every page lets you accept,
-                reject or withdraw analytics consent. We save your choice in this
-                browser&apos;s local storage, separately from inquiry information.
-                The preference contains only its version, optional measurement
-                choices and the time you saved them. Clearing this storage removes
-                the saved choice. On the next page load, analytics stays off until
-                you choose again.
+                Because this measurement does not use cookies or store an
+                identifier on your device, we do not show a consent prompt. You
+                can use our website, forms and contact links without making a
+                choice.
               </p>
               <p>
-                Withdrawing consent stops subsequent optional measurement, removes
-                accessible first party analytics cookies and reloads the page to
-                unload the provider. It does not erase information Google already
-                received. You can also use your browser controls to remove cookies.
-                If your browser prevents saving preferences, we explain the storage
-                error and keep optional measurement off for that page.
+                We previously offered optional Google Analytics through a
+                Measurement settings control. If you saved a choice at that
+                time, the saved choice and any accessible Google Analytics
+                cookies are removed from your browser the next time you visit.
+                This does not erase information Google received while analytics
+                was switched on in your browser. You can also use your browser
+                controls to remove cookies or to block website analytics.
               </p>
             </SubSection>
 
@@ -241,8 +237,8 @@ export default function PrivacyPage() {
                 Our hosting and security providers may maintain operational request
                 and error logs, including the technical information in Section 2,
                 to serve pages, investigate problems and prevent abuse. These
-                necessary website operations continue when you decline analytics;
-                declining analytics does not make every request anonymous.
+                necessary website operations are separate from website analytics;
+                cookieless analytics does not make every request anonymous.
               </p>
             </SubSection>
 
@@ -251,7 +247,7 @@ export default function PrivacyPage() {
                 Our inquiry forms send the details you enter to our lead delivery
                 service so we can respond. Inquiries receive manual replies and
                 requested callbacks; a transactional confirmation email is separate
-                from marketing. Analytics consent does not enroll you in marketing
+                from marketing. Using this website does not enroll you in marketing
                 calls or messages. Phone, email, SMS and WhatsApp links connect you
                 to the service you choose, whose own privacy practices apply.
                 Our operational SMS terms remain in Section 7.
