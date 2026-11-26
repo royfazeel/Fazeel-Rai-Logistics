@@ -14,12 +14,13 @@ import { BUSINESS } from '@/lib/constants';
 
 // Preserve the original policy date; the update date records the current revision.
 const POLICY_EFFECTIVE = 'September 28, 2026';
-const POLICY_UPDATED = 'November 19, 2026';
+const POLICY_UPDATED = 'November 26, 2026';
 
 export const metadata = pageMetadata('Privacy Policy & SMS Terms', 'Privacy policy for raidispatch.com, operated by Rai Technologies LLC as Rai Dispatch. Read about contact details, operational logs and SMS communications.', "/privacy");
 
-// Website analytics is cookieless (Vercel Web Analytics); Google Analytics and
-// Google Ads measurement are not loaded, so there is no consent prompt.
+// Website analytics is cookieless (Vercel Web Analytics). Google Ads conversion
+// measurement is loaded and uses first-party cookies (Section 5B); Google
+// Analytics is not loaded. No consent prompt is shown.
 // Operational SMS terms are separate from website analytics.
 export default function PrivacyPage() {
   return (
@@ -172,15 +173,17 @@ export default function PrivacyPage() {
               Service providers may process information needed to deliver dispatching
               services, respond to your requests, send inquiry notifications and
               operate or protect the website. Our hosting provider also supplies
-              the cookieless website analytics described in Section 5. Your
-              inquiry details are not included in those analytics events.
+              the cookieless website analytics described in Section 5, and
+              Google receives the advertising measurement information described
+              there. Your inquiry details are not included in those analytics
+              events or in what we send to Google.
             </p>
           </Section>
 
-          {/* 5. Cookieless analytics and necessary website operations. */}
+          {/* 5. Cookieless analytics, Google Ads measurement and necessary website operations. */}
           <Section
             number="5"
-            title="Website Analytics, Cookies &amp; Operational Logs"
+            title="Website Analytics, Advertising Measurement, Cookies &amp; Operational Logs"
             badge={{ icon: Shield, text: 'Website visitors' }}
           >
             <SubSection letter="A" title="Cookieless Website Analytics">
@@ -188,8 +191,8 @@ export default function PrivacyPage() {
                 We use Vercel Web Analytics, a service from our hosting provider
                 Vercel Inc., to understand website visits and interactions in
                 aggregate. It does not use cookies, and we do not store an
-                analytics identifier in your browser. Google Analytics and Google
-                Ads measurement are not loaded on this website.
+                analytics identifier in your browser. Google Analytics is not
+                loaded on this website.
               </p>
               <p>
                 We measure page visits, accepted inquiry forms, quote form
@@ -204,8 +207,9 @@ export default function PrivacyPage() {
                 operating system, device type and approximate location such as
                 country. Our events do not include submitted names, phone
                 numbers, email addresses or message text. We do not use this
-                information for advertising or to follow you across other
-                websites.
+                analytics information for advertising or to follow you across
+                other websites. Advertising measurement is separate and is
+                described in part B.
               </p>
               <p>
                 Read{' '}
@@ -214,12 +218,47 @@ export default function PrivacyPage() {
               </p>
             </SubSection>
 
-            <SubSection letter="B" title="No Analytics Cookies or Consent Prompt">
+            <SubSection letter="B" title="Google Ads Conversion Measurement">
               <p>
-                Because this measurement does not use cookies or store an
-                identifier on your device, we do not show a consent prompt. You
-                can use our website, forms and contact links without making a
-                choice.
+                We advertise on Google. To learn which of our ads lead to an
+                inquiry, this website loads the Google tag, a script from
+                Google LLC, for our Google Ads account.
+              </p>
+              <p>
+                When you arrive from one of our Google ads, the tag stores the
+                ad click identifier in first-party cookies on this website.
+                Their names begin with <code>_gcl_</code> and they last up to
+                90 days. When an inquiry form is accepted, or you click a
+                phone, SMS, WhatsApp or email link, the tag reports to Google
+                that this happened. A click does not confirm that a call or
+                message took place.
+              </p>
+              <p>
+                Google receives the ad click identifier, the page address and
+                technical details such as your IP address, browser and device.
+                We do not send Google the names, phone numbers, email addresses
+                or message text entered in our forms. Google may combine this
+                information with other information it holds and may use it for
+                its own advertising products, including showing our ads to
+                people who have visited this website.
+              </p>
+              <p>
+                Read{' '}
+                <a href="https://policies.google.com/technologies/partner-sites" className="text-primary-700 font-medium underline hover:text-primary-800">how Google uses information from sites that use its services</a>
+                . You can change the ads Google shows you in{' '}
+                <a href="https://myadcenter.google.com/" className="text-primary-700 font-medium underline hover:text-primary-800">My Ad Center</a>
+                .
+              </p>
+            </SubSection>
+
+            <SubSection letter="C" title="Cookies and Your Choices">
+              <p>
+                We do not show a consent prompt. Our website analytics uses no
+                cookies; Google Ads conversion measurement uses the cookies
+                described in part B from your first visit. You can block or
+                delete cookies in your browser settings, or block the Google
+                tag with a browser extension. Our website, forms and contact
+                links work the same either way.
               </p>
               <p>
                 We previously offered optional Google Analytics through a
@@ -227,12 +266,11 @@ export default function PrivacyPage() {
                 time, the saved choice and any accessible Google Analytics
                 cookies are removed from your browser the next time you visit.
                 This does not erase information Google received while analytics
-                was switched on in your browser. You can also use your browser
-                controls to remove cookies or to block website analytics.
+                was switched on in your browser.
               </p>
             </SubSection>
 
-            <SubSection letter="C" title="Hosting and Security">
+            <SubSection letter="D" title="Hosting and Security">
               <p>
                 Our hosting and security providers may maintain operational request
                 and error logs, including the technical information in Section 2,
@@ -242,7 +280,7 @@ export default function PrivacyPage() {
               </p>
             </SubSection>
 
-            <SubSection letter="D" title="Contact Forms and External Services">
+            <SubSection letter="E" title="Contact Forms and External Services">
               <p>
                 Our inquiry forms send the details you enter to our lead delivery
                 service so we can respond. Inquiries receive manual replies and
