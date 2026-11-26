@@ -103,6 +103,7 @@ Environment changes require a new deployment. Public `NEXT_PUBLIC_*` values are 
 | `src/components/` | Navigation, footer, pricing presentation, native FAQ disclosure, lead forms, and contact actions |
 | `src/app/api/lead/route.ts` | Lead validation, delivery, acknowledgement, and configuration self-check |
 | `src/lib/track.ts`, `src/components/SiteAnalytics.tsx` | Cookieless Vercel Web Analytics: allow-listed contact/lead events, page addresses without query strings, no consent prompt |
+| `src/lib/google-ads.ts`, `src/components/GoogleAdsTag.tsx` | Google Ads conversion measurement: tag ID and conversion labels, the Google tag, and the conversion reports sent by `track()` |
 | `scripts/` | Read-only SEO crawl, isolated lead API verification and analytics checks |
 | `public/video/` | Locally hosted hero/CTA posters and video files |
 
@@ -129,22 +130,37 @@ The local test sink proves the application workflow in isolation. Confirm live d
 
 ## Website measurement
 
-As of **November 19, 2026**, the website uses **Vercel Web Analytics**. It is cookieless, so visitors are not shown a consent prompt: the earlier automatic consent dialog and the "Measurement settings" control are removed. Google Analytics 4 (GA4), Google Ads and the shared Google tag are not loaded. This does not change the underlying Google accounts or delete their historical data.
+As of **November 26, 2026**, the website has two kinds of measurement and **no consent prompt**:
+
+1. **Vercel Web Analytics**, which is cookieless, for visits and contact interactions.
+2. **Google Ads conversion measurement** for the Rai Dispatch campaign, through the Google tag. Google Analytics 4 (GA4) is not loaded.
+
+### Vercel Web Analytics
 
 - **Web Analytics must stay enabled** for the existing **fazeel-rai-logistics** Vercel project (project → **Analytics**). On November 19, 2026 the live site was serving the analytics script and sending page views, which requires that setting; the dashboard itself was not checked. If it is disabled, the site keeps working but nothing is recorded.
 - `SiteAnalytics` is mounted once in `src/app/layout.tsx` and renders nothing. On Vercel the script and its endpoints are served from a per-project path on the site's own host (for example `/<id>/script.js` and `/<id>/view`), not from a third-party domain. `/_vercel/insights/script.js` is the package's fallback path outside a Vercel build, so a local `next start` requests that path and gets a 404.
 - Page views are reported without query strings or fragments. `src/lib/track.ts` sends only the code-owned events `call_click`, `sms_click`, `whatsapp_click`, `email_click`, `quote_modal_open` and `lead_submit`, each with an allow-listed `location` or `source` label and no form data. `lead_submit` is sent only after the lead API accepts a submission. Custom events are a plan-dependent Vercel feature; confirm they appear for this project's plan before relying on them.
-- The site does not call the script's visitor-identification or cookie opt-in features. Do not add them without revisiting `/privacy`, `/terms` and the consent question.
+- The site does not call the script's visitor-identification or cookie opt-in features.
+
+### Google Ads conversion measurement
+
+- **Settings live in `src/lib/google-ads.ts`**: `tagId` (the `AW-…` Google tag ID of the Google Ads account) and one conversion label per action. These are public values that appear in the page source, and they are kept in code on purpose so that a Google variable left in the Vercel project from an earlier setup cannot switch a different account on. **Until `tagId` is filled in, the site loads no Google tag and reports nothing.** `SETUP.md` section 2 says where to find the values.
+- `GoogleAdsTag` is mounted once in `src/app/layout.tsx`. It loads Google's library on every page right after the page becomes interactive, so the click identifier (`gclid`) an ad adds to the landing address is stored in Google's first-party `_gcl_*` cookies before the visitor moves on.
+- The same `track()` calls that feed Vercel also report a Google Ads conversion for each action that has a label: `lead_submit` (only after the lead API accepts the inquiry) and `call_click`, plus `sms_click`, `whatsapp_click` and `email_click` if labels are added. Only the conversion action is named; no form field or placement label is sent. `quote_modal_open` is never a conversion.
+- **Nothing on the website holds the tag back.** There is no consent prompt and no consent-mode command, so no visitor choice can reduce the conversions reported. `clearLegacyGoogleMeasurement()` removes only the earlier Google Analytics `_ga*` cookies; it must never remove `_gcl_*` cookies, because that would make later conversions unattributable.
+- `remarketing: false` sends `allow_ad_personalization_signals: false`: conversions are counted in full, but visitors are not added to remarketing audiences or used for personalized ads. `/privacy` Section 5 says so; change the two together.
+- This setup is meant for the United States campaign. For visitors in the European Economic Area, the United Kingdom and Switzerland, Google's EU user consent policy expects a consent signal; review that before advertising there.
+- In Google Ads, keep **auto-tagging** on and use `https://raidispatch.com/...` final URLs. The `www` and old-domain redirects preserve the query string, so the click identifier survives them.
 - Browsers that used the earlier GA4 setup have their saved consent choice and accessible `_ga*` cookies removed on the next visit.
-- The variables `NEXT_PUBLIC_MEASUREMENT_ENABLED`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID` and `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL` are no longer read and can be deleted from the Vercel project.
+- The variables `NEXT_PUBLIC_MEASUREMENT_ENABLED`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID` and `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL` are not read and can be deleted from the Vercel project.
 
 ```sh
 node scripts/verify-analytics.mjs
 ```
 
-This checks the event allow-list, page-address handling, the removal of earlier Google cookies and the absence of Google tag code, using stand-in provider and browser objects. It does not verify the dashboard setting, live delivery or plan-dependent reporting.
+This checks the event allow-list, page-address handling, the Google Ads settings and conversion commands, the absence of any consent command, that Google Ads click cookies are kept while earlier Google Analytics cookies are removed, and the absence of Google Analytics code. It uses stand-in provider and browser objects and prints whether a tag ID is currently set. It does not verify a dashboard or Google Ads account setting, live delivery or plan-dependent reporting; confirm real conversions in Google Ads after deployment.
 
-Hosting and security providers may still retain operational request/error logs. Contact forms, lead delivery, optional carrier acknowledgements and direct contact links remain separate and unchanged. The current disclosures are in `/privacy` and `/terms`, dated November 19, 2026.
+Hosting and security providers may still retain operational request/error logs. Contact forms, lead delivery, optional carrier acknowledgements and direct contact links remain separate and unchanged. The current disclosures are in `/privacy` and `/terms`, dated November 26, 2026.
 
 ## Contact and license
 
@@ -166,4 +182,4 @@ node scripts/submit-indexnow.mjs --url https://raidispatch.com/resources --submi
 
 Search access checks use declared crawler headers on representative public URLs; they do not impersonate verified crawler IPs or prove citations. The existing robots wildcard allows public content and excludes `/api/`. No special AI files or schema are required for Google AI features.
 
-IndexNow is manual and dry-run by default. It reads the production sitemap, limits notifications to canonical `raidispatch.com` URLs and verifies the deployed ownership file before submission. The verification key is intentionally hosted publicly under `public/`; it is not an account credential. A successful response only acknowledges the notification, not indexing. No tracking tags or recurring jobs were added.
+IndexNow is manual and dry-run by default. It reads the production sitemap, limits notifications to canonical `raidispatch.com` URLs and verifies the deployed ownership file before submission. The verification key is intentionally hosted publicly under `public/`; it is not an account credential. A successful response only acknowledges the notification, not indexing.

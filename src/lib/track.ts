@@ -1,11 +1,16 @@
 import { track as sendEvent, type BeforeSendEvent } from '@vercel/analytics';
+import { reportAdsConversion } from './google-ads';
 
 /**
- * Cookieless website measurement through Vercel Web Analytics.
+ * Website measurement.
  *
- * The analytics script is served from this website's own host, sets no
- * cookies and stores nothing in the browser, so there is no consent prompt.
- * Google Analytics and the Google tag are not loaded anywhere on the site.
+ * 1. Vercel Web Analytics: cookieless; its script is served from this
+ *    website's own host and stores nothing in the browser.
+ * 2. Google Ads conversion measurement (src/lib/google-ads.ts): accepted
+ *    inquiries and contact clicks are reported as conversions so the Rai
+ *    Dispatch campaign can be measured. Google Analytics is not loaded.
+ *
+ * Neither is gated by a consent prompt; the site shows none.
  */
 export type TrackEvent = 'call_click' | 'sms_click' | 'whatsapp_click' | 'email_click' | 'quote_modal_open' | 'lead_submit';
 export type EventParams = Record<string, string | number | boolean | undefined>;
@@ -49,20 +54,27 @@ export function track(event: TrackEvent, params: EventParams = {}): void {
   // lead_submit is invoked only after the lead API accepts the submission.
   if (event === 'lead_submit' && !sources.has(String(params.source))) return;
   try { sendEvent(event, safeParams(params)); } catch { /* Contact remains available if measurement fails. */ }
+  // Separate from the line above: one provider failing never stops the other.
+  // Only the conversion action is named; no placement or form detail is sent.
+  reportAdsConversion(event);
 }
 
 /**
  * One-time tidy-up for browsers that used the earlier consent-gated Google
  * Analytics setup: forget the saved consent choice and expire the Google
- * cookies it may have set. Google cookies last up to two years, so this can be
- * deleted after November 2028.
+ * Analytics cookies it may have set. Those cookies last up to two years, so
+ * this can be deleted after November 2028.
+ *
+ * Google Ads cookies (`_gcl_*`) are deliberately left alone. They hold the
+ * ad-click identifier that conversion measurement depends on; removing them
+ * here would make every later conversion unattributable.
  */
 export const LEGACY_CONSENT_STORAGE_KEY = 'rai-measurement-consent-v1';
 export function clearLegacyGoogleMeasurement(): void {
   if (typeof window === 'undefined') return;
   try { window.localStorage.removeItem(LEGACY_CONSENT_STORAGE_KEY); } catch { /* Storage can be blocked; nothing to remove then. */ }
   try {
-    const names = document.cookie.split(';').map(item => item.trim().split('=')[0]).filter(name => /^_ga(?:_|$)/.test(name) || /^_gcl_/.test(name));
+    const names = document.cookie.split(';').map(item => item.trim().split('=')[0]).filter(name => /^_ga(?:_|$)/.test(name));
     const host = window.location.hostname;
     const domains = ['', host, `.${host}`, ...(host.endsWith('.raidispatch.com') ? ['.raidispatch.com'] : [])];
     for (const name of names) for (const domain of domains) document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax${domain ? `; domain=${domain}` : ''}`;

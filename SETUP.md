@@ -5,10 +5,10 @@ For the domain migration and recorded launch checks, also see
 [the SEO audit and migration record](docs/SEO-AUDIT-AND-MIGRATION.md).
 
 Configure and verify **lead delivery** so enquiries reach the intended inbox or
-webhook. Website visits are counted with cookieless **Vercel Web Analytics**
-(section 2), so visitors never see a cookie popup. Google Ads and Google
-Analytics 4 (GA4) are not loaded; no advertising or analytics tag setup is
-required.
+webhook. Website visits are counted with cookieless **Vercel Web Analytics**,
+and results of the Google Ads campaign are measured with **Google Ads
+conversion tracking** (both in section 2). Visitors never see a cookie popup.
+Google Analytics 4 (GA4) is not loaded.
 
 Every setting below is pasted into the same place (Vercel), and every one of
 them needs the same last step: **redeploy**. That step is where almost
@@ -141,13 +141,18 @@ Slack message, use `summary` on its own and you are done.
 
 ---
 
-## 2. Website analytics (no cookie popup)
+## 2. Website analytics and Google Ads conversions (no cookie popup)
+
+Visitors are not asked to accept or reject anything, and no popup can stop a
+conversion from being counted. The earlier Google Analytics popup and the
+"Measurement settings" link are gone. Google Analytics 4 (GA4) is not loaded.
+The underlying Google accounts and their historical reports are not deleted by
+website changes.
+
+### 2a. Vercel Web Analytics
 
 The website counts visits with **Vercel Web Analytics**. It does not use
-cookies, so visitors are not asked to accept or reject anything. The earlier
-Google Analytics popup and the "Measurement settings" link are gone, and no
-Google Ads or Google Analytics 4 (GA4) tag is loaded. The underlying Google
-accounts and their historical reports are not deleted by this website change.
+cookies.
 
 It needs one switch in Vercel, once:
 
@@ -170,11 +175,68 @@ These old settings are no longer used and can be deleted from Vercel:
 `NEXT_PUBLIC_MEASUREMENT_ENABLED`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`,
 `NEXT_PUBLIC_GOOGLE_ADS_ID`, `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL`.
 
+### 2b. Google Ads conversion tracking
+
+This tells Google Ads which ad clicks turned into an inquiry or a phone call,
+so the Rai Dispatch campaign can be judged and optimized on real leads.
+
+**In Google Ads (one time).** Google renames these menus from time to time; the
+steps follow its "Set up your web conversions" help page as of November 2026.
+
+1. Open **Goals → Summary**, choose **Create conversion action**, pick
+   **Conversions on a website** and enter `raidispatch.com` when asked for the
+   domain.
+2. Add the action **Lead form submitted** with the **Manually using code**
+   option: category *Submit lead form*, count **One**.
+3. Add a second action **Phone call click** the same way: category *Contact*,
+   count **One**.
+4. Finish the setup and open each action's tag instructions (**Install the tag
+   yourself** / event snippet). The event snippet contains a line like this:
+
+   ```
+   'send_to': 'AW-1234567890/AbC-D_efGhIjKlMn'
+   ```
+
+   The part before the slash (`AW-1234567890`) is the **tag ID**; it is the
+   same for both actions. The part after the slash is that action's **label**.
+   You do not paste Google's snippets into the website; only these values are
+   needed.
+5. Open **Admin → Account settings → Auto-tagging** and make sure **Tag the
+   URL that people click through from my ad** is ticked. Without it, ad clicks
+   carry no click identifier and conversions cannot be matched to them.
+
+**In the website code (one file):** open `src/lib/google-ads.ts` and fill in
+
+| Setting | Value |
+| --- | --- |
+| `tagId` | the tag ID, for example `AW-1234567890` |
+| `conversionLabels.lead_submit` | the label of **Lead form submitted** |
+| `conversionLabels.call_click` | the label of **Phone call click** |
+
+Text-message, WhatsApp and email clicks can be counted the same way: create an
+action for each in Google Ads and paste its label next to `sms_click`,
+`whatsapp_click` or `email_click`. An empty label means that action is not
+reported. These values are not passwords; they are visible in the page source
+of every website that uses Google Ads. Commit the change and let Vercel deploy
+it (no environment variable is involved).
+
+**Check it:** in Google Ads the tag should show as detected within a few hours
+of the first visits. To test end to end, click one of your own ads, send the
+contact form with your own details, and look for the conversion under
+**Goals → Conversions** (it can take a few hours, sometimes up to a day, to
+appear). Delete the test lead afterwards.
+
+What Google receives: the page address including the ad click identifier,
+normal browser details, and the name of the conversion action. No names, phone
+numbers, email addresses or message text are sent. Google stores the click
+identifier in cookies whose names begin with `_gcl_`. Visitors are not added to
+remarketing audiences (`remarketing: false` in the same file).
+
 Hosting and security providers may still maintain operational request/error
 logs. The contact form, quote form, lead notifications, optional acknowledgement
 emails and direct contact links continue to work independently of analytics.
 See the privacy and terms pages for the current disclosures, dated
-**November 19, 2026**.
+**November 26, 2026**.
 
 ---
 

@@ -49,9 +49,11 @@ const PAGE_REVISIONS: Record<string, string> = {
   ...Object.fromEntries(SERVICE_CONTENT.map(content => [`/services/${content.slug}`, '2026-11-02'])),
   ...Object.fromEntries(CARRIER_CONTENT.map(content => [`/carriers/${content.slug}`, '2026-11-02'])),
   // November 19: cookieless analytics replaced consent-gated Google Analytics;
-  // the privacy and terms pages were rewritten. Keep these after the spreads
-  // above, which would otherwise overwrite the dates.
-  '/privacy': '2026-11-19', '/terms': '2026-11-19',
+  // the privacy and terms pages were rewritten. November 26: Google Ads
+  // conversion measurement added, and both pages now describe the Google tag
+  // and its cookies. Keep these after the spreads above, which would otherwise
+  // overwrite the dates.
+  '/privacy': '2026-11-26', '/terms': '2026-11-26',
   // November 19: dry van load guide published and listed on the resources hub.
   // The dry van and box truck pages were revised, and seven more equipment
   // pages gained a plain fee question.
