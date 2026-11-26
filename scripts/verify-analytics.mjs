@@ -67,19 +67,32 @@ check('Server rendering and a failing provider never throw or send', () => {
 check('Google Ads conversions name only the conversion action and never wait for a consent choice', () => {
   const ads = [];
   const lib = loadTrack({ window: { gtag: (...args) => ads.push(plain(args)) } }, { track: () => {} });
-  lib.track('lead_submit', { source: 'quote_modal', email: 'private@example.com', phone: '+15555555555', message: 'private' });
-  for (const event of ['call_click', 'sms_click', 'whatsapp_click', 'email_click']) lib.track(event, { location: 'home_hero', name: 'Do not send' });
   const lead = 'AW-18340605512/-hqfCOHe7OccEMjcvalE', contact = 'AW-18340605512/8Ia-CN_v6-ccEMjcvalE';
-  assert.deepEqual(ads, [lead, contact, contact, contact, contact].map(send_to => ['event', 'conversion', { send_to }]));
+  const conversion = send_to => ['event', 'conversion', { send_to }];
+  lib.track('lead_submit', { source: 'quote_modal', email: 'private@example.com', phone: '+15555555555', message: 'private' });
+  assert.deepEqual(ads, [conversion(lead)]);
   assert.equal(lib.GOOGLE_ADS_ID, 'AW-18340605512');
+  // Contact clicks are counted from the link itself, so every contact link on the site is covered.
   ads.length = 0;
+  const contactLinks = ['tel:+12133716155', 'sms:+12133716155?body=Hi', 'mailto:sam@railogistics.us', 'https://wa.me/12133716155?text=Hi', 'https://api.whatsapp.com/send?phone=12133716155', ' TEL:+12133716155 '];
+  for (const href of contactLinks) { assert.equal(lib.isContactLink(href), true, href); lib.reportContactLinkClick(href); }
+  assert.deepEqual(ads, contactLinks.map(() => conversion(contact)));
+  ads.length = 0;
+  for (const href of ['/contact', '/pricing#fees', 'https://raidispatch.com/', 'https://example.com/tel:123', 'https://wa.me.example.com/1', 'javascript:void(0)', '', null, undefined, 42]) { assert.equal(lib.isContactLink(href), false, String(href)); lib.reportContactLinkClick(href); }
+  assert.equal(ads.length, 0, 'ordinary links are not conversions');
+  // track() must not also send the contact conversion, or tracked buttons would count twice.
+  for (const event of ['call_click', 'sms_click', 'whatsapp_click', 'email_click']) lib.track(event, { location: 'home_hero', name: 'Do not send' });
   lib.track('quote_modal_open', { location: 'pricing_preview' }); lib.track('purchase'); lib.track('lead_submit'); lib.track('lead_submit', { source: 'someone@example.com' });
-  assert.equal(ads.length, 0, 'only accepted leads and contact clicks are conversions');
+  assert.equal(ads.length, 0, 'only accepted leads and contact link clicks are conversions');
   const sent = [];
   const noTag = loadTrack({ window: {} }, { track: (...args) => sent.push(args) });
-  assert.doesNotThrow(() => noTag.track('call_click', { location: 'home_hero' })); assert.equal(sent.length, 1, 'a blocked or unloaded Google tag does not stop Vercel events');
+  assert.doesNotThrow(() => { noTag.track('call_click', { location: 'home_hero' }); noTag.reportContactLinkClick('tel:+12133716155'); }); assert.equal(sent.length, 1, 'a blocked or unloaded Google tag does not stop Vercel events');
   const failing = loadTrack({ window: { gtag: () => { throw new Error('tag unavailable'); } } }, { track: () => {} });
-  assert.doesNotThrow(() => failing.track('lead_submit', { source: 'contact_page' }));
+  assert.doesNotThrow(() => { failing.track('lead_submit', { source: 'contact_page' }); failing.reportContactLinkClick('tel:+12133716155'); });
+  assert.doesNotThrow(() => loadTrack({}, { track: () => {} }).reportContactLinkClick('tel:+12133716155'), 'server rendering');
+  const analytics = readFileSync(resolve(root, 'src/components/SiteAnalytics.tsx'), 'utf8');
+  assert.match(analytics, /document\.addEventListener\('click', onClick, true\)/, 'one capture-phase listener covers every link');
+  assert.match(analytics, /reportContactLinkClick\(link\.getAttribute\('href'\)\)/);
   const tag = readFileSync(resolve(root, 'src/components/GoogleAdsTag.tsx'), 'utf8');
   assert.match(tag, /gtag\('consent', 'default', \{ ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted' \}\)/);
   assert.ok(!/['"]denied['"]/.test(tag), 'no consent type may default to denied');

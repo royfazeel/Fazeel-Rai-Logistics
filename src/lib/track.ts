@@ -7,8 +7,9 @@ import { track as sendEvent, type BeforeSendEvent } from '@vercel/analytics';
  * served from this website's own host, sets no cookies and stores nothing in
  * the browser.
  *
- * Google Ads conversion measurement reports the same contact interactions to
- * the Google Ads account so ad clicks can be matched to inquiries. The Google
+ * Google Ads conversion measurement reports accepted inquiry forms and every
+ * click on a phone, SMS, WhatsApp or email link to the Google Ads account, so
+ * ad clicks can be matched to inquiries. The Google
  * tag (src/components/GoogleAdsTag.tsx) stores the ad click identifier in
  * first-party `_gcl_*` cookies. No consent prompt is shown and nothing here
  * waits for one. Google Analytics is not loaded.
@@ -55,7 +56,9 @@ export function track(event: TrackEvent, params: EventParams = {}): void {
   // lead_submit is invoked only after the lead API accepts the submission.
   if (event === 'lead_submit' && !sources.has(String(params.source))) return;
   try { sendEvent(event, safeParams(params)); } catch { /* Contact remains available if measurement fails. */ }
-  sendGoogleAdsConversion(event);
+  // Contact clicks are reported to Google Ads by reportContactLinkClick, which
+  // sees every contact link on the site. Sending them here too would count twice.
+  if (event === 'lead_submit') sendGoogleAdsConversion(SUBMIT_LEAD_FORM);
 }
 
 /**
@@ -67,22 +70,35 @@ export function track(event: TrackEvent, params: EventParams = {}): void {
 export const GOOGLE_ADS_ID = 'AW-18340605512';
 const SUBMIT_LEAD_FORM = `${GOOGLE_ADS_ID}/-hqfCOHe7OccEMjcvalE`;
 const CONTACT = `${GOOGLE_ADS_ID}/8Ia-CN_v6-ccEMjcvalE`;
-const adsConversions: Partial<Record<TrackEvent, string>> = {
-  lead_submit: SUBMIT_LEAD_FORM,
-  call_click: CONTACT, sms_click: CONTACT, whatsapp_click: CONTACT, email_click: CONTACT,
-};
 
 /**
  * Only the conversion action is named: no form data, placement or page
  * parameters are added here. The Google tag sends with a beacon, so a click
  * that opens the phone, mail or WhatsApp app is still delivered.
  */
-function sendGoogleAdsConversion(event: TrackEvent): void {
-  const send_to = adsConversions[event];
-  if (!send_to) return;
+function sendGoogleAdsConversion(send_to: string): void {
+  if (typeof window === 'undefined') return;
   try {
     (window as Window & { gtag?: (...args: unknown[]) => void }).gtag?.('event', 'conversion', { send_to });
   } catch { /* Contact remains available if measurement fails. */ }
+}
+
+/** True for a link that starts a call, a text, an email or a WhatsApp chat. */
+export function isContactLink(href: string | null | undefined): boolean {
+  if (typeof href !== 'string') return false;
+  const value = href.trim().toLowerCase();
+  return value.startsWith('tel:') || value.startsWith('sms:') || value.startsWith('mailto:')
+    || /^https?:\/\/(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com)\//.test(value);
+}
+
+/**
+ * Called by SiteAnalytics for every link click on the site. A click on any
+ * contact link, wherever it is (page body, header, footer, sticky bar, legal
+ * pages), is reported once as the "Rai Logistics Contact" conversion. Links do
+ * not need their own click handler to be counted.
+ */
+export function reportContactLinkClick(href: string | null | undefined): void {
+  if (isContactLink(href)) sendGoogleAdsConversion(CONTACT);
 }
 
 /**
