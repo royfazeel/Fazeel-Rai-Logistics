@@ -103,6 +103,7 @@ Environment changes require a new deployment. Public `NEXT_PUBLIC_*` values are 
 | `src/components/` | Navigation, footer, pricing presentation, native FAQ disclosure, lead forms, and contact actions |
 | `src/app/api/lead/route.ts` | Lead validation, delivery, acknowledgement, and configuration self-check |
 | `src/lib/track.ts`, `src/components/SiteAnalytics.tsx` | Cookieless Vercel Web Analytics: allow-listed contact/lead events, page addresses without query strings, no consent prompt |
+| `src/components/GoogleAdsTag.tsx`, `src/lib/track.ts` | Google Ads conversion measurement: the Google tag with consent defaults granted, and the two conversion actions sent from `track()` |
 | `scripts/` | Read-only SEO crawl, isolated lead API verification and analytics checks |
 | `public/video/` | Locally hosted hero/CTA posters and video files |
 
@@ -129,22 +130,39 @@ The local test sink proves the application workflow in isolation. Confirm live d
 
 ## Website measurement
 
-As of **November 19, 2026**, the website uses **Vercel Web Analytics**. It is cookieless, so visitors are not shown a consent prompt: the earlier automatic consent dialog and the "Measurement settings" control are removed. Google Analytics 4 (GA4), Google Ads and the shared Google tag are not loaded. This does not change the underlying Google accounts or delete their historical data.
+As of **November 19, 2026**, the website uses **Vercel Web Analytics**. It is cookieless, so visitors are not shown a consent prompt: the earlier automatic consent dialog and the "Measurement settings" control are removed. Google Analytics 4 (GA4) is not loaded. This does not change the underlying Google accounts or delete their historical data.
+
+As of **November 26, 2026**, the website also loads the Google tag for **Google Ads conversion measurement** (see below). It uses first-party cookies and still shows no consent prompt.
 
 - **Web Analytics must stay enabled** for the existing **fazeel-rai-logistics** Vercel project (project → **Analytics**). On November 19, 2026 the live site was serving the analytics script and sending page views, which requires that setting; the dashboard itself was not checked. If it is disabled, the site keeps working but nothing is recorded.
 - `SiteAnalytics` is mounted once in `src/app/layout.tsx` and renders nothing. On Vercel the script and its endpoints are served from a per-project path on the site's own host (for example `/<id>/script.js` and `/<id>/view`), not from a third-party domain. `/_vercel/insights/script.js` is the package's fallback path outside a Vercel build, so a local `next start` requests that path and gets a 404.
 - Page views are reported without query strings or fragments. `src/lib/track.ts` sends only the code-owned events `call_click`, `sms_click`, `whatsapp_click`, `email_click`, `quote_modal_open` and `lead_submit`, each with an allow-listed `location` or `source` label and no form data. `lead_submit` is sent only after the lead API accepts a submission. Custom events are a plan-dependent Vercel feature; confirm they appear for this project's plan before relying on them.
 - The site does not call the script's visitor-identification or cookie opt-in features. Do not add them without revisiting `/privacy`, `/terms` and the consent question.
-- Browsers that used the earlier GA4 setup have their saved consent choice and accessible `_ga*` cookies removed on the next visit.
+- Browsers that used the earlier GA4 setup have their saved consent choice and accessible `_ga*` cookies removed on the next visit. Google Ads `_gcl_*` cookies are not removed: they hold the ad click identifier.
 - The variables `NEXT_PUBLIC_MEASUREMENT_ENABLED`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `NEXT_PUBLIC_GOOGLE_ADS_ID` and `NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL` are no longer read and can be deleted from the Vercel project.
 
 ```sh
 node scripts/verify-analytics.mjs
 ```
 
-This checks the event allow-list, page-address handling, the removal of earlier Google cookies and the absence of Google tag code, using stand-in provider and browser objects. It does not verify the dashboard setting, live delivery or plan-dependent reporting.
+This checks the event allow-list, page-address handling, the Google Ads conversion mapping and consent defaults, the removal of earlier Google Analytics cookies (and that `_gcl_*` cookies are kept), and that Google tag code exists only in `GoogleAdsTag.tsx` and `track.ts`, using stand-in provider and browser objects. It does not verify the dashboard setting, the Google Ads account, live delivery or plan-dependent reporting.
 
-Hosting and security providers may still retain operational request/error logs. Contact forms, lead delivery, optional carrier acknowledgements and direct contact links remain separate and unchanged. The current disclosures are in `/privacy` and `/terms`, dated November 19, 2026.
+### Google Ads conversion measurement
+
+Added **November 26, 2026** for Google Ads account **748-406-9019** (Rai Logistics), tag ID `AW-18340605512`.
+
+| Website event | Google Ads conversion action | `send_to` |
+|---|---|---|
+| `lead_submit` (an inquiry form the lead API accepted) | Submit lead form | `AW-18340605512/-hqfCOHe7OccEMjcvalE` |
+| `call_click`, `sms_click`, `whatsapp_click`, `email_click` | Rai Logistics Contact | `AW-18340605512/8Ia-CN_v6-ccEMjcvalE` |
+
+- `GoogleAdsTag` is mounted once in `src/app/layout.tsx`. One inline script sets the consent defaults to **granted**, configures the tag and then requests `gtag.js`, in that order.
+- **There is no consent prompt, and nothing waits for one.** Do not add a cookie banner or consent platform that defaults `ad_storage` or `ad_user_data` to denied, or that holds back the Google tag: Google Ads would stop recording conversions. Do not restore the `_gcl_*` cookie removal either.
+- `track()` in `src/lib/track.ts` sends the conversion right after the Vercel event. Only the conversion action is named; no form data, placement or page parameters are added. `quote_modal_open` is not a conversion. Enhanced conversions (hashed contact details) are not used.
+- The IDs are in the code, not in environment variables. To change an action, edit the constants in `src/lib/track.ts` and the expected values in `scripts/verify-analytics.mjs`.
+- To check a deployment: open the site with `?gclid=test` and confirm a `_gcl_aw` cookie is set and survives a reload; click a phone link or submit a form and look for a request to `googleadservices.com/pagead/conversion/18340605512/` carrying the label above.
+
+Hosting and security providers may still retain operational request/error logs. Contact forms, lead delivery, optional carrier acknowledgements and direct contact links remain separate and unchanged. The current disclosures are in `/privacy` and `/terms`, dated November 26, 2026.
 
 ## Contact and license
 
