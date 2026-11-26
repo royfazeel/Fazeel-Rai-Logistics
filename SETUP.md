@@ -6,9 +6,9 @@ For the domain migration and recorded launch checks, also see
 
 Configure and verify **lead delivery** so enquiries reach the intended inbox or
 webhook. Website visits are counted with cookieless **Vercel Web Analytics**
-(section 2), so visitors never see a cookie popup. Google Ads and Google
-Analytics 4 (GA4) are not loaded; no advertising or analytics tag setup is
-required.
+(section 2), so visitors never see a cookie popup. Google Ads conversion
+measurement is built in (section 2) and needs no setup. Google Analytics 4
+(GA4) is not loaded.
 
 Every setting below is pasted into the same place (Vercel), and every one of
 them needs the same last step: **redeploy**. That step is where almost
@@ -145,9 +145,19 @@ Slack message, use `summary` on its own and you are done.
 
 The website counts visits with **Vercel Web Analytics**. It does not use
 cookies, so visitors are not asked to accept or reject anything. The earlier
-Google Analytics popup and the "Measurement settings" link are gone, and no
-Google Ads or Google Analytics 4 (GA4) tag is loaded. The underlying Google
-accounts and their historical reports are not deleted by this website change.
+Google Analytics popup and the "Measurement settings" link are gone, and
+Google Analytics 4 (GA4) is not loaded. The underlying Google accounts and
+their historical reports are not deleted by this website change.
+
+**Google Ads conversions.** Since November 26, 2026 the website also reports
+conversions to Google Ads account **748-406-9019**: an accepted inquiry form
+counts as **Submit lead form**, and a click on a phone, SMS, WhatsApp or email
+link counts as **Rai Logistics Contact**. This uses Google cookies, and there
+is still no cookie popup. Nothing needs to be switched on in Vercel. Do not add
+a cookie popup or consent tool without asking a developer first: one that
+blocks Google by default would stop conversions from being recorded. In Google
+Ads, check **Goals → Conversions**; both actions should show as recording
+within a day of a real conversion.
 
 It needs one switch in Vercel, once:
 
@@ -174,7 +184,7 @@ Hosting and security providers may still maintain operational request/error
 logs. The contact form, quote form, lead notifications, optional acknowledgement
 emails and direct contact links continue to work independently of analytics.
 See the privacy and terms pages for the current disclosures, dated
-**November 19, 2026**.
+**November 26, 2026**.
 
 ---
 

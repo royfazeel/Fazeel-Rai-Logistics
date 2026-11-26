@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { Barlow_Condensed, Inter } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { GoogleAdsTag } from '@/components/GoogleAdsTag';
 import { SiteAnalytics } from '@/components/SiteAnalytics';
 import StickyCallWidgets from '@/components/StickyCallWidgets';
 import { BUSINESS, ACTIVE_CARRIER_SUPPORT, SETUP_DESK_HOURS, EQUIPMENT_TYPES } from '@/lib/constants';
@@ -117,6 +118,9 @@ export default function RootLayout({
           {/* Cookieless Vercel Web Analytics. It renders nothing and needs no
               consent prompt; the earlier Google Analytics dialog is removed. */}
           <SiteAnalytics />
+          {/* Google Ads conversion measurement. No consent prompt is shown;
+              see the note in GoogleAdsTag before adding one. */}
+          <GoogleAdsTag />
           {/* No auto-appearing popup: the exit-intent/timed LeadCapturePopup was
               removed at the client's request. The component still exists at
               src/components/LeadCapturePopup.tsx — re-add <LeadCapturePopup /> here
