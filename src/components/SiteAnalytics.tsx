@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/next';
-import { clearLegacyGoogleMeasurement, sanitizeAnalyticsEvent } from '@/lib/track';
+import { clearLegacyGoogleMeasurement, reportContactLinkClick, sanitizeAnalyticsEvent } from '@/lib/track';
 
 /**
  * Mount once in the root layout. Renders nothing: Vercel Web Analytics is
@@ -11,5 +11,16 @@ import { clearLegacyGoogleMeasurement, sanitizeAnalyticsEvent } from '@/lib/trac
  */
 export function SiteAnalytics() {
   useEffect(() => { clearLegacyGoogleMeasurement(); }, []);
+  // One listener for the whole page, in the capture phase, so every phone, SMS,
+  // WhatsApp and email link counts as a Google Ads contact conversion even if
+  // the link has no click handler of its own or another handler stops the event.
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+      if (link) reportContactLinkClick(link.getAttribute('href'));
+    };
+    document.addEventListener('click', onClick, true);
+    return () => document.removeEventListener('click', onClick, true);
+  }, []);
   return <Analytics beforeSend={sanitizeAnalyticsEvent} />;
 }
