@@ -154,11 +154,11 @@ Added **November 26, 2026** for Google Ads account **748-406-9019** (Rai Logisti
 | Website event | Google Ads conversion action | `send_to` |
 |---|---|---|
 | `lead_submit` (an inquiry form the lead API accepted) | Submit lead form | `AW-18340605512/-hqfCOHe7OccEMjcvalE` |
-| `call_click`, `sms_click`, `whatsapp_click`, `email_click` | Rai Logistics Contact | `AW-18340605512/8Ia-CN_v6-ccEMjcvalE` |
+| A click on any phone, SMS, WhatsApp or email link | Rai Logistics Contact | `AW-18340605512/8Ia-CN_v6-ccEMjcvalE` |
 
 - `GoogleAdsTag` is mounted once in `src/app/layout.tsx`. One inline script sets the consent defaults to **granted**, configures the tag and then requests `gtag.js`, in that order.
 - **There is no consent prompt, and nothing waits for one.** Do not add a cookie banner or consent platform that defaults `ad_storage` or `ad_user_data` to denied, or that holds back the Google tag: Google Ads would stop recording conversions. Do not restore the `_gcl_*` cookie removal either.
-- `track()` in `src/lib/track.ts` sends the conversion right after the Vercel event. Only the conversion action is named; no form data, placement or page parameters are added. `quote_modal_open` is not a conversion. Enhanced conversions (hashed contact details) are not used.
+- `track('lead_submit')` in `src/lib/track.ts` sends the lead conversion right after the Vercel event. Contact clicks are counted differently: `SiteAnalytics` adds one capture-phase click listener for the whole page, and `reportContactLinkClick()` sends the contact conversion for any `tel:`, `sms:`, `mailto:` or WhatsApp link, so links in the footer, the detail pages and the legal pages count without needing their own `track()` call. `track()` does not send the contact conversion itself, so tracked buttons are not counted twice. Only the conversion action is named; no form data, placement or page parameters are added. `quote_modal_open` is not a conversion. Enhanced conversions (hashed contact details) are not used.
 - The IDs are in the code, not in environment variables. To change an action, edit the constants in `src/lib/track.ts` and the expected values in `scripts/verify-analytics.mjs`.
 - To check a deployment: open the site with `?gclid=test` and confirm a `_gcl_aw` cookie is set and survives a reload; click a phone link or submit a form and look for a request to `googleadservices.com/pagead/conversion/18340605512/` carrying the label above.
 
