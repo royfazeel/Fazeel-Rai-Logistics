@@ -8,7 +8,7 @@ import { DISPATCH_FEE_POLICY, DISPATCH_PRICING_SUMMARY } from '@/lib/dispatch-pr
  * Date of the latest substantive Terms revision, including the published
  * dispatch fee schedule. Keep the visible date and sitemap revision aligned.
  */
-const TERMS_UPDATED = 'November 19, 2026';
+const TERMS_UPDATED = 'November 26, 2026';
 
 export const metadata = pageMetadata('Terms of Service', 'Rai Dispatch service terms, carrier responsibilities, dispatch fees, load approvals, payment arrangements and cancellation conditions.', "/terms");
 
@@ -239,10 +239,13 @@ export default function TermsPage() {
             <p className="text-navy-800 leading-relaxed mb-4">
               We use cookieless website analytics from our hosting provider,
               Vercel, to understand visits and contact interactions in aggregate.
-              It does not use cookies, so no consent prompt is shown. Google
-              Analytics and Google Ads measurement are not loaded. Hosting and
-              security providers may process operational request and error logs
-              to deliver and protect the website.
+              We also use the Google tag to measure which of our Google ads lead
+              to inquiries. It stores Google Ads cookies in your browser and
+              reports accepted inquiries and clicks on contact links to Google,
+              without the details you submit. No consent prompt is shown. Google
+              Analytics is not loaded. Hosting and security providers may process
+              operational request and error logs to deliver and protect the
+              website.
             </p>
             <p className="text-navy-800 leading-relaxed mb-4">
               Our contact forms and communication channels continue to process the

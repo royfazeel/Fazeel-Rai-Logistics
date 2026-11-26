@@ -6,8 +6,9 @@ import { clearLegacyGoogleMeasurement, sanitizeAnalyticsEvent } from '@/lib/trac
 
 /**
  * Mount once in the root layout. Renders nothing: Vercel Web Analytics is
- * cookieless, so visitors are never shown a consent prompt. Web Analytics must
+ * cookieless, and visitors are never shown a consent prompt. Web Analytics must
  * also be enabled for the project in the Vercel dashboard before data appears.
+ * Google Ads conversion measurement is separate: see GoogleAdsTag.
  */
 export function SiteAnalytics() {
   useEffect(() => { clearLegacyGoogleMeasurement(); }, []);
